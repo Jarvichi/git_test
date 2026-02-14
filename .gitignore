@@ -19,6 +19,10 @@ build/
 .swiftpm/
 Packages/
 
+# Node / Web
+node_modules/
+dist/
+
 # macOS
 .DS_Store
 *.swp
