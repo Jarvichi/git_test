@@ -1,0 +1,425 @@
+/* ─── Base ───────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0a0a;
+  color: #33ff33;
+  font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
+  font-size: 14px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+pre {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ─── Game Container ─────────────────────────────────── */
+
+.game-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 12px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-title {
+  text-align: center;
+  font-size: 20px;
+  color: #ffcc00;
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+  margin-bottom: 8px;
+  letter-spacing: 4px;
+}
+
+/* ─── Movement Layout ────────────────────────────────── */
+
+.movement-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.divider {
+  height: 1px;
+  background: #33ff33;
+  margin: 8px 0;
+}
+
+/* ─── Path Map ───────────────────────────────────────── */
+
+.path-map {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.path-header {
+  color: #ffcc00;
+  margin-bottom: 4px;
+}
+
+.path-message {
+  color: #00ccff;
+  margin-bottom: 8px;
+}
+
+.path-ascii {
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre;
+}
+
+.destination-picker {
+  margin-top: 12px;
+}
+
+.destination-header {
+  color: #ffcc00;
+  margin-bottom: 6px;
+}
+
+.destination-btn {
+  display: block;
+  background: none;
+  border: 1px solid #33ff33;
+  color: #33ff33;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 12px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s;
+}
+
+.destination-btn:hover {
+  background: rgba(51, 255, 51, 0.15);
+}
+
+/* ─── Hand Panel ─────────────────────────────────────── */
+
+.hand-panel {
+  padding-top: 4px;
+}
+
+.hand-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.hand-label {
+  color: #ffcc00;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.hand-cards {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+}
+
+.hand-hint {
+  color: #888;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* ─── Card Tile ──────────────────────────────────────── */
+
+.card-tile {
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 4px;
+  border: 1px solid rgba(51, 255, 51, 0.4);
+  border-radius: 2px;
+  transition: all 0.15s;
+  min-width: 100px;
+}
+
+.card-tile:hover {
+  border-color: #33ff33;
+  background: rgba(51, 255, 51, 0.08);
+}
+
+.card-tile--selected {
+  border-color: #ffcc00 !important;
+  background: rgba(255, 204, 0, 0.12) !important;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+}
+
+.card-tile--legendary {
+  border-color: rgba(255, 215, 0, 0.6);
+}
+
+.card-tile--rare {
+  border-color: rgba(0, 170, 255, 0.5);
+}
+
+.card-ascii {
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: pre;
+}
+
+.card-both-sides {
+  font-size: 9px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.card-name {
+  font-size: 10px;
+  color: #ccc;
+  margin-top: 1px;
+}
+
+/* ─── Battle Screen ──────────────────────────────────── */
+
+.battle-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.battle-title {
+  font-size: 16px;
+  color: #ff4444;
+  text-align: center;
+}
+
+.battle-screen--boss .battle-title {
+  color: #ff0000;
+  font-size: 18px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.enemy-ascii {
+  color: #ff4444;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: pre;
+}
+
+.enemy-hp {
+  color: #ff4444;
+}
+
+.battle-info {
+  color: #ff8800;
+  font-size: 12px;
+}
+
+.combat-log {
+  border: 1px solid #333;
+  padding: 6px;
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 12px;
+}
+
+.log-entry {
+  color: #ccc;
+}
+
+.player-stats {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.combat-label {
+  color: #ffcc00;
+  font-size: 11px;
+}
+
+.no-cards-warning {
+  color: #ff0000;
+  font-size: 16px;
+  text-align: center;
+  padding: 12px;
+}
+
+/* ─── Reward Screen ──────────────────────────────────── */
+
+.reward-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  justify-content: center;
+}
+
+.reward-title {
+  color: #ffcc00;
+  font-size: 16px;
+}
+
+.chest-ascii {
+  color: #ffcc00;
+  font-size: 14px;
+  white-space: pre;
+  text-align: center;
+}
+
+.reward-message {
+  color: #00ccff;
+}
+
+.reward-card-preview {
+  text-align: center;
+}
+
+.reward-card-sides {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.side-label {
+  font-size: 10px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.reward-card-name {
+  color: #ccc;
+}
+
+.reward-empty {
+  color: #888;
+}
+
+/* ─── Game Over Screen ───────────────────────────────── */
+
+.gameover-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  justify-content: center;
+}
+
+.gameover-title {
+  font-size: 20px;
+}
+
+.gameover--win .gameover-title {
+  color: #ffcc00;
+}
+
+.gameover--lose .gameover-title {
+  color: #ff4444;
+}
+
+.gameover-ascii {
+  font-size: 16px;
+  white-space: pre;
+  text-align: center;
+}
+
+.gameover--win .gameover-ascii {
+  color: #ffcc00;
+}
+
+.gameover--lose .gameover-ascii {
+  color: #ff4444;
+}
+
+.gameover-message {
+  font-size: 14px;
+}
+
+.gameover--win .gameover-message {
+  color: #00ccff;
+}
+
+.gameover--lose .gameover-message {
+  color: #ff4444;
+}
+
+.gameover-stats {
+  color: #888;
+  text-align: center;
+}
+
+/* ─── Buttons ────────────────────────────────────────── */
+
+.action-btn {
+  background: none;
+  border: 1px solid #33ff33;
+  color: #33ff33;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.action-btn:hover {
+  background: rgba(51, 255, 51, 0.15);
+}
+
+.action-btn--large {
+  font-size: 16px;
+  padding: 12px 32px;
+  border-width: 2px;
+}
+
+/* ─── Scrollbars ─────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ─── Mobile ─────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  body { font-size: 12px; }
+  .game-container { padding: 8px; }
+  .game-title { font-size: 16px; letter-spacing: 2px; }
+  .card-ascii { font-size: 9px; }
+  .card-tile { min-width: 80px; }
+  .path-ascii { font-size: 10px; }
+  .enemy-ascii { font-size: 12px; }
+}
