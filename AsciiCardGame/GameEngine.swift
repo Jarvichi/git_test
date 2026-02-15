@@ -152,10 +152,17 @@ struct GameEngine {
                 newState.phase = .gameOver(won: true)
                 newState.message = "You defeated the DRAGON LORD!"
             } else {
-                // Battle won, return to movement
+                // Battle won — offer 3 cards as reward
                 newState.activeBattle = nil
-                newState.phase = .movement
-                newState.message = "Victory! Choose your next move."
+                let choices = prepareRewardChoices(state: &newState, count: 3)
+                newState.rewardChoices = choices
+                if choices.isEmpty {
+                    newState.phase = .movement
+                    newState.message = "Victory! No cards to offer. Choose your next move."
+                } else {
+                    newState.phase = .battleReward
+                    newState.message = "Victory! Choose a card as your reward."
+                }
             }
             return newState
         }
@@ -211,6 +218,47 @@ struct GameEngine {
         }
 
         newState.phase = .movement
+        return newState
+    }
+
+    // MARK: - Reward Helpers
+
+    /// Pulls up to `count` cards from the draw pile as reward choices.
+    /// Reshuffles discard into draw pile if needed.
+    private static func prepareRewardChoices(state: inout GameState, count: Int) -> [Card] {
+        if state.drawPile.count < count && !state.discardPile.isEmpty {
+            state.drawPile.append(contentsOf: state.discardPile.shuffled())
+            state.discardPile = []
+        }
+        let n = min(count, state.drawPile.count)
+        let choices = Array(state.drawPile.prefix(n))
+        state.drawPile.removeFirst(n)
+        return choices
+    }
+
+    // MARK: - Collect Battle Reward (pick 1 of 3)
+
+    static func collectBattleReward(state: GameState, chosenCardId: UUID) -> GameState {
+        var newState = state
+        if let chosen = newState.rewardChoices.first(where: { $0.id == chosenCardId }) {
+            newState.hand.append(chosen)
+            let unchosen = newState.rewardChoices.filter { $0.id != chosenCardId }
+            newState.drawPile.append(contentsOf: unchosen)
+            newState.drawPile.shuffle()
+            newState.message = "You chose \(chosen.name)! Choose your next move."
+        }
+        newState.rewardChoices = []
+        newState.phase = .movement
+        return newState
+    }
+
+    static func skipBattleReward(state: GameState) -> GameState {
+        var newState = state
+        newState.drawPile.append(contentsOf: newState.rewardChoices)
+        newState.drawPile.shuffle()
+        newState.rewardChoices = []
+        newState.phase = .movement
+        newState.message = "Reward skipped. Choose your next move."
         return newState
     }
 

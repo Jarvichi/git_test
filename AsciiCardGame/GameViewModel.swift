@@ -41,6 +41,16 @@ final class GameViewModel: ObservableObject {
         state = GameEngine.collectReward(state: state)
     }
 
+    // MARK: - Battle Reward Phase Actions
+
+    func collectBattleReward(cardId: UUID) {
+        state = GameEngine.collectBattleReward(state: state, chosenCardId: cardId)
+    }
+
+    func skipBattleReward() {
+        state = GameEngine.skipBattleReward(state: state)
+    }
+
     // MARK: - Game Control
 
     func resetGame() {

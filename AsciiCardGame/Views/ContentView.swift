@@ -17,6 +17,9 @@ struct ContentView: View {
             case .reward:
                 RewardView()
                     .environmentObject(vm)
+            case .battleReward:
+                BattleRewardView()
+                    .environmentObject(vm)
             case .bossFight:
                 BossFightView()
                     .environmentObject(vm)

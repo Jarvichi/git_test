@@ -33,6 +33,7 @@ export function newGame(): GameState {
     hand,
     drawPile,
     discardPile: [],
+    rewardChoices: [],
     playerHP: 20,
     playerMaxHP: 20,
     phase: { type: 'movement' },
@@ -185,8 +186,16 @@ export function playCardForCombat(state: GameState, cardId: string): GameState {
       s.message = 'You defeated the DRAGON LORD!'
     } else {
       s.activeBattle = null
-      s.phase = { type: 'movement' }
-      s.message = 'Victory! Choose your next move.'
+      // Offer 3 cards as battle reward
+      const choices = prepareRewardChoices(s, 3)
+      s.rewardChoices = choices
+      if (choices.length > 0) {
+        s.phase = { type: 'battleReward' }
+        s.message = 'Victory! Choose a card as your reward.'
+      } else {
+        s.phase = { type: 'movement' }
+        s.message = 'Victory! No cards to offer. Choose your next move.'
+      }
     }
     return s
   }
@@ -219,7 +228,20 @@ export function playCardForCombat(state: GameState, cardId: string): GameState {
   return s
 }
 
-// ─── Collect Reward ─────────────────────────────────────
+// ─── Reward Helpers ─────────────────────────────────────
+
+function prepareRewardChoices(s: GameState, count: number): Card[] {
+  // Reshuffle if needed
+  if (s.drawPile.length < count && s.discardPile.length > 0) {
+    s.drawPile = [...s.drawPile, ...shuffle(s.discardPile)]
+    s.discardPile = []
+  }
+  // Pull up to `count` cards from draw pile as choices
+  const n = Math.min(count, s.drawPile.length)
+  return s.drawPile.splice(0, n)
+}
+
+// ─── Collect Reward (reward space — 1 random card) ──────
 
 export function collectReward(state: GameState): GameState {
   const s = structuredClone(state)
@@ -238,6 +260,33 @@ export function collectReward(state: GameState): GameState {
   }
 
   s.phase = { type: 'movement' }
+  return s
+}
+
+// ─── Collect Battle Reward (pick 1 of 3) ────────────────
+
+export function collectBattleReward(state: GameState, chosenCardId: string): GameState {
+  const s = structuredClone(state)
+
+  const chosen = s.rewardChoices.find(c => c.id === chosenCardId)
+  if (chosen) {
+    s.hand.push(chosen)
+    const unchosen = s.rewardChoices.filter(c => c.id !== chosenCardId)
+    s.drawPile = shuffle([...s.drawPile, ...unchosen])
+    s.message = `You chose ${chosen.name}! Choose your next move.`
+  }
+
+  s.rewardChoices = []
+  s.phase = { type: 'movement' }
+  return s
+}
+
+export function skipBattleReward(state: GameState): GameState {
+  const s = structuredClone(state)
+  s.drawPile = shuffle([...s.drawPile, ...s.rewardChoices])
+  s.rewardChoices = []
+  s.phase = { type: 'movement' }
+  s.message = 'Reward skipped. Choose your next move.'
   return s
 }
 

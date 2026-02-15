@@ -6,11 +6,14 @@ import {
   playCardForMovement,
   playCardForCombat,
   collectReward,
+  collectBattleReward,
+  skipBattleReward,
 } from './game/engine'
 import { PathMap } from './components/PathMap'
 import { Hand } from './components/Hand'
 import { Battle } from './components/Battle'
 import { Reward } from './components/Reward'
+import { BattleReward } from './components/BattleReward'
 import { GameOver } from './components/GameOver'
 import './styles.css'
 
@@ -37,6 +40,14 @@ export default function App() {
 
   const handleCollectReward = useCallback(() => {
     setState(s => collectReward(s))
+  }, [])
+
+  const handleCollectBattleReward = useCallback((cardId: string) => {
+    setState(s => collectBattleReward(s, cardId))
+  }, [])
+
+  const handleSkipBattleReward = useCallback(() => {
+    setState(s => skipBattleReward(s))
   }, [])
 
   const handleRestart = useCallback(() => {
@@ -77,6 +88,10 @@ export default function App() {
 
       {phase.type === 'reward' && (
         <Reward state={state} onCollect={handleCollectReward} />
+      )}
+
+      {phase.type === 'battleReward' && (
+        <BattleReward state={state} onPick={handleCollectBattleReward} onSkip={handleSkipBattleReward} />
       )}
 
       {phase.type === 'gameOver' && (
