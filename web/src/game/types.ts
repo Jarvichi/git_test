@@ -48,6 +48,7 @@ export type GamePhase =
   | { type: 'movement' }
   | { type: 'battle' }
   | { type: 'reward' }
+  | { type: 'battleReward' }
   | { type: 'bossFight' }
   | { type: 'gameOver'; won: boolean }
 
@@ -60,6 +61,7 @@ export interface GameState {
   hand: Card[]
   drawPile: Card[]
   discardPile: Card[]
+  rewardChoices: Card[]
 
   playerHP: number
   playerMaxHP: number

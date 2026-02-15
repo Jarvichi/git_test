@@ -18,6 +18,7 @@ enum GamePhase: Equatable {
     case movement
     case battle
     case reward
+    case battleReward
     case bossFight
     case gameOver(won: Bool)
 }
@@ -33,6 +34,7 @@ struct GameState: Equatable {
     var hand: [Card]
     var drawPile: [Card]
     var discardPile: [Card]
+    var rewardChoices: [Card] = []
 
     // Player
     var playerHP: Int = 20

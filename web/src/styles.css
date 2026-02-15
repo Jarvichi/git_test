@@ -315,6 +315,36 @@ pre {
   color: #888;
 }
 
+/* ─── Battle Reward Choices ─────────────────────────── */
+
+.reward-choices {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.reward-choice {
+  border: 1px solid rgba(51, 255, 51, 0.3);
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  border-radius: 2px;
+}
+
+.reward-choice:hover {
+  border-color: #ffcc00;
+  background: rgba(255, 204, 0, 0.08);
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+}
+
+.reward-pick-btn {
+  margin-top: 8px;
+  font-size: 12px !important;
+  padding: 4px 12px !important;
+}
+
 /* ─── Game Over Screen ───────────────────────────────── */
 
 .gameover-screen {
