@@ -72,38 +72,117 @@ pre {
   margin-bottom: 8px;
 }
 
-.path-ascii {
-  font-size: 12px;
-  line-height: 1.4;
-  white-space: pre;
+.path-grid-wrapper {
+  position: relative;
 }
 
-.destination-picker {
-  margin-top: 12px;
-}
-
-.destination-header {
-  color: #ffcc00;
-  margin-bottom: 6px;
-}
-
-.destination-btn {
-  display: block;
-  background: none;
-  border: 1px solid #33ff33;
-  color: #33ff33;
-  font-family: inherit;
-  font-size: 13px;
-  padding: 6px 12px;
-  margin-bottom: 4px;
-  cursor: pointer;
-  text-align: left;
+.path-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  transition: background 0.15s;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.destination-btn:hover {
+.path-grid {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.path-row {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 6px 0;
+}
+
+.path-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+}
+
+.path-node {
+  width: 44px;
+  height: 40px;
+  border: 1px solid #33ff33;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  background: rgba(0, 0, 0, 0.6);
+  transition: all 0.2s;
+  padding: 0;
+}
+
+button.path-node {
+  cursor: pointer;
+  color: inherit;
+}
+
+.path-node-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.path-node-label {
+  font-size: 8px;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+/* Type colors */
+.path-node--battle { color: #33ff33; border-color: #33ff33; }
+.path-node--reward { color: #ffcc00; border-color: #ffcc00; }
+.path-node--boss   { color: #ff4444; border-color: #ff4444; }
+.path-node--start  { color: #00ccff; border-color: #00ccff; }
+
+/* State: current node — gold pulsing glow */
+.path-node--current {
+  border-color: #ffcc00;
+  color: #ffcc00;
+  box-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+  animation: nodeCurrentPulse 1.5s ease-in-out infinite;
+}
+
+/* State: target — green pulsing border, clickable */
+.path-node--target {
+  border-color: #33ff33;
+  box-shadow: 0 0 8px rgba(51, 255, 51, 0.4);
+  animation: nodeTargetPulse 1s ease-in-out infinite;
+}
+
+.path-node--target:hover {
   background: rgba(51, 255, 51, 0.15);
+  box-shadow: 0 0 14px rgba(51, 255, 51, 0.6);
+}
+
+/* State: visited — dimmed, dashed */
+.path-node--visited {
+  opacity: 0.3;
+  border-style: dashed;
+}
+
+/* State: unreachable — very dim */
+.path-node--unreachable {
+  opacity: 0.12;
+}
+
+@keyframes nodeCurrentPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 204, 0, 0.5); }
+  50% { box-shadow: 0 0 16px rgba(255, 204, 0, 0.8); }
+}
+
+@keyframes nodeTargetPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(51, 255, 51, 0.4); }
+  50% { box-shadow: 0 0 14px rgba(51, 255, 51, 0.7); }
 }
 
 /* ─── Hand Panel ─────────────────────────────────────── */
@@ -155,12 +234,19 @@ pre {
 .card-tile:hover {
   border-color: #33ff33;
   background: rgba(51, 255, 51, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(51, 255, 51, 0.3);
+}
+
+@keyframes cardSelectedPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(255, 204, 0, 0.3); }
+  50% { box-shadow: 0 0 16px rgba(255, 204, 0, 0.6); }
 }
 
 .card-tile--selected {
   border-color: #ffcc00 !important;
   background: rgba(255, 204, 0, 0.12) !important;
-  box-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+  animation: cardSelectedPulse 1.2s ease-in-out infinite;
 }
 
 .card-tile--legendary {
@@ -169,6 +255,10 @@ pre {
 
 .card-tile--rare {
   border-color: rgba(0, 170, 255, 0.5);
+}
+
+.card-tile--uncommon {
+  border-color: rgba(0, 255, 136, 0.5);
 }
 
 .card-ascii {
@@ -189,6 +279,13 @@ pre {
   margin-top: 1px;
 }
 
+/* ─── Phase Transitions ─────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ─── Battle Screen ──────────────────────────────────── */
 
 .battle-screen {
@@ -196,6 +293,7 @@ pre {
   flex-direction: column;
   gap: 8px;
   flex: 1;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .battle-title {
@@ -221,6 +319,16 @@ pre {
   font-size: 14px;
   line-height: 1.3;
   white-space: pre;
+  text-shadow: 0 0 8px rgba(255, 68, 68, 0.6);
+}
+
+@keyframes bossGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); }
+  50% { text-shadow: 0 0 20px rgba(255, 0, 0, 0.9), 0 0 40px rgba(255, 0, 0, 0.4); }
+}
+
+.battle-screen--boss .enemy-ascii {
+  animation: bossGlow 1.5s ease-in-out infinite;
 }
 
 .enemy-hp {
@@ -272,6 +380,7 @@ pre {
   gap: 12px;
   flex: 1;
   justify-content: center;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .reward-title {
@@ -284,6 +393,7 @@ pre {
   font-size: 14px;
   white-space: pre;
   text-align: center;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
 }
 
 .reward-message {
@@ -336,7 +446,8 @@ pre {
 .reward-choice:hover {
   border-color: #ffcc00;
   background: rgba(255, 204, 0, 0.08);
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+  box-shadow: 0 0 14px rgba(255, 204, 0, 0.4);
+  transform: translateY(-2px);
 }
 
 .reward-pick-btn {
@@ -354,6 +465,7 @@ pre {
   gap: 16px;
   flex: 1;
   justify-content: center;
+  animation: fadeIn 0.3s ease-out;
 }
 
 .gameover-title {
@@ -376,10 +488,12 @@ pre {
 
 .gameover--win .gameover-ascii {
   color: #ffcc00;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
 }
 
 .gameover--lose .gameover-ascii {
   color: #ff4444;
+  text-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
 }
 
 .gameover-message {
@@ -409,17 +523,20 @@ pre {
   font-size: 14px;
   padding: 8px 20px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.15s;
 }
 
 .action-btn:hover {
   background: rgba(51, 255, 51, 0.15);
+  box-shadow: 0 0 12px rgba(51, 255, 51, 0.4);
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.6);
 }
 
 .action-btn--large {
   font-size: 16px;
   padding: 12px 32px;
   border-width: 2px;
+  animation: nodeTargetPulse 1s ease-in-out infinite;
 }
 
 /* ─── Scrollbars ─────────────────────────────────────── */
@@ -450,6 +567,9 @@ pre {
   .game-title { font-size: 16px; letter-spacing: 2px; }
   .card-ascii { font-size: 9px; }
   .card-tile { min-width: 80px; }
-  .path-ascii { font-size: 10px; }
+  .path-node { width: 36px; height: 34px; }
+  .path-node-icon { font-size: 10px; }
+  .path-node-label { font-size: 7px; }
+  .path-cell { min-height: 38px; }
   .enemy-ascii { font-size: 12px; }
 }
