@@ -44,6 +44,56 @@ export function newGame(): GameState {
   }
 }
 
+// ─── Tree Traversal Helpers ─────────────────────────────
+
+/** Collect all node IDs reachable from `startId` at exactly `targetStep` via childIds */
+function reachableAtStep(nodes: PathNode[], startId: string, targetStep: number): string[] {
+  const nodeMap = new Map(nodes.map(n => [n.id, n]))
+  // BFS frontier: start with current node's children, expand step by step
+  let frontier = new Set<string>([startId])
+
+  const startNode = nodeMap.get(startId)
+  if (!startNode) return []
+
+  for (let step = startNode.step; step < targetStep; step++) {
+    const nextFrontier = new Set<string>()
+    for (const id of frontier) {
+      const node = nodeMap.get(id)
+      if (node) {
+        for (const childId of node.childIds) {
+          nextFrontier.add(childId)
+        }
+      }
+    }
+    frontier = nextFrontier
+    if (frontier.size === 0) break
+  }
+
+  return [...frontier]
+}
+
+/** Find all node IDs reachable from `startId` (at any future step) */
+export function allReachable(nodes: PathNode[], startId: string): string[] {
+  const nodeMap = new Map(nodes.map(n => [n.id, n]))
+  const visited = new Set<string>()
+  const queue = [startId]
+
+  while (queue.length > 0) {
+    const id = queue.shift()!
+    if (visited.has(id)) continue
+    visited.add(id)
+    const node = nodeMap.get(id)
+    if (node) {
+      for (const childId of node.childIds) {
+        if (!visited.has(childId)) queue.push(childId)
+      }
+    }
+  }
+
+  visited.delete(startId) // don't include the starting node itself
+  return [...visited]
+}
+
 // ─── Movement Target Resolution ─────────────────────────
 
 export function resolveMovementTargets(card: Card, state: GameState): string[] {
@@ -51,20 +101,35 @@ export function resolveMovementTargets(card: Card, state: GameState): string[] {
 
   if (effect.type === 'moveSteps') {
     const targetStep = Math.min(state.currentStep + effect.value, 10)
-    return state.allNodes.filter(n => n.step === targetStep).map(n => n.id)
+    return reachableAtStep(state.allNodes, state.currentNodeId, targetStep)
   }
 
   if (effect.type === 'jumpToNextReward') {
-    for (let step = state.currentStep + 1; step <= 10; step++) {
-      const rewards = state.allNodes.filter(n => n.step === step && n.spaceType === 'reward')
-      if (rewards.length > 0) return rewards.map(n => n.id)
+    // Search reachable nodes for the nearest reward
+    const reachable = allReachable(state.allNodes, state.currentNodeId)
+    const nodeMap = new Map(state.allNodes.map(n => [n.id, n]))
+
+    // Group reachable rewards by step, return the earliest step's rewards
+    const rewardsByStep = new Map<number, string[]>()
+    for (const id of reachable) {
+      const node = nodeMap.get(id)
+      if (node && node.spaceType === 'reward') {
+        if (!rewardsByStep.has(node.step)) rewardsByStep.set(node.step, [])
+        rewardsByStep.get(node.step)!.push(id)
+      }
     }
-    // Fallback: move 1 step
-    return state.allNodes.filter(n => n.step === state.currentStep + 1).map(n => n.id)
+
+    if (rewardsByStep.size > 0) {
+      const minStep = Math.min(...rewardsByStep.keys())
+      return rewardsByStep.get(minStep)!
+    }
+
+    // Fallback: move 1 step via tree
+    return reachableAtStep(state.allNodes, state.currentNodeId, state.currentStep + 1)
   }
 
-  // Non-movement side A: fallback move 1
-  return state.allNodes.filter(n => n.step === state.currentStep + 1).map(n => n.id)
+  // Non-movement side A: fallback move 1 via tree
+  return reachableAtStep(state.allNodes, state.currentNodeId, state.currentStep + 1)
 }
 
 // ─── Enemy Templates ────────────────────────────────────
@@ -288,54 +353,6 @@ export function skipBattleReward(state: GameState): GameState {
   s.phase = { type: 'movement' }
   s.message = 'Reward skipped. Choose your next move.'
   return s
-}
-
-// ─── ASCII Path Map Rendering ───────────────────────────
-
-export function renderPathMap(state: GameState): string {
-  const lines: string[] = []
-
-  for (let step = 10; step >= 0; step--) {
-    const nodesAtStep = state.allNodes
-      .filter(n => n.step === step)
-      .sort((a, b) => a.branchIndex - b.branchIndex)
-
-    let nodeLine = `Step${String(step).padStart(2, ' ')}: `
-
-    for (const node of nodesAtStep) {
-      const sym = nodeSymbol(node)
-      let display: string
-      if (node.id === state.currentNodeId) {
-        display = `>${sym}<`
-      } else if (node.isVisited) {
-        display = ` ${sym.slice(0, 1)}${sym[1]}.${sym.slice(2)} `
-      } else {
-        display = ` ${sym} `
-      }
-      nodeLine += display + '  '
-    }
-
-    lines.push(nodeLine)
-
-    if (step > 0) {
-      let connector = '         '
-      for (let i = 0; i < nodesAtStep.length; i++) {
-        connector += '  |    '
-      }
-      lines.push(connector)
-    }
-  }
-
-  return lines.join('\n')
-}
-
-function nodeSymbol(node: PathNode): string {
-  switch (node.spaceType) {
-    case 'start':  return '[@]'
-    case 'battle': return '[X]'
-    case 'reward': return '[R]'
-    case 'boss':   return '[!]'
-  }
 }
 
 // ─── Display Helpers ────────────────────────────────────
