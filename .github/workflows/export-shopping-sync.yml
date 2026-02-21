@@ -1,0 +1,32 @@
+name: Export Shopping Sync to standalone repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout shopping-sync branch
+        uses: actions/checkout@v4
+        with:
+          ref: claude/sainsburys-shopping-sync-Wuwtp
+
+      - name: Push shopping-sync folder to Sainsburys-shopping-sync repo
+        env:
+          PAT: ${{ secrets.SAINSBURYS_REPO_PAT }}
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "GitHub Actions"
+
+          git clone https://x-access-token:${PAT}@github.com/Jarvichi/Sainsburys-shopping-sync.git /tmp/target
+
+          # Copy contents of the shopping-sync subfolder into the root of the target repo
+          cp -r shopping-sync/. /tmp/target/
+
+          cd /tmp/target
+          git add .
+          git diff --cached --quiet && echo "Nothing to commit" && exit 0
+          git commit -m "Initial commit"
+          git push origin main
+          echo "Done — https://github.com/Jarvichi/Sainsburys-shopping-sync"
