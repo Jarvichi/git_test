@@ -1,0 +1,5 @@
+.env
+.sainsburys_session.json
+venv/
+__pycache__/
+*.pyc

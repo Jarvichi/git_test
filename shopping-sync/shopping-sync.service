@@ -1,0 +1,13 @@
+[Unit]
+Description=Sainsbury's Shopping Sync
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Replace 'pi' with your actual username if different
+User=pi
+WorkingDirectory=/home/pi/sainsburys-shopping-sync
+ExecStart=/home/pi/sainsburys-shopping-sync/venv/bin/python sync.py
+StandardOutput=journal
+StandardError=journal

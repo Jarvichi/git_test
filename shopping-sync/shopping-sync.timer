@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Sainsbury's Shopping Sync daily at 8am
+
+[Timer]
+# Sync every day at 08:00 local time
+OnCalendar=*-*-* 08:00:00
+# Run immediately on boot if the last scheduled run was missed
+Persistent=true
+
+[Install]
+WantedBy=timers.target
