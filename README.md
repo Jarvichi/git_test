@@ -1,52 +1,46 @@
-# ASCII Card Quest
+# Jarv's Amazing Web Game
 
-A roguelike card game where every card has two sides - use one, lose the other.
+A browser-based strategy card game. Deploy units, build structures, and cast upgrades to destroy the enemy base before yours falls.
 
-**Play now:** [https://jarvichi.github.io/git_test/](https://jarvichi.github.io/git_test/)
+**Play now:** [https://jarvichi.github.io/jarvs-amazing-web-game/](https://jarvichi.github.io/jarvs-amazing-web-game/)
 
 ## How to Play
 
-You must traverse a 10-step branching path and defeat the **Dragon Lord** boss at the end.
+- Each turn you have **mana** (starts at 3, grows with Farms)
+- Play cards from your hand to **deploy units**, **build structures**, or **cast upgrades**
+- Click **End Turn** — all units fight simultaneously, then the opponent plays their turn
+- **Win** by reducing the enemy base to 0 HP. **Lose** if your base falls.
 
-- You start with **7 cards** drawn from a 20-card deck
-- Each card has **two sides**: a Movement side and a Combat side
-- **To move**: play a card for its Movement side (the card is spent), then choose which branch to land on
-- **Landing on a Battle** `[X]`: you must play a card for its Combat side to fight the enemy
-- **Landing on a Reward** `[R]`: you draw a new card from the deck
-- **Step 10** is the Boss fight - play combat cards until the Dragon Lord falls
+## Units
 
-**You win** if you beat the boss. **You lose** if you run out of cards or HP.
+| Unit | Cost | Attack | HP | Notes |
+|------|------|--------|----|-------|
+| Goblin | 1 | 2 | 3 | Melee — targets walls first |
+| Archer | 1 | 2 | 3 | Ranged — bypasses walls |
+| Barbarian | 2 | 4 | 4 | Melee — hard-hitting |
+| Knight | 2 | 3 | 7 | Melee — armored tank |
+| Wizard | 3 | 5 | 3 | Ranged — bypasses walls |
+| Dragon | 4 | 8 | 7 | Ranged — bypasses walls |
 
-The core tension: every card you spend moving is a card you can't use in combat, and vice versa.
+## Structures
 
-## Card Deck
+| Structure | Cost | HP | Effect |
+|-----------|------|----|--------|
+| Wall | 1 | 10 | Absorbs melee attacks before other units |
+| Farm | 2 | 6 | +1 max mana per turn while standing |
+| Barracks | 3 | 8 | Draw +1 card at the start of each turn |
 
-| Card | Qty | Movement | Combat | Rarity |
-|------|-----|----------|--------|--------|
-| Weak Strike | 5 | Move 1 | Deal 3 dmg | Common |
-| Quick Blade | 4 | Move 2 | Deal 5 dmg | Common |
-| Swift Healer | 3 | Move 3 | Heal 4 HP | Uncommon |
-| Shield Creep | 3 | Move 1 | Block 4 | Uncommon |
-| Vaulter | 2 | Jump to Reward | Deal 8 dmg | Rare |
-| Mend Runner | 2 | Move 2 | Heal 6 HP | Rare |
-| Legend's Charge | 1 | Move 4 | Deal 12 dmg | Legendary |
+## Upgrades
 
-## Project Structure
+| Card | Cost | Effect |
+|------|------|--------|
+| Sharpen Blades | 2 | All your units permanently gain +2 attack |
+| Fortify | 2 | Heal all your units for 4 HP |
 
-```
-AsciiCardGame/          # iOS (SwiftUI) version
-  Models/               # Card, PathNode, GameState
-  Views/                # SwiftUI screens
-  GameEngine.swift      # Pure game logic
-  GameViewModel.swift   # State management
+## Targeting Rules
 
-web/                    # Browser version (React + TypeScript)
-  src/game/             # Types, cards, path, engine
-  src/components/       # React components
-  src/styles.css        # Retro terminal CSS
-
-.github/workflows/      # GitHub Pages auto-deploy
-```
+- **Melee units** — attack walls first → then other units/structures → then the base
+- **Ranged units** — skip walls, attack other units/structures → then the base
 
 ## Run Locally
 
@@ -58,8 +52,4 @@ npm run dev
 
 ## Deploy
 
-The game auto-deploys to GitHub Pages when merged to `main`. To enable:
-
-1. Go to **Settings > Pages** in your GitHub repo
-2. Set Source to **GitHub Actions**
-3. Merge this branch to `main`
+The game auto-deploys to GitHub Pages when merged to `main` via GitHub Actions.

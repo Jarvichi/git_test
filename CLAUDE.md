@@ -1,10 +1,10 @@
-# ASCII Card Quest — Claude Instructions
+# Jarv's Amazing Web Game — Claude Instructions
 
 ## Project Overview
-A browser-based roguelike deck-building card game. The only platform is the web app (`web/`). There is no iOS app.
+A browser-based strategy card game. Deploy units, build structures, and cast upgrades to destroy the enemy base. The only platform is the web app (`web/`).
 
-- **Live URL:** https://jarvichi.github.io/git_test/
-- **Repo:** Jarvichi/git_test on GitHub
+- **Live URL:** https://jarvichi.github.io/jarvs-amazing-web-game/
+- **Repo:** Jarvichi/jarvs-amazing-web-game on GitHub
 
 ## Tech Stack
 - React 18, TypeScript 5, Vite 5
@@ -16,22 +16,17 @@ A browser-based roguelike deck-building card game. The only platform is the web 
 web/
   src/
     game/          # Pure game logic (no React)
-      types.ts     # Interfaces: Card, GameState, PathNode, BattleState
-      engine.ts    # Core mechanics: movement, combat, rewards, path generation
-      cards.ts     # Card deck definition (20 cards, 4 rarities)
-      path.ts      # Branching path generation (10 steps to boss)
+      types.ts     # Interfaces: Card, Unit, GameState, Base, effects
+      engine.ts    # Core mechanics: mana, combat, opponent AI
+      cards.ts     # Card deck (units, structures, upgrades)
     components/    # React UI
-      App.tsx      # Root component, game state, phase routing
-      Battle.tsx   # Combat UI
-      BattleReward.tsx  # 3-card choice after battle victory
-      PathMap.tsx  # ASCII branching path visualization
-      Hand.tsx     # Card hand display
-      CardTile.tsx # Individual card rendering
-      Reward.tsx   # Treasure collection UI
-      GameOver.tsx # Win/lose screen
+      App.tsx          # Root component, game state, phase routing
+      Battlefield.tsx  # Main game screen: bases, field, hand, log
+      CardTile.tsx     # Individual card rendering
+      GameOver.tsx     # Win/lose screen
     styles.css
   package.json
-  vite.config.ts   # base: '/git_test/' for GitHub Pages
+  vite.config.ts   # base: '/jarvs-amazing-web-game/' for GitHub Pages
   tsconfig.json
 .github/
   workflows/
@@ -47,11 +42,11 @@ npm run preview  # Preview production build locally
 ```
 
 ## Game Design
-- **Core mechanic:** Each card has two sides — Movement (top) and Combat (bottom). Playing one side permanently discards the card.
-- **Path:** 10-step branching path toward the Dragon Lord boss
-- **Enemy scaling:** Goblins (steps 1-3, 8HP) → Bandits (4-6, 10HP) → Trolls (7-9, 12HP) → Dragon Lord (step 10, 15HP, 7dmg/turn)
-- **Deck:** 20 cards — Common (Weak Strike, Quick Blade), Uncommon (Swift Healer, Shield Creep), Rare (Vaulter, Mend Runner), Legendary (Legend's Charge)
-- **Win:** Defeat the Dragon Lord. **Lose:** Run out of HP or cards.
+- **Mana system:** Player starts with 3 mana/turn; Farms increase max mana permanently
+- **Card types:** Unit (deploy fighters), Structure (build Walls/Farms/Barracks), Upgrade (buff/heal all units)
+- **Combat:** All units attack simultaneously at End Turn; melee targets walls first, ranged bypasses walls
+- **Opponent AI:** Plays 1–2 affordable cards per turn from its own shuffled deck
+- **Win:** Destroy the enemy base (20 HP). **Lose:** Your base reaches 0 HP.
 
 ## GitHub & PRs
 - Authenticated as: Jarvichi
