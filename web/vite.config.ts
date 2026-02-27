@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/git_test/',
+  base: '/jarvs-amazing-web-game/',
 })

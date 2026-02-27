@@ -1,75 +1,66 @@
-// ─── Card Effects (extensible) ───────────────────────────
+// ─── Structure & Upgrade Effects ─────────────────────────
 
-export type CardEffect =
-  | { type: 'moveSteps'; value: number }
-  | { type: 'jumpToNextReward' }
-  | { type: 'dealDamage'; value: number }
-  | { type: 'healHP'; value: number }
-  | { type: 'block'; value: number }
+export type StructureEffect =
+  | { type: 'mana'; amount: number }      // +N max mana per turn while alive
+  | { type: 'extraDraw'; amount: number } // draw N extra cards per turn while alive
+
+export type UpgradeEffect =
+  | { type: 'buffAttack'; amount: number } // +N attack to all friendly units
+  | { type: 'healUnits'; amount: number }  // heal all friendly units N HP
+
+// ─── Cards ───────────────────────────────────────────────
 
 export type CardRarity = 'common' | 'uncommon' | 'rare' | 'legendary'
+export type CardType = 'unit' | 'structure' | 'upgrade'
+
+export interface UnitTemplate {
+  name: string
+  attack: number
+  maxHp: number
+  isWall: boolean      // absorbs melee attacks before other units
+  bypassWall: boolean  // ignores walls when selecting targets
+  structureEffect?: StructureEffect
+}
+
+export interface Unit extends UnitTemplate {
+  id: string
+  owner: 'player' | 'opponent'
+  hp: number
+}
 
 export interface Card {
   id: string
   name: string
   rarity: CardRarity
-  sideA: CardEffect   // typically movement
-  sideB: CardEffect   // typically combat
+  cost: number
+  cardType: CardType
+  unit?: UnitTemplate          // unit and structure cards
+  upgradeEffect?: UpgradeEffect // upgrade cards
+  description: string
 }
 
-// ─── Path ────────────────────────────────────────────────
+// ─── Game ────────────────────────────────────────────────
 
-export type SpaceType = 'start' | 'battle' | 'reward' | 'boss'
-
-export interface PathNode {
-  id: string
-  step: number        // 0 = start, 1-9 = path, 10 = boss
-  branchIndex: number // 0, 1, or 2
-  spaceType: SpaceType
-  isVisited: boolean
-  childIds: string[]
+export interface Base {
+  hp: number
+  maxHp: number
 }
-
-// ─── Battle ──────────────────────────────────────────────
-
-export interface BattleState {
-  enemyName: string
-  enemyHP: number
-  enemyMaxHP: number
-  enemyDamagePerTurn: number
-  playerBlockThisTurn: number
-  log: string[]
-  isResolved: boolean
-}
-
-// ─── Game Phase ──────────────────────────────────────────
 
 export type GamePhase =
-  | { type: 'movement' }
-  | { type: 'battle' }
-  | { type: 'reward' }
-  | { type: 'battleReward' }
-  | { type: 'bossFight' }
-  | { type: 'gameOver'; won: boolean }
-
-// ─── Game State ──────────────────────────────────────────
+  | { type: 'playerTurn' }
+  | { type: 'gameOver'; winner: 'player' | 'opponent' }
 
 export interface GameState {
-  allNodes: PathNode[]
-  currentNodeId: string
-
-  hand: Card[]
-  drawPile: Card[]
-  discardPile: Card[]
-  rewardChoices: Card[]
-
-  playerHP: number
-  playerMaxHP: number
-
+  playerBase: Base
+  opponentBase: Base
+  field: Unit[]
+  playerHand: Card[]
+  playerDeck: Card[]
+  opponentHand: Card[]
+  opponentDeck: Card[]
+  mana: number
+  maxMana: number
+  log: string[]
   phase: GamePhase
-  activeBattle: BattleState | null
-
-  currentStep: number
-  turnNumber: number
-  message: string
+  turn: number
 }

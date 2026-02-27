@@ -1,39 +1,68 @@
 import React from 'react'
 import { Card } from '../game/types'
-import { effectDescription, effectLabel, rarityStars } from '../game/cards'
+import { rarityStars } from '../game/cards'
 
 interface Props {
   card: Card
-  showSideA: boolean
-  isSelected?: boolean
+  canAfford?: boolean
   onClick?: () => void
 }
 
-export function CardTile({ card, showSideA, isSelected, onClick }: Props) {
-  const effect = showSideA ? card.sideA : card.sideB
-  const label = effectLabel(effect)
-  const desc = effectDescription(effect)
-  const stars = rarityStars(card.rarity)
+export function CardTile({ card, canAfford = true, onClick }: Props) {
+  const stars = rarityStars(card.rarity).padEnd(4)
+  const costStr = `[${card.cost}]`.padEnd(7)
 
-  const rarityClass = `card-tile--${card.rarity}`
+  let line1: string
+  let line2: string
+  let line3: string
+
+  if (card.cardType === 'upgrade' && card.upgradeEffect) {
+    const e = card.upgradeEffect
+    line1 = 'UPGRADE'
+    line2 = e.type === 'buffAttack' ? `+${e.amount} ATK`.padEnd(7) : `HEAL ${e.amount}`.padEnd(7)
+    line3 = 'ALL    '
+  } else if (card.unit) {
+    const u = card.unit
+    line1 = u.name.slice(0, 7).padEnd(7)
+    if (u.isWall || u.attack === 0) {
+      line2 = `HP:${String(u.maxHp).padStart(2)}  `.slice(0, 7)
+    } else {
+      line2 = `A:${u.attack} H:${u.maxHp}`.padEnd(7).slice(0, 7)
+    }
+    if (u.isWall) {
+      line3 = 'WALL   '
+    } else if (u.bypassWall) {
+      line3 = 'RANGE  '
+    } else if (u.structureEffect?.type === 'mana') {
+      line3 = `+${u.structureEffect.amount}MANA `.padEnd(7).slice(0, 7)
+    } else if (u.structureEffect?.type === 'extraDraw') {
+      line3 = `+${u.structureEffect.amount}DRAW `.padEnd(7).slice(0, 7)
+    } else {
+      line3 = '       '
+    }
+  } else {
+    line1 = '       '
+    line2 = '       '
+    line3 = '       '
+  }
 
   return (
     <div
-      className={`card-tile ${isSelected ? 'card-tile--selected' : ''} ${rarityClass}`}
-      onClick={onClick}
+      className={[
+        'card-tile',
+        `card-tile--${card.rarity}`,
+        canAfford ? '' : 'card-tile--unaffordable',
+      ].filter(Boolean).join(' ')}
+      onClick={canAfford ? onClick : undefined}
+      title={card.description}
     >
-      <pre className="card-ascii">
-{`┌───────┐
-│ ${label}   │
-│       │
-│${desc.padEnd(7)}│
-│       │
-│ ${stars.padEnd(5)} │
-└───────┘`}
-      </pre>
-      <div className="card-both-sides">
-        {effectDescription(card.sideA)} / {effectDescription(card.sideB)}
-      </div>
+      <pre className="card-ascii">{`┌───────┐
+│${costStr}│
+│${line1}│
+│${line2}│
+│${line3}│
+│${stars}   │
+└───────┘`}</pre>
       <div className="card-name">{card.name}</div>
     </div>
   )

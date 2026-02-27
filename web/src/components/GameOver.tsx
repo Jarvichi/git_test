@@ -3,7 +3,7 @@ import { GameState } from '../game/types'
 
 interface Props {
   state: GameState
-  won: boolean
+  winner: 'player' | 'opponent'
   onRestart: () => void
 }
 
@@ -11,7 +11,7 @@ const VICTORY_ART = `   \\o/
     |
    / \\
 =========
- WINNER!
+ VICTORY!
 =========`
 
 const DEFEAT_ART = `   ___
@@ -21,36 +21,23 @@ const DEFEAT_ART = `   ___
   |___|
  /     \\`
 
-export function GameOver({ state, won, onRestart }: Props) {
+export function GameOver({ state, winner, onRestart }: Props) {
+  const won = winner === 'player'
   return (
     <div className={`gameover-screen ${won ? 'gameover--win' : 'gameover--lose'}`}>
       <div className="gameover-title">
         {won ? '═══ VICTORY ═══' : '═══ DEFEAT ═══'}
       </div>
-
       <pre className="gameover-ascii">{won ? VICTORY_ART : DEFEAT_ART}</pre>
-
-      {won ? (
-        <>
-          <div className="gameover-message">You defeated the Dragon Lord!</div>
-          <div className="gameover-stats">
-            <div>HP remaining: {state.playerHP}/{state.playerMaxHP}</div>
-            <div>Cards in hand: {state.hand.length}</div>
-            <div>Turns taken: {state.turnNumber}</div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="gameover-message">
-            {state.playerHP <= 0 ? 'You were slain...' : 'You ran out of cards!'}
-          </div>
-          <div className="gameover-stats">
-            <div>Reached step: {state.currentStep}/10</div>
-            <div>Turns taken: {state.turnNumber}</div>
-          </div>
-        </>
-      )}
-
+      <div className="gameover-message">
+        {won ? 'Enemy base destroyed!' : 'Your base was destroyed...'}
+      </div>
+      <div className="gameover-stats">
+        <div>Turns: {state.turn}</div>
+        {won
+          ? <div>Your base HP: {state.playerBase.hp}/{state.playerBase.maxHp}</div>
+          : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>}
+      </div>
       <button className="action-btn action-btn--large" onClick={onRestart}>
         [ Play Again ]
       </button>
