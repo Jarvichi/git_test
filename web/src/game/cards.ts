@@ -10,6 +10,7 @@ interface UnitCardDef {
   cost: number
   unit: UnitTemplate
   description: string
+  deployMs?: number
 }
 
 interface UpgradeCardDef {
@@ -30,6 +31,7 @@ function makeUnits(def: UnitCardDef, cardType: CardType = 'unit'): Card[] {
     cardType,
     unit: def.unit,
     description: def.description,
+    deployMs: def.deployMs,
   }))
 }
 
@@ -45,17 +47,22 @@ function makeUpgrades(def: UpgradeCardDef): Card[] {
   }))
 }
 
+// Shared unit templates for spawner buildings
+const GOBLIN_UNIT: UnitTemplate = { name: 'Goblin', attack: 2, maxHp: 3, isWall: false, bypassWall: false }
+const ARCHER_UNIT: UnitTemplate = { name: 'Archer', attack: 2, maxHp: 3, isWall: false, bypassWall: true }
+const DRAGON_UNIT: UnitTemplate = { name: 'Dragon', attack: 8, maxHp: 7, isWall: false, bypassWall: true }
+
 export function makeDeck(): Card[] {
   return [
     // ── Units ──────────────────────────────────────────────
     ...makeUnits({
       count: 3, name: 'Goblin', rarity: 'common', cost: 1,
-      unit: { name: 'Goblin', attack: 2, maxHp: 3, isWall: false, bypassWall: false },
+      unit: GOBLIN_UNIT,
       description: 'Cheap melee fighter.',
     }),
     ...makeUnits({
       count: 3, name: 'Archer', rarity: 'common', cost: 1,
-      unit: { name: 'Archer', attack: 2, maxHp: 3, isWall: false, bypassWall: true },
+      unit: ARCHER_UNIT,
       description: 'Ranged — fires over walls.',
     }),
     ...makeUnits({
@@ -75,7 +82,7 @@ export function makeDeck(): Card[] {
     }),
     ...makeUnits({
       count: 1, name: 'Dragon', rarity: 'legendary', cost: 4,
-      unit: { name: 'Dragon', attack: 8, maxHp: 7, isWall: false, bypassWall: true },
+      unit: DRAGON_UNIT,
       description: 'Unstoppable aerial might.',
     }),
     // ── Structures ─────────────────────────────────────────
@@ -90,15 +97,37 @@ export function makeDeck(): Card[] {
         name: 'Farm', attack: 0, maxHp: 6, isWall: false, bypassWall: false,
         structureEffect: { type: 'mana', amount: 1 },
       },
-      description: '+1 max mana per turn while standing.',
+      description: '+1 max mana while standing.',
     }, 'structure'),
+    // Barracks — spawns a Goblin every 8 s
     ...makeUnits({
-      count: 1, name: 'Build Barracks', rarity: 'rare', cost: 3,
+      count: 2, name: 'Barracks', rarity: 'uncommon', cost: 2,
       unit: {
         name: 'Barracks', attack: 0, maxHp: 8, isWall: false, bypassWall: false,
-        structureEffect: { type: 'extraDraw', amount: 1 },
+        structureEffect: { type: 'spawn', unitTemplate: GOBLIN_UNIT, intervalMs: 8000 },
       },
-      description: 'Draw +1 card at the start of each turn.',
+      description: 'Spawns a Goblin every 8s.',
+      deployMs: 5000,
+    }, 'structure'),
+    // Arcane Tower — spawns an Archer every 12 s
+    ...makeUnits({
+      count: 1, name: 'Arcane Tower', rarity: 'rare', cost: 3,
+      unit: {
+        name: 'Arc.Tower', attack: 0, maxHp: 6, isWall: false, bypassWall: false,
+        structureEffect: { type: 'spawn', unitTemplate: ARCHER_UNIT, intervalMs: 12000 },
+      },
+      description: 'Spawns an Archer every 12s.',
+      deployMs: 5000,
+    }, 'structure'),
+    // Dragon Lair — spawns a Dragon every 25 s
+    ...makeUnits({
+      count: 1, name: 'Dragon Lair', rarity: 'legendary', cost: 5,
+      unit: {
+        name: 'DrgnLair', attack: 0, maxHp: 10, isWall: false, bypassWall: false,
+        structureEffect: { type: 'spawn', unitTemplate: DRAGON_UNIT, intervalMs: 25000 },
+      },
+      description: 'Spawns a Dragon every 25s.',
+      deployMs: 8000,
     }, 'structure'),
     // ── Upgrades ───────────────────────────────────────────
     ...makeUpgrades({

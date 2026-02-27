@@ -35,8 +35,9 @@ export function CardTile({ card, canAfford = true, onClick }: Props) {
       line3 = 'RANGE  '
     } else if (u.structureEffect?.type === 'mana') {
       line3 = `+${u.structureEffect.amount}MANA `.padEnd(7).slice(0, 7)
-    } else if (u.structureEffect?.type === 'extraDraw') {
-      line3 = `+${u.structureEffect.amount}DRAW `.padEnd(7).slice(0, 7)
+    } else if (u.structureEffect?.type === 'spawn') {
+      const secs = Math.round(u.structureEffect.intervalMs / 1000)
+      line3 = `/${secs}s     `.slice(0, 7)
     } else {
       line3 = '       '
     }

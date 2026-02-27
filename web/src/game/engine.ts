@@ -1,10 +1,20 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect } from './types'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, QueuedCard } from './types'
 import { makeDeck } from './cards'
+
+// ─── Constants ────────────────────────────────────────────
+
+export const COMBAT_INTERVAL_MS = 6000
+const OPPONENT_INTERVAL_MS = 8000
+const MANA_REGEN_MS = 3000       // 1 mana every 3 seconds
+const BASE_MAX_MANA = 5
 
 // ─── Helpers ─────────────────────────────────────────────
 
 let _unitId = 0
 function uid(): string { return `unit-${++_unitId}` }
+
+let _queueId = 0
+function quid(): string { return `q-${++_queueId}` }
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -26,21 +36,26 @@ export function hpBar(current: number, max: number): string {
 }
 
 function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
-  return { ...template, id: uid(), owner, hp: template.maxHp }
+  const unit: Unit = { ...template, id: uid(), owner, hp: template.maxHp, isNew: true }
+  if (template.structureEffect?.type === 'spawn') {
+    unit.spawnTimer = template.structureEffect.intervalMs
+  }
+  return unit
 }
 
-// ─── Mana / draw bonuses from structures ─────────────────
+function defaultDeployMs(card: Card): number {
+  if (card.deployMs) return card.deployMs
+  if (card.cardType === 'structure') return 5000
+  if (card.cardType === 'upgrade') return 1500
+  return 3000
+}
+
+// ─── Mana bonus from Farms ────────────────────────────────
 
 function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
   return field
     .filter(u => u.owner === owner && u.structureEffect?.type === 'mana')
-    .reduce((sum, u) => sum + u.structureEffect!.amount, 0)
-}
-
-function getExtraDraw(field: Unit[], owner: 'player' | 'opponent'): number {
-  return field
-    .filter(u => u.owner === owner && u.structureEffect?.type === 'extraDraw')
-    .reduce((sum, u) => sum + u.structureEffect!.amount, 0)
+    .reduce((sum, u) => sum + (u.structureEffect as { type: 'mana'; amount: number }).amount, 0)
 }
 
 // ─── New Game ────────────────────────────────────────────
@@ -60,52 +75,65 @@ export function newGame(): GameState {
     opponentHand,
     opponentDeck,
     mana: 3,
-    maxMana: 3,
-    log: ['⚔  Battle begins! Deploy your forces.'],
-    phase: { type: 'playerTurn' },
-    turn: 1,
+    maxMana: BASE_MAX_MANA,
+    manaAccum: 0,
+    queue: [],
+    log: ['⚔  Battle begins! Tap cards to queue them.'],
+    phase: { type: 'playing' },
+    combatTimer: COMBAT_INTERVAL_MS,
+    opponentTimer: OPPONENT_INTERVAL_MS,
+    turn: 0,
   }
 }
 
-// ─── Play Card ───────────────────────────────────────────
+// ─── Queue Card ───────────────────────────────────────────
 
-export function playCard(state: GameState, cardId: string): GameState {
-  const s = structuredClone(state)
-  if (s.phase.type !== 'playerTurn') return state
+export function queueCard(state: GameState, cardId: string): GameState {
+  if (state.phase.type !== 'playing') return state
 
-  const cardIdx = s.playerHand.findIndex(c => c.id === cardId)
+  const cardIdx = state.playerHand.findIndex(c => c.id === cardId)
   if (cardIdx === -1) return state
 
-  const card = s.playerHand[cardIdx]
-  if (s.mana < card.cost) return state
+  const card = state.playerHand[cardIdx]
+  if (state.mana < card.cost) return state
 
+  const s = structuredClone(state)
   s.playerHand.splice(cardIdx, 1)
   s.mana -= card.cost
 
-  if (card.cardType === 'unit' || card.cardType === 'structure') {
-    const unit = spawnUnit(card.unit!, 'player')
-    s.field.push(unit)
-    const verb = card.cardType === 'structure' ? 'built' : 'deployed'
-    s.log.push(`You ${verb} ${unit.name}.`)
-  } else if (card.cardType === 'upgrade' && card.upgradeEffect) {
-    applyUpgrade(s, card.upgradeEffect, 'player')
-  }
+  const totalMs = defaultDeployMs(card)
+  s.queue.push({ qId: quid(), card, msRemaining: totalMs, totalMs })
 
   drawCard(s.playerDeck, s.playerHand)
+  s.log = [...s.log, `Queuing ${card.name}… marching to front.`]
   return s
 }
 
-// ─── Apply Upgrade ───────────────────────────────────────
+// ─── Apply Upgrade ────────────────────────────────────────
 
-function applyUpgrade(s: GameState, effect: UpgradeEffect, owner: 'player' | 'opponent'): void {
+function applyUpgrade(s: GameState, effect: UpgradeEffect, owner: 'player' | 'opponent', log: string[]): void {
   const units = s.field.filter(u => u.owner === owner)
   const label = owner === 'player' ? 'Your' : 'Enemy'
   if (effect.type === 'buffAttack') {
     for (const u of units) u.attack += effect.amount
-    s.log.push(`${label} units gain +${effect.amount} attack!`)
+    log.push(`${label} units gain +${effect.amount} attack!`)
   } else if (effect.type === 'healUnits') {
     for (const u of units) u.hp = Math.min(u.maxHp, u.hp + effect.amount)
-    s.log.push(`${label} units healed ${effect.amount} HP.`)
+    log.push(`${label} units healed ${effect.amount} HP.`)
+  }
+}
+
+// ─── Deploy a card onto the field ────────────────────────
+
+function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log: string[]): void {
+  if (card.cardType === 'unit' || card.cardType === 'structure') {
+    const unit = spawnUnit(card.unit!, owner)
+    s.field.push(unit)
+    const verb = card.cardType === 'structure' ? 'built' : 'deployed'
+    const who = owner === 'player' ? 'You' : 'Opponent'
+    log.push(`${who} ${verb} ${unit.name}.`)
+  } else if (card.cardType === 'upgrade' && card.upgradeEffect) {
+    applyUpgrade(s, card.upgradeEffect, owner, log)
   }
 }
 
@@ -124,11 +152,9 @@ function resolveCombat(s: GameState, log: string[]): void {
     let target: Unit | null = null
 
     if (unit.bypassWall) {
-      // Ranged: skip walls, hit other units/structures first, then base
       const nonWalls = enemies.filter(u => !u.isWall)
       if (nonWalls.length > 0) target = nonWalls[Math.floor(Math.random() * nonWalls.length)]
     } else {
-      // Melee: walls first, then any other unit/structure, then base
       const walls = enemies.filter(u => u.isWall)
       if (walls.length > 0) {
         target = walls[Math.floor(Math.random() * walls.length)]
@@ -148,7 +174,6 @@ function resolveCombat(s: GameState, log: string[]): void {
     }
   }
 
-  // Apply damage simultaneously
   for (const unit of s.field) {
     const dmg = damageMap.get(unit.id) ?? 0
     if (dmg > 0) unit.hp -= dmg
@@ -174,25 +199,18 @@ function checkGameOver(s: GameState): boolean {
 // ─── Opponent AI ─────────────────────────────────────────
 
 function opponentAI(s: GameState, log: string[]): void {
-  // Extra draw from Barracks
-  const extraDraw = getExtraDraw(s.field, 'opponent')
-  for (let i = 0; i < extraDraw; i++) drawCard(s.opponentDeck, s.opponentHand)
-
   const manaBonus = getManaBonus(s.field, 'opponent')
-  let mana = Math.min(10, 3 + manaBonus)
+  let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
   let played = 0
   while (played < 2) {
     const affordable = s.opponentHand.filter(c => c.cost <= mana)
     if (affordable.length === 0) break
 
-    // Prefer deploying units/structures if field is weak; otherwise anything
     const opponentUnits = s.field.filter(u => u.owner === 'opponent')
     const playerUnits = s.field.filter(u => u.owner === 'player')
     const wantsUnit = opponentUnits.length <= playerUnits.length
-    const preferred = wantsUnit
-      ? affordable.filter(c => c.cardType !== 'upgrade')
-      : affordable
+    const preferred = wantsUnit ? affordable.filter(c => c.cardType !== 'upgrade') : affordable
     const pool = preferred.length > 0 ? preferred : affordable
 
     const card = pool[Math.floor(Math.random() * pool.length)]
@@ -200,65 +218,82 @@ function opponentAI(s: GameState, log: string[]): void {
     mana -= card.cost
     played++
 
-    if (card.cardType === 'unit' || card.cardType === 'structure') {
-      const unit = spawnUnit(card.unit!, 'opponent')
-      s.field.push(unit)
-      log.push(`Opponent deploys ${unit.name}.`)
-    } else if (card.cardType === 'upgrade' && card.upgradeEffect) {
-      applyUpgrade(s, card.upgradeEffect, 'opponent')
-    }
-
+    deployCard(s, card, 'opponent', log)
     drawCard(s.opponentDeck, s.opponentHand)
 
-    // Only play second card 40% of the time
     if (played === 1 && Math.random() > 0.4) break
   }
 
   if (played === 0) log.push('Opponent holds their ground.')
 }
 
-// ─── End Turn ────────────────────────────────────────────
+// ─── Tick (called every ~100 ms) ─────────────────────────
 
-export function endTurn(state: GameState): GameState {
+export function tick(state: GameState, deltaMs: number): GameState {
+  if (state.phase.type !== 'playing') return state
+
   const s = structuredClone(state)
-  if (s.phase.type !== 'playerTurn') return state
-
   const log: string[] = []
 
-  // Player's combat
-  log.push('── Combat ──')
-  resolveCombat(s, log)
-  if (checkGameOver(s)) {
-    s.log = [...s.log, ...log]
-    return s
-  }
-
-  // Opponent's turn
-  log.push("── Opponent's Turn ──")
-  opponentAI(s, log)
-
-  // Opponent's combat
-  log.push('── Combat ──')
-  resolveCombat(s, log)
-  if (checkGameOver(s)) {
-    s.log = [...s.log, ...log]
-    return s
-  }
-
-  // Start next player turn
-  s.turn++
+  // 1. Mana regen
   const manaBonus = getManaBonus(s.field, 'player')
-  s.maxMana = Math.min(10, 3 + manaBonus)
-  s.mana = s.maxMana
+  s.maxMana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
-  // Extra draw from Barracks
-  const extraDraw = getExtraDraw(s.field, 'player')
-  for (let i = 0; i < extraDraw; i++) {
-    drawCard(s.playerDeck, s.playerHand)
-    log.push('  Barracks: drew +1 card.')
+  if (s.mana < s.maxMana) {
+    s.manaAccum += deltaMs / MANA_REGEN_MS
+    while (s.manaAccum >= 1 && s.mana < s.maxMana) {
+      s.mana++
+      s.manaAccum -= 1
+    }
+    if (s.mana >= s.maxMana) s.manaAccum = 0
   }
 
-  log.push(`── Turn ${s.turn} (Mana: ${s.mana}/${s.maxMana}) ──`)
-  s.log = [...s.log, ...log]
+  // 2. Process player queue — deploy cards whose countdown expired
+  const remaining: QueuedCard[] = []
+  for (const qc of s.queue) {
+    qc.msRemaining -= deltaMs
+    if (qc.msRemaining <= 0) {
+      deployCard(s, qc.card, 'player', log)
+    } else {
+      remaining.push(qc)
+    }
+  }
+  s.queue = remaining
+
+  // 3. Tick spawner buildings
+  for (const unit of s.field) {
+    if (unit.spawnTimer == null || unit.structureEffect?.type !== 'spawn') continue
+    unit.spawnTimer -= deltaMs
+    if (unit.spawnTimer <= 0) {
+      const effect = unit.structureEffect as { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
+      const spawned = spawnUnit(effect.unitTemplate, unit.owner)
+      s.field.push(spawned)
+      const who = unit.owner === 'player' ? 'Your' : 'Enemy'
+      log.push(`${who} ${unit.name} spawned a ${spawned.name}!`)
+      unit.spawnTimer = effect.intervalMs
+    }
+  }
+
+  // 4. Combat timer
+  s.combatTimer -= deltaMs
+  if (s.combatTimer <= 0) {
+    s.turn++
+    log.push(`── ⚔ Combat Round ${s.turn} ──`)
+    resolveCombat(s, log)
+    if (checkGameOver(s)) {
+      s.log = [...s.log, ...log]
+      return s
+    }
+    s.combatTimer = COMBAT_INTERVAL_MS
+  }
+
+  // 5. Opponent timer
+  s.opponentTimer -= deltaMs
+  if (s.opponentTimer <= 0) {
+    opponentAI(s, log)
+    s.opponentTimer = OPPONENT_INTERVAL_MS
+  }
+
+  if (log.length > 0) s.log = [...s.log, ...log]
   return s
 }

@@ -55,7 +55,7 @@ pre {
 .base {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 6px 10px;
   border: 1px solid;
   border-radius: 2px;
@@ -86,7 +86,52 @@ pre {
 
 .base-side-info {
   font-size: 11px;
-  opacity: 0.7;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ─── Mana Pips ──────────────────────────────────────── */
+
+.mana-bar {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.mana-pip {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #33ff33;
+  border-radius: 1px;
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+  background: transparent;
+}
+
+.mana-pip--full {
+  background: #33ff33;
+}
+
+.mana-pip--empty {
+  background: transparent;
+  opacity: 0.3;
+}
+
+.mana-pip--partial {
+  background: transparent;
+}
+
+.mana-pip-fill {
+  display: block;
+  position: absolute;
+  left: 0; top: 0;
+  height: 100%;
+  background: rgba(51, 255, 51, 0.55);
+  transition: width 0.1s linear;
 }
 
 /* ─── Field Rows ─────────────────────────────────────── */
@@ -118,15 +163,53 @@ pre {
   padding: 4px 8px;
 }
 
-.field-divider {
-  color: #555;
-  font-size: 11px;
+/* ─── Combat Divider ─────────────────────────────────── */
+
+.field-divider-wrap {
+  position: relative;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.field-divider-bar {
+  position: absolute;
+  inset: 0;
+  background: #111;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222;
+  overflow: hidden;
+}
+
+.field-divider-fill {
+  height: 100%;
+  background: rgba(255, 100, 0, 0.18);
+  transition: width 0.1s linear;
+}
+
+.field-divider-label {
+  position: relative;
+  width: 100%;
   text-align: center;
-  letter-spacing: 0;
-  line-height: 1;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #ff9900;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(255, 153, 0, 0.6);
+  pointer-events: none;
 }
 
 /* ─── Unit Badges ────────────────────────────────────── */
+
+@keyframes unitEnterPlayer {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes unitEnterOpponent {
+  from { transform: translateY(-20px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
 
 .unit-badge {
   display: flex;
@@ -141,38 +224,17 @@ pre {
   text-align: center;
 }
 
-.unit-badge--player {
-  border-color: #33ff33;
-  color: #33ff33;
-}
+.unit-badge--player  { border-color: #33ff33; color: #33ff33; }
+.unit-badge--opponent { border-color: #ff4444; color: #ff4444; }
+.unit-badge--wall    { border-style: double; opacity: 0.9; }
+.unit-badge--structure { border-style: dashed; }
 
-.unit-badge--opponent {
-  border-color: #ff4444;
-  color: #ff4444;
-}
+.unit-badge--new-player   { animation: unitEnterPlayer   0.45s ease-out; }
+.unit-badge--new-opponent { animation: unitEnterOpponent 0.45s ease-out; }
 
-.unit-badge--wall {
-  border-style: double;
-  opacity: 0.9;
-}
-
-.unit-badge--structure {
-  border-style: dashed;
-}
-
-.unit-name {
-  font-size: 10px;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-}
-
-.unit-hp {
-  font-size: 10px;
-}
-
-.unit-atk {
-  font-size: 10px;
-}
+.unit-name { font-size: 10px; font-weight: bold; letter-spacing: 0.5px; }
+.unit-hp   { font-size: 10px; }
+.unit-atk  { font-size: 10px; }
 
 .unit-tag {
   font-size: 8px;
@@ -183,6 +245,68 @@ pre {
 .unit-tag--econ {
   color: #ffcc00;
   opacity: 1;
+}
+
+/* ─── Queue Panel ────────────────────────────────────── */
+
+.queue-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  border: 1px dashed #444;
+  border-radius: 2px;
+  background: rgba(255, 153, 0, 0.04);
+  flex-wrap: wrap;
+}
+
+.queue-label {
+  font-size: 10px;
+  color: #ff9900;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.queue-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.queue-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 3px 6px;
+  border: 1px solid #ff9900;
+  border-radius: 2px;
+  min-width: 48px;
+  font-size: 10px;
+  color: #ff9900;
+}
+
+.queue-badge-name {
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.queue-badge-timer {
+  font-size: 11px;
+}
+
+.queue-progress-track {
+  width: 100%;
+  height: 3px;
+  background: #333;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.queue-progress-fill {
+  height: 100%;
+  background: #ff9900;
+  transition: width 0.1s linear;
 }
 
 /* ─── Combat Log ─────────────────────────────────────── */
@@ -222,18 +346,6 @@ pre {
   font-size: 11px;
 }
 
-.end-turn-btn {
-  padding: 4px 14px !important;
-  font-size: 13px !important;
-  border-color: #ffcc00 !important;
-  color: #ffcc00 !important;
-}
-
-.end-turn-btn:hover {
-  background: rgba(255, 204, 0, 0.12) !important;
-  box-shadow: 0 0 10px rgba(255, 204, 0, 0.4) !important;
-}
-
 .hand-cards {
   display: flex;
   gap: 8px;
@@ -271,17 +383,9 @@ pre {
   background: none;
 }
 
-.card-tile--legendary {
-  border-color: rgba(255, 215, 0, 0.6);
-}
-
-.card-tile--rare {
-  border-color: rgba(0, 170, 255, 0.5);
-}
-
-.card-tile--uncommon {
-  border-color: rgba(0, 255, 136, 0.45);
-}
+.card-tile--legendary { border-color: rgba(255, 215, 0, 0.6); }
+.card-tile--rare      { border-color: rgba(0, 170, 255, 0.5); }
+.card-tile--uncommon  { border-color: rgba(0, 255, 136, 0.45); }
 
 .card-ascii {
   font-size: 11px;
@@ -313,9 +417,7 @@ pre {
   animation: fadeIn 0.3s ease-out;
 }
 
-.gameover-title {
-  font-size: 20px;
-}
+.gameover-title { font-size: 20px; }
 
 .gameover--win .gameover-title  { color: #ffcc00; }
 .gameover--lose .gameover-title { color: #ff4444; }
@@ -336,9 +438,7 @@ pre {
   text-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
 }
 
-.gameover-message {
-  font-size: 14px;
-}
+.gameover-message { font-size: 14px; }
 
 .gameover--win .gameover-message  { color: #00ccff; }
 .gameover--lose .gameover-message { color: #ff4444; }
@@ -396,4 +496,5 @@ pre {
   .card-ascii { font-size: 9px; }
   .card-tile { min-width: 78px; }
   .unit-badge { min-width: 46px; font-size: 10px; }
+  .mana-pip { width: 8px; height: 8px; }
 }
