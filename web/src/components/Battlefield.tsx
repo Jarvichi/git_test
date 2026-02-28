@@ -1,73 +1,38 @@
 import React, { useRef, useEffect } from 'react'
-import { GameState, Unit, QueuedCard } from '../game/types'
+import { GameState, Unit, LANE_WIDTH } from '../game/types'
+import { CARD_COOLDOWN_MS } from '../game/engine'
 import { CardTile } from './CardTile'
-import { hpBar, COMBAT_INTERVAL_MS } from '../game/engine'
 
 interface Props {
   state: GameState
-  onQueueCard: (cardId: string) => void
+  onPlayCard: (cardId: string) => void
 }
 
-function UnitBadge({ unit }: { unit: Unit }) {
-  const classes = [
-    'unit-badge',
-    `unit-badge--${unit.owner}`,
-    unit.isWall ? 'unit-badge--wall' : '',
-    unit.structureEffect ? 'unit-badge--structure' : '',
-    unit.isNew ? `unit-badge--new-${unit.owner}` : '',
-  ].filter(Boolean).join(' ')
-
-  let effectLabel: string | null = null
-  if (unit.structureEffect) {
-    if (unit.structureEffect.type === 'mana') {
-      effectLabel = `+${unit.structureEffect.amount}MANA`
-    } else if (unit.structureEffect.type === 'spawn') {
-      const secLeft = unit.spawnTimer != null ? Math.ceil(unit.spawnTimer / 1000) : '?'
-      effectLabel = `SPAWN ${secLeft}s`
-    }
-  }
+function LaneUnit({ unit }: { unit: Unit }) {
+  const pct = (unit.x / LANE_WIDTH) * 100
+  const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
+  const isStructure = unit.moveSpeed === 0
 
   return (
-    <div className={classes}>
-      <div className="unit-name">{unit.name}</div>
-      <div className="unit-hp">{unit.hp}/{unit.maxHp}HP</div>
-      {unit.attack > 0 && <div className="unit-atk">⚔ {unit.attack}</div>}
-      {unit.isWall && <div className="unit-tag">WALL</div>}
-      {unit.bypassWall && !unit.structureEffect && <div className="unit-tag">RANGE</div>}
-      {effectLabel && <div className="unit-tag unit-tag--econ">{effectLabel}</div>}
-    </div>
-  )
-}
-
-function QueueBadge({ qc }: { qc: QueuedCard }) {
-  const pct = Math.max(0, qc.msRemaining / qc.totalMs)
-  const secLeft = Math.ceil(qc.msRemaining / 1000)
-  return (
-    <div className="queue-badge">
-      <div className="queue-badge-name">{qc.card.name}</div>
-      <div className="queue-badge-timer">{secLeft}s</div>
-      <div className="queue-progress-track">
-        <div className="queue-progress-fill" style={{ width: `${pct * 100}%` }} />
+    <div
+      className={[
+        'lane-unit',
+        `lane-unit--${unit.owner}`,
+        isStructure ? 'lane-unit--structure' : '',
+        unit.isWall ? 'lane-unit--wall' : '',
+      ].filter(Boolean).join(' ')}
+      style={{ left: `${pct}%` }}
+      title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
+    >
+      <div className="lane-unit-name">{unit.name}</div>
+      <div className="lane-unit-hp-bar">
+        <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />
       </div>
-    </div>
-  )
-}
-
-function CombatDivider({ combatTimer }: { combatTimer: number }) {
-  const secsLeft = (combatTimer / 1000).toFixed(1)
-  const pct = combatTimer / COMBAT_INTERVAL_MS
-  return (
-    <div className="field-divider-wrap">
-      <div className="field-divider-bar">
-        <div className="field-divider-fill" style={{ width: `${pct * 100}%` }} />
-      </div>
-      <div className="field-divider-label">⚔ COMBAT IN {secsLeft}s</div>
     </div>
   )
 }
 
 function ManaBar({ mana, maxMana, manaAccum }: { mana: number; maxMana: number; manaAccum: number }) {
-  // Render pips: filled, partially filling, empty
   const pips = Array.from({ length: maxMana }, (_, i) => {
     if (i < mana) return 'full'
     if (i === mana) return 'partial'
@@ -75,9 +40,9 @@ function ManaBar({ mana, maxMana, manaAccum }: { mana: number; maxMana: number; 
   })
   return (
     <div className="mana-bar">
-      {pips.map((state, i) => (
-        <span key={i} className={`mana-pip mana-pip--${state}`}>
-          {state === 'partial'
+      {pips.map((pipState, i) => (
+        <span key={i} className={`mana-pip mana-pip--${pipState}`}>
+          {pipState === 'partial'
             ? <span className="mana-pip-fill" style={{ width: `${manaAccum * 100}%` }} />
             : null}
         </span>
@@ -86,10 +51,24 @@ function ManaBar({ mana, maxMana, manaAccum }: { mana: number; maxMana: number; 
   )
 }
 
-export function Battlefield({ state, onQueueCard }: Props) {
-  const playerUnits = state.field.filter(u => u.owner === 'player')
-  const opponentUnits = state.field.filter(u => u.owner === 'opponent')
+function HpBar({ current, max, color }: { current: number; max: number; color: string }) {
+  const pct = Math.max(0, (current / max) * 100)
+  return (
+    <div className="hp-bar-track">
+      <div className="hp-bar-fill" style={{ width: `${pct}%`, background: color }} />
+      <span className="hp-bar-text">{current}/{max}</span>
+    </div>
+  )
+}
+
+export function Battlefield({ state, onPlayCard }: Props) {
   const logRef = useRef<HTMLDivElement>(null)
+  const cooldownActive = state.cardCooldown > 0
+  const cooldownSec = (state.cardCooldown / 1000).toFixed(1)
+  const gameTimeSec = Math.floor(state.gameTime / 1000)
+  const minutes = Math.floor(gameTimeSec / 60)
+  const seconds = gameTimeSec % 60
+  const timeStr = `${minutes}:${String(seconds).padStart(2, '0')}`
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
@@ -98,53 +77,50 @@ export function Battlefield({ state, onQueueCard }: Props) {
   return (
     <div className="battlefield">
 
+      {/* Top bar: game time */}
+      <div className="top-bar">
+        <span className="game-clock">{timeStr}</span>
+        {cooldownActive && (
+          <span className="cooldown-label">Next card in {cooldownSec}s</span>
+        )}
+      </div>
+
       {/* Opponent base */}
-      <div className="base base--opponent">
-        <span className="base-label">ENEMY BASE</span>
-        <span className="base-hp">{hpBar(state.opponentBase.hp, state.opponentBase.maxHp)}</span>
-        <span className="base-side-info">Hand: {state.opponentHand.length}</span>
+      <div className="base-bar base-bar--opponent">
+        <span className="base-bar-label">ENEMY</span>
+        <HpBar current={state.opponentBase.hp} max={state.opponentBase.maxHp} color="#ff4444" />
+        <span className="base-bar-info">Hand: {state.opponentHand.length}</span>
       </div>
 
-      {/* Opponent field */}
-      <div className="field-row field-row--opponent">
-        {opponentUnits.length === 0
-          ? <span className="field-empty">— no units —</span>
-          : opponentUnits.map(u => <UnitBadge key={u.id} unit={u} />)}
+      {/* The Lane */}
+      <div className="lane">
+        <div className="lane-ground" />
+        {state.field.map(u => <LaneUnit key={u.id} unit={u} />)}
       </div>
 
-      {/* Combat divider with countdown */}
-      <CombatDivider combatTimer={state.combatTimer} />
-
-      {/* Player field */}
-      <div className="field-row field-row--player">
-        {playerUnits.length === 0
-          ? <span className="field-empty">— tap cards below to deploy —</span>
-          : playerUnits.map(u => <UnitBadge key={u.id} unit={u} />)}
-      </div>
-
-      {/* Player base + mana */}
-      <div className="base base--player">
-        <span className="base-label">YOUR BASE</span>
-        <span className="base-hp">{hpBar(state.playerBase.hp, state.playerBase.maxHp)}</span>
-        <span className="base-side-info">
+      {/* Player base */}
+      <div className="base-bar base-bar--player">
+        <span className="base-bar-label">YOU</span>
+        <HpBar current={state.playerBase.hp} max={state.playerBase.maxHp} color="#33ff33" />
+        <span className="base-bar-info">
           MANA {state.mana}/{state.maxMana}
           <ManaBar mana={state.mana} maxMana={state.maxMana} manaAccum={state.manaAccum} />
         </span>
       </div>
 
-      {/* Deploy queue */}
-      {state.queue.length > 0 && (
-        <div className="queue-panel">
-          <span className="queue-label">MARCHING TO FRONT:</span>
-          <div className="queue-list">
-            {state.queue.map(qc => <QueueBadge key={qc.qId} qc={qc} />)}
-          </div>
+      {/* Cooldown progress bar */}
+      {cooldownActive && (
+        <div className="cooldown-bar-track">
+          <div
+            className="cooldown-bar-fill"
+            style={{ width: `${(state.cardCooldown / CARD_COOLDOWN_MS) * 100}%` }}
+          />
         </div>
       )}
 
       {/* Combat log */}
       <div className="combat-log" ref={logRef}>
-        {state.log.slice(-12).map((entry, i) => (
+        {state.log.slice(-8).map((entry, i) => (
           <div key={i} className="log-entry">{entry}</div>
         ))}
       </div>
@@ -153,23 +129,23 @@ export function Battlefield({ state, onQueueCard }: Props) {
       <div className="hand-panel">
         <div className="hand-header">
           <span className="hand-label">
-            HAND ({state.playerHand.length}) · Deck: {state.playerDeck.length} · Round {state.turn}
+            HAND ({state.playerHand.length}) | Deck: {state.playerDeck.length}
           </span>
         </div>
         <div className="hand-cards">
           {state.playerHand.length === 0
-            ? <span className="field-empty">— waiting for cards —</span>
+            ? <span className="field-empty">No cards</span>
             : state.playerHand.map(card => (
               <CardTile
                 key={card.id}
                 card={card}
                 canAfford={state.mana >= card.cost}
-                onClick={() => onQueueCard(card.id)}
+                disabled={cooldownActive}
+                onClick={() => onPlayCard(card.id)}
               />
             ))}
         </div>
       </div>
-
     </div>
   )
 }

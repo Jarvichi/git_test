@@ -1,20 +1,20 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, QueuedCard } from './types'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, LANE_WIDTH } from './types'
 import { makeDeck } from './cards'
 
 // ─── Constants ────────────────────────────────────────────
 
-export const COMBAT_INTERVAL_MS = 6000
 const OPPONENT_INTERVAL_MS = 8000
 const MANA_REGEN_MS = 3000       // 1 mana every 3 seconds
 const BASE_MAX_MANA = 5
+export const CARD_COOLDOWN_MS = 5000  // 5 s between card plays
+
+const PLAYER_SPAWN_X = 30        // where player units appear
+const OPPONENT_SPAWN_X = LANE_WIDTH - 30  // where opponent units appear
 
 // ─── Helpers ─────────────────────────────────────────────
 
 let _unitId = 0
 function uid(): string { return `unit-${++_unitId}` }
-
-let _queueId = 0
-function quid(): string { return `q-${++_queueId}` }
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -29,25 +29,23 @@ function drawCard(deck: Card[], hand: Card[]): void {
   if (deck.length > 0) hand.push(deck.shift()!)
 }
 
-export function hpBar(current: number, max: number): string {
-  const filled = Math.max(0, Math.round((current / max) * 12))
-  const empty = 12 - filled
-  return `[${'█'.repeat(filled)}${'░'.repeat(empty)}] ${current}/${max}`
-}
-
 function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
-  const unit: Unit = { ...template, id: uid(), owner, hp: template.maxHp, isNew: true }
+  const unit: Unit = {
+    ...template,
+    id: uid(),
+    owner,
+    hp: template.maxHp,
+    x: owner === 'player' ? PLAYER_SPAWN_X : OPPONENT_SPAWN_X,
+    attackTimer: 0,
+  }
   if (template.structureEffect?.type === 'spawn') {
     unit.spawnTimer = template.structureEffect.intervalMs
   }
+  // Structures stay at base
+  if (template.moveSpeed === 0) {
+    unit.x = owner === 'player' ? 10 : LANE_WIDTH - 10
+  }
   return unit
-}
-
-function defaultDeployMs(card: Card): number {
-  if (card.deployMs) return card.deployMs
-  if (card.cardType === 'structure') return 5000
-  if (card.cardType === 'upgrade') return 1500
-  return 3000
 }
 
 // ─── Mana bonus from Farms ────────────────────────────────
@@ -67,8 +65,8 @@ export function newGame(): GameState {
   const opponentHand = opponentDeck.splice(0, 4)
 
   return {
-    playerBase: { hp: 20, maxHp: 20 },
-    opponentBase: { hp: 20, maxHp: 20 },
+    playerBase: { hp: 50, maxHp: 50 },
+    opponentBase: { hp: 50, maxHp: 50 },
     field: [],
     playerHand,
     playerDeck,
@@ -77,19 +75,19 @@ export function newGame(): GameState {
     mana: 3,
     maxMana: BASE_MAX_MANA,
     manaAccum: 0,
-    queue: [],
-    log: ['⚔  Battle begins! Tap cards to queue them.'],
+    cardCooldown: 0,
+    log: ['Battle begins! Tap cards to deploy.'],
     phase: { type: 'playing' },
-    combatTimer: COMBAT_INTERVAL_MS,
     opponentTimer: OPPONENT_INTERVAL_MS,
-    turn: 0,
+    gameTime: 0,
   }
 }
 
-// ─── Queue Card ───────────────────────────────────────────
+// ─── Play Card (immediate deploy + cooldown) ─────────────
 
-export function queueCard(state: GameState, cardId: string): GameState {
+export function playCard(state: GameState, cardId: string): GameState {
   if (state.phase.type !== 'playing') return state
+  if (state.cardCooldown > 0) return state
 
   const cardIdx = state.playerHand.findIndex(c => c.id === cardId)
   if (cardIdx === -1) return state
@@ -100,12 +98,10 @@ export function queueCard(state: GameState, cardId: string): GameState {
   const s = structuredClone(state)
   s.playerHand.splice(cardIdx, 1)
   s.mana -= card.cost
+  s.cardCooldown = CARD_COOLDOWN_MS
 
-  const totalMs = defaultDeployMs(card)
-  s.queue.push({ qId: quid(), card, msRemaining: totalMs, totalMs })
-
+  deployCard(s, card, 'player', s.log)
   drawCard(s.playerDeck, s.playerHand)
-  s.log = [...s.log, `Queuing ${card.name}… marching to front.`]
   return s
 }
 
@@ -137,56 +133,115 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
   }
 }
 
-// ─── Combat Resolution ────────────────────────────────────
+// ─── Movement ─────────────────────────────────────────────
 
-function resolveCombat(s: GameState, log: string[]): void {
-  const damageMap = new Map<string, number>()
-  let playerBaseDmg = 0
-  let opponentBaseDmg = 0
+function moveUnits(s: GameState, deltaMs: number): void {
+  const deltaSec = deltaMs / 1000
 
   for (const unit of s.field) {
-    if (unit.attack === 0) continue
+    if (unit.moveSpeed === 0) continue
 
-    const isPlayer = unit.owner === 'player'
-    const enemies = s.field.filter(u => u.owner !== unit.owner)
-    let target: Unit | null = null
+    // Find nearest enemy in front of this unit
+    const nearestEnemy = findNearestEnemy(s.field, unit)
 
-    if (unit.bypassWall) {
-      const nonWalls = enemies.filter(u => !u.isWall)
-      if (nonWalls.length > 0) target = nonWalls[Math.floor(Math.random() * nonWalls.length)]
-    } else {
-      const walls = enemies.filter(u => u.isWall)
-      if (walls.length > 0) {
-        target = walls[Math.floor(Math.random() * walls.length)]
-      } else if (enemies.length > 0) {
-        target = enemies[Math.floor(Math.random() * enemies.length)]
-      }
+    // Check if blocked by a wall
+    if (nearestEnemy && nearestEnemy.isWall && !unit.bypassWall) {
+      const dist = Math.abs(unit.x - nearestEnemy.x)
+      if (dist <= unit.attackRange + 10) continue  // stop at wall
     }
+
+    // Check if in attack range of any enemy — stop moving if so
+    if (nearestEnemy) {
+      const dist = Math.abs(unit.x - nearestEnemy.x)
+      if (dist <= unit.attackRange) continue  // in range, stop
+    }
+
+    // Move toward enemy base
+    const moveAmount = unit.moveSpeed * deltaSec
+    if (unit.owner === 'player') {
+      unit.x = Math.min(LANE_WIDTH, unit.x + moveAmount)
+    } else {
+      unit.x = Math.max(0, unit.x - moveAmount)
+    }
+  }
+}
+
+function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
+  let nearest: Unit | null = null
+  let nearestDist = Infinity
+
+  for (const other of field) {
+    if (other.owner === unit.owner) continue
+    if (other.hp <= 0) continue
+
+    // For melee units that can't bypass walls, walls are valid targets
+    // For ranged units, skip walls (they bypass)
+    if (other.isWall && unit.bypassWall) continue
+
+    const dist = Math.abs(unit.x - other.x)
+
+    // Only consider enemies "in front" of this unit
+    if (unit.owner === 'player' && other.x < unit.x) continue
+    if (unit.owner === 'opponent' && other.x > unit.x) continue
+
+    if (dist < nearestDist) {
+      nearestDist = dist
+      nearest = other
+    }
+  }
+  return nearest
+}
+
+// ─── Per-unit Combat ──────────────────────────────────────
+
+function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
+  for (const unit of s.field) {
+    if (unit.attack === 0 || unit.hp <= 0) continue
+
+    // Tick attack cooldown
+    if (unit.attackTimer > 0) {
+      unit.attackTimer -= deltaMs
+      continue
+    }
+
+    // Find target
+    const target = findNearestEnemy(s.field, unit)
+    const isPlayer = unit.owner === 'player'
 
     if (target) {
-      damageMap.set(target.id, (damageMap.get(target.id) ?? 0) + unit.attack)
-      log.push(`  ${unit.name} [${isPlayer ? 'YOU' : 'FOE'}] → ${target.name} -${unit.attack}HP`)
+      const dist = Math.abs(unit.x - target.x)
+      if (dist <= unit.attackRange) {
+        // Attack!
+        target.hp -= unit.attack
+        unit.attackTimer = unit.attackCooldownMs
+        if (target.hp <= 0) {
+          log.push(`${unit.name} destroyed ${target.name}!`)
+        }
+      }
     } else {
-      if (isPlayer) opponentBaseDmg += unit.attack
-      else playerBaseDmg += unit.attack
-      const baseLabel = isPlayer ? 'Enemy Base' : 'Your Base'
-      log.push(`  ${unit.name} [${isPlayer ? 'YOU' : 'FOE'}] → ${baseLabel} -${unit.attack}HP`)
+      // No enemy units — attack the base if close enough
+      const atEnemyBase = isPlayer
+        ? unit.x >= LANE_WIDTH - unit.attackRange
+        : unit.x <= unit.attackRange
+
+      if (atEnemyBase) {
+        if (isPlayer) {
+          s.opponentBase.hp = Math.max(0, s.opponentBase.hp - unit.attack)
+          log.push(`${unit.name} hits Enemy Base! -${unit.attack}HP`)
+        } else {
+          s.playerBase.hp = Math.max(0, s.playerBase.hp - unit.attack)
+          log.push(`${unit.name} hits Your Base! -${unit.attack}HP`)
+        }
+        unit.attackTimer = unit.attackCooldownMs
+      }
     }
   }
 
-  for (const unit of s.field) {
-    const dmg = damageMap.get(unit.id) ?? 0
-    if (dmg > 0) unit.hp -= dmg
-  }
-
-  const before = s.field.length
+  // Remove dead units
   s.field = s.field.filter(u => u.hp > 0)
-  const fallen = before - s.field.length
-  if (fallen > 0) log.push(`  ${fallen} unit(s) destroyed.`)
-
-  s.playerBase.hp = Math.max(0, s.playerBase.hp - playerBaseDmg)
-  s.opponentBase.hp = Math.max(0, s.opponentBase.hp - opponentBaseDmg)
 }
+
+// ─── Game Over Check ──────────────────────────────────────
 
 function checkGameOver(s: GameState): boolean {
   if (s.playerBase.hp <= 0 || s.opponentBase.hp <= 0) {
@@ -224,7 +279,7 @@ function opponentAI(s: GameState, log: string[]): void {
     if (played === 1 && Math.random() > 0.4) break
   }
 
-  if (played === 0) log.push('Opponent holds their ground.')
+  if (played === 0) log.push('Opponent holds.')
 }
 
 // ─── Tick (called every ~100 ms) ─────────────────────────
@@ -234,6 +289,8 @@ export function tick(state: GameState, deltaMs: number): GameState {
 
   const s = structuredClone(state)
   const log: string[] = []
+
+  s.gameTime += deltaMs
 
   // 1. Mana regen
   const manaBonus = getManaBonus(s.field, 'player')
@@ -248,19 +305,22 @@ export function tick(state: GameState, deltaMs: number): GameState {
     if (s.mana >= s.maxMana) s.manaAccum = 0
   }
 
-  // 2. Process player queue — deploy cards whose countdown expired
-  const remaining: QueuedCard[] = []
-  for (const qc of s.queue) {
-    qc.msRemaining -= deltaMs
-    if (qc.msRemaining <= 0) {
-      deployCard(s, qc.card, 'player', log)
-    } else {
-      remaining.push(qc)
-    }
+  // 2. Card cooldown
+  if (s.cardCooldown > 0) {
+    s.cardCooldown = Math.max(0, s.cardCooldown - deltaMs)
   }
-  s.queue = remaining
 
-  // 3. Tick spawner buildings
+  // 3. Move all units
+  moveUnits(s, deltaMs)
+
+  // 4. Process per-unit attacks
+  processAttacks(s, deltaMs, log)
+  if (checkGameOver(s)) {
+    s.log = [...s.log, ...log]
+    return s
+  }
+
+  // 5. Tick spawner buildings
   for (const unit of s.field) {
     if (unit.spawnTimer == null || unit.structureEffect?.type !== 'spawn') continue
     unit.spawnTimer -= deltaMs
@@ -274,20 +334,7 @@ export function tick(state: GameState, deltaMs: number): GameState {
     }
   }
 
-  // 4. Combat timer
-  s.combatTimer -= deltaMs
-  if (s.combatTimer <= 0) {
-    s.turn++
-    log.push(`── ⚔ Combat Round ${s.turn} ──`)
-    resolveCombat(s, log)
-    if (checkGameOver(s)) {
-      s.log = [...s.log, ...log]
-      return s
-    }
-    s.combatTimer = COMBAT_INTERVAL_MS
-  }
-
-  // 5. Opponent timer
+  // 6. Opponent timer
   s.opponentTimer -= deltaMs
   if (s.opponentTimer <= 0) {
     opponentAI(s, log)

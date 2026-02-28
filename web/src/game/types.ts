@@ -19,6 +19,9 @@ export interface UnitTemplate {
   maxHp: number
   isWall: boolean
   bypassWall: boolean
+  moveSpeed: number          // pixels per second (0 = stationary structure)
+  attackRange: number        // pixels — distance at which unit can attack
+  attackCooldownMs: number   // ms between attacks
   structureEffect?: StructureEffect
 }
 
@@ -26,8 +29,9 @@ export interface Unit extends UnitTemplate {
   id: string
   owner: 'player' | 'opponent'
   hp: number
-  spawnTimer?: number      // ms until next spawn (spawner buildings only)
-  isNew?: boolean          // triggers enter animation on first render
+  x: number                  // pixel position in the lane (0=player base, LANE_WIDTH=opponent base)
+  attackTimer: number        // ms until this unit can attack again
+  spawnTimer?: number        // ms until next spawn (spawner buildings only)
 }
 
 export interface Card {
@@ -39,16 +43,6 @@ export interface Card {
   unit?: UnitTemplate
   upgradeEffect?: UpgradeEffect
   description: string
-  deployMs?: number        // override default deploy time
-}
-
-// ─── Queue ────────────────────────────────────────────────
-
-export interface QueuedCard {
-  qId: string
-  card: Card
-  msRemaining: number
-  totalMs: number
 }
 
 // ─── Game ────────────────────────────────────────────────
@@ -62,6 +56,8 @@ export type GamePhase =
   | { type: 'playing' }
   | { type: 'gameOver'; winner: 'player' | 'opponent' }
 
+export const LANE_WIDTH = 500
+
 export interface GameState {
   playerBase: Base
   opponentBase: Base
@@ -72,11 +68,10 @@ export interface GameState {
   opponentDeck: Card[]
   mana: number
   maxMana: number
-  manaAccum: number       // fractional mana toward next point (0–1)
-  queue: QueuedCard[]     // player's deploy queue
+  manaAccum: number          // fractional mana toward next point (0–1)
+  cardCooldown: number       // ms until player can play another card
   log: string[]
   phase: GamePhase
-  combatTimer: number     // ms until next auto-combat
-  opponentTimer: number   // ms until opponent next acts
-  turn: number            // combat round counter
+  opponentTimer: number      // ms until opponent next acts
+  gameTime: number           // total elapsed game time in ms
 }
