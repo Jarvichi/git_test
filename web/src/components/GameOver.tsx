@@ -33,7 +33,7 @@ export function GameOver({ state, winner, onRestart }: Props) {
         {won ? 'Enemy base destroyed!' : 'Your base was destroyed...'}
       </div>
       <div className="gameover-stats">
-        <div>Turns: {state.turn}</div>
+        <div>Time: {Math.floor(state.gameTime / 1000)}s</div>
         {won
           ? <div>Your base HP: {state.playerBase.hp}/{state.playerBase.maxHp}</div>
           : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>}

@@ -1,12 +1,12 @@
 // ─── Structure & Upgrade Effects ─────────────────────────
 
 export type StructureEffect =
-  | { type: 'mana'; amount: number }      // +N max mana per turn while alive
-  | { type: 'extraDraw'; amount: number } // draw N extra cards per turn while alive
+  | { type: 'mana'; amount: number }
+  | { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
 
 export type UpgradeEffect =
-  | { type: 'buffAttack'; amount: number } // +N attack to all friendly units
-  | { type: 'healUnits'; amount: number }  // heal all friendly units N HP
+  | { type: 'buffAttack'; amount: number }
+  | { type: 'healUnits'; amount: number }
 
 // ─── Cards ───────────────────────────────────────────────
 
@@ -17,8 +17,11 @@ export interface UnitTemplate {
   name: string
   attack: number
   maxHp: number
-  isWall: boolean      // absorbs melee attacks before other units
-  bypassWall: boolean  // ignores walls when selecting targets
+  isWall: boolean
+  bypassWall: boolean
+  moveSpeed: number          // pixels per second (0 = stationary structure)
+  attackRange: number        // pixels — distance at which unit can attack
+  attackCooldownMs: number   // ms between attacks
   structureEffect?: StructureEffect
 }
 
@@ -26,6 +29,9 @@ export interface Unit extends UnitTemplate {
   id: string
   owner: 'player' | 'opponent'
   hp: number
+  x: number                  // pixel position in the lane (0=player base, LANE_WIDTH=opponent base)
+  attackTimer: number        // ms until this unit can attack again
+  spawnTimer?: number        // ms until next spawn (spawner buildings only)
 }
 
 export interface Card {
@@ -34,8 +40,8 @@ export interface Card {
   rarity: CardRarity
   cost: number
   cardType: CardType
-  unit?: UnitTemplate          // unit and structure cards
-  upgradeEffect?: UpgradeEffect // upgrade cards
+  unit?: UnitTemplate
+  upgradeEffect?: UpgradeEffect
   description: string
 }
 
@@ -47,8 +53,10 @@ export interface Base {
 }
 
 export type GamePhase =
-  | { type: 'playerTurn' }
+  | { type: 'playing' }
   | { type: 'gameOver'; winner: 'player' | 'opponent' }
+
+export const LANE_WIDTH = 500
 
 export interface GameState {
   playerBase: Base
@@ -60,7 +68,10 @@ export interface GameState {
   opponentDeck: Card[]
   mana: number
   maxMana: number
+  manaAccum: number          // fractional mana toward next point (0–1)
+  cardCooldown: number       // ms until player can play another card
   log: string[]
   phase: GamePhase
-  turn: number
+  opponentTimer: number      // ms until opponent next acts
+  gameTime: number           // total elapsed game time in ms
 }
