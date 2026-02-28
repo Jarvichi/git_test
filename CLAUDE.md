@@ -48,6 +48,9 @@ npm run preview  # Preview production build locally
 - **Opponent AI:** Plays 1–2 affordable cards per turn from its own shuffled deck
 - **Win:** Destroy the enemy base (20 HP). **Lose:** Your base reaches 0 HP.
 
+## Permissions
+- Claude has full permission to push and merge code changes
+
 ## GitHub & PRs
 - Authenticated as: Jarvichi
 - Default base branch: `main`
