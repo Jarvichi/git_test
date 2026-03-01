@@ -32,6 +32,7 @@ export interface Unit extends UnitTemplate {
   x: number                  // pixel position in the lane (0=player base, LANE_WIDTH=opponent base)
   attackTimer: number        // ms until this unit can attack again
   spawnTimer?: number        // ms until next spawn (spawner buildings only)
+  upgradeLevel?: number      // 1 = base, 2+ = upgraded (structures only)
 }
 
 export interface Card {
