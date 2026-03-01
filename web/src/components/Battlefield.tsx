@@ -10,10 +10,27 @@ interface Props {
 }
 
 function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number }) {
-  const pct = (unit.x / LANE_WIDTH) * 100
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
   const isStructure = unit.moveSpeed === 0
-  const bottom = isStructure ? 4 + stackIndex * 52 : 8
+
+  // Vertical lane: top% based on x position (high x = near enemy = near top)
+  const topPct = (1 - unit.x / LANE_WIDTH) * 100
+
+  let style: React.CSSProperties
+  if (isStructure) {
+    // Structures are anchored to their base edge, spread horizontally by stackIndex
+    const hOffset = 5 + stackIndex * 58
+    style = unit.owner === 'player'
+      ? { bottom: '5px', left: `${hOffset}px` }
+      : { top: '5px', right: `${hOffset}px` }
+  } else {
+    // Mobile units float in the center, positioned vertically
+    style = {
+      top: `${topPct}%`,
+      left: '50%',
+      transform: 'translateX(-50%) translateY(-50%)',
+    }
+  }
 
   return (
     <div
@@ -23,7 +40,7 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
         isStructure ? 'lane-unit--structure' : '',
         unit.isWall ? 'lane-unit--wall' : '',
       ].filter(Boolean).join(' ')}
-      style={{ left: `${pct}%`, bottom: `${bottom}px` }}
+      style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
       <SpriteImg name={unit.name} className="lane-unit-sprite" />
@@ -72,6 +89,7 @@ export function Battlefield({ state, onPlayCard }: Props) {
   const minutes = Math.floor(gameTimeSec / 60)
   const seconds = gameTimeSec % 60
   const timeStr = `${minutes}:${String(seconds).padStart(2, '0')}`
+  const sdSec = Math.ceil(state.suddenDeathTimer / 1000)
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
@@ -80,12 +98,19 @@ export function Battlefield({ state, onPlayCard }: Props) {
   return (
     <div className="battlefield">
 
-      {/* Top bar: game time */}
-      <div className="top-bar">
+      {/* Top bar: clock, scores, sudden death */}
+      <div className={`top-bar${state.suddenDeath ? ' top-bar--sudden-death' : ''}`}>
         <span className="game-clock">{timeStr}</span>
-        {cooldownActive && (
-          <span className="cooldown-label">Next card in {cooldownSec}s</span>
-        )}
+        <span className="score-display">
+          <span className="score-player">{state.playerScore}</span>
+          <span className="score-sep"> – </span>
+          <span className="score-opponent">{state.opponentScore}</span>
+        </span>
+        {state.suddenDeath
+          ? <span className="sudden-death-label">⚡ {sdSec}s</span>
+          : cooldownActive
+            ? <span className="cooldown-label">{cooldownSec}s</span>
+            : null}
       </div>
 
       {/* Opponent base */}
@@ -95,7 +120,7 @@ export function Battlefield({ state, onPlayCard }: Props) {
         <span className="base-bar-info">Hand: {state.opponentHand.length}</span>
       </div>
 
-      {/* The Lane */}
+      {/* The Lane — vertical, fills remaining space */}
       <div className="lane">
         <div className="lane-ground" />
         {state.field.map((u, i) => {
@@ -128,7 +153,7 @@ export function Battlefield({ state, onPlayCard }: Props) {
 
       {/* Combat log */}
       <div className="combat-log" ref={logRef}>
-        {state.log.slice(-8).map((entry, i) => (
+        {state.log.slice(-6).map((entry, i) => (
           <div key={i} className="log-entry">{entry}</div>
         ))}
       </div>

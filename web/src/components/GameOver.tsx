@@ -3,7 +3,7 @@ import { GameState } from '../game/types'
 
 interface Props {
   state: GameState
-  winner: 'player' | 'opponent'
+  winner: 'player' | 'opponent' | 'draw'
   onRestart: () => void
 }
 
@@ -21,22 +21,44 @@ const DEFEAT_ART = `   ___
   |___|
  /     \\`
 
+const DRAW_ART = `  =====
+  |   |
+  | = |
+  |   |
+  =====
+  DRAW!`
+
 export function GameOver({ state, winner, onRestart }: Props) {
   const won = winner === 'player'
+  const draw = winner === 'draw'
+  const css = won ? 'gameover--win' : draw ? 'gameover--draw' : 'gameover--lose'
+  const art = won ? VICTORY_ART : draw ? DRAW_ART : DEFEAT_ART
+
+  const title = won ? '═══ VICTORY ═══' : draw ? '═══ DRAW ═══' : '═══ DEFEAT ═══'
+
+  const message = won
+    ? 'Enemy base destroyed!'
+    : draw
+      ? 'Time ran out — scores are tied!'
+      : winner === 'opponent'
+        ? 'Your base was destroyed...'
+        : `Score: you lost on points.`
+
   return (
-    <div className={`gameover-screen ${won ? 'gameover--win' : 'gameover--lose'}`}>
-      <div className="gameover-title">
-        {won ? '═══ VICTORY ═══' : '═══ DEFEAT ═══'}
-      </div>
-      <pre className="gameover-ascii">{won ? VICTORY_ART : DEFEAT_ART}</pre>
-      <div className="gameover-message">
-        {won ? 'Enemy base destroyed!' : 'Your base was destroyed...'}
+    <div className={`gameover-screen ${css}`}>
+      <div className="gameover-title">{title}</div>
+      <pre className="gameover-ascii">{art}</pre>
+      <div className="gameover-message">{message}</div>
+      <div className="gameover-score">
+        <span className="score-player">{state.playerScore}</span>
+        <span className="score-sep"> vs </span>
+        <span className="score-opponent">{state.opponentScore}</span>
       </div>
       <div className="gameover-stats">
         <div>Time: {Math.floor(state.gameTime / 1000)}s</div>
-        {won
+        {!draw && (won
           ? <div>Your base HP: {state.playerBase.hp}/{state.playerBase.maxHp}</div>
-          : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>}
+          : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>)}
       </div>
       <button className="action-btn action-btn--large" onClick={onRestart}>
         [ Play Again ]

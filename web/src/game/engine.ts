@@ -7,6 +7,7 @@ const OPPONENT_INTERVAL_MS = 8000
 const MANA_REGEN_MS = 3000       // 1 mana every 3 seconds
 const BASE_MAX_MANA = 5
 export const CARD_COOLDOWN_MS = 5000  // 5 s between card plays
+const SUDDEN_DEATH_MS = 60000
 
 const PLAYER_SPAWN_X = 30        // where player units appear
 const OPPONENT_SPAWN_X = LANE_WIDTH - 30  // where opponent units appear
@@ -80,6 +81,10 @@ export function newGame(): GameState {
     phase: { type: 'playing' },
     opponentTimer: OPPONENT_INTERVAL_MS,
     gameTime: 0,
+    playerScore: 0,
+    opponentScore: 0,
+    suddenDeath: false,
+    suddenDeathTimer: 0,
   }
 }
 
@@ -123,6 +128,27 @@ function applyUpgrade(s: GameState, effect: UpgradeEffect, owner: 'player' | 'op
 
 function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log: string[]): void {
   if (card.cardType === 'unit' || card.cardType === 'structure') {
+    // If playing a structure and one of the same type already exists, upgrade it instead
+    if (card.cardType === 'structure') {
+      const template = card.unit!
+      const existing = s.field.find(u => u.owner === owner && u.name === template.name)
+      if (existing) {
+        existing.maxHp *= 2
+        existing.hp = Math.min(existing.hp * 2, existing.maxHp)
+        let note = 'HP×2'
+        if (existing.structureEffect?.type === 'spawn') {
+          const spawnEffect = existing.structureEffect as { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
+          spawnEffect.intervalMs = Math.max(3000, Math.floor(spawnEffect.intervalMs / 2))
+          if (existing.spawnTimer != null) {
+            existing.spawnTimer = Math.min(existing.spawnTimer, spawnEffect.intervalMs)
+          }
+          note += ', spawn×2'
+        }
+        const who = owner === 'player' ? 'You' : 'Opponent'
+        log.push(`${who} upgraded ${existing.name}! (${note})`)
+        return
+      }
+    }
     const unit = spawnUnit(card.unit!, owner)
     s.field.push(unit)
     const verb = card.cardType === 'structure' ? 'built' : 'deployed'
@@ -133,39 +159,9 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
   }
 }
 
-// ─── Movement ─────────────────────────────────────────────
+// ─── Enemy-finding helpers ────────────────────────────────
 
-function moveUnits(s: GameState, deltaMs: number): void {
-  const deltaSec = deltaMs / 1000
-
-  for (const unit of s.field) {
-    if (unit.moveSpeed === 0) continue
-
-    // Find nearest enemy in front of this unit
-    const nearestEnemy = findNearestEnemy(s.field, unit)
-
-    // Check if blocked by a wall
-    if (nearestEnemy && nearestEnemy.isWall && !unit.bypassWall) {
-      const dist = Math.abs(unit.x - nearestEnemy.x)
-      if (dist <= unit.attackRange + 10) continue  // stop at wall
-    }
-
-    // Check if in attack range of any enemy — stop moving if so
-    if (nearestEnemy) {
-      const dist = Math.abs(unit.x - nearestEnemy.x)
-      if (dist <= unit.attackRange) continue  // in range, stop
-    }
-
-    // Move toward enemy base
-    const moveAmount = unit.moveSpeed * deltaSec
-    if (unit.owner === 'player') {
-      unit.x = Math.min(LANE_WIDTH, unit.x + moveAmount)
-    } else {
-      unit.x = Math.max(0, unit.x - moveAmount)
-    }
-  }
-}
-
+// Enemies strictly ahead of this unit (toward opponent base) — used for forward movement
 function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
@@ -173,14 +169,10 @@ function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
   for (const other of field) {
     if (other.owner === unit.owner) continue
     if (other.hp <= 0) continue
-
-    // For melee units that can't bypass walls, walls are valid targets
-    // For ranged units, skip walls (they bypass)
     if (other.isWall && unit.bypassWall) continue
 
     const dist = Math.abs(unit.x - other.x)
 
-    // Only consider enemies "in front" of this unit
     if (unit.owner === 'player' && other.x < unit.x) continue
     if (unit.owner === 'opponent' && other.x > unit.x) continue
 
@@ -192,44 +184,125 @@ function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
   return nearest
 }
 
+// Enemies strictly behind this unit — used to turn around and chase
+function findEnemyBehind(field: Unit[], unit: Unit): Unit | null {
+  let nearest: Unit | null = null
+  let nearestDist = Infinity
+
+  for (const other of field) {
+    if (other.owner === unit.owner) continue
+    if (other.hp <= 0) continue
+    if (other.isWall && unit.bypassWall) continue
+
+    const dist = Math.abs(unit.x - other.x)
+
+    if (unit.owner === 'player' && other.x >= unit.x) continue
+    if (unit.owner === 'opponent' && other.x <= unit.x) continue
+
+    if (dist < nearestDist) {
+      nearestDist = dist
+      nearest = other
+    }
+  }
+  return nearest
+}
+
+// Nearest enemy in any direction within attack range — used for actual attacks
+function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
+  let nearest: Unit | null = null
+  let nearestDist = Infinity
+
+  for (const other of field) {
+    if (other.owner === unit.owner) continue
+    if (other.hp <= 0) continue
+    if (other.isWall && unit.bypassWall) continue
+
+    const dist = Math.abs(unit.x - other.x)
+    if (dist > unit.attackRange) continue
+
+    if (dist < nearestDist) {
+      nearestDist = dist
+      nearest = other
+    }
+  }
+  return nearest
+}
+
+// ─── Movement ─────────────────────────────────────────────
+
+function moveUnits(s: GameState, deltaMs: number): void {
+  const deltaSec = deltaMs / 1000
+
+  for (const unit of s.field) {
+    if (unit.moveSpeed === 0) continue
+
+    const nearestAhead = findNearestEnemy(s.field, unit)
+    // Default direction: toward enemy base
+    let moveDir: number = unit.owner === 'player' ? 1 : -1
+
+    if (nearestAhead) {
+      const dist = Math.abs(unit.x - nearestAhead.x)
+      // Melee units stop and wait at walls
+      if (nearestAhead.isWall && !unit.bypassWall && dist <= unit.attackRange + 10) continue
+      // In attack range — stop moving, let processAttacks handle it
+      if (dist <= unit.attackRange) continue
+      // Keep marching forward (moveDir already correct)
+    } else {
+      // No enemies ahead — check if one has slipped past us
+      const behind = findEnemyBehind(s.field, unit)
+      if (behind) {
+        const dist = Math.abs(unit.x - behind.x)
+        if (dist <= unit.attackRange) continue  // already in range
+        moveDir = behind.x > unit.x ? 1 : -1   // turn around
+      }
+      // else: no enemies anywhere, keep marching toward base
+    }
+
+    const moveAmount = unit.moveSpeed * deltaSec * moveDir
+    unit.x = Math.min(LANE_WIDTH, Math.max(0, unit.x + moveAmount))
+  }
+}
+
 // ─── Per-unit Combat ──────────────────────────────────────
 
 function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
   for (const unit of s.field) {
     if (unit.attack === 0 || unit.hp <= 0) continue
 
-    // Tick attack cooldown
     if (unit.attackTimer > 0) {
       unit.attackTimer -= deltaMs
       continue
     }
 
-    // Find target
-    const target = findNearestEnemy(s.field, unit)
+    const target = findAttackTarget(s.field, unit)
     const isPlayer = unit.owner === 'player'
 
     if (target) {
-      const dist = Math.abs(unit.x - target.x)
-      if (dist <= unit.attackRange) {
-        // Attack!
-        target.hp -= unit.attack
-        unit.attackTimer = unit.attackCooldownMs
-        if (target.hp <= 0) {
-          log.push(`${unit.name} destroyed ${target.name}!`)
-        }
+      const prevHp = target.hp
+      target.hp -= unit.attack
+      const actualDamage = prevHp - Math.max(0, target.hp)
+      if (isPlayer) s.playerScore += actualDamage
+      else s.opponentScore += actualDamage
+      unit.attackTimer = unit.attackCooldownMs
+      if (target.hp <= 0) {
+        log.push(`${unit.name} destroyed ${target.name}!`)
       }
     } else {
-      // No enemy units — attack the base if close enough
+      // No enemies in range — attack the base if close enough
       const atEnemyBase = isPlayer
         ? unit.x >= LANE_WIDTH - unit.attackRange
         : unit.x <= unit.attackRange
 
       if (atEnemyBase) {
         if (isPlayer) {
+          const prev = s.opponentBase.hp
           s.opponentBase.hp = Math.max(0, s.opponentBase.hp - unit.attack)
+          s.playerScore += prev - s.opponentBase.hp
           log.push(`${unit.name} hits Enemy Base! -${unit.attack}HP`)
         } else {
+          const prev = s.playerBase.hp
           s.playerBase.hp = Math.max(0, s.playerBase.hp - unit.attack)
+          s.opponentScore += prev - s.playerBase.hp
           log.push(`${unit.name} hits Your Base! -${unit.attack}HP`)
         }
         unit.attackTimer = unit.attackCooldownMs
@@ -339,6 +412,28 @@ export function tick(state: GameState, deltaMs: number): GameState {
   if (s.opponentTimer <= 0) {
     opponentAI(s, log)
     s.opponentTimer = OPPONENT_INTERVAL_MS
+  }
+
+  // 7. Sudden death — trigger when all cards have been drawn and played
+  if (!s.suddenDeath) {
+    const allExhausted =
+      s.playerDeck.length === 0 && s.playerHand.length === 0 &&
+      s.opponentDeck.length === 0 && s.opponentHand.length === 0
+    if (allExhausted) {
+      s.suddenDeath = true
+      s.suddenDeathTimer = SUDDEN_DEATH_MS
+      log.push('⚡ SUDDEN DEATH! 60s remain — highest score wins!')
+    }
+  } else {
+    s.suddenDeathTimer -= deltaMs
+    if (s.suddenDeathTimer <= 0) {
+      const winner = s.playerScore > s.opponentScore ? 'player'
+        : s.opponentScore > s.playerScore ? 'opponent'
+        : 'draw'
+      s.phase = { type: 'gameOver', winner }
+      s.log = [...s.log, ...log]
+      return s
+    }
   }
 
   if (log.length > 0) s.log = [...s.log, ...log]
