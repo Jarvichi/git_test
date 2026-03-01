@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Stone wall with offset brick rows -->
+  <!-- Row 1 -->
+  <rect x="0" y="0" width="15" height="7" rx="0.5" fill="#888" stroke="#555" stroke-width="0.6"/>
+  <rect x="17" y="0" width="15" height="7" rx="0.5" fill="#888" stroke="#555" stroke-width="0.6"/>
+  <!-- Row 2 (offset) -->
+  <rect x="0" y="9" width="9" height="7" rx="0.5" fill="#999" stroke="#555" stroke-width="0.6"/>
+  <rect x="11" y="9" width="10" height="7" rx="0.5" fill="#888" stroke="#555" stroke-width="0.6"/>
+  <rect x="23" y="9" width="9" height="7" rx="0.5" fill="#999" stroke="#555" stroke-width="0.6"/>
+  <!-- Row 3 -->
+  <rect x="0" y="18" width="15" height="7" rx="0.5" fill="#888" stroke="#555" stroke-width="0.6"/>
+  <rect x="17" y="18" width="15" height="7" rx="0.5" fill="#888" stroke="#555" stroke-width="0.6"/>
+  <!-- Row 4 (offset) -->
+  <rect x="0" y="27" width="9" height="5" rx="0.5" fill="#999" stroke="#555" stroke-width="0.6"/>
+  <rect x="11" y="27" width="10" height="5" rx="0.5" fill="#888" stroke="#555" stroke-width="0.6"/>
+  <rect x="23" y="27" width="9" height="5" rx="0.5" fill="#999" stroke="#555" stroke-width="0.6"/>
+  <!-- Mortar highlights -->
+  <line x1="0" y1="8" x2="32" y2="8" stroke="#444" stroke-width="1.5"/>
+  <line x1="0" y1="17" x2="32" y2="17" stroke="#444" stroke-width="1.5"/>
+  <line x1="0" y1="26" x2="32" y2="26" stroke="#444" stroke-width="1.5"/>
+  <line x1="16" y1="0" x2="16" y2="8" stroke="#444" stroke-width="1.5"/>
+  <line x1="10" y1="9" x2="10" y2="17" stroke="#444" stroke-width="1.5"/>
+  <line x1="22" y1="9" x2="22" y2="17" stroke="#444" stroke-width="1.5"/>
+  <line x1="16" y1="18" x2="16" y2="26" stroke="#444" stroke-width="1.5"/>
+  <line x1="10" y1="27" x2="10" y2="32" stroke="#444" stroke-width="1.5"/>
+  <line x1="22" y1="27" x2="22" y2="32" stroke="#444" stroke-width="1.5"/>
+</svg>

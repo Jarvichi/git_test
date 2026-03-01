@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { GameState, Unit, LANE_WIDTH } from '../game/types'
 import { CARD_COOLDOWN_MS } from '../game/engine'
 import { CardTile } from './CardTile'
+import { SpriteImg } from './SpriteImg'
 
 interface Props {
   state: GameState
@@ -24,6 +25,7 @@ function LaneUnit({ unit }: { unit: Unit }) {
       style={{ left: `${pct}%` }}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
+      <SpriteImg name={unit.name} className="lane-unit-sprite" />
       <div className="lane-unit-name">{unit.name}</div>
       <div className="lane-unit-hp-bar">
         <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />

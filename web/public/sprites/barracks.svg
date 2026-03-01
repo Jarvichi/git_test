@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Main building -->
+  <rect x="3" y="14" width="26" height="16" fill="#9a7a44"/>
+  <!-- Top fortification wall -->
+  <rect x="2" y="10" width="28" height="6" fill="#7a5a33"/>
+  <!-- Battlements (merlons) -->
+  <rect x="2" y="6" width="5" height="6" rx="0.5" fill="#7a5a33"/>
+  <rect x="9" y="6" width="5" height="6" rx="0.5" fill="#7a5a33"/>
+  <rect x="16" y="6" width="5" height="6" rx="0.5" fill="#7a5a33"/>
+  <rect x="23" y="6" width="7" height="6" rx="0.5" fill="#7a5a33"/>
+  <!-- Arched entrance -->
+  <path d="M12,30 L12,22 Q12,18 16,18 Q20,18 20,22 L20,30 Z" fill="#4a2a11"/>
+  <!-- Door arch highlight -->
+  <path d="M13,22 Q13,19 16,19 Q19,19 19,22" stroke="#6a4a22" stroke-width="0.8" fill="none"/>
+  <!-- Windows -->
+  <rect x="4" y="17" width="6" height="5" rx="0.5" fill="#4a2a11"/>
+  <path d="M4,19 Q7,17 10,19" stroke="#7a5a33" stroke-width="0.5" fill="none"/>
+  <rect x="22" y="17" width="6" height="5" rx="0.5" fill="#4a2a11"/>
+  <path d="M22,19 Q25,17 28,19" stroke="#7a5a33" stroke-width="0.5" fill="none"/>
+  <!-- Flagpole -->
+  <line x1="16" y1="1" x2="16" y2="10" stroke="#7a5a33" stroke-width="1.5"/>
+  <!-- Flag -->
+  <polygon points="16,1 26,4.5 16,8" fill="#cc2222"/>
+  <!-- Crossed swords emblem on flag -->
+  <line x1="19" y1="3" x2="23" y2="7" stroke="#ffcc00" stroke-width="0.8"/>
+  <line x1="23" y1="3" x2="19" y2="7" stroke="#ffcc00" stroke-width="0.8"/>
+  <!-- Wall texture -->
+  <line x1="3" y1="20" x2="11" y2="20" stroke="#7a5a33" stroke-width="0.5"/>
+  <line x1="21" y1="20" x2="29" y2="20" stroke="#7a5a33" stroke-width="0.5"/>
+  <line x1="3" y1="25" x2="11" y2="25" stroke="#7a5a33" stroke-width="0.5"/>
+  <line x1="21" y1="25" x2="29" y2="25" stroke="#7a5a33" stroke-width="0.5"/>
+</svg>
