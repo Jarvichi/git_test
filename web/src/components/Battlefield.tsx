@@ -9,10 +9,11 @@ interface Props {
   onPlayCard: (cardId: string) => void
 }
 
-function LaneUnit({ unit }: { unit: Unit }) {
+function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number }) {
   const pct = (unit.x / LANE_WIDTH) * 100
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
   const isStructure = unit.moveSpeed === 0
+  const bottom = isStructure ? 4 + stackIndex * 52 : 8
 
   return (
     <div
@@ -22,7 +23,7 @@ function LaneUnit({ unit }: { unit: Unit }) {
         isStructure ? 'lane-unit--structure' : '',
         unit.isWall ? 'lane-unit--wall' : '',
       ].filter(Boolean).join(' ')}
-      style={{ left: `${pct}%` }}
+      style={{ left: `${pct}%`, bottom: `${bottom}px` }}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
       <SpriteImg name={unit.name} className="lane-unit-sprite" />
@@ -97,7 +98,12 @@ export function Battlefield({ state, onPlayCard }: Props) {
       {/* The Lane */}
       <div className="lane">
         <div className="lane-ground" />
-        {state.field.map(u => <LaneUnit key={u.id} unit={u} />)}
+        {state.field.map((u, i) => {
+          const stackIndex = u.moveSpeed === 0
+            ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && o.owner === u.owner).length
+            : 0
+          return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} />
+        })}
       </div>
 
       {/* Player base */}
