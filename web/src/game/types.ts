@@ -54,7 +54,7 @@ export interface Base {
 
 export type GamePhase =
   | { type: 'playing' }
-  | { type: 'gameOver'; winner: 'player' | 'opponent' }
+  | { type: 'gameOver'; winner: 'player' | 'opponent' | 'draw' }
 
 export const LANE_WIDTH = 500
 
@@ -74,4 +74,8 @@ export interface GameState {
   phase: GamePhase
   opponentTimer: number      // ms until opponent next acts
   gameTime: number           // total elapsed game time in ms
+  playerScore: number        // cumulative damage dealt to opponent
+  opponentScore: number      // cumulative damage dealt to player
+  suddenDeath: boolean       // true once all cards exhausted
+  suddenDeathTimer: number   // ms remaining in sudden death (60 000 at start)
 }

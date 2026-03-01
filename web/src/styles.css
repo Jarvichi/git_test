@@ -11,8 +11,8 @@ body {
   color: #33ff33;
   font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
   font-size: 14px;
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* ─── Game Container ─────────────────────────────────── */
@@ -20,20 +20,21 @@ body {
 .game-container {
   max-width: 740px;
   margin: 0 auto;
-  padding: 10px 12px;
-  min-height: 100vh;
+  padding: 6px 10px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .game-title {
   text-align: center;
-  font-size: 18px;
+  font-size: 15px;
   color: #ffcc00;
-  padding: 6px 0 8px;
+  padding: 4px 0 5px;
   border-bottom: 2px solid #333;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   letter-spacing: 3px;
+  flex-shrink: 0;
 }
 
 /* ─── Battlefield ────────────────────────────────────── */
@@ -42,32 +43,62 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 6px;
+  gap: 5px;
+  min-height: 0;
 }
 
-/* ─── Top Bar (clock + cooldown) ─────────────────────── */
+/* ─── Top Bar (clock + scores + sudden death) ─────────── */
 
 .top-bar {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border: 1px solid #333;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.02);
 }
 
+.top-bar--sudden-death {
+  border-color: #ff9900;
+  background: rgba(255, 153, 0, 0.08);
+  animation: sdPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes sdPulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(255, 153, 0, 0.3); }
+  50%       { box-shadow: 0 0 10px rgba(255, 153, 0, 0.7); }
+}
+
 .game-clock {
-  font-size: 16px;
+  font-size: 14px;
   color: #aaa;
   font-weight: bold;
   letter-spacing: 2px;
 }
 
+.score-display {
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.score-player   { color: #33ff33; }
+.score-sep      { color: #555; }
+.score-opponent { color: #ff4444; }
+
 .cooldown-label {
-  font-size: 12px;
+  font-size: 11px;
   color: #ff9900;
   animation: pulse 1s ease-in-out infinite;
+}
+
+.sudden-death-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #ff9900;
+  animation: pulse 0.6s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -78,10 +109,11 @@ body {
 /* ─── Base Bars ─────────────────────────────────────── */
 
 .base-bar {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 10px;
+  padding: 5px 10px;
   border: 2px solid;
   border-radius: 3px;
   font-size: 13px;
@@ -185,30 +217,31 @@ body {
   transition: width 0.1s linear;
 }
 
-/* ─── The Lane ───────────────────────────────────────── */
+/* ─── The Lane (vertical — fills remaining space) ────── */
 
 .lane {
   position: relative;
-  height: 200px;
+  flex: 1;
+  min-height: 160px;
   border: 2px solid #333;
   border-radius: 3px;
   background: #0d0d0d;
   overflow: hidden;
 }
 
+/* Subtle vertical center line: red (enemy top) → green (player bottom) */
 .lane-ground {
   position: absolute;
-  left: 0;
-  right: 0;
+  top: 0;
   bottom: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #33ff33 0%, #222 20%, #222 80%, #ff4444 100%);
-  opacity: 0.4;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(255,68,68,0.35) 0%, rgba(34,34,34,0.1) 40%, rgba(34,34,34,0.1) 60%, rgba(51,255,51,0.35) 100%);
 }
 
 /* ─── Lane Unit Sprites ──────────────────────────────── */
 
-/* Sprite shown above the unit name in the lane */
 .lane-unit-sprite {
   max-width: 32px;
   max-height: 28px;
@@ -222,13 +255,11 @@ body {
 
 .lane-unit {
   position: absolute;
-  bottom: 8px;
-  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  transition: left 0.1s linear;
+  transition: top 0.1s linear;
   min-width: 36px;
 }
 
@@ -269,9 +300,9 @@ body {
   transition: width 0.15s ease-out;
 }
 
-/* Structures: taller, different shape */
+/* Structures anchored to base edges, no transition needed */
 .lane-unit--structure {
-  bottom: 4px;
+  transition: none;
 }
 
 .lane-unit--structure .lane-unit-name {
@@ -291,6 +322,7 @@ body {
 /* ─── Cooldown Bar ───────────────────────────────────── */
 
 .cooldown-bar-track {
+  flex-shrink: 0;
   height: 4px;
   background: #1a1a1a;
   border-radius: 2px;
@@ -307,9 +339,10 @@ body {
 /* ─── Combat Log ─────────────────────────────────────── */
 
 .combat-log {
+  flex-shrink: 0;
   border: 1px solid #222;
-  padding: 5px 8px;
-  max-height: 72px;
+  padding: 4px 8px;
+  max-height: 58px;
   overflow-y: auto;
   font-size: 11px;
   background: rgba(0, 0, 0, 0.3);
@@ -324,15 +357,16 @@ body {
 /* ─── Hand Panel ─────────────────────────────────────── */
 
 .hand-panel {
+  flex-shrink: 0;
   border-top: 2px solid #333;
-  padding-top: 6px;
+  padding-top: 5px;
 }
 
 .hand-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .hand-label {
@@ -353,7 +387,7 @@ body {
   padding: 4px 8px;
 }
 
-/* ─── Card Tile (CSS-drawn, not ASCII) ───────────────── */
+/* ─── Card Tile ──────────────────────────────────────── */
 
 .card-tile {
   flex-shrink: 0;
@@ -428,7 +462,6 @@ body {
   color: #888;
 }
 
-/* Sprite art area inside a card — hidden when no image is found */
 .card-art {
   min-height: 42px;
   display: flex;
@@ -436,7 +469,6 @@ body {
   justify-content: center;
 }
 
-/* Sprite image inside a card */
 .card-sprite {
   max-width: 64px;
   max-height: 40px;
@@ -464,8 +496,9 @@ body {
 
 .gameover-title { font-size: 20px; }
 
-.gameover--win .gameover-title  { color: #ffcc00; }
+.gameover--win  .gameover-title { color: #ffcc00; }
 .gameover--lose .gameover-title { color: #ff4444; }
+.gameover--draw .gameover-title { color: #00ccff; }
 
 .gameover-ascii {
   font-size: 16px;
@@ -473,26 +506,31 @@ body {
   text-align: center;
 }
 
-.gameover--win .gameover-ascii {
-  color: #ffcc00;
-  text-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
-}
-
-.gameover--lose .gameover-ascii {
-  color: #ff4444;
-  text-shadow: 0 0 10px rgba(255, 68, 68, 0.6);
-}
+.gameover--win  .gameover-ascii { color: #ffcc00; text-shadow: 0 0 10px rgba(255, 204, 0, 0.6); }
+.gameover--lose .gameover-ascii { color: #ff4444; text-shadow: 0 0 10px rgba(255, 68, 68, 0.6); }
+.gameover--draw .gameover-ascii { color: #00ccff; text-shadow: 0 0 10px rgba(0, 204, 255, 0.6); }
 
 .gameover-message { font-size: 14px; }
 
-.gameover--win .gameover-message  { color: #00ccff; }
+.gameover--win  .gameover-message { color: #00ccff; }
 .gameover--lose .gameover-message { color: #ff4444; }
+.gameover--draw .gameover-message { color: #00ccff; }
 
 .gameover-stats {
   color: #888;
   text-align: center;
   line-height: 1.8;
 }
+
+.gameover-score {
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.gameover-score .score-player   { color: #33ff33; }
+.gameover-score .score-sep      { color: #555; }
+.gameover-score .score-opponent { color: #ff4444; }
 
 /* ─── Buttons ────────────────────────────────────────── */
 
@@ -537,10 +575,9 @@ body {
 
 @media (max-width: 480px) {
   body { font-size: 12px; }
-  .game-container { padding: 6px; }
-  .game-title { font-size: 14px; letter-spacing: 1px; }
+  .game-container { padding: 4px 6px; }
+  .game-title { font-size: 13px; letter-spacing: 1px; }
   .card-tile { min-width: 78px; padding: 6px 8px; }
-  .lane { height: 160px; }
   .lane-unit-name { font-size: 8px; }
   .mana-pip { width: 8px; height: 8px; }
 }
