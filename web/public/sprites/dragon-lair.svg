@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Mountain / rock silhouette -->
+  <path d="M0,32 L0,20 Q2,14 7,10 Q11,6 16,5 Q21,6 25,10 Q30,14 32,20 L32,32 Z" fill="#3a2a1a"/>
+  <!-- Rock facets (lighter) -->
+  <path d="M0,32 L0,24 Q3,18 8,14 Q12,10 16,9" stroke="#5a4a2a" stroke-width="1" fill="none"/>
+  <path d="M32,32 L32,24 Q29,18 24,14 Q20,10 16,9" stroke="#5a4a2a" stroke-width="1" fill="none"/>
+  <!-- Cave entrance (large arch) -->
+  <path d="M7,32 L7,23 Q7,14 16,14 Q25,14 25,23 L25,32 Z" fill="#0d0505"/>
+  <!-- Cave inner shadow -->
+  <path d="M9,32 L9,24 Q9,17 16,17 Q23,17 23,24 L23,32 Z" fill="#0a0202"/>
+  <!-- Dragon eyes in the darkness -->
+  <circle cx="12.5" cy="24" r="2.5" fill="#ff6600"/>
+  <circle cx="19.5" cy="24" r="2.5" fill="#ff6600"/>
+  <ellipse cx="12.5" cy="24" rx="1" ry="1.8" fill="#cc2200"/>
+  <ellipse cx="19.5" cy="24" rx="1" ry="1.8" fill="#cc2200"/>
+  <circle cx="12.5" cy="24" r="0.5" fill="#ff0000" opacity="0.6"/>
+  <circle cx="19.5" cy="24" r="0.5" fill="#ff0000" opacity="0.6"/>
+  <!-- Smoke drifting up from cave -->
+  <path d="M14,14 Q12,10 14,7 Q13,4 15,2" stroke="#555" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <path d="M18,14 Q20,10 18,7 Q19,4 17,2" stroke="#555" stroke-width="1.5" fill="none" opacity="0.4"/>
+  <!-- Stalactites above cave -->
+  <polygon points="10,14 11,20 12,14" fill="#2a1a0a"/>
+  <polygon points="14,14 15,18 16,14" fill="#2a1a0a"/>
+  <polygon points="18,14 19,17 20,14" fill="#2a1a0a"/>
+  <polygon points="22,14 23,19 24,14" fill="#2a1a0a"/>
+  <!-- Scattered bones at entrance -->
+  <line x1="8" y1="31" x2="12" y2="30" stroke="#aaa" stroke-width="1"/>
+  <line x1="20" y1="31" x2="24" y2="30" stroke="#aaa" stroke-width="1"/>
+</svg>

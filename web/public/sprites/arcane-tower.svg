@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Magical glow (outer) -->
+  <circle cx="16" cy="6" r="6" fill="#6600cc" opacity="0.2"/>
+  <!-- Conical roof / spire -->
+  <polygon points="16,1 9,12 23,12" fill="#5500aa"/>
+  <!-- Roof shimmer -->
+  <polygon points="16,2 14,10 16,8 18,10" fill="#8844cc"/>
+  <!-- Tower body -->
+  <rect x="10" y="11" width="12" height="19" fill="#3a1a66"/>
+  <!-- Battlements -->
+  <rect x="10" y="9" width="3" height="4" rx="0.5" fill="#5500aa"/>
+  <rect x="15" y="9" width="3" height="4" rx="0.5" fill="#5500aa"/>
+  <rect x="20" y="9" width="2" height="4" rx="0.5" fill="#5500aa"/>
+  <!-- Glowing arcane window (main) -->
+  <ellipse cx="16" cy="18" rx="4" ry="5" fill="#7722cc"/>
+  <ellipse cx="16" cy="18" rx="2.5" ry="3.5" fill="#aa44ff"/>
+  <ellipse cx="16" cy="18" rx="1.2" ry="1.8" fill="#ddaaff"/>
+  <!-- Rune circles -->
+  <circle cx="16" cy="18" r="5.5" stroke="#9933ff" stroke-width="0.5" fill="none"/>
+  <!-- Lower window -->
+  <ellipse cx="16" cy="27" rx="2.5" ry="2.5" fill="#7722cc"/>
+  <ellipse cx="16" cy="27" rx="1.3" ry="1.3" fill="#aa44ff"/>
+  <!-- Floating stars -->
+  <circle cx="6" cy="13" r="1.2" fill="#ffdd00"/>
+  <circle cx="5" cy="22" r="0.9" fill="#ffdd00"/>
+  <circle cx="26" cy="16" r="1.2" fill="#ffdd00"/>
+  <circle cx="27" cy="25" r="0.8" fill="#ffdd00"/>
+  <!-- Tower base detail -->
+  <rect x="9" y="28" width="14" height="2" rx="1" fill="#2a0a55"/>
+  <!-- Arch door -->
+  <path d="M13,30 L13,26 Q13,24 16,24 Q19,24 19,26 L19,30 Z" fill="#1a0a33"/>
+</svg>
