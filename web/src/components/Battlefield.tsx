@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { GameState, Unit, LANE_WIDTH } from '../game/types'
 import { CARD_COOLDOWN_MS } from '../game/engine'
 import { CardTile } from './CardTile'
-import { SpriteImg } from './SpriteImg'
+import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 
 interface Props {
   state: GameState
@@ -31,10 +31,11 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       ? { bottom: '5px', left: `${hOffset}px` }
       : { top: '5px', right: `${hOffset}px` }
   } else {
-    // Mobile units float in the center, positioned vertically
+    // Mobile units spread across the lane using their assigned laneOffset
+    const hPct = 50 + (unit.laneOffset ?? 0)
     style = {
       top: `${topPct}%`,
-      left: '50%',
+      left: `${hPct}%`,
       transform: 'translateX(-50%) translateY(-50%)',
     }
   }
@@ -51,7 +52,10 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
-      <SpriteImg name={unit.name} className="lane-unit-sprite" />
+      {isStructure
+        ? <SpriteImg name={unit.name} className="lane-unit-sprite" />
+        : <AnimatedSpriteImg name={unit.name} frameCount={3} fps={6} className="lane-unit-sprite" />
+      }
       <div className="lane-unit-name">
         {unit.name}
         {unit.upgradeLevel != null && unit.upgradeLevel >= 2 && (

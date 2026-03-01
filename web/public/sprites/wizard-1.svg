@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Pointy hat (tall) -->
+  <polygon points="16,1 9,13 23,13" fill="#7722cc"/>
+  <rect x="8" y="12" width="16" height="3" rx="1" fill="#5500aa"/>
+  <!-- Stars on hat -->
+  <circle cx="18" cy="8" r="1" fill="#ffdd00"/>
+  <circle cx="12" cy="7" r="0.7" fill="#ffdd00"/>
+  <!-- Face (old, wise) -->
+  <ellipse cx="16" cy="17" rx="5.5" ry="5" fill="#f0c87a"/>
+  <!-- Eyebrows (bushy) -->
+  <path d="M11.5,15 Q13,14 14.5,15" stroke="#cccccc" stroke-width="1.5" fill="none"/>
+  <path d="M17.5,15 Q19,14 20.5,15" stroke="#cccccc" stroke-width="1.5" fill="none"/>
+  <!-- Eyes -->
+  <circle cx="13.5" cy="16.5" r="1.2" fill="#4444ff"/>
+  <circle cx="18.5" cy="16.5" r="1.2" fill="#4444ff"/>
+  <!-- Long white beard -->
+  <path d="M11,20 Q16,28 21,20 Q20,29 16,31 Q12,29 11,20 Z" fill="#eeeeee"/>
+  <!-- Robe (hem swings left - left foot forward) -->
+  <path d="M11,21 L6,32 L22,32 L21,21 Z" fill="#7722cc"/>
+  <!-- Rune on robe -->
+  <text x="14" y="29" font-size="5" fill="#aa44ff">✦</text>
+  <!-- Staff (slightly tilted left) -->
+  <line x1="4" y1="32" x2="11" y2="14" stroke="#8B4513" stroke-width="2.5"/>
+  <!-- Orb at top of staff -->
+  <circle cx="10" cy="13" r="3.5" fill="#44ffaa" opacity="0.85"/>
+  <circle cx="9" cy="12" r="1.2" fill="#aaffdd"/>
+  <!-- Left foot peeking (forward) -->
+  <rect x="5" y="30" width="6" height="2" rx="1" fill="#5500aa"/>
+</svg>

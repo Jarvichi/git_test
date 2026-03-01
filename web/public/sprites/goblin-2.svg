@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Pointy ears (raised 1px - mid-stride body up) -->
+  <polygon points="9,11 6,3 13,9" fill="#4a9a40"/>
+  <polygon points="23,11 26,3 19,9" fill="#4a9a40"/>
+  <!-- Head (raised 1px) -->
+  <ellipse cx="16" cy="11" rx="8" ry="7" fill="#66cc44"/>
+  <!-- Eyes -->
+  <circle cx="12.5" cy="9.5" r="2" fill="#111"/>
+  <circle cx="19.5" cy="9.5" r="2" fill="#111"/>
+  <circle cx="12.2" cy="9" r="1" fill="#ff3333"/>
+  <circle cx="19.2" cy="9" r="1" fill="#ff3333"/>
+  <!-- Nose -->
+  <ellipse cx="16" cy="12" rx="1.5" ry="1" fill="#4a9a40"/>
+  <!-- Fangs -->
+  <polygon points="13.5,14.5 14.5,17.5 15.5,14.5" fill="white"/>
+  <polygon points="16.5,14.5 17.5,14.5 17,17.5" fill="white"/>
+  <!-- Body (raised 1px) -->
+  <rect x="11" y="17" width="10" height="7" rx="2" fill="#55aa33"/>
+  <!-- Arms neutral -->
+  <ellipse cx="7" cy="21" rx="5" ry="2.5" fill="#55aa33"/>
+  <ellipse cx="25" cy="21" rx="5" ry="2.5" fill="#55aa33"/>
+  <!-- Legs: both slightly up and spread, mid-stride -->
+  <rect x="11" y="23" width="4" height="5" rx="1" fill="#449922"/>
+  <rect x="17" y="23" width="4" height="5" rx="1" fill="#449922"/>
+</svg>

@@ -30,6 +30,8 @@ function drawCard(deck: Card[], hand: Card[]): void {
   if (deck.length > 0) hand.push(deck.shift()!)
 }
 
+const LANE_OFFSETS = [-36, -18, 0, 18, 36]
+
 function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
   const unit: Unit = {
     ...template,
@@ -48,6 +50,9 @@ function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
       ? (owner === 'player' ? 150 : LANE_WIDTH - 150)
       : (owner === 'player' ? 10 : LANE_WIDTH - 10)
     unit.upgradeLevel = 1
+  } else {
+    // Mobile units take a random path (horizontal lane offset for display)
+    unit.laneOffset = LANE_OFFSETS[Math.floor(Math.random() * LANE_OFFSETS.length)]
   }
   return unit
 }

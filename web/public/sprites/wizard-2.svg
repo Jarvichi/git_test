@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Pointy hat (raised 1px mid-stride) -->
+  <polygon points="16,0 9,12 23,12" fill="#7722cc"/>
+  <rect x="8" y="11" width="16" height="3" rx="1" fill="#5500aa"/>
+  <!-- Stars on hat -->
+  <circle cx="18" cy="7" r="1" fill="#ffdd00"/>
+  <circle cx="12" cy="6" r="0.7" fill="#ffdd00"/>
+  <!-- Face (old, wise, raised 1px) -->
+  <ellipse cx="16" cy="16" rx="5.5" ry="5" fill="#f0c87a"/>
+  <!-- Eyebrows (bushy) -->
+  <path d="M11.5,14 Q13,13 14.5,14" stroke="#cccccc" stroke-width="1.5" fill="none"/>
+  <path d="M17.5,14 Q19,13 20.5,14" stroke="#cccccc" stroke-width="1.5" fill="none"/>
+  <!-- Eyes -->
+  <circle cx="13.5" cy="15.5" r="1.2" fill="#4444ff"/>
+  <circle cx="18.5" cy="15.5" r="1.2" fill="#4444ff"/>
+  <!-- Long white beard -->
+  <path d="M11,19 Q16,27 21,19 Q20,28 16,30 Q12,28 11,19 Z" fill="#eeeeee"/>
+  <!-- Robe (symmetric mid-stride) -->
+  <path d="M11,20 L8,32 L24,32 L21,20 Z" fill="#7722cc"/>
+  <!-- Rune on robe -->
+  <text x="14" y="29" font-size="5" fill="#aa44ff">✦</text>
+  <!-- Staff (straight) -->
+  <line x1="5" y1="32" x2="11" y2="13" stroke="#8B4513" stroke-width="2.5"/>
+  <!-- Orb at top of staff -->
+  <circle cx="10" cy="12" r="3.5" fill="#44ffaa" opacity="0.85"/>
+  <circle cx="9" cy="11" r="1.2" fill="#aaffdd"/>
+</svg>

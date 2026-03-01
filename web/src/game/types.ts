@@ -33,6 +33,7 @@ export interface Unit extends UnitTemplate {
   attackTimer: number        // ms until this unit can attack again
   spawnTimer?: number        // ms until next spawn (spawner buildings only)
   upgradeLevel?: number      // 1 = base, 2+ = upgraded (structures only)
+  laneOffset?: number        // horizontal display offset from center (%) — one of [-36,-18,0,18,36]
 }
 
 export interface Card {
