@@ -47,6 +47,7 @@ function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
     unit.x = template.isWall
       ? (owner === 'player' ? 150 : LANE_WIDTH - 150)
       : (owner === 'player' ? 10 : LANE_WIDTH - 10)
+    unit.upgradeLevel = 1
   }
   return unit
 }
@@ -137,6 +138,7 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
       if (existing) {
         existing.maxHp *= 2
         existing.hp = Math.min(existing.hp * 2, existing.maxHp)
+        existing.upgradeLevel = (existing.upgradeLevel ?? 1) + 1
         let note = 'HP×2'
         if (existing.structureEffect?.type === 'spawn') {
           const spawnEffect = existing.structureEffect as { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }

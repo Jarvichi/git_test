@@ -343,6 +343,16 @@ body {
   height: 6px;
 }
 
+/* Upgrade level badge shown next to building name */
+.lane-unit-level {
+  margin-left: 4px;
+  font-size: 8px;
+  font-weight: bold;
+  color: #ffcc00;
+  text-shadow: 0 0 4px rgba(255, 204, 0, 0.7);
+  letter-spacing: 0.5px;
+}
+
 /* Attack flash — brief brightness burst when a unit strikes */
 .lane-unit--attacking {
   filter: brightness(2.2) drop-shadow(0 0 5px currentColor);

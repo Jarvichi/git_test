@@ -52,7 +52,12 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
       <SpriteImg name={unit.name} className="lane-unit-sprite" />
-      <div className="lane-unit-name">{unit.name}</div>
+      <div className="lane-unit-name">
+        {unit.name}
+        {unit.upgradeLevel != null && unit.upgradeLevel >= 2 && (
+          <span className="lane-unit-level">Lv{unit.upgradeLevel}</span>
+        )}
+      </div>
       <div className="lane-unit-hp-bar">
         <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />
       </div>
