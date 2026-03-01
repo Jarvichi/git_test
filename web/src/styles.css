@@ -206,6 +206,18 @@ body {
   opacity: 0.4;
 }
 
+/* ─── Lane Unit Sprites ──────────────────────────────── */
+
+/* Sprite shown above the unit name in the lane */
+.lane-unit-sprite {
+  max-width: 32px;
+  max-height: 28px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+  margin: 0 auto;
+}
+
 /* ─── Lane Units ─────────────────────────────────────── */
 
 .lane-unit {
@@ -414,6 +426,23 @@ body {
 .card-rarity {
   font-size: 8px;
   color: #888;
+}
+
+/* Sprite art area inside a card — hidden when no image is found */
+.card-art {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sprite image inside a card */
+.card-sprite {
+  max-width: 64px;
+  max-height: 40px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
 }
 
 /* ─── Game Over Screen ───────────────────────────────── */
