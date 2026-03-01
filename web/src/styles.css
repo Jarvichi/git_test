@@ -312,11 +312,40 @@ body {
   border-radius: 2px;
 }
 
+.lane-unit--wall {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-top: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  background: rgba(255, 255, 255, 0.04);
+  min-width: unset;
+}
+
+.lane-unit--wall .lane-unit-sprite {
+  display: none;
+}
+
 .lane-unit--wall .lane-unit-name {
-  padding: 2px 6px;
-  border: 2px solid currentColor;
-  border-radius: 1px;
-  font-size: 8px;
+  font-size: 9px;
+  font-weight: bold;
+  border: 1px solid currentColor;
+  padding: 1px 5px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.lane-unit--wall .lane-unit-hp-bar {
+  flex: 1;
+  max-width: 200px;
+  height: 6px;
+}
+
+/* Attack flash — brief brightness burst when a unit strikes */
+.lane-unit--attacking {
+  filter: brightness(2.2) drop-shadow(0 0 5px currentColor);
 }
 
 /* ─── Cooldown Bar ───────────────────────────────────── */

@@ -42,9 +42,11 @@ function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
   if (template.structureEffect?.type === 'spawn') {
     unit.spawnTimer = template.structureEffect.intervalMs
   }
-  // Structures stay at base
+  // Structures stay at base; walls are placed further out to form a defensive line
   if (template.moveSpeed === 0) {
-    unit.x = owner === 'player' ? 10 : LANE_WIDTH - 10
+    unit.x = template.isWall
+      ? (owner === 'player' ? 150 : LANE_WIDTH - 150)
+      : (owner === 'player' ? 10 : LANE_WIDTH - 10)
   }
   return unit
 }
@@ -242,8 +244,6 @@ function moveUnits(s: GameState, deltaMs: number): void {
 
     if (nearestAhead) {
       const dist = Math.abs(unit.x - nearestAhead.x)
-      // Melee units stop and wait at walls
-      if (nearestAhead.isWall && !unit.bypassWall && dist <= unit.attackRange + 10) continue
       // In attack range — stop moving, let processAttacks handle it
       if (dist <= unit.attackRange) continue
       // Keep marching forward (moveDir already correct)

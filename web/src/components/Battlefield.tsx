@@ -16,9 +16,16 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
   // Vertical lane: top% based on x position (high x = near enemy = near top)
   const topPct = (1 - unit.x / LANE_WIDTH) * 100
 
+  // Unit just attacked if timer is in the upper half of its cooldown
+  const isAttacking = unit.attack > 0 && unit.attackCooldownMs > 0 &&
+    unit.attackTimer > unit.attackCooldownMs * 0.6
+
   let style: React.CSSProperties
-  if (isStructure) {
-    // Structures are anchored to their base edge, spread horizontally by stackIndex
+  if (unit.isWall) {
+    // Walls span the full lane width, positioned by their x value
+    style = { top: `${topPct}%`, left: 0, right: 0, transform: 'translateY(-50%)' }
+  } else if (isStructure) {
+    // Other structures are anchored to their base edge, spread horizontally by stackIndex
     const hOffset = 5 + stackIndex * 58
     style = unit.owner === 'player'
       ? { bottom: '5px', left: `${hOffset}px` }
@@ -39,6 +46,7 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
         `lane-unit--${unit.owner}`,
         isStructure ? 'lane-unit--structure' : '',
         unit.isWall ? 'lane-unit--wall' : '',
+        isAttacking ? 'lane-unit--attacking' : '',
       ].filter(Boolean).join(' ')}
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
