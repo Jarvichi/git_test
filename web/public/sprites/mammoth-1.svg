@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Body (huge, fills canvas) -->
+  <ellipse cx="14" cy="21" rx="12" ry="9" fill="#774422"/>
+  <!-- Woolly texture overlay -->
+  <ellipse cx="14" cy="20" rx="10" ry="7" fill="#885533" opacity="0.5"/>
+  <!-- Head -->
+  <ellipse cx="26" cy="16" rx="7" ry="6" fill="#774422"/>
+  <!-- Forehead bump -->
+  <ellipse cx="24" cy="11" rx="4" ry="3" fill="#885533"/>
+  <!-- Ear -->
+  <ellipse cx="20" cy="13" rx="3" ry="4" fill="#663311"/>
+  <ellipse cx="20" cy="13" rx="2" ry="3" fill="#774422"/>
+  <!-- Eye (small, deep set) -->
+  <circle cx="28" cy="14" r="1.5" fill="#111"/>
+  <circle cx="28.3" cy="13.7" r="0.5" fill="#553322"/>
+  <!-- Trunk (curling down) -->
+  <path d="M31,18 Q34,22 32,28 Q29,32 27,30" stroke="#663311" stroke-width="4" fill="none"/>
+  <!-- Tusks -->
+  <path d="M29,19 Q35,20 34,26" stroke="#ffffcc" stroke-width="2.5" fill="none"/>
+  <path d="M27,20 Q32,23 30,28" stroke="#eeeebb" stroke-width="2" fill="none"/>
+  <!-- Legs: left pair forward -->
+  <rect x="5" y="28" width="5" height="4" rx="1" fill="#663311"/>
+  <rect x="11" y="29" width="5" height="3" rx="1" fill="#663311"/>
+  <rect x="17" y="28" width="5" height="4" rx="1" fill="#663311"/>
+  <rect x="2" y="29" width="4" height="3" rx="1" fill="#663311"/>
+</svg>
