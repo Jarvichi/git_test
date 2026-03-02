@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Rocky cliff -->
+  <rect x="2" y="10" width="28" height="20" rx="2" fill="#555566"/>
+  <rect x="2" y="10" width="28" height="5" rx="2" fill="#666677"/>
+  <!-- Cave mouth -->
+  <ellipse cx="16" cy="26" rx="10" ry="7" fill="#1a1a2a"/>
+  <path d="M6,26 Q16,16 26,26" fill="#1a1a2a"/>
+  <!-- Cave arch shading -->
+  <path d="M7,26 Q16,17 25,26" fill="none" stroke="#2a2a3a" stroke-width="1.5"/>
+  <!-- Stalactites -->
+  <polygon points="11,22 9.5,28 12.5,28" fill="#444455"/>
+  <polygon points="16,20 14.5,27 17.5,27" fill="#444455"/>
+  <polygon points="21,22 19.5,28 22.5,28" fill="#444455"/>
+  <!-- Bats flying out -->
+  <path d="M8,8 Q7,6 6,8" stroke="#221133" stroke-width="1.5" fill="none"/>
+  <path d="M8,8 Q9,6 10,8" stroke="#221133" stroke-width="1.5" fill="none"/>
+  <circle cx="8" cy="9" r="1.2" fill="#221133"/>
+  <path d="M20,5 Q19,3 18,5" stroke="#221133" stroke-width="1.5" fill="none"/>
+  <path d="M20,5 Q21,3 22,5" stroke="#221133" stroke-width="1.5" fill="none"/>
+  <circle cx="20" cy="6" r="1.2" fill="#221133"/>
+  <path d="M26,12 Q25,10 24,12" stroke="#221133" stroke-width="1.5" fill="none"/>
+  <path d="M26,12 Q27,10 28,12" stroke="#221133" stroke-width="1.5" fill="none"/>
+  <circle cx="26" cy="13" r="1.2" fill="#221133"/>
+  <!-- Rocky top details -->
+  <polygon points="4,10 8,4 12,10" fill="#5a5a6a"/>
+  <polygon points="14,10 18,3 22,10" fill="#5a5a6a"/>
+  <polygon points="22,10 26,5 30,10" fill="#5a5a6a"/>
+</svg>
