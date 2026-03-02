@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Helmet (raised 1px) -->
+  <ellipse cx="16" cy="6" rx="7" ry="6" fill="#556677"/>
+  <rect x="9" y="9" width="14" height="3" rx="0.5" fill="#445566"/>
+  <!-- Visor slit -->
+  <rect x="12" y="9.5" width="8" height="1.5" fill="#223344"/>
+  <!-- Body armour -->
+  <rect x="10" y="12" width="12" height="9" rx="1" fill="#667788"/>
+  <!-- Pauldrons -->
+  <ellipse cx="9" cy="13" rx="4" ry="3" fill="#556677"/>
+  <ellipse cx="23" cy="13" rx="4" ry="3" fill="#556677"/>
+  <!-- Shield -->
+  <circle cx="4" cy="16" r="6" fill="#4477aa"/>
+  <circle cx="4" cy="16" r="4.5" fill="#5588bb"/>
+  <circle cx="4" cy="16" r="1.5" fill="#88aacc"/>
+  <!-- Sword -->
+  <rect x="24" y="5" width="2.5" height="12" rx="0.5" fill="#cccccc"/>
+  <rect x="22" y="12" width="7" height="1.5" rx="0.3" fill="#aa8833"/>
+  <!-- Legs: mid-stride spread -->
+  <rect x="10" y="21" width="5" height="6" rx="1" fill="#445566"/>
+  <rect x="17" y="21" width="5" height="6" rx="1" fill="#445566"/>
+  <!-- Boots -->
+  <rect x="9" y="25" width="7" height="3" rx="1" fill="#223344"/>
+  <rect x="17" y="25" width="6" height="3" rx="1" fill="#223344"/>
+</svg>
