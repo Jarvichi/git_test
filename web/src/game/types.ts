@@ -6,7 +6,10 @@ export type StructureEffect =
 
 export type UpgradeEffect =
   | { type: 'buffAttack'; amount: number }
-  | { type: 'healUnits'; amount: number }
+  | { type: 'healUnits';  amount: number }
+  | { type: 'buffSpeed';  amount: number }   // adds to moveSpeed of all mobile units
+  | { type: 'buffMaxHp';  amount: number }   // increases maxHp and heals by same amount
+  | { type: 'buffRange';  amount: number }   // increases attackRange of all attacking units
 
 // ─── Cards ───────────────────────────────────────────────
 
@@ -18,7 +21,12 @@ export interface UnitTemplate {
   attack: number
   maxHp: number
   isWall: boolean
+  /** True if this unit skips walls when choosing attack targets (ranged / magic). */
   bypassWall: boolean
+  /** True if this unit physically flies over walls — never stopped by them. */
+  flying?: boolean
+  /** True if this unit can scale walls — passes through at 25 % speed instead of stopping. */
+  climber?: boolean
   moveSpeed: number          // pixels per second (0 = stationary structure)
   attackRange: number        // pixels — distance at which unit can attack
   attackCooldownMs: number   // ms between attacks

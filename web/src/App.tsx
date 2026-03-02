@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { GameState } from './game/types'
-import { newGame, playCard, tick } from './game/engine'
+import { newGame, playCard, tick, MAX_HANDICAP } from './game/engine'
 import { loadDeck, buildDeckCards, generatePack } from './game/collection'
 import { Battlefield } from './components/Battlefield'
 import { GameOver } from './components/GameOver'
@@ -11,6 +11,15 @@ import { PackOpening } from './components/PackOpening'
 import './styles.css'
 
 const TICK_MS = 100
+const HANDICAP_KEY = 'jarvs_handicap'
+
+function loadHandicap(): number {
+  try {
+    const v = localStorage.getItem(HANDICAP_KEY)
+    if (v !== null) return Math.min(MAX_HANDICAP, Math.max(0, parseInt(v, 10)))
+  } catch { /* ignore */ }
+  return 0
+}
 
 type Screen = 'title' | 'playing' | 'collection' | 'deckbuilder' | 'pack'
 
@@ -18,6 +27,7 @@ export default function App() {
   const [screen, setScreen]       = useState<Screen>('title')
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [pack, setPack]           = useState<string[]>([])
+  const [handicap, setHandicap]   = useState<number>(loadHandicap)
 
   // ── Game loop ────────────────────────────────────────────
   useEffect(() => {
@@ -32,19 +42,28 @@ export default function App() {
   // ── Actions ──────────────────────────────────────────────
   const handlePlay = useCallback(() => {
     const playerCards = buildDeckCards(loadDeck())
-    setGameState(newGame(playerCards))
+    setGameState(newGame(playerCards, handicap))
     setScreen('playing')
-  }, [])
+  }, [handicap])
 
   const handlePlayCard = useCallback((cardId: string) => {
     setGameState(s => s ? playCard(s, cardId) : s)
   }, [])
 
   const handlePlayAgain = useCallback(() => {
+    if (!gameState || gameState.phase.type !== 'gameOver') return
+    const winner = gameState.phase.winner
+    const nextHandicap = winner === 'player'
+      ? Math.max(0, handicap - 1)
+      : winner === 'opponent'
+        ? Math.min(MAX_HANDICAP, handicap + 1)
+        : handicap
+    try { localStorage.setItem(HANDICAP_KEY, String(nextHandicap)) } catch { /* ignore */ }
+    setHandicap(nextHandicap)
     const playerCards = buildDeckCards(loadDeck())
-    setGameState(newGame(playerCards))
+    setGameState(newGame(playerCards, nextHandicap))
     setScreen('playing')
-  }, [])
+  }, [gameState, handicap])
 
   const handleOpenPack = useCallback(() => {
     setPack(generatePack())
@@ -90,6 +109,7 @@ export default function App() {
           <GameOver
             state={gameState}
             winner={gameState.phase.winner}
+            handicap={handicap}
             onOpenPack={gameState.phase.winner === 'player' ? handleOpenPack : undefined}
             onPlayAgain={handlePlayAgain}
             onMainMenu={handleMainMenu}
