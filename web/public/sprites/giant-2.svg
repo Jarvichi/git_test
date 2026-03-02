@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Club (mid-swing) -->
+  <rect x="24" y="2" width="5" height="14" rx="2" fill="#6a4a2a" transform="rotate(-20 26 9)"/>
+  <ellipse cx="26" cy="2" rx="3.5" ry="2.5" fill="#5a3a1a"/>
+  <!-- Head (raised 1px) -->
+  <ellipse cx="13" cy="6" rx="8" ry="7" fill="#887766"/>
+  <ellipse cx="13" cy="5" rx="7" ry="3" fill="#776655" opacity="0.5"/>
+  <!-- Eyes -->
+  <circle cx="10" cy="5.5" r="1.8" fill="#221100"/>
+  <circle cx="16" cy="5.5" r="1.8" fill="#221100"/>
+  <circle cx="10.3" cy="5.2" r="0.8" fill="#cc3300"/>
+  <circle cx="16.3" cy="5.2" r="0.8" fill="#cc3300"/>
+  <!-- Nose -->
+  <ellipse cx="13" cy="8.5" rx="2.5" ry="1.5" fill="#776655"/>
+  <!-- Mouth -->
+  <path d="M9,11 Q13,14 17,11" fill="#221100"/>
+  <rect x="11" y="11" width="1.5" height="2" fill="#e8e8cc"/>
+  <rect x="14" y="11" width="1.5" height="2" fill="#e8e8cc"/>
+  <!-- Torso -->
+  <ellipse cx="13" cy="21" rx="11" ry="9" fill="#998877"/>
+  <path d="M6,15 L4,30 L22,30 L20,15 Z" fill="#554433" opacity="0.6"/>
+  <!-- Arms: both out, mid-stride -->
+  <ellipse cx="2" cy="20" rx="3" ry="6" fill="#887766"/>
+  <rect x="21" y="12" width="6" height="9" rx="2" fill="#887766"/>
+  <!-- Legs mid-stride -->
+  <rect x="7" y="28" width="6" height="4" rx="1" fill="#665544"/>
+  <rect x="14" y="28" width="6" height="4" rx="1" fill="#665544"/>
+</svg>
