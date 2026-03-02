@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ground -->
+  <rect x="1" y="27" width="30" height="5" rx="1" fill="#7a6a3a"/>
+  <!-- Thick timber walls -->
+  <rect x="2" y="14" width="5" height="15" rx="1" fill="#7a5a2a"/>
+  <rect x="25" y="14" width="5" height="15" rx="1" fill="#7a5a2a"/>
+  <!-- Top cross-beam -->
+  <rect x="2" y="12" width="28" height="4" rx="1" fill="#8a6a3a"/>
+  <rect x="2" y="12" width="28" height="2" fill="#9a7a4a"/>
+  <!-- Gate posts -->
+  <rect x="10" y="10" width="3" height="20" rx="1" fill="#6a4a1a"/>
+  <rect x="19" y="10" width="3" height="20" rx="1" fill="#6a4a1a"/>
+  <!-- Gate (open) -->
+  <rect x="13" y="14" width="6" height="13" rx="0.5" fill="#5a3a0a" opacity="0.6"/>
+  <!-- Crossed timber pattern on gate -->
+  <line x1="13" y1="14" x2="19" y2="27" stroke="#3a2a0a" stroke-width="1" opacity="0.8"/>
+  <line x1="19" y1="14" x2="13" y2="27" stroke="#3a2a0a" stroke-width="1" opacity="0.8"/>
+  <!-- Mammoth tusks displayed on gate crossbeam -->
+  <path d="M7,12 Q5,8 7,5 Q9,2 11,5" stroke="#ffffcc" stroke-width="2.5" fill="none"/>
+  <path d="M25,12 Q27,8 25,5 Q23,2 21,5" stroke="#eeeebb" stroke-width="2" fill="none"/>
+  <!-- Fence spikes on top beam -->
+  <polygon points="4,12 5,8 6,12" fill="#6a4a1a"/>
+  <polygon points="8,12 9,8 10,12" fill="#6a4a1a"/>
+  <polygon points="22,12 23,8 24,12" fill="#6a4a1a"/>
+  <polygon points="26,12 27,8 28,12" fill="#6a4a1a"/>
+  <!-- Hay and trampled mud in pen -->
+  <ellipse cx="16" cy="25" rx="5" ry="2" fill="#8a7a3a" opacity="0.5"/>
+  <line x1="12" y1="24" x2="16" y2="25" stroke="#aa9a44" stroke-width="1"/>
+  <line x1="20" y1="24" x2="16" y2="25" stroke="#aa9a44" stroke-width="1"/>
+</svg>
