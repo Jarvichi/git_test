@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Left wing raised high -->
+  <path d="M13,14 L0,2 L4,12 L1,16 L10,14 Z" fill="#cc9922"/>
+  <!-- Right wing raised high -->
+  <path d="M19,14 L32,2 L28,12 L31,16 L22,14 Z" fill="#cc9922"/>
+  <!-- Wing feathers -->
+  <line x1="13" y1="14" x2="2" y2="5" stroke="#ddaa33" stroke-width="0.8"/>
+  <line x1="13" y1="14" x2="3" y2="11" stroke="#ddaa33" stroke-width="0.8"/>
+  <line x1="19" y1="14" x2="30" y2="5" stroke="#ddaa33" stroke-width="0.8"/>
+  <line x1="19" y1="14" x2="29" y2="11" stroke="#ddaa33" stroke-width="0.8"/>
+  <!-- Lion body -->
+  <ellipse cx="16" cy="22" rx="9" ry="6" fill="#cc8833"/>
+  <!-- Lion hindquarters -->
+  <ellipse cx="8" cy="23" rx="5" ry="4" fill="#bb7722"/>
+  <!-- Tail -->
+  <path d="M4,24 Q1,20 3,16 Q5,13 6,15" stroke="#cc8833" stroke-width="2.5" fill="none"/>
+  <ellipse cx="6" cy="15" rx="2" ry="2" fill="#ddaa55"/>
+  <!-- Eagle neck -->
+  <path d="M18,17 Q22,14 24,12" fill="#ffffff" stroke="#cccccc" stroke-width="0.5"/>
+  <!-- Eagle head -->
+  <ellipse cx="25" cy="10" rx="5" ry="4.5" fill="#ffffff"/>
+  <!-- Beak -->
+  <path d="M29,10 L32,12 L30,14 L28,12 Z" fill="#ffcc00"/>
+  <!-- Eye (fierce) -->
+  <circle cx="26" cy="9" r="1.5" fill="#ff8800"/>
+  <circle cx="26.3" cy="9" r="0.7" fill="#111"/>
+  <!-- Ear tufts -->
+  <polygon points="23,7 21,3 25,6" fill="#ffffff"/>
+  <!-- Front lion paws -->
+  <ellipse cx="23" cy="27" rx="3" ry="2.5" fill="#bb7722"/>
+  <ellipse cx="10" cy="28" rx="3" ry="2" fill="#bb7722"/>
+</svg>
