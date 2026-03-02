@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dirt mound -->
+  <ellipse cx="16" cy="24" rx="14" ry="7" fill="#8B6914"/>
+  <ellipse cx="16" cy="22" rx="12" ry="5" fill="#9a7a2a"/>
+  <!-- Burrow hole -->
+  <ellipse cx="16" cy="24" rx="5" ry="3" fill="#3a2a0a"/>
+  <!-- Gnawed sticks around entrance -->
+  <line x1="10" y1="22" x2="8" y2="18" stroke="#6a4a1a" stroke-width="1.5"/>
+  <line x1="12" y1="20" x2="11" y2="17" stroke="#6a4a1a" stroke-width="1.5"/>
+  <line x1="22" y1="22" x2="24" y2="18" stroke="#6a4a1a" stroke-width="1.5"/>
+  <!-- Rat peering out -->
+  <ellipse cx="16" cy="22" rx="3" ry="2.5" fill="#775533"/>
+  <circle cx="17.5" cy="21" r="0.8" fill="#ff2222"/>
+  <!-- Footprints on dirt -->
+  <ellipse cx="9" cy="26" rx="1" ry="0.6" fill="#7a5a1a"/>
+  <ellipse cx="12" cy="28" rx="1" ry="0.6" fill="#7a5a1a"/>
+  <ellipse cx="20" cy="28" rx="1" ry="0.6" fill="#7a5a1a"/>
+  <ellipse cx="23" cy="26" rx="1" ry="0.6" fill="#7a5a1a"/>
+</svg>
