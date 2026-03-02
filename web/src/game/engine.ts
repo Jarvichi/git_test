@@ -67,9 +67,20 @@ function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
 
 // ─── New Game ────────────────────────────────────────────
 
-export function newGame(playerCards?: Card[]): GameState {
+export const MAX_HANDICAP = 20
+
+/**
+ * Start a new game.
+ * @param playerCards  Optional custom deck for the player (defaults to makeDeck()).
+ * @param opponentHandicap  Cards removed from the opponent's deck (adaptive difficulty).
+ *   Increases by 1 on each player loss, decreases by 1 on each win (floor 0).
+ */
+export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
   const playerDeck = shuffle(playerCards ?? makeDeck())
-  const opponentDeck = shuffle(makeDeck())
+  const rawOpponentDeck = shuffle(makeDeck())
+  // Remove cards from the tail of the shuffled deck to weaken the opponent
+  const clamp = Math.min(Math.max(0, opponentHandicap), MAX_HANDICAP)
+  const opponentDeck = rawOpponentDeck.slice(0, Math.max(4, rawOpponentDeck.length - clamp))
   const playerHand = playerDeck.splice(0, 4)
   const opponentHand = opponentDeck.splice(0, 4)
 
@@ -85,7 +96,11 @@ export function newGame(playerCards?: Card[]): GameState {
     maxMana: BASE_MAX_MANA,
     manaAccum: 0,
     cardCooldown: 0,
-    log: ['Battle begins! Tap cards to deploy.'],
+    log: [
+      clamp > 0
+        ? `Battle begins! (Enemy -${clamp} card${clamp !== 1 ? 's' : ''} handicap)`
+        : 'Battle begins! Tap cards to deploy.',
+    ],
     phase: { type: 'playing' },
     opponentTimer: OPPONENT_INTERVAL_MS,
     gameTime: 0,
@@ -129,6 +144,15 @@ function applyUpgrade(s: GameState, effect: UpgradeEffect, owner: 'player' | 'op
   } else if (effect.type === 'healUnits') {
     for (const u of units) u.hp = Math.min(u.maxHp, u.hp + effect.amount)
     log.push(`${label} units healed ${effect.amount} HP.`)
+  } else if (effect.type === 'buffSpeed') {
+    for (const u of units) if (u.moveSpeed > 0) u.moveSpeed += effect.amount
+    log.push(`${label} units surge +${effect.amount} speed!`)
+  } else if (effect.type === 'buffMaxHp') {
+    for (const u of units) { u.maxHp += effect.amount; u.hp = Math.min(u.hp + effect.amount, u.maxHp) }
+    log.push(`${label} units gain +${effect.amount} max HP!`)
+  } else if (effect.type === 'buffRange') {
+    for (const u of units) if (u.attackRange > 0) u.attackRange += effect.amount
+    log.push(`${label} units gain +${effect.amount} attack range!`)
   }
 }
 
@@ -170,7 +194,8 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
 
 // ─── Enemy-finding helpers ────────────────────────────────
 
-// Enemies strictly ahead of this unit (toward opponent base) — used for forward movement
+// Enemies strictly ahead of this unit (toward opponent base) — used for forward movement.
+// flying units and climbers skip walls entirely; regular ground units see walls as obstacles.
 function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
@@ -178,7 +203,7 @@ function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
   for (const other of field) {
     if (other.owner === unit.owner) continue
     if (other.hp <= 0) continue
-    if (other.isWall && unit.bypassWall) continue
+    if (other.isWall && (unit.flying || unit.climber)) continue
 
     const dist = Math.abs(unit.x - other.x)
 
@@ -201,7 +226,7 @@ function findEnemyBehind(field: Unit[], unit: Unit): Unit | null {
   for (const other of field) {
     if (other.owner === unit.owner) continue
     if (other.hp <= 0) continue
-    if (other.isWall && unit.bypassWall) continue
+    if (other.isWall && (unit.flying || unit.climber)) continue
 
     const dist = Math.abs(unit.x - other.x)
 
@@ -216,7 +241,8 @@ function findEnemyBehind(field: Unit[], unit: Unit): Unit | null {
   return nearest
 }
 
-// Nearest enemy in any direction within attack range — used for actual attacks
+// Nearest enemy in any direction within attack range — used for actual attacks.
+// bypassWall units and climbers skip walls (they fire/climb over, not through them).
 function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
@@ -224,7 +250,7 @@ function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
   for (const other of field) {
     if (other.owner === unit.owner) continue
     if (other.hp <= 0) continue
-    if (other.isWall && unit.bypassWall) continue
+    if (other.isWall && (unit.bypassWall || unit.climber)) continue
 
     const dist = Math.abs(unit.x - other.x)
     if (dist > unit.attackRange) continue
@@ -238,6 +264,9 @@ function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
 }
 
 // ─── Movement ─────────────────────────────────────────────
+
+const CLIMB_SPEED_FACTOR = 0.25   // climbers move at 25 % speed through wall zones
+const WALL_CLIMB_ZONE   = 30      // px radius around a wall that counts as "wall zone"
 
 function moveUnits(s: GameState, deltaMs: number): void {
   const deltaSec = deltaMs / 1000
@@ -265,7 +294,13 @@ function moveUnits(s: GameState, deltaMs: number): void {
       // else: no enemies anywhere, keep marching toward base
     }
 
-    const moveAmount = unit.moveSpeed * deltaSec * moveDir
+    // Climbers slow to CLIMB_SPEED_FACTOR when passing through a wall zone
+    const inWallZone = unit.climber && s.field.some(w =>
+      w.isWall && w.owner !== unit.owner && w.hp > 0 &&
+      Math.abs(unit.x - w.x) <= WALL_CLIMB_ZONE
+    )
+    const speed = inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed
+    const moveAmount = speed * deltaSec * moveDir
     unit.x = Math.min(LANE_WIDTH, Math.max(0, unit.x + moveAmount))
   }
 }

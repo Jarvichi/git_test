@@ -1,9 +1,12 @@
 import React from 'react'
 import { GameState } from '../game/types'
+import { MAX_HANDICAP } from '../game/engine'
 
 interface Props {
   state: GameState
   winner: 'player' | 'opponent' | 'draw'
+  /** Current opponent deck handicap (cards removed from enemy deck). */
+  handicap: number
   onOpenPack?: () => void
   onPlayAgain: () => void
   onMainMenu: () => void
@@ -30,7 +33,7 @@ const DRAW_ART = `  =====
   =====
   DRAW!`
 
-export function GameOver({ state, winner, onOpenPack, onPlayAgain, onMainMenu }: Props) {
+export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onMainMenu }: Props) {
   const won  = winner === 'player'
   const draw = winner === 'draw'
   const css  = won ? 'gameover--win' : draw ? 'gameover--draw' : 'gameover--lose'
@@ -45,6 +48,23 @@ export function GameOver({ state, winner, onOpenPack, onPlayAgain, onMainMenu }:
       : winner === 'opponent'
         ? 'Your base was destroyed...'
         : 'Score: you lost on points.'
+
+  // What happens to the opponent handicap next round
+  const nextHandicap = won
+    ? Math.max(0, handicap - 1)
+    : !draw ? Math.min(MAX_HANDICAP, handicap + 1)
+    : handicap
+
+  let handicapNote = ''
+  if (won) {
+    handicapNote = nextHandicap < handicap
+      ? `Enemy regains a card next round (handicap: ${nextHandicap})`
+      : 'Enemy deck at full strength!'
+  } else if (!draw) {
+    handicapNote = `Enemy starts with ${nextHandicap} fewer card${nextHandicap !== 1 ? 's' : ''} next round`
+  } else if (handicap > 0) {
+    handicapNote = `Handicap unchanged (${handicap} cards removed)`
+  }
 
   return (
     <div className={`gameover-screen ${css}`}>
@@ -63,6 +83,7 @@ export function GameOver({ state, winner, onOpenPack, onPlayAgain, onMainMenu }:
           : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>
         )}
       </div>
+      {handicapNote && <div className="gameover-handicap">{handicapNote}</div>}
 
       <div className="gameover-actions">
         {won && onOpenPack && (
