@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Wispy body, slightly tilted left -->
+  <path d="M10,28 Q7,20 10,14 Q13,8 16,6 Q19,8 22,14 Q25,20 22,28 Q19,25 16,28 Q13,25 10,28 Z" fill="#aabbff" opacity="0.85"/>
+  <!-- Inner glow -->
+  <path d="M12,26 Q10,20 12,15 Q14,10 16,9 Q18,10 20,15 Q22,20 20,26 Q18,24 16,26 Q14,24 12,26 Z" fill="#ddeeff" opacity="0.6"/>
+  <!-- Eyes (glowing) -->
+  <ellipse cx="13" cy="14" rx="2.5" ry="3" fill="#6699ff"/>
+  <ellipse cx="19" cy="14" rx="2.5" ry="3" fill="#6699ff"/>
+  <ellipse cx="13" cy="14" rx="1.5" ry="2" fill="#aaccff"/>
+  <ellipse cx="19" cy="14" rx="1.5" ry="2" fill="#aaccff"/>
+  <!-- Reaching arms (wispy tendrils) -->
+  <path d="M10,18 Q4,15 2,18 Q5,19 8,20" stroke="#aabbff" stroke-width="2" fill="none" opacity="0.8"/>
+  <path d="M22,18 Q28,15 30,18 Q27,19 24,20" stroke="#aabbff" stroke-width="2" fill="none" opacity="0.8"/>
+  <!-- Bottom wisps -->
+  <path d="M12,27 Q10,31 11,32" stroke="#8899dd" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M16,28 Q16,31 15,32" stroke="#8899dd" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M20,27 Q22,31 21,32" stroke="#8899dd" stroke-width="1.5" fill="none" opacity="0.7"/>
+</svg>
