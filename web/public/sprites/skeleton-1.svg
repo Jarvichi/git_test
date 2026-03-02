@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <circle cx="16" cy="9" r="7" fill="#e8ddb0"/>
+  <ellipse cx="12.5" cy="8.5" rx="2.5" ry="2" fill="#111"/>
+  <ellipse cx="19.5" cy="8.5" rx="2.5" ry="2" fill="#111"/>
+  <path d="M15,11 L16,13.5 L17,11 Z" fill="#111"/>
+  <rect x="11" y="13" width="10" height="2.5" rx="0.5" fill="#d8cca0"/>
+  <line x1="13.5" y1="13" x2="13.5" y2="15.5" stroke="#111" stroke-width="0.7"/>
+  <line x1="16" y1="13" x2="16" y2="15.5" stroke="#111" stroke-width="0.7"/>
+  <line x1="18.5" y1="13" x2="18.5" y2="15.5" stroke="#111" stroke-width="0.7"/>
+  <rect x="15" y="15.5" width="2" height="2" fill="#c8c0a0"/>
+  <rect x="15.5" y="17.5" width="1" height="8" fill="#c8c0a0"/>
+  <line x1="15.5" y1="19" x2="9.5" y2="21" stroke="#c8c0a0" stroke-width="1.2"/>
+  <line x1="16.5" y1="19" x2="22.5" y2="21" stroke="#c8c0a0" stroke-width="1.2"/>
+  <line x1="15.5" y1="22" x2="9.5" y2="24" stroke="#c8c0a0" stroke-width="1.2"/>
+  <line x1="16.5" y1="22" x2="22.5" y2="24" stroke="#c8c0a0" stroke-width="1.2"/>
+  <ellipse cx="16" cy="26.5" rx="4" ry="1.5" fill="#c8c0a0"/>
+  <!-- arms: left forward, right back -->
+  <line x1="15.5" y1="20" x2="8" y2="23" stroke="#c8c0a0" stroke-width="1.4"/>
+  <line x1="16.5" y1="20" x2="24" y2="17" stroke="#c8c0a0" stroke-width="1.4"/>
+  <!-- legs: left raised, right back -->
+  <rect x="10" y="26" width="2.5" height="5" rx="0.5" fill="#c8c0a0" transform="rotate(-12 11.25 28.5)"/>
+  <rect x="18" y="27" width="2.5" height="4" rx="0.5" fill="#c8c0a0" transform="rotate(10 19.25 29)"/>
+</svg>

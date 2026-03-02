@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Head with hood -->
+  <ellipse cx="16" cy="7" rx="6" ry="6" fill="#8b6914"/>
+  <path d="M10,7 Q16,1 22,7 Q20,5 16,4.5 Q12,5 10,7 Z" fill="#5a4010"/>
+  <!-- Face -->
+  <ellipse cx="14" cy="7" rx="1.5" ry="1.5" fill="#222"/>
+  <ellipse cx="18" cy="7" rx="1.5" ry="1.5" fill="#222"/>
+  <!-- Body/tunic -->
+  <rect x="11" y="12" width="10" height="10" rx="2" fill="#8b6914"/>
+  <!-- Belt -->
+  <rect x="11" y="19" width="10" height="2" fill="#5a4010"/>
+  <rect x="14.5" y="19" width="3" height="2" fill="#c8a020"/>
+  <!-- Legs -->
+  <rect x="12" y="22" width="3.5" height="8" rx="1" fill="#5a4010"/>
+  <rect x="16.5" y="22" width="3.5" height="8" rx="1" fill="#5a4010"/>
+  <!-- Boots -->
+  <rect x="11.5" y="28" width="4" height="3" rx="1" fill="#3a2800"/>
+  <rect x="16" y="28" width="4" height="3" rx="1" fill="#3a2800"/>
+  <!-- Crossbow held forward -->
+  <rect x="20" y="13" width="10" height="2" rx="0.5" fill="#5a3800"/>
+  <rect x="23" y="10" width="2" height="8" rx="0.5" fill="#5a3800"/>
+  <line x1="23" y1="11" x2="30" y2="11" stroke="#888" stroke-width="1"/>
+  <!-- Arrow nocked -->
+  <line x1="25" y1="14" x2="31" y2="14" stroke="#c8a020" stroke-width="0.8"/>
+  <polygon points="31,13 32,14 31,15" fill="#c8a020"/>
+  <!-- Left arm holding stock -->
+  <line x1="16" y1="16" x2="22" y2="15" stroke="#8b6914" stroke-width="2.5"/>
+</svg>

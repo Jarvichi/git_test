@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark hood -->
+  <ellipse cx="16" cy="7" rx="6" ry="6" fill="#2a2a2a"/>
+  <path d="M10,8 Q16,1 22,8 Q19,4 16,3.5 Q13,4 10,8 Z" fill="#1a1a1a"/>
+  <!-- Eyes (glowing) -->
+  <ellipse cx="14" cy="7.5" rx="1.5" ry="1" fill="#00ddaa"/>
+  <ellipse cx="18" cy="7.5" rx="1.5" ry="1" fill="#00ddaa"/>
+  <!-- Scarf / mask -->
+  <rect x="10" y="10" width="12" height="3" rx="1" fill="#1a1a1a"/>
+  <!-- Dark leather body -->
+  <rect x="11" y="12" width="10" height="10" rx="2" fill="#2a2a2a"/>
+  <!-- Belt with pouches -->
+  <rect x="11" y="19" width="10" height="2" fill="#3a2800"/>
+  <rect x="12" y="19" width="2" height="2.5" fill="#2a1a00"/>
+  <rect x="18" y="19" width="2" height="2.5" fill="#2a1a00"/>
+  <!-- Legs -->
+  <rect x="12" y="22" width="3" height="8" rx="1" fill="#1a1a1a"/>
+  <rect x="17" y="22" width="3" height="8" rx="1" fill="#1a1a1a"/>
+  <!-- Boots -->
+  <rect x="11" y="28" width="4" height="3" rx="1" fill="#1a0a00"/>
+  <rect x="17" y="28" width="4" height="3" rx="1" fill="#1a0a00"/>
+  <!-- Daggers (dual wield) -->
+  <rect x="6" y="14" width="1.5" height="8" rx="0.5" fill="#aaa" transform="rotate(20 6.75 18)"/>
+  <rect x="24" y="14" width="1.5" height="8" rx="0.5" fill="#aaa" transform="rotate(-20 24.75 18)"/>
+</svg>

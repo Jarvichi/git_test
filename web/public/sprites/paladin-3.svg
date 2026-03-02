@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect x="10" y="2" width="12" height="10" rx="3" fill="#aaa"/>
+  <rect x="10" y="2" width="12" height="5" rx="3" fill="#ddd"/>
+  <rect x="11" y="7" width="10" height="2" rx="0.5" fill="#333"/>
+  <path d="M16,2 Q14,0 12,1 Q14,2 16,2 Z" fill="#cc2222"/>
+  <path d="M16,2 Q18,0 20,1 Q18,2 16,2 Z" fill="#cc2222"/>
+  <rect x="9" y="11" width="14" height="11" rx="2" fill="#bbb"/>
+  <line x1="16" y1="11" x2="16" y2="22" stroke="#999" stroke-width="0.8"/>
+  <rect x="14.5" y="13" width="3" height="7" fill="#cc2222"/>
+  <rect x="12" y="15.5" width="8" height="3" fill="#cc2222"/>
+  <!-- Shield back -->
+  <path d="M6,13 L6,23 Q6,26 10,27 Q10,23 10,13 Z" fill="#cc2222"/>
+  <line x1="8" y1="14" x2="8" y2="25" stroke="#ffdd00" stroke-width="1"/>
+  <!-- Sword swinging -->
+  <rect x="23" y="10" width="2" height="16" rx="0.5" fill="#ccc" transform="rotate(20 24 18)"/>
+  <rect x="21" y="14" width="6" height="1.5" rx="0.5" fill="#aaa" transform="rotate(20 24 14.75)"/>
+  <rect x="23.5" y="8" width="1" height="3" rx="0.3" fill="#c8a020" transform="rotate(20 24 9.5)"/>
+  <!-- Legs: right forward -->
+  <rect x="11" y="22" width="4" height="8" rx="1" fill="#aaa" transform="rotate(6 13 26)"/>
+  <rect x="17" y="22" width="4" height="9" rx="1" fill="#aaa" transform="rotate(-8 19 26.5)"/>
+  <rect x="11" y="28" width="5" height="3" rx="1" fill="#999"/>
+  <rect x="16" y="29" width="5" height="3" rx="1" fill="#999"/>
+</svg>

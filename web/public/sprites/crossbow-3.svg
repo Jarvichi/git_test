@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <ellipse cx="16" cy="7" rx="6" ry="6" fill="#8b6914"/>
+  <path d="M10,7 Q16,1 22,7 Q20,5 16,4.5 Q12,5 10,7 Z" fill="#5a4010"/>
+  <ellipse cx="14" cy="7" rx="1.5" ry="1.5" fill="#222"/>
+  <ellipse cx="18" cy="7" rx="1.5" ry="1.5" fill="#222"/>
+  <rect x="11" y="12" width="10" height="10" rx="2" fill="#8b6914"/>
+  <rect x="11" y="19" width="10" height="2" fill="#5a4010"/>
+  <rect x="14.5" y="19" width="3" height="2" fill="#c8a020"/>
+  <!-- Legs: right forward -->
+  <rect x="12" y="22" width="3.5" height="7" rx="1" fill="#5a4010" transform="rotate(8 13.75 25.5)"/>
+  <rect x="16.5" y="22" width="3.5" height="8" rx="1" fill="#5a4010" transform="rotate(-10 18.25 26)"/>
+  <rect x="12" y="27" width="4" height="3" rx="1" fill="#3a2800"/>
+  <rect x="15.5" y="28.5" width="4" height="3" rx="1" fill="#3a2800"/>
+  <!-- Crossbow slightly dipped -->
+  <rect x="20" y="14" width="10" height="2" rx="0.5" fill="#5a3800"/>
+  <rect x="23" y="11" width="2" height="8" rx="0.5" fill="#5a3800"/>
+  <line x1="23" y1="12" x2="30" y2="12" stroke="#888" stroke-width="1"/>
+  <line x1="25" y1="15" x2="31" y2="15" stroke="#c8a020" stroke-width="0.8"/>
+  <polygon points="31,14 32,15 31,16" fill="#c8a020"/>
+  <line x1="16" y1="17" x2="22" y2="16" stroke="#8b6914" stroke-width="2.5"/>
+</svg>
