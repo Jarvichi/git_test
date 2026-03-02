@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <ellipse cx="16" cy="7.5" rx="8" ry="7" fill="#8a9a4a"/>
+  <ellipse cx="16" cy="4.5" rx="7" ry="3" fill="#6a7a3a"/>
+  <polygon points="10,3.5 8,0.5 12,4.5" fill="#5a6a2a"/>
+  <polygon points="22,3.5 24,0.5 20,4.5" fill="#5a6a2a"/>
+  <circle cx="13" cy="7.5" r="2" fill="#ffaa00"/>
+  <circle cx="19" cy="7.5" r="2" fill="#ffaa00"/>
+  <circle cx="13.3" cy="7.5" r="1" fill="#111"/>
+  <circle cx="19.3" cy="7.5" r="1" fill="#111"/>
+  <ellipse cx="16" cy="11.5" rx="3" ry="2" fill="#6a7a3a"/>
+  <circle cx="14.5" cy="12" r="1" fill="#5a6a2a"/>
+  <circle cx="17.5" cy="12" r="1" fill="#5a6a2a"/>
+  <path d="M11,13.5 Q16,17.5 21,13.5" fill="#5a6a2a"/>
+  <rect x="13" y="14.5" width="2.5" height="3" rx="0.3" fill="#ddd"/>
+  <rect x="16.5" y="14.5" width="2.5" height="3" rx="0.3" fill="#ddd"/>
+  <rect x="8" y="13.5" width="16" height="12" rx="3" fill="#8a9a4a"/>
+  <rect x="8" y="22.5" width="16" height="2.5" fill="#5a3800"/>
+  <rect x="14" y="22" width="4" height="3.5" fill="#c8a020"/>
+  <rect x="23" y="10" width="4" height="14" rx="2" fill="#7a5000"/>
+  <ellipse cx="25" cy="10" rx="4" ry="3" fill="#5a3800"/>
+  <ellipse cx="5" cy="19.5" rx="4" ry="3" fill="#8a9a4a" transform="rotate(10 5 19.5)"/>
+  <ellipse cx="3" cy="22.5" rx="3" ry="2" fill="#7a8a3a"/>
+  <rect x="10" y="25.5" width="5" height="7" rx="2" fill="#7a8a3a"/>
+  <rect x="17" y="25.5" width="5" height="7" rx="2" fill="#7a8a3a"/>
+</svg>

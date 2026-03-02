@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Arm firing position (up) -->
+  <circle cx="8" cy="26" r="5" fill="#5a3800" stroke="#3a2000" stroke-width="1"/>
+  <circle cx="24" cy="26" r="5" fill="#5a3800" stroke="#3a2000" stroke-width="1"/>
+  <circle cx="8" cy="26" r="2" fill="#3a2000"/>
+  <circle cx="24" cy="26" r="2" fill="#3a2000"/>
+  <line x1="8" y1="21" x2="8" y2="31" stroke="#3a2000" stroke-width="1"/>
+  <line x1="3" y1="26" x2="13" y2="26" stroke="#3a2000" stroke-width="1"/>
+  <line x1="19" y1="26" x2="29" y2="26" stroke="#3a2000" stroke-width="1"/>
+  <line x1="24" y1="21" x2="24" y2="31" stroke="#3a2000" stroke-width="1"/>
+  <rect x="5" y="20" width="22" height="4" rx="1" fill="#5a3800"/>
+  <!-- Arm pointing up-forward (fired) -->
+  <rect x="14" y="6" width="3" height="14" rx="1" fill="#7a5000" transform="rotate(20 15.5 13)"/>
+  <!-- Bucket now at top -->
+  <path d="M16,4 Q20,2 24,4 L23,9 Q20,10 17,9 Z" fill="#5a3800"/>
+  <!-- Boulder in flight -->
+  <circle cx="28" cy="3" r="2.5" fill="#888"/>
+  <rect x="8" y="18" width="5" height="5" rx="1" fill="#888"/>
+  <rect x="10" y="18" width="2" height="6" rx="0.5" fill="#7a5000"/>
+  <rect x="20" y="18" width="2" height="6" rx="0.5" fill="#7a5000"/>
+  <circle cx="27" cy="17" r="2" fill="#c8a060"/>
+  <rect x="26" y="19" width="2" height="4" rx="0.5" fill="#6a4020"/>
+</svg>

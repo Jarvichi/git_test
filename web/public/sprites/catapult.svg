@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Wheels -->
+  <circle cx="8" cy="26" r="5" fill="#5a3800" stroke="#3a2000" stroke-width="1"/>
+  <circle cx="24" cy="26" r="5" fill="#5a3800" stroke="#3a2000" stroke-width="1"/>
+  <circle cx="8" cy="26" r="2" fill="#3a2000"/>
+  <circle cx="24" cy="26" r="2" fill="#3a2000"/>
+  <line x1="8" y1="21" x2="8" y2="31" stroke="#3a2000" stroke-width="1"/>
+  <line x1="3" y1="26" x2="13" y2="26" stroke="#3a2000" stroke-width="1"/>
+  <line x1="19" y1="26" x2="29" y2="26" stroke="#3a2000" stroke-width="1"/>
+  <line x1="24" y1="21" x2="24" y2="31" stroke="#3a2000" stroke-width="1"/>
+  <!-- Axle / frame -->
+  <rect x="5" y="20" width="22" height="4" rx="1" fill="#5a3800"/>
+  <!-- Arm (cocked back) -->
+  <rect x="14" y="10" width="3" height="14" rx="1" fill="#7a5000" transform="rotate(-30 15.5 17)"/>
+  <!-- Bucket -->
+  <path d="M6,7 Q10,5 14,7 L13,12 Q10,13 7,12 Z" fill="#5a3800"/>
+  <!-- Counterweight -->
+  <rect x="19" y="18" width="5" height="5" rx="1" fill="#888"/>
+  <!-- Frame supports -->
+  <rect x="10" y="18" width="2" height="6" rx="0.5" fill="#7a5000"/>
+  <rect x="20" y="18" width="2" height="6" rx="0.5" fill="#7a5000"/>
+  <!-- Operator (tiny figure) -->
+  <circle cx="27" cy="17" r="2" fill="#c8a060"/>
+  <rect x="26" y="19" width="2" height="4" rx="0.5" fill="#6a4020"/>
+</svg>

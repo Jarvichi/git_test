@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Wings level -->
+  <ellipse cx="10" cy="16" rx="7" ry="3" fill="#aaffee" opacity="0.7"/>
+  <ellipse cx="22" cy="16" rx="7" ry="3" fill="#aaffee" opacity="0.7"/>
+  <ellipse cx="10" cy="19" rx="5" ry="2.5" fill="#88ffdd" opacity="0.5"/>
+  <ellipse cx="22" cy="19" rx="5" ry="2.5" fill="#88ffdd" opacity="0.5"/>
+  <ellipse cx="16" cy="18" rx="3" ry="5" fill="#ffaadd"/>
+  <circle cx="16" cy="12" r="4" fill="#ffccaa"/>
+  <path d="M12,11 Q16,7 20,11 Q18,8 16,7.5 Q14,8 12,11 Z" fill="#66aa00"/>
+  <circle cx="14.5" cy="12" r="1.2" fill="#00aaff"/>
+  <circle cx="17.5" cy="12" r="1.2" fill="#00aaff"/>
+  <circle cx="14.8" cy="11.8" r="0.5" fill="#fff"/>
+  <circle cx="17.8" cy="11.8" r="0.5" fill="#fff"/>
+  <path d="M14,14 Q16,15.5 18,14" stroke="#aa6688" stroke-width="0.8" fill="none"/>
+  <line x1="20" y1="15" x2="27" y2="9" stroke="#c8a020" stroke-width="1.2"/>
+  <circle cx="27" cy="9" r="1.5" fill="#ffee00"/>
+  <circle cx="29" cy="7" r="0.8" fill="#ffee00" opacity="0.8"/>
+  <circle cx="25" cy="6" r="0.6" fill="#ffee00" opacity="0.6"/>
+  <line x1="15" y1="22" x2="14" y2="26" stroke="#ffaadd" stroke-width="1.5"/>
+  <line x1="17" y1="22" x2="18" y2="26" stroke="#ffaadd" stroke-width="1.5"/>
+  <ellipse cx="14" cy="26.5" rx="1.5" ry="0.8" fill="#ff88bb"/>
+  <ellipse cx="18" cy="26.5" rx="1.5" ry="0.8" fill="#ff88bb"/>
+</svg>
