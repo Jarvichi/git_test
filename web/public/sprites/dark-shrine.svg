@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Stone altar base -->
+  <rect x="4" y="24" width="24" height="8" rx="1" fill="#444"/>
+  <rect x="2" y="26" width="28" height="6" rx="0.5" fill="#555"/>
+  <!-- Obelisk-like columns -->
+  <rect x="5" y="10" width="5" height="16" rx="0.5" fill="#444"/>
+  <rect x="22" y="10" width="5" height="16" rx="0.5" fill="#444"/>
+  <polygon points="5,10 7.5,5 10,10" fill="#333"/>
+  <polygon points="22,10 24.5,5 27,10" fill="#333"/>
+  <!-- Central altar -->
+  <rect x="11" y="14" width="10" height="12" rx="0.5" fill="#3a3a3a"/>
+  <!-- Glowing rune -->
+  <text x="16" y="23" text-anchor="middle" font-size="9" fill="#aa00ff" font-family="monospace" opacity="0.9">☽</text>
+  <!-- Eerie glow aura -->
+  <circle cx="16" cy="19" r="8" fill="none" stroke="#6600cc" stroke-width="0.8" opacity="0.5"/>
+  <circle cx="16" cy="19" r="5" fill="none" stroke="#aa00ff" stroke-width="0.5" opacity="0.4"/>
+  <!-- Moon above -->
+  <path d="M13,4 Q16,0 19,4 Q17,2.5 13,4 Z" fill="#aaa"/>
+  <circle cx="14" cy="6" r="0.8" fill="#aaa" opacity="0.7"/>
+  <circle cx="18" cy="5" r="0.6" fill="#aaa" opacity="0.5"/>
+</svg>

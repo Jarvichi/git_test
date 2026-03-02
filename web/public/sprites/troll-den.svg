@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Cave mouth -->
+  <ellipse cx="16" cy="28" rx="14" ry="8" fill="#3a3020"/>
+  <!-- Rock pile / hill -->
+  <ellipse cx="16" cy="22" rx="15" ry="12" fill="#5a5040"/>
+  <!-- Cave opening (dark) -->
+  <ellipse cx="16" cy="27" rx="9" ry="6" fill="#111"/>
+  <!-- Rock texture -->
+  <ellipse cx="7" cy="18" rx="5" ry="4" fill="#6a6050"/>
+  <ellipse cx="25" cy="19" rx="5" ry="4" fill="#6a6050"/>
+  <ellipse cx="16" cy="14" rx="6" ry="4" fill="#6a6050"/>
+  <!-- Bones at entrance -->
+  <line x1="10" y1="29" x2="14" y2="27" stroke="#ccc" stroke-width="1.5"/>
+  <line x1="22" y1="29" x2="18" y2="27" stroke="#ccc" stroke-width="1.5"/>
+  <circle cx="10" cy="29.5" r="1.2" fill="#ccc"/>
+  <circle cx="22" cy="29.5" r="1.2" fill="#ccc"/>
+  <!-- Glowing eyes inside cave -->
+  <circle cx="14" cy="25" r="1.5" fill="#ffdd00" opacity="0.9"/>
+  <circle cx="18" cy="25" r="1.5" fill="#ffdd00" opacity="0.9"/>
+</svg>

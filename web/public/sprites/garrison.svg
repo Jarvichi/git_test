@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Fort walls -->
+  <rect x="2" y="14" width="28" height="18" rx="1" fill="#8a7a5a"/>
+  <!-- Battlements -->
+  <rect x="2" y="10" width="5" height="6" rx="0.5" fill="#8a7a5a"/>
+  <rect x="9" y="10" width="5" height="6" rx="0.5" fill="#8a7a5a"/>
+  <rect x="16" y="10" width="5" height="6" rx="0.5" fill="#8a7a5a"/>
+  <rect x="23" y="10" width="7" height="6" rx="0.5" fill="#8a7a5a"/>
+  <!-- Gate -->
+  <rect x="11" y="20" width="10" height="12" rx="2" fill="#3a2a10"/>
+  <rect x="12" y="19" width="8" height="2" rx="1" fill="#5a4a2a"/>
+  <!-- Arrow slits -->
+  <rect x="5" y="17" width="2" height="5" rx="0.5" fill="#3a2a10"/>
+  <rect x="25" y="17" width="2" height="5" rx="0.5" fill="#3a2a10"/>
+  <!-- Flag -->
+  <line x1="16" y1="2" x2="16" y2="12" stroke="#8a7a5a" stroke-width="1"/>
+  <polygon points="16,2 24,5 16,8" fill="#cc2222"/>
+  <!-- Archer silhouette in window -->
+  <rect x="5.5" y="17.5" width="1" height="4" fill="#111"/>
+</svg>
