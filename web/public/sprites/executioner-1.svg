@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Hood (covers face) -->
+  <path d="M9,12 Q16,2 23,12 L21,15 Q16,11 11,15 Z" fill="#111122"/>
+  <ellipse cx="16" cy="12" rx="7" ry="6" fill="#222233"/>
+  <!-- Eye holes -->
+  <ellipse cx="13.5" cy="11" rx="1.5" ry="1" fill="#111"/>
+  <ellipse cx="18.5" cy="11" rx="1.5" ry="1" fill="#111"/>
+  <!-- Neck -->
+  <rect x="13" y="16" width="6" height="3" fill="#885544"/>
+  <!-- Massive torso -->
+  <rect x="8" y="19" width="16" height="10" rx="2" fill="#333344"/>
+  <!-- Left arm back -->
+  <rect x="2" y="18" width="7" height="4" rx="1" fill="#333344"/>
+  <!-- Right arm raised high with axe -->
+  <rect x="23" y="10" width="4" height="12" rx="1" fill="#333344"/>
+  <!-- Axe handle -->
+  <rect x="25" y="5" width="2" height="18" rx="0.5" fill="#5a3a1a"/>
+  <!-- Axe head (huge) -->
+  <path d="M25,5 L18,2 L17,8 L25,9 Z" fill="#888888"/>
+  <path d="M25,5 L30,3 L31,9 L25,9 Z" fill="#777777"/>
+  <line x1="17" y1="5" x2="31" y2="6" stroke="#555" stroke-width="0.5"/>
+  <!-- Legs: left forward, right back -->
+  <rect x="9" y="29" width="5" height="3" rx="1" fill="#222233"/>
+  <rect x="18" y="29" width="5" height="3" rx="1" fill="#222233"/>
+</svg>
