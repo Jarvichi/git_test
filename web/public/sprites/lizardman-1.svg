@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Tail -->
+  <path d="M12,24 Q6,28 4,32" stroke="#336633" stroke-width="3" fill="none"/>
+  <!-- Body -->
+  <ellipse cx="17" cy="20" rx="7" ry="6" fill="#447744"/>
+  <!-- Scale texture -->
+  <ellipse cx="17" cy="19" rx="5" ry="4" fill="#336633" opacity="0.4"/>
+  <!-- Neck -->
+  <rect x="14" y="12" width="6" height="6" rx="2" fill="#447744"/>
+  <!-- Head -->
+  <ellipse cx="17" cy="10" rx="6" ry="5" fill="#55aa55"/>
+  <!-- Snout -->
+  <path d="M21,9 L28,11 L26,14 L21,12 Z" fill="#447744"/>
+  <!-- Nostril -->
+  <circle cx="26" cy="11.5" r="0.8" fill="#224422"/>
+  <!-- Eye -->
+  <circle cx="22" cy="8" r="2" fill="#ffcc00"/>
+  <ellipse cx="22" cy="8" rx="0.8" ry="1.4" fill="#111"/>
+  <!-- Spines along head -->
+  <polygon points="14,6 12,2 16,5" fill="#336633"/>
+  <polygon points="17,5 16,1 19,4" fill="#336633"/>
+  <!-- Arm left back, arm right forward -->
+  <line x1="11" y1="18" x2="5" y2="22" stroke="#336633" stroke-width="3"/>
+  <line x1="23" y1="18" x2="29" y2="14" stroke="#336633" stroke-width="3"/>
+  <!-- Claws right -->
+  <line x1="29" y1="14" x2="31" y2="12" stroke="#336633" stroke-width="1.5"/>
+  <line x1="29" y1="14" x2="31" y2="16" stroke="#336633" stroke-width="1.5"/>
+  <!-- Legs: left forward, right back -->
+  <rect x="12" y="24" width="4" height="8" rx="1" fill="#336633"/>
+  <rect x="18" y="24" width="4" height="6" rx="1" fill="#336633"/>
+</svg>
