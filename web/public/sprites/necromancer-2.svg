@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Tall pointed hood (raised 1px) -->
+  <polygon points="16,-1 10,11 22,11" fill="#111122"/>
+  <rect x="8" y="9" width="16" height="4" rx="0.5" fill="#221133"/>
+  <!-- Head -->
+  <ellipse cx="16" cy="13" rx="5" ry="5.5" fill="#e0d8cc"/>
+  <!-- Eyes -->
+  <circle cx="13.5" cy="12" r="1.8" fill="#003300"/>
+  <circle cx="18.5" cy="12" r="1.8" fill="#003300"/>
+  <circle cx="13.5" cy="12" r="1" fill="#00ff66" opacity="0.8"/>
+  <circle cx="18.5" cy="12" r="1" fill="#00ff66" opacity="0.8"/>
+  <!-- Mouth -->
+  <path d="M13,16 Q16,18 19,16" stroke="#aaa" stroke-width="1" fill="none"/>
+  <!-- Robes -->
+  <path d="M10,18 L7,31 L25,31 L22,18 Z" fill="#111122"/>
+  <!-- Belt -->
+  <rect x="10" y="21" width="12" height="2" fill="#330044"/>
+  <!-- Staff -->
+  <line x1="8" y1="19" x2="3" y2="3" stroke="#5a3a1a" stroke-width="2"/>
+  <!-- Skull -->
+  <circle cx="3" cy="3" r="3" fill="#e0d8cc"/>
+  <circle cx="2" cy="2.5" r="0.8" fill="#333"/>
+  <circle cx="4" cy="2.5" r="0.8" fill="#333"/>
+  <path d="M1.5,5 Q3,6.5 4.5,5" stroke="#888" stroke-width="0.7" fill="none"/>
+  <!-- Right arm -->
+  <line x1="22" y1="19" x2="28" y2="15" stroke="#111122" stroke-width="3"/>
+  <line x1="28" y1="15" x2="30" y2="13" stroke="#e0d8cc" stroke-width="1.5"/>
+  <line x1="28" y1="15" x2="29" y2="17" stroke="#e0d8cc" stroke-width="1.5"/>
+  <!-- Green magic (pulsing — slightly larger) -->
+  <circle cx="30" cy="13" r="2.5" fill="#00ff66" opacity="0.7"/>
+  <!-- Legs -->
+  <line x1="13" y1="29" x2="12" y2="31" stroke="#221133" stroke-width="3"/>
+  <line x1="19" y1="29" x2="20" y2="31" stroke="#221133" stroke-width="3"/>
+</svg>
