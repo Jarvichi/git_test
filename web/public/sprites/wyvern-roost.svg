@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Volcanic rocky base -->
+  <ellipse cx="16" cy="29" rx="14" ry="3" fill="#3a2a1a"/>
+  <!-- Rock formations -->
+  <polygon points="2,29 6,16 10,29" fill="#4a3a2a"/>
+  <polygon points="8,29 12,12 18,29" fill="#5a4a3a"/>
+  <polygon points="14,29 20,10 28,29" fill="#4a3a2a"/>
+  <polygon points="22,29 26,18 30,29" fill="#3a2a1a"/>
+  <!-- Lava cracks glowing -->
+  <line x1="5" y1="25" x2="10" y2="22" stroke="#ff4400" stroke-width="1" opacity="0.8"/>
+  <line x1="20" y1="24" x2="25" y2="20" stroke="#ff6600" stroke-width="1" opacity="0.7"/>
+  <line x1="12" y1="27" x2="15" y2="23" stroke="#ff4400" stroke-width="0.8" opacity="0.6"/>
+  <!-- Iron chain post -->
+  <rect x="14.5" y="16" width="3" height="10" rx="1" fill="#555555"/>
+  <ellipse cx="16" cy="16" rx="3" ry="1.5" fill="#444444"/>
+  <!-- Chain links -->
+  <ellipse cx="16" cy="18" rx="2" ry="1" fill="none" stroke="#666666" stroke-width="1.2"/>
+  <ellipse cx="16" cy="21" rx="2" ry="1" fill="none" stroke="#666666" stroke-width="1.2"/>
+  <ellipse cx="16" cy="24" rx="2" ry="1" fill="none" stroke="#666666" stroke-width="1.2"/>
+  <!-- Scorched bones -->
+  <line x1="4" y1="28" x2="9" y2="26" stroke="#ccc8aa" stroke-width="1.5"/>
+  <circle cx="4" cy="28" r="1" fill="#bbb8a0"/>
+  <circle cx="9" cy="26" r="1" fill="#bbb8a0"/>
+  <line x1="24" y1="27" x2="28" y2="25" stroke="#ccc8aa" stroke-width="1.5"/>
+  <circle cx="24" cy="27" r="1" fill="#bbb8a0"/>
+  <circle cx="28" cy="25" r="1" fill="#bbb8a0"/>
+  <!-- Wyvern wing silhouette perched on top rock -->
+  <path d="M14,12 L6,6 L8,13 L6,17 L14,13 Z" fill="#1a4a1a"/>
+  <path d="M18,12 L26,6 L24,13 L26,17 L18,13 Z" fill="#1a4a1a"/>
+  <ellipse cx="16" cy="13" rx="3" ry="2.5" fill="#225522"/>
+  <!-- Orange eye -->
+  <circle cx="17.5" cy="12" r="1" fill="#ff8800"/>
+</svg>
