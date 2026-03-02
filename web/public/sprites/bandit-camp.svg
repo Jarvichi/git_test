@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ground -->
+  <ellipse cx="16" cy="28" rx="14" ry="3" fill="#7a6a3a"/>
+  <!-- Wooden fence posts -->
+  <rect x="3" y="20" width="2" height="8" rx="0.5" fill="#6a4a1a"/>
+  <rect x="7" y="19" width="2" height="9" rx="0.5" fill="#6a4a1a"/>
+  <rect x="23" y="19" width="2" height="9" rx="0.5" fill="#6a4a1a"/>
+  <rect x="27" y="20" width="2" height="8" rx="0.5" fill="#6a4a1a"/>
+  <!-- Fence rails -->
+  <rect x="3" y="21" width="8" height="1.5" rx="0.5" fill="#5a3a0a"/>
+  <rect x="3" y="24" width="8" height="1.5" rx="0.5" fill="#5a3a0a"/>
+  <rect x="21" y="21" width="8" height="1.5" rx="0.5" fill="#5a3a0a"/>
+  <rect x="21" y="24" width="8" height="1.5" rx="0.5" fill="#5a3a0a"/>
+  <!-- Tent -->
+  <polygon points="16,6 7,22 25,22" fill="#8a6a2a"/>
+  <polygon points="16,6 11,22 21,22" fill="#9a7a3a"/>
+  <!-- Tent entrance flap -->
+  <polygon points="16,22 13,22 14,16 16,14" fill="#5a3a0a"/>
+  <polygon points="16,22 19,22 18,16 16,14" fill="#5a3a0a"/>
+  <!-- Campfire -->
+  <ellipse cx="16" cy="26" rx="3" ry="1.5" fill="#5a3a0a"/>
+  <polygon points="16,19 14,24 18,24" fill="#cc4400"/>
+  <polygon points="16,20 15,24 17,24" fill="#ff8800"/>
+  <ellipse cx="16" cy="24" rx="1" ry="0.5" fill="#ffcc00"/>
+  <!-- Skull on pole (bandit marker) -->
+  <ellipse cx="28" cy="12" rx="2" ry="2.2" fill="#e8e0cc"/>
+  <circle cx="27.2" cy="11.5" r="0.5" fill="#3a2a1a"/>
+  <circle cx="28.8" cy="11.5" r="0.5" fill="#3a2a1a"/>
+  <rect x="26.5" y="13.5" width="3" height="0.8" rx="0.3" fill="#c8c0aa"/>
+  <rect x="28" y="14" width="2" height="6" rx="0.5" fill="#6a4a1a"/>
+</svg>
