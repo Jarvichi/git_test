@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Main building -->
+  <rect x="5" y="14" width="22" height="18" rx="1" fill="#2a1a2a"/>
+  <rect x="5" y="14" width="22" height="3" fill="#3a2a3a"/>
+  <!-- Gothic pointed roof -->
+  <polygon points="5,14 16,2 27,14" fill="#1a0a1a"/>
+  <polygon points="7,14 16,4 25,14" fill="#221222"/>
+  <!-- Central spire -->
+  <polygon points="14,14 16,0 18,14" fill="#1a0a1a"/>
+  <!-- Arched windows (blood red glow) -->
+  <rect x="8" y="17" width="5" height="7" rx="2.5" fill="#220000"/>
+  <rect x="8.5" y="17" width="4" height="6" rx="2" fill="#880000" opacity="0.8"/>
+  <rect x="19" y="17" width="5" height="7" rx="2.5" fill="#220000"/>
+  <rect x="19.5" y="17" width="4" height="6" rx="2" fill="#880000" opacity="0.8"/>
+  <!-- Door arch -->
+  <rect x="13" y="24" width="6" height="8" rx="3" fill="#110011"/>
+  <rect x="13.5" y="24" width="5" height="7" rx="2.5" fill="#330033"/>
+  <!-- Coffin/door handle -->
+  <circle cx="17.5" cy="28" r="0.7" fill="#aa8800"/>
+  <!-- Bat flying above -->
+  <circle cx="16" cy="9" r="1.5" fill="#221133"/>
+  <path d="M14.5,9 Q12,6 10,9" fill="#221133"/>
+  <path d="M17.5,9 Q20,6 22,9" fill="#221133"/>
+  <!-- Red eyes on bat -->
+  <circle cx="15.2" cy="8.5" r="0.5" fill="#ff0000"/>
+  <circle cx="16.8" cy="8.5" r="0.5" fill="#ff0000"/>
+  <!-- Iron fence posts -->
+  <line x1="3" y1="26" x2="3" y2="32" stroke="#333344" stroke-width="1.5"/>
+  <line x1="6" y1="25" x2="6" y2="32" stroke="#333344" stroke-width="1.5"/>
+  <line x1="26" y1="25" x2="26" y2="32" stroke="#333344" stroke-width="1.5"/>
+  <line x1="29" y1="26" x2="29" y2="32" stroke="#333344" stroke-width="1.5"/>
+  <polygon points="3,26 2.3,24 3.7,24" fill="#333344"/>
+  <polygon points="6,25 5.3,23 6.7,23" fill="#333344"/>
+  <polygon points="26,25 25.3,23 26.7,23" fill="#333344"/>
+  <polygon points="29,26 28.3,24 29.7,24" fill="#333344"/>
+</svg>
