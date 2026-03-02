@@ -31,8 +31,8 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       ? { bottom: '5px', left: `${hOffset}px` }
       : { top: '5px', right: `${hOffset}px` }
   } else {
-    // Mobile units spread across the lane using their assigned laneOffset
-    const hPct = 50 + (unit.laneOffset ?? 0)
+    // Mobile units: lateral position derived from unit.y (-80..80 → 14..86%)
+    const hPct = 50 + (unit.y / 80) * 36
     style = {
       top: `${topPct}%`,
       left: `${hPct}%`,
