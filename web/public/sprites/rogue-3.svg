@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <ellipse cx="16" cy="7" rx="6" ry="6" fill="#2a2a2a"/>
+  <path d="M10,8 Q16,1 22,8 Q19,4 16,3.5 Q13,4 10,8 Z" fill="#1a1a1a"/>
+  <ellipse cx="14" cy="7.5" rx="1.5" ry="1" fill="#00ddaa"/>
+  <ellipse cx="18" cy="7.5" rx="1.5" ry="1" fill="#00ddaa"/>
+  <rect x="10" y="10" width="12" height="3" rx="1" fill="#1a1a1a"/>
+  <rect x="11" y="12" width="10" height="10" rx="2" fill="#2a2a2a"/>
+  <rect x="11" y="19" width="10" height="2" fill="#3a2800"/>
+  <rect x="12" y="19" width="2" height="2.5" fill="#2a1a00"/>
+  <rect x="18" y="19" width="2" height="2.5" fill="#2a1a00"/>
+  <!-- Legs: right forward -->
+  <rect x="12" y="22" width="3" height="7" rx="1" fill="#1a1a1a" transform="rotate(10 13.5 25.5)"/>
+  <rect x="17" y="22" width="3" height="8" rx="1" fill="#1a1a1a" transform="rotate(-15 18.5 26)"/>
+  <rect x="12.5" y="27" width="4" height="3" rx="1" fill="#1a0a00"/>
+  <rect x="16" y="28" width="4" height="3" rx="1" fill="#1a0a00"/>
+  <!-- Dagger other side thrust -->
+  <rect x="6" y="13" width="1.5" height="9" rx="0.5" fill="#aaa" transform="rotate(10 6.75 17.5)"/>
+  <rect x="23" y="15" width="1.5" height="7" rx="0.5" fill="#aaa" transform="rotate(-30 23.75 18.5)"/>
+</svg>
