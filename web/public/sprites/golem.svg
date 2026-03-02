@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Stone head (blocky) -->
+  <rect x="9" y="1" width="14" height="12" rx="2" fill="#888"/>
+  <rect x="9" y="1" width="14" height="5" rx="2" fill="#aaa"/>
+  <!-- Cracks on head -->
+  <line x1="13" y1="2" x2="14" y2="7" stroke="#666" stroke-width="0.8"/>
+  <line x1="19" y1="3" x2="18" y2="8" stroke="#666" stroke-width="0.8"/>
+  <!-- Glowing eyes -->
+  <rect x="11" y="5" width="4" height="3" rx="1" fill="#ff6600"/>
+  <rect x="17" y="5" width="4" height="3" rx="1" fill="#ff6600"/>
+  <!-- Glowing interior -->
+  <rect x="12" y="5.5" width="2.5" height="2" rx="0.5" fill="#ffaa00"/>
+  <rect x="18" y="5.5" width="2.5" height="2" rx="0.5" fill="#ffaa00"/>
+  <!-- Massive torso -->
+  <rect x="7" y="13" width="18" height="12" rx="2" fill="#888"/>
+  <!-- Chest rune -->
+  <text x="16" y="22" text-anchor="middle" font-size="7" fill="#ff6600" font-family="monospace">⬡</text>
+  <!-- Huge arms -->
+  <rect x="0" y="13" width="7" height="11" rx="2" fill="#888"/>
+  <rect x="25" y="13" width="7" height="11" rx="2" fill="#888"/>
+  <!-- Fist bumps -->
+  <rect x="0" y="22" width="8" height="6" rx="2" fill="#777"/>
+  <rect x="24" y="22" width="8" height="6" rx="2" fill="#777"/>
+  <!-- Legs -->
+  <rect x="9" y="25" width="6" height="7" rx="1" fill="#777"/>
+  <rect x="17" y="25" width="6" height="7" rx="1" fill="#777"/>
+</svg>

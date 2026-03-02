@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Base -->
+  <rect x="4" y="18" width="24" height="14" rx="1" fill="#ccc"/>
+  <!-- Main tower -->
+  <rect x="8" y="8" width="16" height="12" rx="1" fill="#ddd"/>
+  <!-- Tall spire -->
+  <polygon points="12,0 16,0 20,0 16,8" fill="#bbb"/>
+  <polygon points="13,0 16,-3 19,0" fill="#aaa"/>
+  <circle cx="16" cy="0" r="1.5" fill="#c8a020"/>
+  <!-- Rose window -->
+  <circle cx="16" cy="14" r="3.5" fill="#88aaff" stroke="#999" stroke-width="0.5"/>
+  <line x1="12.5" y1="14" x2="19.5" y2="14" stroke="#999" stroke-width="0.5"/>
+  <line x1="16" y1="10.5" x2="16" y2="17.5" stroke="#999" stroke-width="0.5"/>
+  <!-- Doors (arched) -->
+  <rect x="12" y="24" width="8" height="8" rx="4" fill="#5a4000"/>
+  <!-- Side towers -->
+  <rect x="4" y="14" width="7" height="8" rx="0.5" fill="#ccc"/>
+  <rect x="21" y="14" width="7" height="8" rx="0.5" fill="#ccc"/>
+  <polygon points="4,14 7.5,8 11,14" fill="#bbb"/>
+  <polygon points="21,14 24.5,8 28,14" fill="#bbb"/>
+  <!-- Cross on top -->
+  <rect x="15.5" y="1" width="1" height="5" fill="#c8a020"/>
+  <rect x="14" y="3" width="4" height="1" fill="#c8a020"/>
+</svg>

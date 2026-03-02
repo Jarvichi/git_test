@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Large wooden stockade -->
+  <rect x="2" y="14" width="28" height="18" rx="1" fill="#5a4020"/>
+  <!-- Log roof / palisade tops -->
+  <rect x="2" y="10" width="4" height="6" rx="0.5" fill="#6a5030"/>
+  <rect x="7" y="9" width="4" height="7" rx="0.5" fill="#6a5030"/>
+  <rect x="12" y="10" width="4" height="6" rx="0.5" fill="#6a5030"/>
+  <rect x="17" y="9" width="4" height="7" rx="0.5" fill="#6a5030"/>
+  <rect x="22" y="10" width="4" height="6" rx="0.5" fill="#6a5030"/>
+  <rect x="27" y="11" width="3" height="5" rx="0.5" fill="#6a5030"/>
+  <!-- Log texture lines -->
+  <line x1="2" y1="17" x2="30" y2="17" stroke="#4a3010" stroke-width="0.8"/>
+  <line x1="2" y1="21" x2="30" y2="21" stroke="#4a3010" stroke-width="0.8"/>
+  <line x1="2" y1="25" x2="30" y2="25" stroke="#4a3010" stroke-width="0.8"/>
+  <!-- Wide gate (broken-looking) -->
+  <rect x="11" y="20" width="10" height="12" rx="0.5" fill="#3a2010"/>
+  <line x1="16" y1="20" x2="16" y2="32" stroke="#2a1000" stroke-width="1"/>
+  <line x1="11" y1="26" x2="21" y2="26" stroke="#2a1000" stroke-width="1"/>
+  <!-- Bones and skulls -->
+  <circle cx="6" cy="29" r="2" fill="#ccc"/>
+  <rect x="5" y="30" width="2" height="1.5" fill="#ccc"/>
+  <circle cx="26" cy="29" r="2" fill="#ccc"/>
+  <rect x="25" y="30" width="2" height="1.5" fill="#ccc"/>
+  <!-- Giant handprint on wall -->
+  <ellipse cx="8" cy="17" rx="3" ry="2" fill="#4a6a3a" opacity="0.6"/>
+</svg>

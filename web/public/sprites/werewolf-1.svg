@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <ellipse cx="16" cy="7" rx="7" ry="6" fill="#6a5a4a"/>
+  <polygon points="10,3 8,0 13,4" fill="#5a4a3a"/>
+  <polygon points="22,3 24,0 19,4" fill="#5a4a3a"/>
+  <polygon points="10.5,3 9,1 13,4" fill="#cc8888"/>
+  <polygon points="21.5,3 23,1 19,4" fill="#cc8888"/>
+  <ellipse cx="16" cy="10" rx="4" ry="3" fill="#7a6a5a"/>
+  <ellipse cx="16" cy="9" rx="2" ry="1.2" fill="#222"/>
+  <ellipse cx="13" cy="7" rx="1.8" ry="1.5" fill="#ffcc00"/>
+  <ellipse cx="19" cy="7" rx="1.8" ry="1.5" fill="#ffcc00"/>
+  <circle cx="13.4" cy="7" r="0.8" fill="#111"/>
+  <circle cx="19.4" cy="7" r="0.8" fill="#111"/>
+  <polygon points="14,12 13,14 15,12" fill="#eee"/>
+  <polygon points="18,12 17,14 19,12" fill="#eee"/>
+  <ellipse cx="16" cy="21" rx="8" ry="9" fill="#6a5a4a"/>
+  <path d="M13,13 Q16,16 19,13 Q16,18 13,13 Z" fill="#8a7a6a"/>
+  <!-- Left arm lunging forward -->
+  <ellipse cx="4" cy="17" rx="4" ry="3" fill="#6a5a4a" transform="rotate(-20 4 17)"/>
+  <line x1="1" y1="19" x2="-1" y2="21" stroke="#ccc" stroke-width="1"/>
+  <line x1="2" y1="20" x2="0" y2="22" stroke="#ccc" stroke-width="1"/>
+  <!-- Right arm back -->
+  <ellipse cx="27" cy="21" rx="4" ry="3" fill="#6a5a4a" transform="rotate(10 27 21)"/>
+  <line x1="30" y1="24" x2="32" y2="26" stroke="#ccc" stroke-width="1"/>
+  <!-- Legs: left forward (bounding) -->
+  <ellipse cx="10" cy="28" rx="4" ry="3" fill="#5a4a3a" transform="rotate(-20 10 28)"/>
+  <ellipse cx="21" cy="30" rx="4" ry="3" fill="#5a4a3a" transform="rotate(10 21 30)"/>
+</svg>
