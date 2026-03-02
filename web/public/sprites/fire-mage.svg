@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Pointed hat (raised 1px) -->
+  <polygon points="16,-1 10,9 22,9" fill="#aa1100"/>
+  <rect x="8" y="8" width="16" height="3" rx="0.5" fill="#cc2200"/>
+  <!-- Head -->
+  <ellipse cx="16" cy="13" rx="5" ry="5" fill="#f4c07a"/>
+  <!-- Eyes -->
+  <circle cx="14" cy="12.5" r="1.2" fill="#ff6600"/>
+  <circle cx="18" cy="12.5" r="1.2" fill="#ff6600"/>
+  <!-- Beard -->
+  <path d="M12,16 Q16,19 20,16 Q18,21 16,21 Q14,21 12,16 Z" fill="#cc8833"/>
+  <!-- Robes body -->
+  <path d="M10,16 L8,29 L24,29 L22,16 Z" fill="#cc1100"/>
+  <!-- Belt -->
+  <rect x="10" y="19" width="12" height="2" fill="#882200"/>
+  <!-- Arms: both mid, hands glowing -->
+  <line x1="10" y1="18" x2="4" y2="16" stroke="#cc1100" stroke-width="3"/>
+  <line x1="22" y1="18" x2="28" y2="13" stroke="#cc1100" stroke-width="3"/>
+  <!-- Fireball -->
+  <circle cx="29" cy="12" r="3.5" fill="#ff6600" opacity="0.9"/>
+  <circle cx="30" cy="11" r="2.2" fill="#ffcc00" opacity="0.9"/>
+  <path d="M27,10 Q29,7 31,9 Q30,7 32,8" stroke="#ff4400" stroke-width="1" fill="none"/>
+</svg>
