@@ -67,8 +67,8 @@ function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
 
 // ─── New Game ────────────────────────────────────────────
 
-export function newGame(): GameState {
-  const playerDeck = shuffle(makeDeck())
+export function newGame(playerCards?: Card[]): GameState {
+  const playerDeck = shuffle(playerCards ?? makeDeck())
   const opponentDeck = shuffle(makeDeck())
   const playerHand = playerDeck.splice(0, 4)
   const opponentHand = opponentDeck.splice(0, 4)

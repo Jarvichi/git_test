@@ -1,38 +1,102 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { GameState } from './game/types'
 import { newGame, playCard, tick } from './game/engine'
+import { loadDeck, buildDeckCards, generatePack } from './game/collection'
 import { Battlefield } from './components/Battlefield'
 import { GameOver } from './components/GameOver'
+import { TitleScreen } from './components/TitleScreen'
+import { CollectionScreen } from './components/CollectionScreen'
+import { DeckBuilder } from './components/DeckBuilder'
+import { PackOpening } from './components/PackOpening'
 import './styles.css'
 
 const TICK_MS = 100
 
-export default function App() {
-  const [state, setState] = useState<GameState>(newGame)
+type Screen = 'title' | 'playing' | 'collection' | 'deckbuilder' | 'pack'
 
+export default function App() {
+  const [screen, setScreen]       = useState<Screen>('title')
+  const [gameState, setGameState] = useState<GameState | null>(null)
+  const [pack, setPack]           = useState<string[]>([])
+
+  // ── Game loop ────────────────────────────────────────────
   useEffect(() => {
-    if (state.phase.type === 'gameOver') return
+    if (screen !== 'playing' || !gameState) return
+    if (gameState.phase.type === 'gameOver') return
     const id = setInterval(() => {
-      setState(s => tick(s, TICK_MS))
+      setGameState(s => s ? tick(s, TICK_MS) : s)
     }, TICK_MS)
     return () => clearInterval(id)
-  }, [state.phase.type])
+  }, [screen, gameState?.phase.type])
+
+  // ── Actions ──────────────────────────────────────────────
+  const handlePlay = useCallback(() => {
+    const playerCards = buildDeckCards(loadDeck())
+    setGameState(newGame(playerCards))
+    setScreen('playing')
+  }, [])
 
   const handlePlayCard = useCallback((cardId: string) => {
-    setState(s => playCard(s, cardId))
+    setGameState(s => s ? playCard(s, cardId) : s)
   }, [])
 
-  const handleRestart = useCallback(() => {
-    setState(newGame())
+  const handlePlayAgain = useCallback(() => {
+    const playerCards = buildDeckCards(loadDeck())
+    setGameState(newGame(playerCards))
+    setScreen('playing')
   }, [])
 
+  const handleOpenPack = useCallback(() => {
+    setPack(generatePack())
+    setScreen('pack')
+  }, [])
+
+  const handlePackDone = useCallback(() => {
+    setScreen('title')
+  }, [])
+
+  const handleMainMenu = useCallback(() => {
+    setScreen('title')
+    setGameState(null)
+  }, [])
+
+  // ── Render ───────────────────────────────────────────────
   return (
     <div className="game-container">
       <div className="game-title">JARV'S AMAZING WEB GAME</div>
-      {state.phase.type === 'gameOver' ? (
-        <GameOver state={state} winner={state.phase.winner} onRestart={handleRestart} />
-      ) : (
-        <Battlefield state={state} onPlayCard={handlePlayCard} />
+
+      {screen === 'title' && (
+        <TitleScreen
+          onPlay={handlePlay}
+          onCollection={() => setScreen('collection')}
+          onDeckBuilder={() => setScreen('deckbuilder')}
+        />
+      )}
+
+      {screen === 'collection' && (
+        <CollectionScreen onBack={() => setScreen('title')} />
+      )}
+
+      {screen === 'deckbuilder' && (
+        <DeckBuilder onBack={() => setScreen('title')} />
+      )}
+
+      {screen === 'pack' && (
+        <PackOpening pack={pack} onDone={handlePackDone} />
+      )}
+
+      {screen === 'playing' && gameState && (
+        gameState.phase.type === 'gameOver' ? (
+          <GameOver
+            state={gameState}
+            winner={gameState.phase.winner}
+            onOpenPack={gameState.phase.winner === 'player' ? handleOpenPack : undefined}
+            onPlayAgain={handlePlayAgain}
+            onMainMenu={handleMainMenu}
+          />
+        ) : (
+          <Battlefield state={gameState} onPlayCard={handlePlayCard} />
+        )
       )}
     </div>
   )

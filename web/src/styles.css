@@ -620,3 +620,392 @@ body {
   .lane-unit-name { font-size: 8px; }
   .mana-pip { width: 8px; height: 8px; }
 }
+
+/* ─── Gold button variant (pack open) ───────────────── */
+
+.action-btn--gold {
+  border-color: #ffcc00;
+  color: #ffcc00;
+}
+.action-btn--gold:hover {
+  background: rgba(255, 204, 0, 0.15);
+  box-shadow: 0 0 14px rgba(255, 204, 0, 0.5);
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.7);
+}
+
+/* ─── Game Over: action row ──────────────────────────── */
+
+.gameover-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* ─── Title Screen ───────────────────────────────────── */
+
+.title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 18px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.title-logo {
+  font-size: 13px;
+  color: #ffcc00;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+  white-space: pre;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+
+.title-subtitle {
+  font-size: 11px;
+  color: #aaa;
+  letter-spacing: 4px;
+  margin-top: -12px;
+}
+
+.title-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-play-btn {
+  min-width: 200px;
+}
+
+.title-nav-btn {
+  min-width: 160px;
+  font-size: 13px;
+  padding: 7px 18px;
+  border-color: rgba(51, 255, 51, 0.5);
+  color: #aaa;
+}
+.title-nav-btn:hover {
+  color: #33ff33;
+  border-color: #33ff33;
+}
+
+.title-deck-info {
+  font-size: 11px;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+/* ─── Overlay screens (Collection, DeckBuilder) ──────── */
+
+.overlay-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.overlay-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0 8px;
+  border-bottom: 2px solid #333;
+  flex-shrink: 0;
+}
+
+.overlay-title {
+  flex: 1;
+  font-size: 15px;
+  color: #ffcc00;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.overlay-count {
+  font-size: 11px;
+  color: #888;
+}
+
+.overlay-count--valid   { color: #33ff33; }
+.overlay-count--invalid { color: #ff9900; }
+
+/* ─── Filter bar ─────────────────────────────────────── */
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 0;
+  flex-shrink: 0;
+  border-bottom: 1px solid #222;
+}
+
+.filter-label {
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+.filter-label--spaced {
+  margin-left: 8px;
+}
+
+.filter-btn {
+  background: none;
+  border: 1px solid #333;
+  color: #555;
+  font-family: inherit;
+  font-size: 10px;
+  padding: 3px 7px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.1s;
+}
+
+.filter-btn:hover {
+  color: #aaa;
+  border-color: #555;
+}
+
+.filter-btn--active {
+  border-color: #33ff33;
+  color: #33ff33;
+  background: rgba(51, 255, 51, 0.08);
+}
+
+/* ─── Collection Grid ────────────────────────────────── */
+
+.collection-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  overflow-y: auto;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.collection-cell {
+  position: relative;
+}
+
+.collection-cell--unowned {
+  opacity: 0.3;
+  filter: grayscale(80%);
+}
+
+.collection-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid #555;
+  color: #ffcc00;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 1px 5px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* ─── Deck Builder ───────────────────────────────────── */
+
+.deckbuilder-body {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+  padding-top: 8px;
+}
+
+.deckbuilder-collection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.deckbuilder-deck {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #222;
+  padding-left: 10px;
+  min-height: 0;
+}
+
+.deckbuilder-panel-title {
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.deck-empty {
+  color: #444;
+  font-size: 12px;
+  padding: 8px 0;
+}
+
+.deck-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.deck-list-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 1px solid #222;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.1s;
+}
+
+.deck-list-item:hover {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #ff4444;
+}
+
+.deck-list-item--legendary { border-left: 2px solid rgba(255,215,0,0.5); }
+.deck-list-item--rare      { border-left: 2px solid rgba(0,170,255,0.5); }
+.deck-list-item--uncommon  { border-left: 2px solid rgba(0,255,136,0.4); }
+.deck-list-item--common    { border-left: 2px solid #333; }
+
+.deck-list-cost {
+  color: #6cf;
+  font-weight: bold;
+  min-width: 12px;
+  text-align: right;
+}
+
+.deck-list-name {
+  flex: 1;
+  color: #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deck-list-count {
+  color: #ffcc00;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: right;
+}
+
+.deckbuilder-footer {
+  flex-shrink: 0;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid #222;
+}
+
+.deck-size-bar-track {
+  height: 4px;
+  background: #1a1a1a;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.deck-size-bar-fill {
+  height: 100%;
+  background: #33ff33;
+  border-radius: 2px;
+  transition: width 0.2s ease-out;
+}
+
+/* ─── Pack Opening ───────────────────────────────────── */
+
+.pack-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.pack-title {
+  font-size: 20px;
+  color: #ffcc00;
+  text-shadow: 0 0 12px rgba(255, 204, 0, 0.6);
+  letter-spacing: 3px;
+}
+
+.pack-subtitle {
+  font-size: 11px;
+  color: #777;
+}
+
+.pack-cards {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pack-card-slot {
+  opacity: 0;
+  transform: translateY(12px) scale(0.9);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.pack-card-slot--revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.pack-card-hidden {
+  width: 90px;
+  height: 130px;
+  border: 2px solid #333;
+  border-radius: 4px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #444;
+}
+
+.pack-card-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pack-card-rarity {
+  font-size: 12px;
+}
+
+.pack-card-rarity--legendary { color: #ffd700; text-shadow: 0 0 6px rgba(255,215,0,0.6); }
+.pack-card-rarity--rare      { color: #00aaff; text-shadow: 0 0 6px rgba(0,170,255,0.5); }
+.pack-card-rarity--uncommon  { color: #00ff88; }
+.pack-card-rarity--common    { color: #888; }
+
+.pack-wait {
+  font-size: 12px;
+  color: #555;
+  animation: pulse 1s ease-in-out infinite;
+}

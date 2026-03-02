@@ -4,7 +4,9 @@ import { GameState } from '../game/types'
 interface Props {
   state: GameState
   winner: 'player' | 'opponent' | 'draw'
-  onRestart: () => void
+  onOpenPack?: () => void
+  onPlayAgain: () => void
+  onMainMenu: () => void
 }
 
 const VICTORY_ART = `   \\o/
@@ -28,11 +30,11 @@ const DRAW_ART = `  =====
   =====
   DRAW!`
 
-export function GameOver({ state, winner, onRestart }: Props) {
-  const won = winner === 'player'
+export function GameOver({ state, winner, onOpenPack, onPlayAgain, onMainMenu }: Props) {
+  const won  = winner === 'player'
   const draw = winner === 'draw'
-  const css = won ? 'gameover--win' : draw ? 'gameover--draw' : 'gameover--lose'
-  const art = won ? VICTORY_ART : draw ? DRAW_ART : DEFEAT_ART
+  const css  = won ? 'gameover--win' : draw ? 'gameover--draw' : 'gameover--lose'
+  const art  = won ? VICTORY_ART : draw ? DRAW_ART : DEFEAT_ART
 
   const title = won ? '═══ VICTORY ═══' : draw ? '═══ DRAW ═══' : '═══ DEFEAT ═══'
 
@@ -42,7 +44,7 @@ export function GameOver({ state, winner, onRestart }: Props) {
       ? 'Time ran out — scores are tied!'
       : winner === 'opponent'
         ? 'Your base was destroyed...'
-        : `Score: you lost on points.`
+        : 'Score: you lost on points.'
 
   return (
     <div className={`gameover-screen ${css}`}>
@@ -58,11 +60,23 @@ export function GameOver({ state, winner, onRestart }: Props) {
         <div>Time: {Math.floor(state.gameTime / 1000)}s</div>
         {!draw && (won
           ? <div>Your base HP: {state.playerBase.hp}/{state.playerBase.maxHp}</div>
-          : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>)}
+          : <div>Enemy base HP remaining: {state.opponentBase.hp}/{state.opponentBase.maxHp}</div>
+        )}
       </div>
-      <button className="action-btn action-btn--large" onClick={onRestart}>
-        [ Play Again ]
-      </button>
+
+      <div className="gameover-actions">
+        {won && onOpenPack && (
+          <button className="action-btn action-btn--large action-btn--gold" onClick={onOpenPack}>
+            ✦ OPEN PACK ✦
+          </button>
+        )}
+        <button className="action-btn" onClick={onPlayAgain}>
+          [ Play Again ]
+        </button>
+        <button className="action-btn" onClick={onMainMenu}>
+          [ Main Menu ]
+        </button>
+      </div>
     </div>
   )
 }
