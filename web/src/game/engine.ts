@@ -30,7 +30,11 @@ function drawCard(deck: Card[], hand: Card[]): void {
   if (deck.length > 0) hand.push(deck.shift()!)
 }
 
-const LANE_OFFSETS = [-36, -18, 0, 18, 36]
+// Five lanes evenly spread across the battle-field's lateral (Y) axis.
+// Y=0 is centre; units move continuously between these positions.
+const LANE_POSITIONS = [-80, -40, 0, 40, 80] as const
+const LANE_MIN_Y = -80
+const LANE_MAX_Y =  80
 
 function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
   const unit: Unit = {
@@ -39,6 +43,7 @@ function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
     owner,
     hp: template.maxHp,
     x: owner === 'player' ? PLAYER_SPAWN_X : OPPONENT_SPAWN_X,
+    y: 0,
     attackTimer: 0,
   }
   if (template.structureEffect?.type === 'spawn') {
@@ -51,8 +56,8 @@ function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
       : (owner === 'player' ? 10 : LANE_WIDTH - 10)
     unit.upgradeLevel = 1
   } else {
-    // Mobile units take a random path (horizontal lane offset for display)
-    unit.laneOffset = LANE_OFFSETS[Math.floor(Math.random() * LANE_OFFSETS.length)]
+    // Mobile units spawn in a random lane
+    unit.y = LANE_POSITIONS[Math.floor(Math.random() * LANE_POSITIONS.length)]
   }
   return unit
 }
@@ -192,73 +197,71 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
   }
 }
 
+// ─── Distance helpers ─────────────────────────────────────
+
+/**
+ * Effective gameplay distance between two units.
+ * Walls span the full lateral axis, so only the forward (X) gap matters for
+ * them. All other units use true 2-D Euclidean distance so that units in
+ * different lanes must physically close the gap before attacking.
+ */
+function unitDist(a: Unit, b: Unit): number {
+  if (b.isWall) return Math.abs(a.x - b.x)
+  const dx = a.x - b.x
+  const dy = a.y - b.y
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
 // ─── Enemy-finding helpers ────────────────────────────────
 
-// Enemies strictly ahead of this unit (toward opponent base) — used for forward movement.
-// flying units and climbers skip walls entirely; regular ground units see walls as obstacles.
+// Nearest enemy that is AHEAD (forward X) of this unit.
+// flying/climber units ignore walls entirely.
 function findNearestEnemy(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
 
   for (const other of field) {
-    if (other.owner === unit.owner) continue
-    if (other.hp <= 0) continue
+    if (other.owner === unit.owner || other.hp <= 0) continue
     if (other.isWall && (unit.flying || unit.climber)) continue
-
-    const dist = Math.abs(unit.x - other.x)
-
-    if (unit.owner === 'player' && other.x < unit.x) continue
+    // "Ahead" is still defined on the X axis (direction toward enemy base)
+    if (unit.owner === 'player'   && other.x < unit.x) continue
     if (unit.owner === 'opponent' && other.x > unit.x) continue
 
-    if (dist < nearestDist) {
-      nearestDist = dist
-      nearest = other
-    }
+    const d = unitDist(unit, other)
+    if (d < nearestDist) { nearestDist = d; nearest = other }
   }
   return nearest
 }
 
-// Enemies strictly behind this unit — used to turn around and chase
+// Nearest enemy that has slipped BEHIND this unit — used to turn around.
 function findEnemyBehind(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
 
   for (const other of field) {
-    if (other.owner === unit.owner) continue
-    if (other.hp <= 0) continue
+    if (other.owner === unit.owner || other.hp <= 0) continue
     if (other.isWall && (unit.flying || unit.climber)) continue
-
-    const dist = Math.abs(unit.x - other.x)
-
-    if (unit.owner === 'player' && other.x >= unit.x) continue
+    if (unit.owner === 'player'   && other.x >= unit.x) continue
     if (unit.owner === 'opponent' && other.x <= unit.x) continue
 
-    if (dist < nearestDist) {
-      nearestDist = dist
-      nearest = other
-    }
+    const d = unitDist(unit, other)
+    if (d < nearestDist) { nearestDist = d; nearest = other }
   }
   return nearest
 }
 
-// Nearest enemy in any direction within attack range — used for actual attacks.
-// bypassWall units and climbers skip walls (they fire/climb over, not through them).
+// Nearest enemy within attack range (2-D). bypassWall/climber units skip walls.
 function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
 
   for (const other of field) {
-    if (other.owner === unit.owner) continue
-    if (other.hp <= 0) continue
+    if (other.owner === unit.owner || other.hp <= 0) continue
     if (other.isWall && (unit.bypassWall || unit.climber)) continue
 
-    const dist = Math.abs(unit.x - other.x)
-    if (dist > unit.attackRange) continue
-
-    if (dist < nearestDist) {
-      nearestDist = dist
-      nearest = other
-    }
+    const d = unitDist(unit, other)
+    if (d > unit.attackRange) continue
+    if (d < nearestDist) { nearestDist = d; nearest = other }
   }
   return nearest
 }
@@ -275,33 +278,51 @@ function moveUnits(s: GameState, deltaMs: number): void {
     if (unit.moveSpeed === 0) continue
 
     const nearestAhead = findNearestEnemy(s.field, unit)
-    // Default direction: toward enemy base
-    let moveDir: number = unit.owner === 'player' ? 1 : -1
+
+    // Determine movement target and vector
+    // Default: march straight toward the enemy base in current lane
+    let tx: number = unit.owner === 'player' ? LANE_WIDTH : 0
+    let ty: number = unit.y
+    let hasTarget = false
 
     if (nearestAhead) {
-      const dist = Math.abs(unit.x - nearestAhead.x)
-      // In attack range — stop moving, let processAttacks handle it
-      if (dist <= unit.attackRange) continue
-      // Keep marching forward (moveDir already correct)
+      // If already in attack range, stand still
+      if (unitDist(unit, nearestAhead) <= unit.attackRange) continue
+      tx = nearestAhead.x
+      // Walls span the whole lateral axis — approach straight ahead; don't drift Y
+      ty = nearestAhead.isWall ? unit.y : nearestAhead.y
+      hasTarget = true
     } else {
-      // No enemies ahead — check if one has slipped past us
+      // No enemies ahead — check if one slipped behind us
       const behind = findEnemyBehind(s.field, unit)
       if (behind) {
-        const dist = Math.abs(unit.x - behind.x)
-        if (dist <= unit.attackRange) continue  // already in range
-        moveDir = behind.x > unit.x ? 1 : -1   // turn around
+        if (unitDist(unit, behind) <= unit.attackRange) continue
+        tx = behind.x
+        ty = behind.isWall ? unit.y : behind.y
+        hasTarget = true
       }
-      // else: no enemies anywhere, keep marching toward base
     }
 
-    // Climbers slow to CLIMB_SPEED_FACTOR when passing through a wall zone
+    // tx/ty already default to "march toward base" — hasTarget just flags
+    // whether we already assigned a real target above
+    void hasTarget
+
+    const dx = tx - unit.x
+    const dy = ty - unit.y
+    const d  = Math.sqrt(dx * dx + dy * dy)
+    if (d === 0) continue
+
+    // Climbers slow down when passing through an enemy wall zone
     const inWallZone = unit.climber && s.field.some(w =>
       w.isWall && w.owner !== unit.owner && w.hp > 0 &&
       Math.abs(unit.x - w.x) <= WALL_CLIMB_ZONE
     )
-    const speed = inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed
-    const moveAmount = speed * deltaSec * moveDir
-    unit.x = Math.min(LANE_WIDTH, Math.max(0, unit.x + moveAmount))
+    const speed = (inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed) * deltaSec
+
+    // Move at full speed toward target, clamped so we don't overshoot
+    const step = Math.min(speed, d)
+    unit.x = Math.min(LANE_WIDTH, Math.max(0,         unit.x + (dx / d) * step))
+    unit.y = Math.min(LANE_MAX_Y, Math.max(LANE_MIN_Y, unit.y + (dy / d) * step))
   }
 }
 

@@ -37,11 +37,11 @@ export interface Unit extends UnitTemplate {
   id: string
   owner: 'player' | 'opponent'
   hp: number
-  x: number                  // pixel position in the lane (0=player base, LANE_WIDTH=opponent base)
+  x: number                  // forward axis: 0=player base, LANE_WIDTH=opponent base
+  y: number                  // lateral axis: one of [-80,-40,0,40,80] (5 lanes, continuous during movement)
   attackTimer: number        // ms until this unit can attack again
   spawnTimer?: number        // ms until next spawn (spawner buildings only)
   upgradeLevel?: number      // 1 = base, 2+ = upgraded (structures only)
-  laneOffset?: number        // horizontal display offset from center (%) — one of [-36,-18,0,18,36]
 }
 
 export interface Card {
