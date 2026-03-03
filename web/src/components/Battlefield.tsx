@@ -32,11 +32,11 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
     // Walls span the full lane width, positioned by their x value
     style = { top: `${topPct}%`, left: 0, right: 0, transform: 'translateY(-50%)' }
   } else if (isStructure) {
-    // Other structures are anchored to their base edge, spread horizontally by stackIndex
-    const hOffset = 5 + stackIndex * 58
+    // Structures anchor to their base edge; horizontal position from unit.y (same scale as mobile units)
+    const hPct = 50 + (unit.y / 80) * 36
     style = unit.owner === 'player'
-      ? { bottom: '5px', left: `${hOffset}px` }
-      : { top: '5px', right: `${hOffset}px` }
+      ? { bottom: '5px', left: `${hPct}%`, transform: 'translateX(-50%)' }
+      : { top: '5px', left: `${hPct}%`, transform: 'translateX(-50%)' }
   } else {
     // Mobile units: lateral position derived from unit.y (-80..80 → 14..86%)
     const hPct = 50 + (unit.y / 80) * 36

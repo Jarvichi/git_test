@@ -212,6 +212,13 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
       }
     }
     const unit = spawnUnit(card.unit!, owner)
+    // Assign a stable lateral slot to non-wall structures so that units
+    // spawned from them start at the same horizontal position.
+    if (card.cardType === 'structure' && !card.unit!.isWall) {
+      const STRUCTURE_Y_SLOTS = [-60, 0, 60, -30, 30]
+      const slotIdx = s.field.filter(u => u.moveSpeed === 0 && !u.isWall && u.owner === owner).length
+      unit.y = STRUCTURE_Y_SLOTS[slotIdx % STRUCTURE_Y_SLOTS.length]
+    }
     s.field.push(unit)
     const verb = card.cardType === 'structure' ? 'built' : 'deployed'
     const who = owner === 'player' ? 'You' : 'Opponent'
@@ -546,6 +553,7 @@ export function tick(state: GameState, deltaMs: number): GameState {
       const spawned = spawnUnit(effect.unitTemplate, unit.owner)
       // Spawn at building's position and animate growing in
       spawned.x = unit.x
+      spawned.y = unit.y   // inherit the building's lateral lane slot
       spawned.spawnGrowTimer = SPAWN_GROW_MS
       s.field.push(spawned)
       const who = unit.owner === 'player' ? 'Your' : 'Enemy'
