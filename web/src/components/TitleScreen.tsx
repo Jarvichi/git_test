@@ -1,9 +1,11 @@
 import React from 'react'
 import { loadDeck, deckTotalCards, isDeckValid } from '../game/collection'
+import { loadRun } from '../game/questline'
 
 interface Props {
   crystals: number
   onPlay: () => void
+  onCampaign: () => void
   onCollection: () => void
   onDeckBuilder: () => void
 }
@@ -15,10 +17,11 @@ const LOGO = `
   |  | ||  | ||  _ <| |  | |
   |____||____||_| \_\_|  |_|`.trim()
 
-export function TitleScreen({ crystals, onPlay, onCollection, onDeckBuilder }: Props) {
-  const deck  = loadDeck()
-  const count = deckTotalCards(deck)
-  const valid = isDeckValid(deck)
+export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder }: Props) {
+  const deck     = loadDeck()
+  const count    = deckTotalCards(deck)
+  const valid    = isDeckValid(deck)
+  const savedRun = loadRun()
 
   return (
     <div className="title-screen">
@@ -27,12 +30,21 @@ export function TitleScreen({ crystals, onPlay, onCollection, onDeckBuilder }: P
 
       <div className="title-buttons">
         <button
-          className="action-btn action-btn--large title-play-btn"
+          className="action-btn action-btn--large title-campaign-btn"
+          onClick={onCampaign}
+          disabled={!valid}
+          title={valid ? undefined : `Deck needs ${10 - count} more cards`}
+        >
+          {savedRun ? '⚔  CONTINUE RUN' : '⚔  CAMPAIGN'}
+        </button>
+
+        <button
+          className="action-btn title-play-btn"
           onClick={onPlay}
           disabled={!valid}
           title={valid ? undefined : `Deck needs ${10 - count} more cards`}
         >
-          {valid ? '▶  BATTLE' : `⚠ DECK TOO SMALL (${count}/10)`}
+          {valid ? '▶  QUICK BATTLE' : `⚠ DECK TOO SMALL (${count}/10)`}
         </button>
 
         <button className="action-btn title-nav-btn" onClick={onDeckBuilder}>

@@ -10,6 +10,8 @@ interface Props {
   onOpenPack?: () => void
   onPlayAgain: () => void
   onMainMenu: () => void
+  /** If set, show an Abandon Run button (campaign mode only). */
+  campaignAbandon?: () => void
 }
 
 const VICTORY_ART = `   \\o/
@@ -33,7 +35,7 @@ const DRAW_ART = `  =====
   =====
   DRAW!`
 
-export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onMainMenu }: Props) {
+export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onMainMenu, campaignAbandon }: Props) {
   const won  = winner === 'player'
   const draw = winner === 'draw'
   const css  = won ? 'gameover--win' : draw ? 'gameover--draw' : 'gameover--lose'
@@ -92,8 +94,13 @@ export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onM
           </button>
         )}
         <button className="action-btn" onClick={onPlayAgain}>
-          [ Play Again ]
+          {campaignAbandon ? (won ? '[ Claim Reward ]' : '[ Retry Node ]') : '[ Play Again ]'}
         </button>
+        {campaignAbandon && (
+          <button className="action-btn gameover-abandon-btn" onClick={campaignAbandon}>
+            [ Abandon Run ]
+          </button>
+        )}
         <button className="action-btn" onClick={onMainMenu}>
           [ Main Menu ]
         </button>
