@@ -1,7 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { GameState } from './game/types'
 import { newGame, playCard, tick, MAX_HANDICAP } from './game/engine'
-import { loadDeck, buildDeckCards, generatePack } from './game/collection'
+import {
+  loadDeck, buildDeckCards, generatePack,
+  loadCollection, saveCollection, loadCrystals, saveCrystals,
+  CRYSTAL_PACK_COST,
+} from './game/collection'
 import { Battlefield } from './components/Battlefield'
 import { GameOver } from './components/GameOver'
 import { TitleScreen } from './components/TitleScreen'
@@ -28,6 +32,7 @@ export default function App() {
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [pack, setPack]           = useState<string[]>([])
   const [handicap, setHandicap]   = useState<number>(loadHandicap)
+  const [crystals, setCrystals]   = useState<number>(loadCrystals)
 
   // ── Game loop ────────────────────────────────────────────
   useEffect(() => {
@@ -41,7 +46,8 @@ export default function App() {
 
   // ── Actions ──────────────────────────────────────────────
   const handlePlay = useCallback(() => {
-    const playerCards = buildDeckCards(loadDeck())
+    const collection  = loadCollection()
+    const playerCards = buildDeckCards(loadDeck(), collection)
     setGameState(newGame(playerCards, handicap))
     setScreen('playing')
   }, [handicap])
@@ -60,7 +66,8 @@ export default function App() {
         : handicap
     try { localStorage.setItem(HANDICAP_KEY, String(nextHandicap)) } catch { /* ignore */ }
     setHandicap(nextHandicap)
-    const playerCards = buildDeckCards(loadDeck())
+    const collection  = loadCollection()
+    const playerCards = buildDeckCards(loadDeck(), collection)
     setGameState(newGame(playerCards, nextHandicap))
     setScreen('playing')
   }, [gameState, handicap])
@@ -68,6 +75,20 @@ export default function App() {
   const handleOpenPack = useCallback(() => {
     setPack(generatePack())
     setScreen('pack')
+  }, [])
+
+  const handleBuyCrystalPack = useCallback(() => {
+    const current = loadCrystals()
+    if (current < CRYSTAL_PACK_COST) return
+    const next = current - CRYSTAL_PACK_COST
+    saveCrystals(next)
+    setCrystals(next)
+    setPack(generatePack())
+    setScreen('pack')
+  }, [])
+
+  const handleCrystalsChanged = useCallback((n: number) => {
+    setCrystals(n)
   }, [])
 
   const handlePackDone = useCallback(() => {
@@ -86,6 +107,7 @@ export default function App() {
 
       {screen === 'title' && (
         <TitleScreen
+          crystals={crystals}
           onPlay={handlePlay}
           onCollection={() => setScreen('collection')}
           onDeckBuilder={() => setScreen('deckbuilder')}
@@ -93,7 +115,12 @@ export default function App() {
       )}
 
       {screen === 'collection' && (
-        <CollectionScreen onBack={() => setScreen('title')} />
+        <CollectionScreen
+          crystals={crystals}
+          onCrystalsChanged={handleCrystalsChanged}
+          onBuyCrystalPack={handleBuyCrystalPack}
+          onBack={() => setScreen('title')}
+        />
       )}
 
       {screen === 'deckbuilder' && (

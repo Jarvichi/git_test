@@ -1020,6 +1020,119 @@ body {
   animation: pulse 1s ease-in-out infinite;
 }
 
+/* ─── Crystal Count ──────────────────────────────────── */
+
+.crystal-count {
+  font-size: 13px;
+  color: #88ccff;
+  font-weight: bold;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ─── Collection Action Row ──────────────────────────── */
+
+.collection-action-row {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0 3px;
+  flex-wrap: wrap;
+}
+
+.collection-disenchant-btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-color: rgba(136, 204, 255, 0.5);
+  color: #88ccff;
+}
+.collection-disenchant-btn:hover:not(:disabled) {
+  background: rgba(136, 204, 255, 0.12);
+  box-shadow: 0 0 10px rgba(136, 204, 255, 0.3);
+}
+.collection-disenchant-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.collection-pack-btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-color: rgba(255, 215, 0, 0.5);
+  color: #ffd700;
+}
+.collection-pack-btn:hover:not(:disabled) {
+  background: rgba(255, 215, 0, 0.12);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+.collection-pack-btn--disabled,
+.collection-pack-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.collection-flash {
+  font-size: 12px;
+  color: #33ff33;
+  animation: fadeFlash 2s ease-out forwards;
+  white-space: nowrap;
+}
+@keyframes fadeFlash {
+  0%, 60% { opacity: 1; }
+  100%     { opacity: 0; }
+}
+
+/* ─── Collection Cell extras ─────────────────────────── */
+
+.collection-extras {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.extra-btn {
+  flex: 1;
+  background: none;
+  border: 1px solid;
+  font-family: inherit;
+  font-size: 9px;
+  padding: 2px 4px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.1s;
+  white-space: nowrap;
+}
+.extra-btn--disenchant { border-color: rgba(136, 204, 255, 0.4); color: #88ccff; }
+.extra-btn--disenchant:hover { background: rgba(136, 204, 255, 0.12); border-color: #88ccff; }
+.extra-btn--master { border-color: rgba(255, 215, 0, 0.4); color: #ffd700; }
+.extra-btn--master:hover { background: rgba(255, 215, 0, 0.12); border-color: #ffd700; }
+
+/* ─── Mastery Bar ────────────────────────────────────── */
+
+.mastery-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 3px;
+}
+.mastery-level {
+  font-size: 9px;
+  color: #ffd700;
+  font-weight: bold;
+  min-width: 18px;
+  white-space: nowrap;
+}
+.mastery-bar-track {
+  flex: 1;
+  height: 4px;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.mastery-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #b8860b, #ffd700);
+  border-radius: 1px;
+  transition: width 0.3s ease-out;
+}
+.mastery-xp { font-size: 8px; color: #888; white-space: nowrap; }
+
 /* ─── Battle Event Banner ────────────────────────────── */
 
 @keyframes eventSlideIn {
