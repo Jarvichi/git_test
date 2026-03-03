@@ -45,7 +45,7 @@ export function PackOpening({ pack, onDone }: Props) {
           >
             {i < revealed && card ? (
               <div className="pack-card-reveal">
-                <CardTile card={card} canAfford={true} onClick={() => setDetailCard(card)} />
+                <CardTile card={card} canAfford={true} onClick={done ? () => setDetailCard(card) : undefined} />
                 <div className={`pack-card-rarity pack-card-rarity--${card.rarity}`}>
                   {rarityStars(card.rarity)}
                 </div>

@@ -15,7 +15,6 @@ interface Props {
   collection: CollectionEntry[]
   deckEntries?: DeckEntry[]
   onClose: () => void
-  onPick?: () => void
 }
 
 const RARITY_COLOUR: Record<string, string> = {
@@ -34,7 +33,7 @@ function statLine(label: string, value: string | number) {
   )
 }
 
-export function CardDetailModal({ card, collection, deckEntries, onClose, onPick }: Props) {
+export function CardDetailModal({ card, collection, deckEntries, onClose }: Props) {
   const owned  = getOwnedCount(collection, card.name)
   const inDeck = deckEntries?.find(e => e.cardName === card.name)?.count ?? 0
   const xp     = getMasteryXp(collection, card.name)
@@ -135,13 +134,6 @@ export function CardDetailModal({ card, collection, deckEntries, onClose, onPick
         {/* Lore */}
         {card.lore && (
           <div className="cdm-lore">"{card.lore}"</div>
-        )}
-
-        {/* Pick action (reward/pack screens) */}
-        {onPick && (
-          <button className="action-btn cdm-pick-btn" onClick={onPick}>
-            PICK THIS CARD
-          </button>
         )}
       </div>
     </div>
