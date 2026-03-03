@@ -55,11 +55,9 @@ export function CardTile({ card, canAfford = true, disabled = false, onClick }: 
     >
       <div className="card-cost">{card.cost}</div>
       <div className="card-title">{card.name}</div>
-      {card.unit && (
-        <div className="card-art">
-          <SpriteImg name={card.unit.name} className="card-sprite" />
-        </div>
-      )}
+      <div className="card-art">
+        {card.unit && <SpriteImg name={card.unit.name} className="card-sprite" />}
+      </div>
       <div className="card-stats">{stats}</div>
       {tag && <div className="card-tag">{tag}</div>}
       <div className="card-rarity">{rarityStars(card.rarity)}</div>
