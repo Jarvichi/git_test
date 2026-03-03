@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react'
-import { GameState, Unit, LANE_WIDTH } from '../game/types'
+import React, { useRef, useEffect, useState } from 'react'
+import { GameState, Unit, LANE_WIDTH, Card } from '../game/types'
 import { CardTile } from './CardTile'
+import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 
 interface Props {
@@ -112,6 +113,7 @@ const STRATEGY_LABELS: Record<string, string> = {
 
 export function Battlefield({ state, onPlayCard }: Props) {
   const logRef = useRef<HTMLDivElement>(null)
+  const [detailCard, setDetailCard] = useState<Card | null>(null)
   const gameTimeSec = Math.floor(state.gameTime / 1000)
   const minutes = Math.floor(gameTimeSec / 60)
   const seconds = gameTimeSec % 60
@@ -197,15 +199,28 @@ export function Battlefield({ state, onPlayCard }: Props) {
           {state.playerHand.length === 0
             ? <span className="field-empty">No cards</span>
             : state.playerHand.map(card => (
-              <CardTile
-                key={card.id}
-                card={card}
-                canAfford={state.mana >= card.cost}
-                onClick={() => onPlayCard(card.id)}
-              />
+              <div key={card.id} className="hand-card-wrap">
+                <CardTile
+                  card={card}
+                  canAfford={state.mana >= card.cost}
+                  onClick={() => onPlayCard(card.id)}
+                />
+                <button
+                  className="hand-card-info-btn"
+                  onClick={e => { e.stopPropagation(); setDetailCard(card) }}
+                >ⓘ</button>
+              </div>
             ))}
         </div>
       </div>
+
+      {detailCard && (
+        <CardDetailModal
+          card={detailCard}
+          collection={[]}
+          onClose={() => setDetailCard(null)}
+        />
+      )}
     </div>
   )
 }
