@@ -1019,3 +1019,73 @@ body {
   color: #555;
   animation: pulse 1s ease-in-out infinite;
 }
+
+/* ─── Battle Event Banner ────────────────────────────── */
+
+@keyframes eventSlideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.battle-event-banner {
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  animation: eventSlideIn 0.3s ease-out;
+  border: 1px solid;
+}
+
+.battle-event-banner--bloodMoon {
+  color: #ff4444;
+  border-color: rgba(255, 68, 68, 0.5);
+  background: rgba(255, 0, 0, 0.08);
+  text-shadow: 0 0 8px rgba(255, 68, 68, 0.6);
+}
+
+.battle-event-banner--fogOfWar {
+  color: #aabbcc;
+  border-color: rgba(170, 187, 204, 0.4);
+  background: rgba(170, 187, 204, 0.06);
+}
+
+.battle-event-banner--supplyDrop {
+  color: #33ff33;
+  border-color: rgba(51, 255, 51, 0.4);
+  background: rgba(51, 255, 51, 0.06);
+}
+
+.battle-event-banner--earthquake {
+  color: #ffcc00;
+  border-color: rgba(255, 204, 0, 0.4);
+  background: rgba(255, 204, 0, 0.06);
+}
+
+/* ─── Strategy Label ─────────────────────────────────── */
+
+.strategy-label {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #ff8888;
+  border: 1px solid rgba(255, 100, 100, 0.35);
+  border-radius: 2px;
+  padding: 0 4px;
+  opacity: 0.8;
+}
+
+/* ─── Hero Card ──────────────────────────────────────── */
+
+.card-tile--legendary.card-tag {
+  color: #ffd700;
+}
+
+.hero-tag {
+  color: #ffd700;
+  font-size: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.7);
+}

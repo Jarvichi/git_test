@@ -454,6 +454,57 @@ const CARD_DEFS: CardDef[] = [
     upgradeEffect: { type: 'buffAttack', amount: 3 }, description: 'All your units gain +3 attack.', deckCount: 2 },
 ]
 
+// ─── Hero Cards ───────────────────────────────────────────
+// One hero is randomly injected into each player's deck per game.
+// Heroes deploy a powerful unit AND immediately buff all friendly units.
+
+export const HERO_CARDS: Card[] = [
+  {
+    id: 'hero-dragon-lord',
+    name: 'Dragon Lord',
+    rarity: 'legendary',
+    cost: 5,
+    cardType: 'unit',
+    isHero: true,
+    unit: { ...DRAGON_UNIT, attack: 15, maxHp: 50 },
+    heroEffect: { type: 'buffAttack', amount: 6 },
+    description: 'HERO: Deploys a mighty Dragon & grants all units +6 attack!',
+  },
+  {
+    id: 'hero-battle-queen',
+    name: 'Battle Queen',
+    rarity: 'legendary',
+    cost: 5,
+    cardType: 'unit',
+    isHero: true,
+    unit: { ...PALADIN_UNIT, attack: 10, maxHp: 60 },
+    heroEffect: { type: 'buffMaxHp', amount: 20 },
+    description: 'HERO: Deploys an armored Paladin & fortifies all units with +20 max HP!',
+  },
+  {
+    id: 'hero-storm-caller',
+    name: 'Storm Caller',
+    rarity: 'legendary',
+    cost: 5,
+    cardType: 'unit',
+    isHero: true,
+    unit: { ...WYVERN_UNIT, attack: 18, maxHp: 40 },
+    heroEffect: { type: 'buffRange', amount: 40 },
+    description: 'HERO: Deploys a fearsome Wyvern & blesses all units with +40 attack range!',
+  },
+  {
+    id: 'hero-shadow-king',
+    name: 'Shadow King',
+    rarity: 'legendary',
+    cost: 5,
+    cardType: 'unit',
+    isHero: true,
+    unit: { ...WEREWOLF_UNIT, attack: 14, maxHp: 35 },
+    heroEffect: { type: 'buffSpeed', amount: 25 },
+    description: 'HERO: Deploys a savage Werewolf & surges all units with +25 speed!',
+  },
+]
+
 // ─── Public API ───────────────────────────────────────────
 
 /** One Card instance per card type — used for display and collection lookups. */

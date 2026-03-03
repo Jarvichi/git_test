@@ -16,10 +16,14 @@ export function CardTile({ card, canAfford = true, disabled = false, onClick }: 
   let stats: string
   let tag: string | null = null
 
+  if (card.isHero) {
+    tag = '★ HERO'
+  }
+
   if (card.cardType === 'upgrade' && card.upgradeEffect) {
     const e = card.upgradeEffect
     stats = e.type === 'buffAttack' ? `+${e.amount} ATK` : `HEAL ${e.amount}`
-    tag = 'UPGRADE'
+    if (!card.isHero) tag = 'UPGRADE'
   } else if (card.unit) {
     const u = card.unit
     if (u.isWall || u.attack === 0) {

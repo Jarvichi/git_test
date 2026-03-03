@@ -1,13 +1,14 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, LANE_WIDTH } from './types'
-import { makeDeck } from './cards'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, LANE_WIDTH, BattleEventState } from './types'
+import { makeDeck, HERO_CARDS } from './cards'
 
 // ─── Constants ────────────────────────────────────────────
 
 const OPPONENT_INTERVAL_MS = 8000
 const MANA_REGEN_MS = 3000       // 1 mana every 3 seconds
 const BASE_MAX_MANA = 5
-export const CARD_COOLDOWN_MS = 5000  // 5 s between card plays
 const SUDDEN_DEATH_MS = 60000
+const BATTLE_EVENT_BASE_MS = 30000  // first event after 30s, then every 24-32s
+const SPAWN_GROW_MS = 1500           // building-spawn grow-in animation duration
 
 const PLAYER_SPAWN_X = 30        // where player units appear
 const OPPONENT_SPAWN_X = LANE_WIDTH - 30  // where opponent units appear
@@ -80,14 +81,36 @@ export const MAX_HANDICAP = 20
  * @param opponentHandicap  Cards removed from the opponent's deck (adaptive difficulty).
  *   Increases by 1 on each player loss, decreases by 1 on each win (floor 0).
  */
+const STRATEGIES: GameState['opponentStrategy'][] = ['swarm', 'turtle', 'rush']
+const STRATEGY_LABELS: Record<GameState['opponentStrategy'], string> = {
+  swarm:  'Swarming with cheap units!',
+  turtle: 'Fortifying with structures!',
+  rush:   'Unleashing heavy hitters!',
+}
+
+/** Inject one hero card into the first ~8 positions of a shuffled deck. */
+function injectHero(deck: Card[], heroPool: Card[]): void {
+  if (heroPool.length === 0) return
+  const hero = heroPool[Math.floor(Math.random() * heroPool.length)]
+  const pos = Math.floor(Math.random() * Math.min(8, deck.length + 1))
+  deck.splice(pos, 0, { ...hero, id: `hero-${uid()}` })
+}
+
 export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
   const playerDeck = shuffle(playerCards ?? makeDeck())
   const rawOpponentDeck = shuffle(makeDeck())
   // Remove cards from the tail of the shuffled deck to weaken the opponent
   const clamp = Math.min(Math.max(0, opponentHandicap), MAX_HANDICAP)
   const opponentDeck = rawOpponentDeck.slice(0, Math.max(4, rawOpponentDeck.length - clamp))
+
+  // Inject one hero card per side
+  injectHero(playerDeck, HERO_CARDS)
+  injectHero(opponentDeck, HERO_CARDS)
+
   const playerHand = playerDeck.splice(0, 4)
   const opponentHand = opponentDeck.splice(0, 4)
+
+  const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
 
   return {
     playerBase: { hp: 50, maxHp: 50 },
@@ -100,19 +123,22 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
     mana: 3,
     maxMana: BASE_MAX_MANA,
     manaAccum: 0,
-    cardCooldown: 0,
     log: [
       clamp > 0
         ? `Battle begins! (Enemy -${clamp} card${clamp !== 1 ? 's' : ''} handicap)`
         : 'Battle begins! Tap cards to deploy.',
+      `Enemy strategy: ${STRATEGY_LABELS[strategy]}`,
     ],
     phase: { type: 'playing' },
     opponentTimer: OPPONENT_INTERVAL_MS,
+    opponentStrategy: strategy,
     gameTime: 0,
     playerScore: 0,
     opponentScore: 0,
     suddenDeath: false,
     suddenDeathTimer: 0,
+    battleEventTimer: BATTLE_EVENT_BASE_MS,
+    activeBattleEvent: null,
   }
 }
 
@@ -120,7 +146,6 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
 
 export function playCard(state: GameState, cardId: string): GameState {
   if (state.phase.type !== 'playing') return state
-  if (state.cardCooldown > 0) return state
 
   const cardIdx = state.playerHand.findIndex(c => c.id === cardId)
   if (cardIdx === -1) return state
@@ -131,7 +156,6 @@ export function playCard(state: GameState, cardId: string): GameState {
   const s = structuredClone(state)
   s.playerHand.splice(cardIdx, 1)
   s.mana -= card.cost
-  s.cardCooldown = CARD_COOLDOWN_MS
 
   deployCard(s, card, 'player', s.log)
   drawCard(s.playerDeck, s.playerHand)
@@ -191,7 +215,13 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
     s.field.push(unit)
     const verb = card.cardType === 'structure' ? 'built' : 'deployed'
     const who = owner === 'player' ? 'You' : 'Opponent'
-    log.push(`${who} ${verb} ${unit.name}.`)
+    // Hero cards deploy their unit AND apply a buff to all friendly units
+    if (card.isHero && card.heroEffect) {
+      log.push(`★ HERO ${card.name} unleashed by ${who}!`)
+      applyUpgrade(s, card.heroEffect, owner, log)
+    } else {
+      log.push(`${who} ${verb} ${unit.name}.`)
+    }
   } else if (card.cardType === 'upgrade' && card.upgradeEffect) {
     applyUpgrade(s, card.upgradeEffect, owner, log)
   }
@@ -317,7 +347,9 @@ function moveUnits(s: GameState, deltaMs: number): void {
       w.isWall && w.owner !== unit.owner && w.hp > 0 &&
       Math.abs(unit.x - w.x) <= WALL_CLIMB_ZONE
     )
-    const speed = (inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed) * deltaSec
+    // Fog of War battle event halves all movement
+    const fogMult = s.activeBattleEvent?.type === 'fogOfWar' ? 0.5 : 1
+    const speed = (inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed) * deltaSec * fogMult
 
     // Move at full speed toward target, clamped so we don't overshoot
     const step = Math.min(speed, d)
@@ -342,7 +374,8 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
 
     if (target) {
       const prevHp = target.hp
-      target.hp -= unit.attack
+      const bloodMoonMult = s.activeBattleEvent?.type === 'bloodMoon' ? 2 : 1
+      target.hp -= unit.attack * bloodMoonMult
       const actualDamage = prevHp - Math.max(0, target.hp)
       if (isPlayer) s.playerScore += actualDamage
       else s.opponentScore += actualDamage
@@ -357,16 +390,18 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
         : unit.x <= unit.attackRange
 
       if (atEnemyBase) {
+        const bloodMoonMult = s.activeBattleEvent?.type === 'bloodMoon' ? 2 : 1
+        const dmg = unit.attack * bloodMoonMult
         if (isPlayer) {
           const prev = s.opponentBase.hp
-          s.opponentBase.hp = Math.max(0, s.opponentBase.hp - unit.attack)
+          s.opponentBase.hp = Math.max(0, s.opponentBase.hp - dmg)
           s.playerScore += prev - s.opponentBase.hp
-          log.push(`${unit.name} hits Enemy Base! -${unit.attack}HP`)
+          log.push(`${unit.name} hits Enemy Base! -${dmg}HP`)
         } else {
           const prev = s.playerBase.hp
-          s.playerBase.hp = Math.max(0, s.playerBase.hp - unit.attack)
+          s.playerBase.hp = Math.max(0, s.playerBase.hp - dmg)
           s.opponentScore += prev - s.playerBase.hp
-          log.push(`${unit.name} hits Your Base! -${unit.attack}HP`)
+          log.push(`${unit.name} hits Your Base! -${dmg}HP`)
         }
         unit.attackTimer = unit.attackCooldownMs
       }
@@ -393,15 +428,25 @@ function opponentAI(s: GameState, log: string[]): void {
   const manaBonus = getManaBonus(s.field, 'opponent')
   let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
+  const strategy = s.opponentStrategy
+  const maxPlays = strategy === 'swarm' ? 3 : 2
+
   let played = 0
-  while (played < 2) {
+  while (played < maxPlays) {
     const affordable = s.opponentHand.filter(c => c.cost <= mana)
     if (affordable.length === 0) break
 
-    const opponentUnits = s.field.filter(u => u.owner === 'opponent')
-    const playerUnits = s.field.filter(u => u.owner === 'player')
-    const wantsUnit = opponentUnits.length <= playerUnits.length
-    const preferred = wantsUnit ? affordable.filter(c => c.cardType !== 'upgrade') : affordable
+    let preferred: Card[]
+    if (strategy === 'swarm') {
+      // Prefer cheap units; flood the board
+      preferred = affordable.filter(c => c.cost <= 2 && c.cardType === 'unit')
+    } else if (strategy === 'turtle') {
+      // Prefer structures; be defensive
+      preferred = affordable.filter(c => c.cardType === 'structure')
+    } else {
+      // rush: prefer expensive units
+      preferred = affordable.filter(c => c.cost >= 3 && c.cardType !== 'structure')
+    }
     const pool = preferred.length > 0 ? preferred : affordable
 
     const card = pool[Math.floor(Math.random() * pool.length)]
@@ -412,10 +457,48 @@ function opponentAI(s: GameState, log: string[]): void {
     deployCard(s, card, 'opponent', log)
     drawCard(s.opponentDeck, s.opponentHand)
 
-    if (played === 1 && Math.random() > 0.4) break
+    // Turtle only plays 1 card per turn
+    if (strategy === 'turtle') break
+    // Others have a random early-stop chance
+    if (played === 1 && Math.random() > 0.5) break
   }
 
   if (played === 0) log.push('Opponent holds.')
+}
+
+// ─── Battle Events ────────────────────────────────────────
+
+function triggerBattleEvent(s: GameState, log: string[]): void {
+  const roll = Math.random()
+  let event: BattleEventState
+
+  if (roll < 0.25) {
+    // Blood Moon: all attacks deal double damage for 15s
+    event = { type: 'bloodMoon', label: '🌑 BLOOD MOON! Double damage for 15s!', remainingMs: 15000 }
+  } else if (roll < 0.5) {
+    // Fog of War: all units move at half speed for 12s
+    event = { type: 'fogOfWar', label: '🌫 FOG OF WAR! Movement halved for 12s!', remainingMs: 12000 }
+  } else if (roll < 0.75) {
+    // Supply Drop: both sides gain +3 mana instantly
+    const bonus = 3
+    s.mana = Math.min(s.maxMana, s.mana + bonus)
+    const oppBonus = Math.min(10, BASE_MAX_MANA + getManaBonus(s.field, 'opponent'))
+    void oppBonus  // opponent mana is virtual per-turn; just note the event
+    event = { type: 'supplyDrop', label: `📦 SUPPLY DROP! Both sides gain +${bonus} mana!`, remainingMs: 3000 }
+    log.push(`Supply Drop! You gained +${bonus} mana.`)
+  } else {
+    // Earthquake: all walls take 20 damage
+    const dmg = 20
+    for (const u of s.field) {
+      if (u.isWall) u.hp = Math.max(0, u.hp - dmg)
+    }
+    s.field = s.field.filter(u => u.hp > 0)
+    event = { type: 'earthquake', label: `🌋 EARTHQUAKE! All walls took ${dmg} damage!`, remainingMs: 3000 }
+    log.push(`Earthquake! All walls shook for ${dmg} damage!`)
+  }
+
+  s.activeBattleEvent = event
+  log.push(event.label)
 }
 
 // ─── Tick (called every ~100 ms) ─────────────────────────
@@ -441,12 +524,7 @@ export function tick(state: GameState, deltaMs: number): GameState {
     if (s.mana >= s.maxMana) s.manaAccum = 0
   }
 
-  // 2. Card cooldown
-  if (s.cardCooldown > 0) {
-    s.cardCooldown = Math.max(0, s.cardCooldown - deltaMs)
-  }
-
-  // 3. Move all units
+  // 2. Move all units
   moveUnits(s, deltaMs)
 
   // 4. Process per-unit attacks
@@ -456,13 +534,19 @@ export function tick(state: GameState, deltaMs: number): GameState {
     return s
   }
 
-  // 5. Tick spawner buildings
+  // 5. Tick spawn-grow timers and spawner buildings
   for (const unit of s.field) {
+    if (unit.spawnGrowTimer != null && unit.spawnGrowTimer > 0) {
+      unit.spawnGrowTimer = Math.max(0, unit.spawnGrowTimer - deltaMs)
+    }
     if (unit.spawnTimer == null || unit.structureEffect?.type !== 'spawn') continue
     unit.spawnTimer -= deltaMs
     if (unit.spawnTimer <= 0) {
       const effect = unit.structureEffect as { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
       const spawned = spawnUnit(effect.unitTemplate, unit.owner)
+      // Spawn at building's position and animate growing in
+      spawned.x = unit.x
+      spawned.spawnGrowTimer = SPAWN_GROW_MS
       s.field.push(spawned)
       const who = unit.owner === 'player' ? 'Your' : 'Enemy'
       log.push(`${who} ${unit.name} spawned a ${spawned.name}!`)
@@ -477,7 +561,18 @@ export function tick(state: GameState, deltaMs: number): GameState {
     s.opponentTimer = OPPONENT_INTERVAL_MS
   }
 
-  // 7. Sudden death — trigger when all cards have been drawn and played
+  // 7. Battle events
+  if (s.activeBattleEvent) {
+    s.activeBattleEvent.remainingMs -= deltaMs
+    if (s.activeBattleEvent.remainingMs <= 0) s.activeBattleEvent = null
+  }
+  s.battleEventTimer -= deltaMs
+  if (s.battleEventTimer <= 0) {
+    triggerBattleEvent(s, log)
+    s.battleEventTimer = 24000 + Math.random() * 8000
+  }
+
+  // 9. Sudden death — trigger when all cards have been drawn and played
   if (!s.suddenDeath) {
     const allExhausted =
       s.playerDeck.length === 0 && s.playerHand.length === 0 &&
