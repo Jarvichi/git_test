@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Left wing lowered -->
+  <path d="M13,16 L0,22 L2,15 L0,11 L10,15 Z" fill="#1a4a1a"/>
+  <!-- Right wing lowered -->
+  <path d="M20,16 L32,22 L30,15 L32,11 L22,15 Z" fill="#1a4a1a"/>
+  <!-- Wing membrane -->
+  <line x1="13" y1="16" x2="2" y2="20" stroke="#336633" stroke-width="0.8"/>
+  <line x1="13" y1="16" x2="2" y2="14" stroke="#336633" stroke-width="0.8"/>
+  <line x1="20" y1="16" x2="30" y2="20" stroke="#336633" stroke-width="0.8"/>
+  <line x1="20" y1="16" x2="30" y2="14" stroke="#336633" stroke-width="0.8"/>
+  <!-- Body -->
+  <ellipse cx="16" cy="21" rx="7" ry="5" fill="#225522"/>
+  <ellipse cx="16" cy="22" rx="4.5" ry="3" fill="#449944"/>
+  <!-- Neck -->
+  <path d="M19,17 Q23,13 26,11" fill="#225522" stroke="#225522" stroke-width="3"/>
+  <!-- Head -->
+  <ellipse cx="27" cy="10" rx="5" ry="4" fill="#225522"/>
+  <!-- Snout (mouth open, about to fire) -->
+  <path d="M30,9 L32,11 L31,14 L29,12 Z" fill="#1a4a1a"/>
+  <!-- Eye -->
+  <circle cx="27" cy="8.5" r="1.5" fill="#ff8800"/>
+  <ellipse cx="27" cy="8.5" rx="0.5" ry="1.3" fill="#111"/>
+  <!-- Horn -->
+  <polygon points="25,7 24,3 27,6" fill="#1a4a1a"/>
+  <!-- Venom spit -->
+  <circle cx="32" cy="12" r="1.5" fill="#66ff33" opacity="0.8"/>
+  <!-- Tail -->
+  <path d="M9,23 Q4,26 3,22 Q3,18 6,17" stroke="#225522" stroke-width="3" fill="none"/>
+  <polygon points="6,16 4,13 8,15" fill="#1a4a1a"/>
+  <!-- Legs -->
+  <line x1="13" y1="24" x2="11" y2="28" stroke="#1a4a1a" stroke-width="2.5"/>
+  <line x1="19" y1="24" x2="21" y2="28" stroke="#1a4a1a" stroke-width="2.5"/>
+</svg>

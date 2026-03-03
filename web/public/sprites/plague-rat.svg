@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Tail -->
+  <path d="M6,20 Q1,17 2,11 Q3,6 7,5" stroke="#553311" stroke-width="1.5" fill="none"/>
+  <!-- Body (mid-stride, raised 1px) -->
+  <ellipse cx="15" cy="21" rx="9" ry="5" fill="#775533"/>
+  <!-- Belly -->
+  <ellipse cx="15" cy="23" rx="6" ry="2.5" fill="#aa8855"/>
+  <!-- Head -->
+  <ellipse cx="24" cy="18" rx="6" ry="4.5" fill="#775533"/>
+  <!-- Ear near -->
+  <ellipse cx="21" cy="13" rx="2.5" ry="3.5" fill="#994466"/>
+  <ellipse cx="21" cy="13" rx="1.5" ry="2.5" fill="#cc7799"/>
+  <!-- Ear far -->
+  <ellipse cx="26" cy="12" rx="2" ry="3" fill="#994466"/>
+  <ellipse cx="26" cy="12" rx="1.2" ry="2" fill="#cc7799"/>
+  <!-- Eye -->
+  <circle cx="27.5" cy="16" r="1.5" fill="#ff2222"/>
+  <circle cx="27.8" cy="15.7" r="0.5" fill="#fff"/>
+  <!-- Nose -->
+  <circle cx="30" cy="18" r="1" fill="#ff9999"/>
+  <!-- Whiskers -->
+  <line x1="29" y1="18" x2="32" y2="16" stroke="#ddccaa" stroke-width="0.5"/>
+  <line x1="29" y1="18" x2="32" y2="20" stroke="#ddccaa" stroke-width="0.5"/>
+  <!-- Legs frame 2: neutral spread -->
+  <line x1="21" y1="24" x2="22" y2="30" stroke="#553311" stroke-width="2"/>
+  <line x1="17" y1="25" x2="18" y2="30" stroke="#553311" stroke-width="2"/>
+  <line x1="12" y1="25" x2="11" y2="30" stroke="#553311" stroke-width="2"/>
+  <line x1="9" y1="24" x2="8" y2="29" stroke="#553311" stroke-width="2"/>
+</svg>

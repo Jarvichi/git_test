@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Rocky mountain peak -->
+  <polygon points="2,32 10,10 22,10 30,32" fill="#888877"/>
+  <polygon points="6,32 10,12 22,12 26,32" fill="#999988"/>
+  <!-- Stone ledge / platform -->
+  <rect x="7" y="18" width="18" height="5" rx="1" fill="#aaa999"/>
+  <rect x="7" y="18" width="18" height="2" fill="#bbbaaa"/>
+  <!-- Large nest on ledge -->
+  <ellipse cx="16" cy="19" rx="8" ry="3.5" fill="#7a5a2a"/>
+  <ellipse cx="16" cy="18" rx="6" ry="2.5" fill="#5a3a0a"/>
+  <!-- Griffin egg (large, golden) -->
+  <ellipse cx="14" cy="17.5" rx="3" ry="2" fill="#ccaa22"/>
+  <ellipse cx="19" cy="18" rx="2.5" ry="1.8" fill="#ddbb33"/>
+  <!-- Golden feathers scattered -->
+  <ellipse cx="5" cy="22" rx="2" ry="0.8" fill="#cc9900" transform="rotate(-25 5 22)"/>
+  <ellipse cx="9" cy="25" rx="2.2" ry="0.8" fill="#ddaa00" transform="rotate(10 9 25)"/>
+  <ellipse cx="23" cy="24" rx="2" ry="0.8" fill="#cc9900" transform="rotate(20 23 24)"/>
+  <ellipse cx="27" cy="21" rx="2" ry="0.8" fill="#ddaa00" transform="rotate(-15 27 21)"/>
+  <!-- Mountain peak tip -->
+  <polygon points="12,10 16,2 20,10" fill="#777766"/>
+  <polygon points="13,10 16,4 19,10" fill="#888877"/>
+  <!-- Clouds -->
+  <ellipse cx="5" cy="8" rx="4" ry="2" fill="#ddddee" opacity="0.6"/>
+  <ellipse cx="27" cy="6" rx="4" ry="2" fill="#ddddee" opacity="0.6"/>
+  <!-- Griffin silhouette perched -->
+  <ellipse cx="16" cy="14" rx="4" ry="3" fill="#ddcc99"/>
+  <path d="M12,14 Q8,11 7,14" fill="#ddcc99"/>
+  <path d="M20,14 Q24,11 25,14" fill="#ddcc99"/>
+  <ellipse cx="18" cy="12" rx="2.5" ry="2" fill="#eeeeee"/>
+  <polygon points="18,10 17,8 19.5,10" fill="#ddcc99"/>
+</svg>

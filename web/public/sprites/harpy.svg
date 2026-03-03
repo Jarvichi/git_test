@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Left wing mid-flap -->
+  <path d="M12,13 L0,7 L3,15 L0,18 L9,15 Z" fill="#226644"/>
+  <!-- Right wing mid-flap -->
+  <path d="M20,13 L32,7 L29,15 L32,18 L23,15 Z" fill="#226644"/>
+  <!-- Wing feather detail -->
+  <line x1="12" y1="13" x2="1" y2="8" stroke="#338855" stroke-width="0.8"/>
+  <line x1="12" y1="13" x2="2" y2="14" stroke="#338855" stroke-width="0.8"/>
+  <line x1="20" y1="13" x2="31" y2="8" stroke="#338855" stroke-width="0.8"/>
+  <line x1="20" y1="13" x2="30" y2="14" stroke="#338855" stroke-width="0.8"/>
+  <!-- Body (raised 1px) -->
+  <ellipse cx="16" cy="17" rx="5" ry="5" fill="#f4c07a"/>
+  <ellipse cx="16" cy="19" rx="3.5" ry="3" fill="#338855"/>
+  <!-- Head -->
+  <ellipse cx="16" cy="10" rx="4.5" ry="4" fill="#f4c07a"/>
+  <!-- Hair/crest -->
+  <path d="M12,9 Q16,3 20,9" fill="#118833"/>
+  <!-- Eyes -->
+  <circle cx="14.5" cy="10" r="0.9" fill="#333"/>
+  <circle cx="17.5" cy="10" r="0.9" fill="#333"/>
+  <!-- Beak -->
+  <path d="M15,12 L16,13.5 L17,12" fill="#cc8822"/>
+  <!-- Talons -->
+  <line x1="13" y1="21" x2="11" y2="26" stroke="#667733" stroke-width="2"/>
+  <line x1="19" y1="21" x2="21" y2="26" stroke="#667733" stroke-width="2"/>
+  <line x1="11" y1="26" x2="9" y2="29" stroke="#667733" stroke-width="1.5"/>
+  <line x1="11" y1="26" x2="12" y2="29" stroke="#667733" stroke-width="1.5"/>
+  <line x1="21" y1="26" x2="19" y2="29" stroke="#667733" stroke-width="1.5"/>
+  <line x1="21" y1="26" x2="22" y2="29" stroke="#667733" stroke-width="1.5"/>
+</svg>

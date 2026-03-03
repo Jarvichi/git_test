@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Well base stone ring -->
+  <ellipse cx="16" cy="24" rx="10" ry="5" fill="#777788"/>
+  <ellipse cx="16" cy="22" rx="10" ry="5" fill="#888899"/>
+  <ellipse cx="16" cy="20" rx="10" ry="4" fill="#9999aa"/>
+  <!-- Well inner dark -->
+  <ellipse cx="16" cy="20" rx="7" ry="2.8" fill="#111122"/>
+  <!-- Ghostly glow rising from well -->
+  <ellipse cx="16" cy="18" rx="5" ry="3" fill="#aaccff" opacity="0.4"/>
+  <ellipse cx="16" cy="14" rx="3.5" ry="4" fill="#aaccff" opacity="0.3"/>
+  <ellipse cx="16" cy="10" rx="2.5" ry="3" fill="#ccddff" opacity="0.25"/>
+  <!-- Spirit wisps -->
+  <path d="M14,18 Q12,13 14,9 Q15,6 16,8" stroke="#8899ff" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <path d="M18,18 Q20,13 18,9 Q17,6 16,8" stroke="#aabbff" stroke-width="1.5" fill="none" opacity="0.7"/>
+  <!-- Spirit face in glow -->
+  <ellipse cx="15" cy="13" rx="0.8" ry="1" fill="#ffffff" opacity="0.8"/>
+  <ellipse cx="17" cy="13" rx="0.8" ry="1" fill="#ffffff" opacity="0.8"/>
+  <!-- Well roof supports -->
+  <rect x="6" y="10" width="2" height="12" rx="0.5" fill="#5a4a3a"/>
+  <rect x="24" y="10" width="2" height="12" rx="0.5" fill="#5a4a3a"/>
+  <!-- Well roof -->
+  <polygon points="4,10 16,2 28,10" fill="#6a4a2a"/>
+  <polygon points="6,10 16,3 26,10" fill="#7a5a3a"/>
+  <!-- Bucket hanging -->
+  <line x1="16" y1="4" x2="16" y2="16" stroke="#5a4a3a" stroke-width="0.8"/>
+  <rect x="13.5" y="16" width="5" height="3.5" rx="0.5" fill="#6a4a2a"/>
+</svg>

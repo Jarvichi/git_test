@@ -51,6 +51,38 @@ npm run preview  # Preview production build locally
 ## Permissions
 - Claude has full permission to push and merge code changes
 
+## Sprites / Graphics
+
+Every unit and building needs a sprite. **Whenever new units or buildings are added, their sprites must be created before the task is complete.**
+
+### Sprite files
+- Location: `web/public/sprites/`
+- Format: SVG, 32×32 viewBox, simple geometric shapes
+- Naming: derived from `unit.name` by lowercasing and replacing non-alphanumeric runs with `-`
+  - e.g. "Fire Mage" → `fire-mage.svg`, "Anc. Altar" → `anc-altar.svg`
+- Special overrides go in `web/src/game/sprites.ts` NAME_MAP
+
+### Per-unit files (mobile units need 4 files)
+| File | Purpose |
+|---|---|
+| `{slug}.svg` | Static fallback (same as frame 2) |
+| `{slug}-1.svg` | Walk frame 1 — stride A (left arm/leg back, right forward) |
+| `{slug}-2.svg` | Walk frame 2 — mid-stride, body 1 px higher |
+| `{slug}-3.svg` | Walk frame 3 — stride B (opposite of frame 1) |
+
+### Buildings (static only)
+One file: `{slug}.svg` — no animation frames needed.
+
+### Workflow when adding new units/buildings
+**Create one graphic, commit, push, then do the next.** Do not batch sprites into a single commit.
+```bash
+# After writing the 4 SVG files for a unit:
+git add web/public/sprites/{slug}*.svg
+git commit -m "Add {Name} sprite"
+git push -u origin <branch>
+# Then move on to the next unit
+```
+
 ## GitHub & PRs
 - Authenticated as: Jarvichi
 - Default base branch: `main`

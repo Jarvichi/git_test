@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Left wing raised up -->
+  <path d="M13,17 L0,5 L5,14 L2,18 L10,17 Z" fill="#331144"/>
+  <!-- Right wing raised up -->
+  <path d="M19,17 L32,5 L27,14 L30,18 L22,17 Z" fill="#331144"/>
+  <!-- Wing membrane veins -->
+  <line x1="13" y1="17" x2="2" y2="7" stroke="#553366" stroke-width="0.7"/>
+  <line x1="13" y1="17" x2="4" y2="13" stroke="#553366" stroke-width="0.7"/>
+  <line x1="19" y1="17" x2="30" y2="7" stroke="#553366" stroke-width="0.7"/>
+  <line x1="19" y1="17" x2="28" y2="13" stroke="#553366" stroke-width="0.7"/>
+  <!-- Body -->
+  <ellipse cx="16" cy="19" rx="5" ry="4" fill="#221133"/>
+  <!-- Ears -->
+  <polygon points="13,16 11,10 15,15" fill="#221133"/>
+  <polygon points="19,16 21,10 17,15" fill="#221133"/>
+  <!-- Face -->
+  <circle cx="14" cy="18" r="1.2" fill="#ff2222"/>
+  <circle cx="18" cy="18" r="1.2" fill="#ff2222"/>
+  <circle cx="14.3" cy="17.7" r="0.5" fill="#fff"/>
+  <circle cx="18.3" cy="17.7" r="0.5" fill="#fff"/>
+  <!-- Fangs -->
+  <polygon points="15,21 15.8,23.5 16.6,21" fill="#ffffff"/>
+  <!-- Feet/claws dangling -->
+  <line x1="14" y1="22" x2="13" y2="26" stroke="#221133" stroke-width="1.2"/>
+  <line x1="18" y1="22" x2="19" y2="26" stroke="#221133" stroke-width="1.2"/>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Pointed ears (raised 1px) -->
+  <polygon points="9,9 6,3 12,7" fill="#665577"/>
+  <polygon points="21,9 24,3 20,7" fill="#665577"/>
+  <!-- Head -->
+  <ellipse cx="16" cy="9" rx="6" ry="5.5" fill="#776688"/>
+  <!-- White hair -->
+  <path d="M10,8 Q16,2 22,8 Q20,5 16,6 Q12,5 10,8 Z" fill="#ffffff"/>
+  <!-- Eyes -->
+  <circle cx="14" cy="9" r="1.2" fill="#ccaaff"/>
+  <circle cx="18" cy="9" r="1.2" fill="#ccaaff"/>
+  <circle cx="14" cy="9" r="0.5" fill="#111"/>
+  <circle cx="18" cy="9" r="0.5" fill="#111"/>
+  <!-- Body -->
+  <rect x="11" y="14" width="10" height="8" rx="1" fill="#332244"/>
+  <!-- Cape -->
+  <path d="M11,14 L9,27 L16,23 L23,27 L21,14 Z" fill="#441166" opacity="0.8"/>
+  <!-- Quiver -->
+  <rect x="22" y="12" width="3" height="8" rx="1" fill="#5a3a1a"/>
+  <line x1="23" y1="11" x2="23" y2="13" stroke="#ccaaff" stroke-width="0.8"/>
+  <!-- Bow -->
+  <path d="M5,7 Q1,15 5,23" stroke="#332244" stroke-width="2" fill="none"/>
+  <line x1="5" y1="7" x2="5" y2="23" stroke="#cccccc" stroke-width="0.7"/>
+  <!-- Arrow -->
+  <line x1="5" y1="15" x2="13" y2="15" stroke="#5a3a1a" stroke-width="1.5"/>
+  <polygon points="13,15 11,13.5 11,16.5" fill="#ccaaff"/>
+  <!-- Legs: mid-stride -->
+  <rect x="11" y="22" width="4" height="6" rx="1" fill="#221133"/>
+  <rect x="17" y="22" width="4" height="6" rx="1" fill="#221133"/>
+</svg>
