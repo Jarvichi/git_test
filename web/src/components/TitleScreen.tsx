@@ -2,6 +2,7 @@ import React from 'react'
 import { loadDeck, deckTotalCards, isDeckValid } from '../game/collection'
 
 interface Props {
+  crystals: number
   onPlay: () => void
   onCollection: () => void
   onDeckBuilder: () => void
@@ -14,8 +15,8 @@ const LOGO = `
   |  | ||  | ||  _ <| |  | |
   |____||____||_| \_\_|  |_|`.trim()
 
-export function TitleScreen({ onPlay, onCollection, onDeckBuilder }: Props) {
-  const deck = loadDeck()
+export function TitleScreen({ crystals, onPlay, onCollection, onDeckBuilder }: Props) {
+  const deck  = loadDeck()
   const count = deckTotalCards(deck)
   const valid = isDeckValid(deck)
 
@@ -44,7 +45,7 @@ export function TitleScreen({ onPlay, onCollection, onDeckBuilder }: Props) {
       </div>
 
       <div className="title-deck-info">
-        Deck: {count} cards
+        Deck: {count} cards &nbsp;·&nbsp; 💎 {crystals.toLocaleString()} crystals
       </div>
     </div>
   )

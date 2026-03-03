@@ -1,4 +1,4 @@
-import { Card } from './types'
+import { Card, CardRarity } from './types'
 import { getCardCatalog } from './cards'
 
 // ─── Types ────────────────────────────────────────────────
@@ -6,6 +6,7 @@ import { getCardCatalog } from './cards'
 export interface CollectionEntry {
   cardName: string
   count: number
+  masteryXp?: number   // total extra copies consumed for mastery (optional for back-compat)
 }
 
 export interface DeckEntry {
@@ -16,11 +17,22 @@ export interface DeckEntry {
 // ─── Constants ────────────────────────────────────────────
 
 const COLLECTION_KEY = 'jarv_collection'
-const DECK_KEY = 'jarv_deck'
+const DECK_KEY       = 'jarv_deck'
+const CRYSTALS_KEY   = 'jarv_crystals'
 
-export const DECK_MIN = 10
-export const DECK_MAX = 30
+export const DECK_MIN  = 10
+export const DECK_MAX  = 30
 export const COPIES_MAX = 4
+
+export const CRYSTAL_PACK_COST = 250
+
+/** Crystals gained per card dismantled, by rarity. */
+export const DISENCHANT_VALUE: Record<CardRarity, number> = {
+  common:    5,
+  uncommon: 15,
+  rare:     40,
+  legendary: 100,
+}
 
 // ─── Starter data ─────────────────────────────────────────
 
@@ -46,6 +58,124 @@ export const STARTER_DECK: DeckEntry[] = [
   { cardName: 'Build Farm',     count: 1 },
   { cardName: 'Sharpen Blades', count: 1 },
 ]
+
+// ─── Crystal storage ──────────────────────────────────────
+
+export function loadCrystals(): number {
+  try {
+    const v = localStorage.getItem(CRYSTALS_KEY)
+    if (v !== null) return Math.max(0, parseInt(v, 10) || 0)
+  } catch { /* ignore */ }
+  return 0
+}
+
+export function saveCrystals(n: number): void {
+  localStorage.setItem(CRYSTALS_KEY, String(Math.max(0, n)))
+}
+
+// ─── Mastery math ─────────────────────────────────────────
+//
+// Mastery level N requires a cumulative total of 5*(2^N - 1) extra copies consumed.
+// Per-level costs:  Lv1=5, Lv2=10, Lv3=20, Lv4=40, Lv5=80, Lv6=160, …
+// Formula: level = floor(log2(xp/5 + 1))
+
+export function masteryLevel(xp: number): number {
+  if (xp <= 0) return 0
+  return Math.floor(Math.log2(xp / 5 + 1))
+}
+
+/** Total XP (extra copies) needed to reach `level` from 0. */
+export function masteryXpForLevel(level: number): number {
+  return level <= 0 ? 0 : 5 * ((1 << level) - 1)
+}
+
+/** Returns current level, XP within that level, and XP needed for the next level. */
+export function masteryProgress(xp: number): { level: number; current: number; needed: number } {
+  const level     = masteryLevel(xp)
+  const levelStart = masteryXpForLevel(level)
+  const levelEnd   = masteryXpForLevel(level + 1)
+  return { level, current: xp - levelStart, needed: levelEnd - levelStart }
+}
+
+export function getMasteryXp(collection: CollectionEntry[], cardName: string): number {
+  return collection.find(e => e.cardName === cardName)?.masteryXp ?? 0
+}
+
+// ─── Disenchant ───────────────────────────────────────────
+
+function rarityOf(cardName: string): CardRarity {
+  const card = getCardCatalog().find(c => c.name === cardName)
+  return card?.rarity ?? 'common'
+}
+
+function extraCount(entry: CollectionEntry): number {
+  return Math.max(0, entry.count - COPIES_MAX)
+}
+
+/** Disenchant all extras for a single card → gain crystals, count drops to COPIES_MAX. */
+export function disenchantCard(
+  collection: CollectionEntry[],
+  cardName: string,
+): { collection: CollectionEntry[]; gained: number } {
+  const entry = collection.find(e => e.cardName === cardName)
+  const extras = entry ? extraCount(entry) : 0
+  if (extras === 0) return { collection, gained: 0 }
+  const gained = DISENCHANT_VALUE[rarityOf(cardName)] * extras
+  return {
+    collection: collection.map(e =>
+      e.cardName === cardName ? { ...e, count: COPIES_MAX } : e
+    ),
+    gained,
+  }
+}
+
+/** Disenchant ALL extras across the entire collection at once. */
+export function disenchantAllExtras(
+  collection: CollectionEntry[],
+): { collection: CollectionEntry[]; gained: number } {
+  let gained = 0
+  const updated = collection.map(e => {
+    const extras = extraCount(e)
+    if (extras === 0) return e
+    gained += DISENCHANT_VALUE[rarityOf(e.cardName)] * extras
+    return { ...e, count: COPIES_MAX }
+  })
+  return { collection: updated, gained }
+}
+
+// ─── Mastery consumption ──────────────────────────────────
+
+/** Consume ALL extra copies of a card as mastery XP (instead of dismantling for crystals). */
+export function masterAllExtras(
+  collection: CollectionEntry[],
+  cardName: string,
+): CollectionEntry[] {
+  return collection.map(e => {
+    if (e.cardName !== cardName) return e
+    const extras = extraCount(e)
+    if (extras === 0) return e
+    return { ...e, count: COPIES_MAX, masteryXp: (e.masteryXp ?? 0) + extras }
+  })
+}
+
+// ─── Mastery stat bonus ───────────────────────────────────
+
+/**
+ * Apply mastery level bonuses to a card template before it enters the deck.
+ * Mobile units: +1 ATK and +2 max HP per level.
+ * Structures / walls: +10 max HP per level.
+ */
+function applyMasteryBonus(card: Card, lvl: number): Card {
+  if (lvl === 0 || !card.unit) return card
+  const u = { ...card.unit }
+  if (u.moveSpeed > 0) {
+    u.attack = u.attack + lvl
+    u.maxHp  = u.maxHp  + lvl * 2
+  } else {
+    u.maxHp = u.maxHp + lvl * 10
+  }
+  return { ...card, unit: u }
+}
 
 // ─── Collection CRUD ──────────────────────────────────────
 
@@ -108,14 +238,17 @@ export function isDeckValid(d: DeckEntry[]): boolean {
 
 let _deckCardId = 0
 
-export function buildDeckCards(entries: DeckEntry[]): Card[] {
+export function buildDeckCards(entries: DeckEntry[], collection?: CollectionEntry[]): Card[] {
   const catalog = getCardCatalog()
   const result: Card[] = []
   for (const entry of entries) {
     const template = catalog.find(c => c.name === entry.cardName)
     if (!template) continue
+    const xp  = collection ? getMasteryXp(collection, entry.cardName) : 0
+    const lvl = masteryLevel(xp)
+    const boosted = applyMasteryBonus(template, lvl)
     for (let i = 0; i < entry.count; i++) {
-      result.push({ ...template, id: `deck-${entry.cardName}-${++_deckCardId}` })
+      result.push({ ...boosted, id: `deck-${entry.cardName}-${++_deckCardId}` })
     }
   }
   return result
@@ -132,10 +265,10 @@ function pickRandom<T>(arr: T[]): T {
  * Guaranteed: 2 commons, 1 uncommon, 1 rare, 1 bonus (10% legendary / 20% rare / 70% uncommon).
  */
 export function generatePack(): string[] {
-  const catalog = getCardCatalog()
-  const commons    = catalog.filter(c => c.rarity === 'common')
-  const uncommons  = catalog.filter(c => c.rarity === 'uncommon')
-  const rares      = catalog.filter(c => c.rarity === 'rare')
+  const catalog     = getCardCatalog()
+  const commons     = catalog.filter(c => c.rarity === 'common')
+  const uncommons   = catalog.filter(c => c.rarity === 'uncommon')
+  const rares       = catalog.filter(c => c.rarity === 'rare')
   const legendaries = catalog.filter(c => c.rarity === 'legendary')
 
   const picks: string[] = [
