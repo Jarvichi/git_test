@@ -74,7 +74,7 @@ export function CardDetailModal({ card, collection, deckEntries, onClose }: Prop
         <div className="cdm-body">
           {/* Left: card visual */}
           <div className="cdm-card-col">
-            <CardTile card={card} canAfford={false} disabled={false} />
+            <CardTile card={card} canAfford={true} />
             <div className="cdm-owned">×{owned} owned{inDeck > 0 ? ` · ×${inDeck} in deck` : ''}</div>
           </div>
 

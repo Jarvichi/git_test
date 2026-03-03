@@ -831,8 +831,8 @@ body {
 }
 
 .collection-cell--unowned {
-  opacity: 0.3;
-  filter: grayscale(80%);
+  opacity: 0.45;
+  filter: grayscale(60%);
 }
 
 /* .collection-badge kept for any legacy use */
