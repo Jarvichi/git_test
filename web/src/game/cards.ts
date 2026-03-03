@@ -505,6 +505,102 @@ export const HERO_CARDS: Card[] = [
   },
 ]
 
+// ─── Lore ─────────────────────────────────────────────────
+
+const CARD_LORE: Record<string, string> = {
+  // Units
+  'Goblin':        'Once the cannon fodder of orc warbands, goblins discovered they actually enjoy being first through the door.',
+  'Archer':        '"I don\'t miss." — Every archer, right before missing.',
+  'Barbarian':     'Trained by no one, feared by everyone. Mostly feared because of the screaming.',
+  'Knight':        "The kingdom's finest. Polished armour hides a spectacular collection of bruises.",
+  'Wizard':        'Years of magical study. Thousands of gold in reagents. Wages still less than a goblin.',
+  'Dragon':        'When it speaks, kingdoms listen. When it breathes, kingdoms burn.',
+  'Skeleton':      'Died once, but keeps showing up. Very dedicated.',
+  'Troll':         "You'll know it's coming. You'll have plenty of time to not do anything about it.",
+  'Crossbow':      'A technically superior weapon. The operators will tell you at every opportunity.',
+  'Paladin':       'Righteous, armoured, and absolutely insufferable at dinner.',
+  'Rogue':         '"What wall?" — The Rogue, from the other side of the wall.',
+  'Catapult':      'Technically pacifist. It\'s the rocks that do the violence.',
+  'Werewolf':      'Formerly a reasonable accountant.',
+  'Golem':         'Was told to hold the line. Has been holding it for two hundred years.',
+  'Pixie':         'Shoots first, asks never.',
+  'Ogre':          'Large. Loud. Effective. Not necessarily in that order.',
+  'Plague Rat':    'One is an annoyance. A hundred is a catastrophe.',
+  'Bandit':        'Honest work never paid this well.',
+  'Bat':           'Hung upside down until called upon — a skill with surprising tactical applications.',
+  'Scorpion':      'Armoured, venomous, grumpy. Triple threat.',
+  'Shield Guard':  'Move? Why would I move?',
+  'Centaur':       "The upper half writes poetry. The lower half doesn't know.",
+  'Harpy':         'Sings beautifully. Fights savagely. Never at the same time.',
+  'Specter':       'Died defending the post. Still defending it.',
+  'Lizardman':     'Cold-blooded. Professionally and personally.',
+  'Ballista':      '"Fire the ballista!" — said with far too much enthusiasm every time.',
+  'Vampire':       'Charming until the biting starts. Sometimes also during the biting.',
+  'Griffin':       'Half eagle, half lion, all opinion.',
+  'Fire Mage':     'Extremely dangerous. Mostly to itself.',
+  'Executioner':   'Does not like being told there is more than one swing allowed.',
+  'Mammoth':       'Once a peaceful grazer. Someone put armour on it.',
+  'Dark Elf':      'Watches from the shadows. Shoots from the shadows. Lives in the shadows. Hates dentist appointments.',
+  'Necromancer':   'Death is just unemployment with extra steps.',
+  'Giant':         'Slow. Inevitable. Cannot open doors, but rarely needs to.',
+  'Wyvern':        "The dragon's practical cousin. Less fire, more punctuality.",
+  'Behemoth':      'There is no plan B for a Behemoth. There is often no plan A left either.',
+  // Structures
+  'Build Wall':    'The first answer to every problem. Usually the second answer too.',
+  'Build Farm':    'Food is mana. Mana is power. This farmer has no idea what he\'s contributing to.',
+  'Barracks':      'Turns gold into goblins. Economists are still debating whether that\'s profitable.',
+  'Arcane Tower':  'The archers it trains insist they learned everything naturally.',
+  'Dragon Lair':   'Do not approach. Do not inquire. Absolutely do not ask about the rent.',
+  'Crypt':         "Nobody asked what's in there. Everyone agrees not to.",
+  'Troll Den':     'Smells terrible. Keeps the neighbours away.',
+  'Garrison':      'A crossbow and a grudge, supplied on rotation.',
+  'Cathedral':     'Blessed walls. Blessed warriors. Blessed inconvenient for the enemy.',
+  'Rogue Den':     'No sign. No address. Impossible to miss.',
+  'Siege Works':   'The engineers here have never met a wall they didn\'t want to destroy.',
+  'Dark Shrine':   'Full moon schedule posted on the door.',
+  'Iron Forge':    'Hammers day and night. Nobody sleeps within a mile.',
+  'Fairy Ring':    '"Step inside the ring," they said. "It\'ll be fun," they said.',
+  'Ogre Den':      'Listed as "residential" in the tax records.',
+  'Rat Burrow':    'The smell announces them long before they arrive.',
+  'Bandit Camp':   'Technically a business.',
+  'Bat Cave':      'Dark inside. Dark outside. Mostly just dark.',
+  'Scorpion Pit':  'HR has filed fourteen complaints about working conditions.',
+  'Guard Post':    'Stand and deliver. Mostly stand.',
+  'Centaur Stable':"It's not a stable, they keep insisting.",
+  'Harpy Roost':   'Do not look up.',
+  'Spirit Well':   'The water is fine. The spirits are not.',
+  'Lizard Warren': 'Warm, underground, and excellent acoustics.',
+  'Ballista Tower':'The elevator is broken. Engineers don\'t care.',
+  'Vamp. Coven':   'Meets at midnight. Dress code: dramatic.',
+  'Aerie':         'Spectacular view. Treacherous access. Worth it.',
+  'Mage Tower':    'Full of books, experiments, and extremely anxious junior mages.',
+  'Gallows':       'Structural integrity questionable. Attendance mandatory.',
+  'Mammoth Pen':   'Do not feed after dark. Do not feed before dark either.',
+  'Shadow Academy':'Curriculum: archery, shadows, and sighing at lesser beings.',
+  'Death Tower':   'The door is unlocked. Nobody goes in uninvited.',
+  "Giant's Hall":  'The ceiling keeps getting raised.',
+  'Wyvern Roost':  'Perched atop the cliff where nothing else dares to live.',
+  'Ancient Altar': 'Old beyond memory. Hungry beyond measure.',
+  // Upgrades
+  'Sharpen Blades':'The whetstone whine echoes across camp. Everyone quietly checks their grip.',
+  'Fortify':       '"Walk it off." — Official battle doctrine.',
+  'Rally':         'A rousing speech, a quick bandage — good as new.',
+  'Haste':         'Legs moved so fast they filed a formal complaint.',
+  'Iron Skin':     'Toughen up. Literally.',
+  'Eagle Eye':     'See further. Regret it only slightly more often.',
+  'War Drums':     'The rhythm of violence.',
+  'Bloodlust':     'Faster. Angrier. Marginally more coordinated.',
+  'Field Medic':   'Not a real medic. Effective anyway.',
+  'Titan Blood':   'Thick. Extremely thick.',
+  'Sniper Scope':  'For those who believe range is the solution to all problems.',
+  'Battle Cry':    'Loud. Effective. No subtlety whatsoever.',
+  // Heroes
+  'Dragon Lord':   'Commands dragons. Dragons pretend not to notice.',
+  'Battle Queen':  'Won sixteen wars. Lost zero negotiations.',
+  'Storm Caller':  'The sky does what she says. Eventually.',
+  'Shadow King':   'Feared in twelve kingdoms. Banned from two taverns specifically.',
+}
+
 // ─── Public API ───────────────────────────────────────────
 
 /** One Card instance per card type — used for display and collection lookups. */
@@ -518,6 +614,7 @@ export function getCardCatalog(): Card[] {
     unit: def.unit,
     upgradeEffect: def.upgradeEffect,
     description: def.description,
+    lore: CARD_LORE[def.name],
   }))
 }
 
@@ -535,6 +632,7 @@ export function makeDeck(): Card[] {
         unit: def.unit,
         upgradeEffect: def.upgradeEffect,
         description: def.description,
+        lore: CARD_LORE[def.name],
       })
     }
   }

@@ -54,6 +54,7 @@ export interface Card {
   unit?: UnitTemplate
   upgradeEffect?: UpgradeEffect
   description: string
+  lore?: string              // flavour text shown in the card detail view
   isHero?: boolean           // hero cards deploy a unit AND trigger a heroEffect buff
   heroEffect?: UpgradeEffect // the permanent buff applied to all friendly units when played
 }
