@@ -51,6 +51,15 @@ npm run preview  # Preview production build locally
 ## Permissions
 - Claude has full permission to push and merge code changes
 
+## Todo Tracking Workflow
+
+**When completing any todo item:**
+1. Mark it `[x]` in the "Pending Implementation Todos" section below
+2. Immediately commit CLAUDE.md with message: `docs: check off [item name] in todo list`
+3. Push to the current branch
+
+This keeps the todo list accurate across sessions.
+
 ## Sprites / Graphics
 
 Every unit and building needs a sprite. **Whenever new units or buildings are added, their sprites must be created before the task is complete.**
@@ -230,20 +239,20 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 
 ### Pending Implementation Todos
 
-**Phase 1 — Core Loop (Next up)**
-- [ ] Design node map data structure (`web/src/game/questline.ts`)
-- [ ] Build NodeMap UI component (scrollable left-right with path branches)
-- [ ] Implement run state: active relics, current act, current node
-- [ ] Save/load run state to localStorage (`jarv_run`)
+**Phase 1 — Core Loop**
+- [x] Design node map data structure (`web/src/game/questline.ts`)
+- [x] Build NodeMap UI component (scrollable left-right with path branches)
+- [x] Implement run state: active relics, current act, current node
+- [x] Save/load run state to localStorage (`jarv_run`)
 - [ ] Deck reset mechanic with starter pack selection
 
 **Phase 2 — Campaign**
-- [ ] Write Act 1 node map data (5 battle nodes, 1 elite, 1 boss)
+- [x] Write Act 1 node map data (5 battle nodes, 1 elite, 1 boss)
 - [ ] Boss AI: Thornlord (structure-heavy — builds walls every turn)
-- [ ] Implement `rest` node type (heal 5 HP)
+- [x] Implement `rest` node type (heal 5 HP)
 - [ ] Implement `event` node type (text choice cards with consequences)
 - [ ] Implement `merchant` node (spend crystals, 3 cards offered)
-- [ ] Post-battle card reward: pick 1 of 3
+- [x] Post-battle card reward: pick 1 of 3
 
 **Phase 3 — Relics**
 - [ ] Relic data in `web/src/game/relics.ts`
