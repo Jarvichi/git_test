@@ -2213,6 +2213,109 @@ body {
   margin-top: auto;
 }
 
+/* ── Starter Pack Select ─────────────────────────────────── */
+
+.starter-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 16px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.starter-select-header {
+  text-align: center;
+}
+
+.starter-select-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #33ff33;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+}
+
+.starter-select-sub {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.starter-packs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.starter-pack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #222;
+  padding: 16px;
+  min-width: 160px;
+  flex: 1;
+  max-width: 200px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.starter-pack:hover {
+  border-color: #33ff33;
+  background: rgba(51, 255, 51, 0.04);
+}
+
+.starter-pack-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #33ff33;
+  letter-spacing: 2px;
+}
+
+.starter-pack-desc {
+  font-size: 10px;
+  color: #555;
+  line-height: 1.5;
+  min-height: 30px;
+}
+
+.starter-pack-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.spl-item {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.spl-count {
+  color: #555;
+  min-width: 18px;
+}
+
+.spl-item--common    .spl-name { color: #aaa; }
+.spl-item--uncommon  .spl-name { color: #4fc3f7; }
+.spl-item--rare      .spl-name { color: #ce93d8; }
+.spl-item--legendary .spl-name { color: #ffc832; }
+
+.starter-pack-btn {
+  margin-top: auto;
+  font-size: 10px;
+  padding: 6px 12px;
+  width: 100%;
+}
+
 /* ── Campaign abandon button ─────────────────────────────── */
 
 .gameover-abandon-btn {
