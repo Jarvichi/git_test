@@ -42,6 +42,7 @@ export interface Unit extends UnitTemplate {
   attackTimer: number        // ms until this unit can attack again
   spawnTimer?: number        // ms until next spawn (spawner buildings only)
   upgradeLevel?: number      // 1 = base, 2+ = upgraded (structures only)
+  spawnGrowTimer?: number    // ms remaining in grow-in animation (building spawns only)
 }
 
 export interface Card {
@@ -53,6 +54,18 @@ export interface Card {
   unit?: UnitTemplate
   upgradeEffect?: UpgradeEffect
   description: string
+  isHero?: boolean           // hero cards deploy a unit AND trigger a heroEffect buff
+  heroEffect?: UpgradeEffect // the permanent buff applied to all friendly units when played
+}
+
+// ─── Battle Events ────────────────────────────────────────
+
+export type BattleEventType = 'bloodMoon' | 'fogOfWar' | 'supplyDrop' | 'earthquake'
+
+export interface BattleEventState {
+  type: BattleEventType
+  label: string
+  remainingMs: number        // duration; instant events use ~3000 just for banner display
 }
 
 // ─── Game ────────────────────────────────────────────────
@@ -68,6 +81,8 @@ export type GamePhase =
 
 export const LANE_WIDTH = 500
 
+export type OpponentStrategy = 'swarm' | 'turtle' | 'rush'
+
 export interface GameState {
   playerBase: Base
   opponentBase: Base
@@ -79,13 +94,15 @@ export interface GameState {
   mana: number
   maxMana: number
   manaAccum: number          // fractional mana toward next point (0–1)
-  cardCooldown: number       // ms until player can play another card
   log: string[]
   phase: GamePhase
   opponentTimer: number      // ms until opponent next acts
+  opponentStrategy: OpponentStrategy
   gameTime: number           // total elapsed game time in ms
   playerScore: number        // cumulative damage dealt to opponent
   opponentScore: number      // cumulative damage dealt to player
   suddenDeath: boolean       // true once all cards exhausted
   suddenDeathTimer: number   // ms remaining in sudden death (60 000 at start)
+  battleEventTimer: number   // ms until next battle event fires
+  activeBattleEvent: BattleEventState | null
 }

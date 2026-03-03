@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react'
 import { GameState, Unit, LANE_WIDTH } from '../game/types'
-import { CARD_COOLDOWN_MS } from '../game/engine'
 import { CardTile } from './CardTile'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 
@@ -8,6 +7,8 @@ interface Props {
   state: GameState
   onPlayCard: (cardId: string) => void
 }
+
+const SPAWN_GROW_MS = 1500
 
 function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number }) {
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
@@ -19,6 +20,11 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
   // Unit just attacked if timer is in the upper half of its cooldown
   const isAttacking = unit.attack > 0 && unit.attackCooldownMs > 0 &&
     unit.attackTimer > unit.attackCooldownMs * 0.6
+
+  // Spawn grow-in animation: scale from 0 → 1 as spawnGrowTimer counts down
+  const growScale = unit.spawnGrowTimer != null && unit.spawnGrowTimer > 0
+    ? Math.max(0.05, 1 - unit.spawnGrowTimer / SPAWN_GROW_MS)
+    : 1
 
   let style: React.CSSProperties
   if (unit.isWall) {
@@ -36,7 +42,7 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
     style = {
       top: `${topPct}%`,
       left: `${hPct}%`,
-      transform: 'translateX(-50%) translateY(-50%)',
+      transform: `translateX(-50%) translateY(-50%) scale(${growScale})`,
     }
   }
 
@@ -98,15 +104,20 @@ function HpBar({ current, max, color }: { current: number; max: number; color: s
   )
 }
 
+const STRATEGY_LABELS: Record<string, string> = {
+  swarm:  'SWARM',
+  turtle: 'TURTLE',
+  rush:   'RUSH',
+}
+
 export function Battlefield({ state, onPlayCard }: Props) {
   const logRef = useRef<HTMLDivElement>(null)
-  const cooldownActive = state.cardCooldown > 0
-  const cooldownSec = (state.cardCooldown / 1000).toFixed(1)
   const gameTimeSec = Math.floor(state.gameTime / 1000)
   const minutes = Math.floor(gameTimeSec / 60)
   const seconds = gameTimeSec % 60
   const timeStr = `${minutes}:${String(seconds).padStart(2, '0')}`
   const sdSec = Math.ceil(state.suddenDeathTimer / 1000)
+  const event = state.activeBattleEvent
 
   useEffect(() => {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
@@ -125,16 +136,26 @@ export function Battlefield({ state, onPlayCard }: Props) {
         </span>
         {state.suddenDeath
           ? <span className="sudden-death-label">⚡ {sdSec}s</span>
-          : cooldownActive
-            ? <span className="cooldown-label">{cooldownSec}s</span>
-            : null}
+          : null}
       </div>
+
+      {/* Battle event banner */}
+      {event && event.remainingMs > 3000 && (
+        <div className={`battle-event-banner battle-event-banner--${event.type}`}>
+          {event.label}
+        </div>
+      )}
 
       {/* Opponent base */}
       <div className="base-bar base-bar--opponent">
         <span className="base-bar-label">ENEMY</span>
         <HpBar current={state.opponentBase.hp} max={state.opponentBase.maxHp} color="#ff4444" />
-        <span className="base-bar-info">Hand: {state.opponentHand.length}</span>
+        <span className="base-bar-info">
+          {STRATEGY_LABELS[state.opponentStrategy] && (
+            <span className="strategy-label">{STRATEGY_LABELS[state.opponentStrategy]}</span>
+          )}
+          Hand: {state.opponentHand.length}
+        </span>
       </div>
 
       {/* The Lane — vertical, fills remaining space */}
@@ -158,16 +179,6 @@ export function Battlefield({ state, onPlayCard }: Props) {
         </span>
       </div>
 
-      {/* Cooldown progress bar */}
-      {cooldownActive && (
-        <div className="cooldown-bar-track">
-          <div
-            className="cooldown-bar-fill"
-            style={{ width: `${(state.cardCooldown / CARD_COOLDOWN_MS) * 100}%` }}
-          />
-        </div>
-      )}
-
       {/* Combat log */}
       <div className="combat-log" ref={logRef}>
         {state.log.slice(-6).map((entry, i) => (
@@ -190,7 +201,6 @@ export function Battlefield({ state, onPlayCard }: Props) {
                 key={card.id}
                 card={card}
                 canAfford={state.mana >= card.cost}
-                disabled={cooldownActive}
                 onClick={() => onPlayCard(card.id)}
               />
             ))}
