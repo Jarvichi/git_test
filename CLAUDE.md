@@ -244,7 +244,7 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 - [x] Build NodeMap UI component (scrollable left-right with path branches)
 - [x] Implement run state: active relics, current act, current node
 - [x] Save/load run state to localStorage (`jarv_run`)
-- [ ] Deck reset mechanic with starter pack selection
+- [x] Deck reset mechanic with starter pack selection
 
 **Phase 2 — Campaign**
 - [x] Write Act 1 node map data (5 battle nodes, 1 elite, 1 boss)
