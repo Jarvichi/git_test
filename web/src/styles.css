@@ -225,7 +225,23 @@ body {
   min-height: 160px;
   border: 2px solid #333;
   border-radius: 3px;
-  background: #0d0d0d;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.014) 0px,
+      rgba(255, 255, 255, 0.014) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    linear-gradient(
+      180deg,
+      #080812 0%,
+      #0a0a10 20%,
+      #0d0d0d 45%,
+      #0d0d0d 55%,
+      #0a100a 80%,
+      #08120a 100%
+    );
   overflow: hidden;
 }
 
@@ -414,9 +430,9 @@ body {
 }
 
 .hand-cards {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
   padding-bottom: 6px;
 }
 
@@ -524,8 +540,13 @@ body {
 
 .hand-card-wrap {
   position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hand-card-wrap .card-tile {
+  width: auto;
+  flex: 1;
 }
 
 .hand-card-info-btn {
@@ -704,19 +725,18 @@ body {
 }
 
 .title-logo {
-  font-size: 13px;
+  font-size: 40px;
   color: #ffcc00;
-  text-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
-  white-space: pre;
-  line-height: 1.4;
-  letter-spacing: 1px;
+  text-shadow: 0 0 18px rgba(255, 204, 0, 0.6);
+  letter-spacing: 12px;
+  font-weight: bold;
 }
 
 .title-subtitle {
   font-size: 11px;
   color: #aaa;
   letter-spacing: 4px;
-  margin-top: -12px;
+  margin-top: -6px;
 }
 
 .title-buttons {
@@ -1408,8 +1428,8 @@ body {
   gap: 2px 10px;
 }
 .cdm-stat-row   { display: flex; gap: 4px; align-items: baseline; }
-.cdm-stat-label { font-size: 9px; color: #555; letter-spacing: 1px; }
-.cdm-stat-value { font-size: 11px; color: #ccc; font-weight: bold; }
+.cdm-stat-label { font-size: 9px; color: #888; letter-spacing: 1px; }
+.cdm-stat-value { font-size: 11px; color: #eee; font-weight: bold; }
 
 .cdm-traits {
   display: flex;
@@ -1418,8 +1438,8 @@ body {
 }
 .cdm-trait {
   font-size: 9px;
-  border: 1px solid #333;
-  color: #666;
+  border: 1px solid #444;
+  color: #999;
   padding: 1px 5px;
   border-radius: 2px;
   text-transform: uppercase;
@@ -1437,8 +1457,8 @@ body {
   font-size: 11px;
   margin-bottom: 2px;
 }
-.cdm-mastery-xp     { font-size: 9px; color: #555; }
-.cdm-mastery-bonus  { font-size: 9px; color: #888; margin-top: 3px; }
+.cdm-mastery-xp     { font-size: 9px; color: #777; }
+.cdm-mastery-bonus  { font-size: 9px; color: #aaa; margin-top: 3px; }
 
 .cdm-battle-stats {
   border-top: 1px solid #1a1a1a;
@@ -1450,11 +1470,11 @@ body {
 
 .cdm-lore {
   font-size: 10px;
-  color: #555;
+  color: #888;
   font-style: italic;
   line-height: 1.5;
   padding: 10px 12px;
-  border-top: 1px solid #1a1a1a;
+  border-top: 1px solid #2a2a2a;
 }
 
 /* ═══════════════════════════════════════════════════════════

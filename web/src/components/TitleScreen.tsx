@@ -10,13 +10,6 @@ interface Props {
   onDeckBuilder: () => void
 }
 
-const LOGO = `
-   ____  ____  ____  __  __
-  |    ||    ||  _ \|  \/  |
-  |  | ||  | || |_) | |\/| |
-  |  | ||  | ||  _ <| |  | |
-  |____||____||_| \_\_|  |_|`.trim()
-
 export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder }: Props) {
   const deck     = loadDeck()
   const count    = deckTotalCards(deck)
@@ -25,7 +18,7 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
 
   return (
     <div className="title-screen">
-      <pre className="title-logo">{LOGO}</pre>
+      <div className="title-logo">JARV'S</div>
       <div className="title-subtitle">AMAZING WEB GAME</div>
 
       <div className="title-buttons">
