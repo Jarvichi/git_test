@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
-import { Card } from '../game/types'
+import React from 'react'
 import { CardTile } from './CardTile'
-import { CardDetailModal } from './CardDetailModal'
 import { getCardCatalog } from '../game/cards'
 import { NodeType } from '../game/questline'
 
@@ -13,16 +11,15 @@ interface Props {
 }
 
 const NODE_FLAVOUR: Record<NodeType, string> = {
-  battle:   'Tap a card to inspect · pick from its detail view.',
-  elite:    'A formidable foe falls. Tap to inspect your reward.',
-  boss:     'The shard guardian is defeated. Tap to inspect your prize.',
+  battle:   'The enemy is routed. Pick a card from the spoils.',
+  elite:    'A formidable foe falls. Choose your reward.',
+  boss:     'The shard guardian is defeated. A legendary prize awaits.',
   rest:     '',
 }
 
 export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
   const catalog = getCardCatalog()
   const cards = choices.map(name => catalog.find(c => c.name === name)).filter(Boolean) as ReturnType<typeof getCardCatalog>[number][]
-  const [detailCard, setDetailCard] = useState<Card | null>(null)
 
   return (
     <div className="reward-screen">
@@ -37,8 +34,9 @@ export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
             <CardTile
               card={card}
               canAfford={true}
-              onClick={() => setDetailCard(card)}
+              onClick={() => onPick(card.name)}
             />
+            <div className="reward-card-label">{card.name}</div>
           </div>
         ))}
       </div>
@@ -46,15 +44,6 @@ export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
       <button className="action-btn reward-skip-btn" onClick={onSkip}>
         SKIP REWARD
       </button>
-
-      {detailCard && (
-        <CardDetailModal
-          card={detailCard}
-          collection={[]}
-          onClose={() => setDetailCard(null)}
-          onPick={() => { onPick(detailCard.name); setDetailCard(null) }}
-        />
-      )}
     </div>
   )
 }

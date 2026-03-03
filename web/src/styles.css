@@ -1457,18 +1457,6 @@ body {
   border-top: 1px solid #1a1a1a;
 }
 
-.cdm-pick-btn {
-  display: block;
-  width: calc(100% - 24px);
-  margin: 10px 12px;
-  padding: 10px;
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: #33ff33;
-  border-color: rgba(51, 255, 51, 0.5);
-  text-align: center;
-}
-
 /* ═══════════════════════════════════════════════════════════
    RARE EVENTS
    ═══════════════════════════════════════════════════════════ */
