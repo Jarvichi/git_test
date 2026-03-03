@@ -164,7 +164,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
 
           return (
             <div key={card.name} className={`collection-cell${owned === 0 ? ' collection-cell--unowned' : ''}`}>
-              <CardTile card={card} canAfford={false} disabled={false} onClick={() => setDetailCard(card)} />
+              <CardTile card={card} canAfford={true} onClick={() => setDetailCard(card)} />
 
               {/* Count + per-card actions on one compact row */}
               <div className="cell-footer">
