@@ -87,3 +87,177 @@ git push -u origin <branch>
 - Authenticated as: Jarvichi
 - Default base branch: `main`
 - Deployment triggers automatically on merge to `main`
+
+---
+
+## Design Roadmap & Todo List
+
+### Lore: The Shattered Dominion
+
+The player is **Jarv**, a wandering tactician who once served the Grand Dominion — a vast empire shattered by the **Fracture Event**, a magical catastrophe that split the realm into isolated shards. Each shard developed its own culture, creatures, and power structures. Jarv travels shard to shard, building a deck from each region's cards, completing the questline, and eventually trying to reach the **Fractured Core** to undo the cataclysm.
+
+**Core tension:** Every time you complete a quest and receive the shard's reward, your deck **resets** (you return to a starter kit). But your **permanent collection grows**, mastery carries over, and you unlock harder difficulty shards and story progression.
+
+---
+
+### Roguelike Questline — 5-Act Structure
+
+**Act 1 — The Verdant Shard** *(tutorial shard, forested realm)*
+- Node map: 5–7 battles, 1 elite, 1 boss
+- Boss: The Thornlord (structure-heavy deck)
+- Reward: `Relic: Bark Shield` (+5 base HP), unlock Act 2
+- Deck reset. Starter pack includes 2x Goblin, 2x Stone Wall, 1x Farm
+
+**Act 2 — The Iron Citadel** *(military shard, fortified ruins)*
+- Node map: 6–8 battles, 2 elites, 1 boss
+- Elite: The Siege Captain (buff-stacks Catapults)
+- Boss: Warlord Kragg (swarm + strong melee)
+- Reward: `Relic: Iron Standard` (units start with +1 ATK), unlock Act 3
+- Deck reset. Starter pack improved
+
+**Act 3 — The Ashen Wastes** *(post-apocalyptic shard, dark magic)*
+- Node map: 7–9 battles, 2 elites, 1 boss
+- Elite: The Revenant Witch (resurrects fallen units once)
+- Boss: The Ashwalker (sacrifices own units for massive damage bursts)
+- Reward: `Relic: Soulstone` (one unit auto-revives per battle), unlock Act 4
+- Deck reset. Starter pack includes rare card
+
+**Act 4 — The Crystal Spire** *(arcane shard, magic-tech hybrids)*
+- Node map: 8–10 battles, 3 elites, 1 boss + 1 secret boss
+- Introduces upgrade-heavy meta
+- Boss: The Archivist (infinite mana at turn 8+)
+- Secret Boss: The Mirror (copies your deck exactly)
+- Reward: `Relic: Prism Lens` (+1 mana per turn), unlock Act 5
+- Deck reset. Can choose 1 legendary from collection for starter
+
+**Act 5 — The Fractured Core** *(final shard, reality breaking)*
+- Node map: 10 battles, gauntlet format (no heal between)
+- All previous bosses appear as elites
+- Final Boss: The Fracture (adaptive AI, switches strategy mid-fight)
+- Reward: `Title: Worldmender`, cosmetic throne room scene
+- Achievement: complete without any shard relic equipped
+
+---
+
+### Roguelike Loop Design
+
+**Node Map:**
+- Linear with branches — 3 paths each with different risk/reward
+- Node types: `battle`, `elite`, `boss`, `rest` (heal 5 HP), `event` (text adventure choice), `merchant` (spend crystals on cards), `mystery`
+
+**Between Runs:**
+- Collection persists across all resets
+- Mastery persists
+- Crystals persist
+- Unlocked shards persist
+- Relics are earned once and available to equip at run start (pick 1)
+
+**Run Rewards:**
+- Battles: draw 1 card from pool of 3 (keep 1, own forever)
+- Elites: draw 1 rare card from pool of 3
+- Boss: draw 1 legendary + shard relic + act completion
+
+**Difficulty:**
+- Normal, Hard (+20% enemy HP), Nightmare (enemies have relics too)
+
+---
+
+### Relic System
+
+Relics are passive bonuses that persist for a full run (reset on next quest start):
+
+| Relic | Effect | Source |
+|---|---|---|
+| Bark Shield | +5 base HP | Act 1 reward |
+| Iron Standard | Units start with +1 ATK | Act 2 reward |
+| Soulstone | One unit auto-revives per battle | Act 3 reward |
+| Prism Lens | +1 mana per turn | Act 4 reward |
+| Crow's Eye | See opponent's hand (first 2 cards) | Elite drop |
+| Blood Crystal | Each kill generates 1 crystal | Elite drop |
+| Thornmail | Attackers take 1 damage when hitting your base | Mystery event |
+| Wanderer's Map | Start with 1 extra card in hand | Merchant |
+
+---
+
+### 1000+ Card Collection Roadmap
+
+Current cards: ~95. Target: 1000+ across 10 shards/expansions.
+
+**Expansion 1 — Verdant Shard** *(forest/nature)* — 80 cards
+- Units: Dryad Sentinel, Vine Golem, Spore Bat, Mushroom Hulk, Thornbeast, Pixie Scout, Elder Treant, Swamp Lurker, Frog Knight, Moss Golem
+- Structures: Thornwall, Spore Tower, Root Network, Ancient Grove, Mushroom Circle
+- Upgrades: Overgrowth, Nature's Bounty, Spore Cloud, Root Bind, Wild Surge
+
+**Expansion 2 — Iron Citadel** *(military/siege)* — 100 cards
+- Units: Siege Engineer, Ironclad Guard, Battering Ram Crew, War Drummer, Ballista Crew, Shield Wall Soldier, Demolitions Expert, Sappers, Cavalry Scout, Grizzled Veteran
+- Structures: Siege Tower, Fortified Wall, Barracks II, Armory, Command Tent, Moat
+- Upgrades: Battle Hardened, Iron Discipline, Siege Protocol, War Cry, Tactical Retreat
+
+**Expansion 3 — Ashen Wastes** *(undead/dark magic)* — 100 cards
+- Units: Bone Archer, Plague Rat, Wight Knight, Revenant, Shadow Stalker, Ash Elemental, Soulrend Witch, Bone Colossus, Wraith, Lich Apprentice
+- Structures: Soul Obelisk, Bone Wall, Death Altar, Necrotic Pool, Graveblight Tower
+- Upgrades: Undying Rage, Soul Harvest, Plague Spread, Dark Ritual, Entropy Wave
+
+**Expansion 4 — Crystal Spire** *(arcane/tech)* — 100 cards
+- Units: Arcane Golem, Mana Wisp, Crystal Hydra, Rune Knight, Spellblade, Techno Imp, Mana Siphon, Arcane Turret, Void Elemental, Chronomancer
+- Structures: Mana Tower, Crystal Wall, Arcane Forge, Leyline Node, Null Field
+- Upgrades: Mana Surge, Crystal Resonance, Void Tap, Arcane Efficiency, Temporal Loop
+
+**Expansion 5 — The Sunken Reef** *(aquatic/tidal)* — 100 cards
+- Units: Crab Knight, Tide Caller, Jellyfish Swarm, Reef Shark Rider, Leviathan Pup, Coral Golem, Sea Witch, Barnacleback, Abyssal Horror, Merfolk Skirmisher
+- Structures: Tidal Wall, Reef Tower, Whirlpool Generator, Pressure Dome, Abyssal Gate
+
+**Expansion 6 — Sky Dominion** *(aerial/celestial)* — 100 cards
+- Focus: flying units with special aerial combat rules
+- Units: Storm Griffin, Cloud Elemental, Lightning Drake, Sky Sentinel, Thunderhawk, Zephyr Sprite, Storm Caller, Celestial Guard, Comet Rider, Windshaper
+
+**Expansion 7 — The Goblin Undercity** *(goblin-centric)* — 80 cards
+- Full goblin faction: specialists, inventors, tunnel fighters
+- Mechanics: cheap swarm units, sacrifice mechanics, trap structures
+
+**Expansion 8 — Heroes & Legends** *(cross-shard legendary figures)* — 60 cards
+- 60 legendary units only, each with unique ability
+- Includes: Jarv (playable hero), The Fracture (antagonist), shard bosses
+
+**Expansion 9 — The Void Between** *(meta/surreal expansion)* — 80 cards
+- Reality-bending cards that interact with game mechanics
+- Includes cards that modify costs, shuffle decks, change base HP targets
+
+**Expansion 10 — Community Shard** *(player-inspired designs)* — 100 cards
+- Named after community contributors, meme cards, joke legendaries
+
+---
+
+### Pending Implementation Todos
+
+**Phase 1 — Core Loop (Next up)**
+- [ ] Design node map data structure (`web/src/game/questline.ts`)
+- [ ] Build NodeMap UI component (scrollable left-right with path branches)
+- [ ] Implement run state: active relics, current act, current node
+- [ ] Save/load run state to localStorage (`jarv_run`)
+- [ ] Deck reset mechanic with starter pack selection
+
+**Phase 2 — Campaign**
+- [ ] Write Act 1 node map data (5 battle nodes, 1 elite, 1 boss)
+- [ ] Boss AI: Thornlord (structure-heavy — builds walls every turn)
+- [ ] Implement `rest` node type (heal 5 HP)
+- [ ] Implement `event` node type (text choice cards with consequences)
+- [ ] Implement `merchant` node (spend crystals, 3 cards offered)
+- [ ] Post-battle card reward: pick 1 of 3
+
+**Phase 3 — Relics**
+- [ ] Relic data in `web/src/game/relics.ts`
+- [ ] Relic effects applied in engine.ts
+- [ ] Relic display on Battlefield HUD
+- [ ] Relic selection screen between acts
+
+**Phase 4 — Expansions**
+- [ ] Add Verdant Shard cards (80 cards) with sprites
+- [ ] Add Iron Citadel cards (100 cards) with sprites
+- [ ] (Remaining expansions follow after)
+
+**Phase 5 — Polish**
+- [ ] Backstory intro screen (text crawl or panel art)
+- [ ] Act transition cutscenes (text only, terminal style)
+- [ ] Boss dialogue lines (1-3 lines per boss encounter)
+- [ ] Victory screen for completing full questline
