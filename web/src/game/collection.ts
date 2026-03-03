@@ -59,6 +59,46 @@ export const STARTER_DECK: DeckEntry[] = [
   { cardName: 'Sharpen Blades', count: 1 },
 ]
 
+// ─── Card stats ───────────────────────────────────────────
+
+const STATS_KEY = 'jarv_card_stats'
+
+export interface CardStats {
+  played: number   // times the card was played from hand by the player
+  died:   number   // times a player unit of this type was destroyed in battle
+}
+
+export function loadCardStats(): Record<string, CardStats> {
+  try {
+    const raw = localStorage.getItem(STATS_KEY)
+    if (raw) return JSON.parse(raw) as Record<string, CardStats>
+  } catch { /* ignore */ }
+  return {}
+}
+
+function saveCardStats(stats: Record<string, CardStats>): void {
+  localStorage.setItem(STATS_KEY, JSON.stringify(stats))
+}
+
+export function recordCardPlayed(cardName: string): void {
+  const stats = loadCardStats()
+  const entry = stats[cardName] ?? { played: 0, died: 0 }
+  stats[cardName] = { ...entry, played: entry.played + 1 }
+  saveCardStats(stats)
+}
+
+/** `unitName` is the unit template name (e.g. "Goblin", "Wall", "Farm"). */
+export function recordUnitDied(unitName: string): void {
+  const stats = loadCardStats()
+  const entry = stats[unitName] ?? { played: 0, died: 0 }
+  stats[unitName] = { ...entry, died: entry.died + 1 }
+  saveCardStats(stats)
+}
+
+export function getCardStats(name: string): CardStats {
+  return loadCardStats()[name] ?? { played: 0, died: 0 }
+}
+
 // ─── Crystal storage ──────────────────────────────────────
 
 export function loadCrystals(): number {

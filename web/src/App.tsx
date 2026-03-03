@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { GameState } from './game/types'
 import { newGame, playCard, tick, MAX_HANDICAP } from './game/engine'
 import {
   loadDeck, buildDeckCards, generatePack,
   loadCollection, saveCollection, loadCrystals, saveCrystals,
+  recordCardPlayed, recordUnitDied,
   CRYSTAL_PACK_COST,
 } from './game/collection'
 import { Battlefield } from './components/Battlefield'
@@ -33,6 +34,8 @@ export default function App() {
   const [pack, setPack]           = useState<string[]>([])
   const [handicap, setHandicap]   = useState<number>(loadHandicap)
   const [crystals, setCrystals]   = useState<number>(loadCrystals)
+  // Map of unit id → unit name for the player's units, used to detect deaths
+  const prevPlayerUnitsRef = useRef<Map<string, string>>(new Map())
 
   // ── Game loop ────────────────────────────────────────────
   useEffect(() => {
@@ -53,8 +56,26 @@ export default function App() {
   }, [handicap])
 
   const handlePlayCard = useCallback((cardId: string) => {
-    setGameState(s => s ? playCard(s, cardId) : s)
+    setGameState(s => {
+      if (!s) return s
+      const card = s.playerHand.find(c => c.id === cardId)
+      if (card) recordCardPlayed(card.name)
+      return playCard(s, cardId)
+    })
   }, [])
+
+  // Detect player unit deaths each game tick
+  useEffect(() => {
+    if (!gameState || screen !== 'playing') return
+    const currentMap = new Map<string, string>()
+    for (const u of gameState.field) {
+      if (u.owner === 'player') currentMap.set(u.id, u.name)
+    }
+    for (const [id, name] of prevPlayerUnitsRef.current) {
+      if (!currentMap.has(id)) recordUnitDied(name)
+    }
+    prevPlayerUnitsRef.current = currentMap
+  }, [gameState?.field])
 
   const handlePlayAgain = useCallback(() => {
     if (!gameState || gameState.phase.type !== 'gameOver') return

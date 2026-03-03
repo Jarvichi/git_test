@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { CardRarity, CardType } from '../game/types'
+import { Card, CardRarity, CardType } from '../game/types'
 import { getCardCatalog } from '../game/cards'
 import {
   loadCollection,
@@ -17,6 +17,7 @@ import {
   COPIES_MAX,
 } from '../game/collection'
 import { CardTile } from './CardTile'
+import { CardDetailModal } from './CardDetailModal'
 
 interface Props {
   crystals: number
@@ -31,7 +32,6 @@ type TypeFilter   = 'all' | CardType
 function MasteryBar({ xp }: { xp: number }) {
   const { level, current, needed } = masteryProgress(xp)
   const pct = needed > 0 ? Math.round((current / needed) * 100) : 100
-  if (level === 0 && xp === 0) return null
   return (
     <div className="mastery-bar-wrap">
       <span className="mastery-level">★{level}</span>
@@ -48,15 +48,17 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
   const [collection, setCollection] = useState<CollectionEntry[]>(loadCollection)
   const [typeFilter,   setTypeFilter]   = useState<TypeFilter>('all')
   const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all')
-  const [flash, setFlash] = useState<string | null>(null)
+  const [flash, setFlash]       = useState<string | null>(null)
+  const [detailCard, setDetailCard] = useState<Card | null>(null)
 
   const filtered = catalog.filter(c =>
     (typeFilter   === 'all' || c.cardType === typeFilter) &&
     (rarityFilter === 'all' || c.rarity   === rarityFilter)
   )
 
-  const totalOwned = collection.reduce((s, e) => s + e.count, 0)
+  const totalOwned  = collection.reduce((s, e) => s + e.count, 0)
   const totalExtras = collection.reduce((s, e) => s + Math.max(0, e.count - COPIES_MAX), 0)
+  const canBuyPack  = crystals >= CRYSTAL_PACK_COST
 
   function notify(msg: string) {
     setFlash(msg)
@@ -70,7 +72,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
     const next = crystals + gained
     saveCrystals(next)
     onCrystalsChanged(next)
-    notify(`+${gained} 💎 from ${totalExtras} extra cards!`)
+    notify(`+${gained} 💎`)
   }
 
   function handleDisenchantCard(cardName: string) {
@@ -84,9 +86,9 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
   }
 
   function handleMasterCard(cardName: string) {
-    const before = getMasteryXp(collection, cardName)
-    const entry = collection.find(e => e.cardName === cardName)
-    const extras = entry ? Math.max(0, entry.count - COPIES_MAX) : 0
+    const before  = getMasteryXp(collection, cardName)
+    const entry   = collection.find(e => e.cardName === cardName)
+    const extras  = entry ? Math.max(0, entry.count - COPIES_MAX) : 0
     if (extras === 0) return
     const updated = masterAllExtras(collection, cardName)
     saveCollection(updated)
@@ -94,17 +96,14 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
     const after = getMasteryXp(updated, cardName)
     const { level: lvlBefore } = masteryProgress(before)
     const { level: lvlAfter  } = masteryProgress(after)
-    if (lvlAfter > lvlBefore) {
-      notify(`${cardName} reached Mastery ${lvlAfter}!`)
-    } else {
-      notify(`+${extras} mastery XP for ${cardName}`)
-    }
+    notify(lvlAfter > lvlBefore
+      ? `${cardName} reached Mastery ${lvlAfter}!`
+      : `+${extras} mastery XP for ${cardName}`)
   }
-
-  const canBuyPack = crystals >= CRYSTAL_PACK_COST
 
   return (
     <div className="overlay-screen">
+      {/* Header */}
       <div className="overlay-header">
         <button className="action-btn" onClick={onBack}>← BACK</button>
         <span className="overlay-title">COLLECTION</span>
@@ -117,33 +116,31 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
           className="action-btn collection-disenchant-btn"
           onClick={handleDisenchantAll}
           disabled={totalExtras === 0}
-          title={totalExtras === 0 ? 'No extras to disenchant' : `Disenchant ${totalExtras} extra cards`}
         >
-          🔮 Disenchant Extras ({totalExtras})
+          🔮 Disenchant extras ({totalExtras})
         </button>
         <button
-          className={`action-btn collection-pack-btn${canBuyPack ? '' : ' collection-pack-btn--disabled'}`}
+          className="action-btn collection-pack-btn"
           onClick={canBuyPack ? onBuyCrystalPack : undefined}
           disabled={!canBuyPack}
-          title={canBuyPack ? 'Open a pack with crystals' : `Need ${CRYSTAL_PACK_COST - crystals} more 💎`}
         >
-          🎁 Buy Pack ({CRYSTAL_PACK_COST} 💎)
+          🎁 Pack ({CRYSTAL_PACK_COST} 💎)
         </button>
         {flash && <span className="collection-flash">{flash}</span>}
       </div>
 
+      {/* Filters — single scrollable row */}
       <div className="filter-bar">
-        <span className="filter-label">TYPE:</span>
         {(['all', 'unit', 'structure', 'upgrade'] as const).map(t => (
           <button
             key={t}
             className={`filter-btn${typeFilter === t ? ' filter-btn--active' : ''}`}
             onClick={() => setTypeFilter(t)}
           >
-            {t.toUpperCase()}
+            {t === 'all' ? 'ALL' : t === 'structure' ? 'STR' : t.slice(0, 3).toUpperCase()}
           </button>
         ))}
-        <span className="filter-label filter-label--spaced">RARITY:</span>
+        <span className="filter-sep">|</span>
         {(['all', 'common', 'uncommon', 'rare', 'legendary'] as const).map(r => (
           <button
             key={r}
@@ -153,43 +150,61 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
             {r === 'all' ? 'ALL' : r.slice(0, 3).toUpperCase()}
           </button>
         ))}
+        <span className="filter-owned">{totalOwned} cards</span>
       </div>
 
+      {/* Grid */}
       <div className="collection-grid">
         {filtered.map(card => {
           const owned  = getOwnedCount(collection, card.name)
           const extras = Math.max(0, owned - COPIES_MAX)
           const xp     = getMasteryXp(collection, card.name)
           const { level: lvl } = masteryProgress(xp)
-          const disenchantVal = DISENCHANT_VALUE[card.rarity] * extras
+          const disenchantVal  = DISENCHANT_VALUE[card.rarity] * extras
 
           return (
             <div key={card.name} className={`collection-cell${owned === 0 ? ' collection-cell--unowned' : ''}`}>
-              <CardTile card={card} canAfford={false} disabled={false} />
-              <div className="collection-badge">×{owned}</div>
+              <CardTile card={card} canAfford={false} disabled={false} onClick={() => setDetailCard(card)} />
+
+              {/* Count + per-card actions on one compact row */}
+              <div className="cell-footer">
+                <span className="cell-count">
+                  ×{owned}{lvl > 0 && <span className="cell-mastery-badge">★{lvl}</span>}
+                </span>
+                {extras > 0 && (
+                  <>
+                    <button
+                      className="extra-btn extra-btn--disenchant"
+                      onClick={() => handleDisenchantCard(card.name)}
+                      title={`+${disenchantVal} 💎`}
+                    >
+                      🔮+{disenchantVal}
+                    </button>
+                    <button
+                      className="extra-btn extra-btn--master"
+                      onClick={() => handleMasterCard(card.name)}
+                      title={`+${extras} mastery XP`}
+                    >
+                      ★+{extras}
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Mastery progress bar (only when mastered) */}
               {xp > 0 && <MasteryBar xp={xp} />}
-              {extras > 0 && (
-                <div className="collection-extras">
-                  <button
-                    className="extra-btn extra-btn--disenchant"
-                    onClick={() => handleDisenchantCard(card.name)}
-                    title={`Disenchant ${extras} extra → +${disenchantVal} 💎`}
-                  >
-                    🔮 +{disenchantVal}
-                  </button>
-                  <button
-                    className="extra-btn extra-btn--master"
-                    onClick={() => handleMasterCard(card.name)}
-                    title={`Consume ${extras} extras for mastery XP (current: Lv${lvl})`}
-                  >
-                    ★ +{extras}xp
-                  </button>
-                </div>
-              )}
             </div>
           )
         })}
       </div>
+
+      {detailCard && (
+        <CardDetailModal
+          card={detailCard}
+          collection={collection}
+          onClose={() => setDetailCard(null)}
+        />
+      )}
     </div>
   )
 }

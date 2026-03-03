@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Card } from '../game/types'
 import { getCardCatalog } from '../game/cards'
 import {
   loadCollection,
@@ -7,6 +8,8 @@ import {
   deckTotalCards,
   isDeckValid,
   getOwnedCount,
+  getMasteryXp,
+  masteryLevel,
   DECK_MIN,
   DECK_MAX,
   COPIES_MAX,
@@ -14,6 +17,7 @@ import {
   DeckEntry,
 } from '../game/collection'
 import { CardTile } from './CardTile'
+import { CardDetailModal } from './CardDetailModal'
 
 interface Props {
   onBack: () => void
@@ -23,6 +27,7 @@ export function DeckBuilder({ onBack }: Props) {
   const catalog = getCardCatalog()
   const [collection] = useState<CollectionEntry[]>(loadCollection)
   const [deck, setDeck] = useState<DeckEntry[]>(loadDeck)
+  const [detailCard, setDetailCard] = useState<Card | null>(null)
 
   const total = deckTotalCards(deck)
   const valid = isDeckValid(deck)
@@ -94,6 +99,7 @@ export function DeckBuilder({ onBack }: Props) {
               const owned  = getOwnedCount(collection, card.name)
               const inDeck = inDeckCount(card.name)
               const canAdd = inDeck < Math.min(owned, COPIES_MAX) && total < DECK_MAX
+              const lvl    = masteryLevel(getMasteryXp(collection, card.name))
               return (
                 <div key={card.name} className="collection-cell">
                   <CardTile
@@ -101,8 +107,16 @@ export function DeckBuilder({ onBack }: Props) {
                     canAfford={canAdd}
                     onClick={canAdd ? () => addCard(card.name) : undefined}
                   />
-                  <div className="collection-badge">
-                    {inDeck}/{owned}
+                  <div className="cell-footer">
+                    <span className="cell-count">
+                      {inDeck}/{owned}
+                      {lvl > 0 && <span className="cell-mastery-badge">★{lvl}</span>}
+                    </span>
+                    <button
+                      className="extra-btn cdm-info-btn"
+                      onClick={e => { e.stopPropagation(); setDetailCard(card) }}
+                      title="Card details"
+                    >ⓘ</button>
                   </div>
                 </div>
               )
@@ -119,6 +133,7 @@ export function DeckBuilder({ onBack }: Props) {
             <ul className="deck-list">
               {deckList.map(entry => {
                 const card = catalog.find(c => c.name === entry.cardName)!
+                const lvl  = masteryLevel(getMasteryXp(collection, entry.cardName))
                 return (
                   <li
                     key={entry.cardName}
@@ -128,7 +143,13 @@ export function DeckBuilder({ onBack }: Props) {
                   >
                     <span className="deck-list-cost">{card.cost}</span>
                     <span className="deck-list-name">{card.name}</span>
+                    {lvl > 0 && <span className="deck-list-mastery">★{lvl}</span>}
                     <span className="deck-list-count">×{entry.count}</span>
+                    <button
+                      className="deck-list-info-btn"
+                      onClick={e => { e.stopPropagation(); setDetailCard(card) }}
+                      title="Card details"
+                    >ⓘ</button>
                   </li>
                 )
               })}
@@ -152,6 +173,15 @@ export function DeckBuilder({ onBack }: Props) {
           </div>
         </div>
       </div>
+
+      {detailCard && (
+        <CardDetailModal
+          card={detailCard}
+          collection={collection}
+          deckEntries={deck}
+          onClose={() => setDetailCard(null)}
+        />
+      )}
     </div>
   )
 }
