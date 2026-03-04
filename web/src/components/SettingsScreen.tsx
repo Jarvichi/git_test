@@ -24,8 +24,6 @@ export function applyTextSettings(): void {
   const color = loadTextColor()
   document.documentElement.style.setProperty('--game-font-size', `${size}px`)
   document.documentElement.style.setProperty('--game-text-color', color)
-  document.body.style.fontSize = `${size}px`
-  document.body.style.color = color
 }
 
 const TEXT_COLOR_PRESETS = [
@@ -51,13 +49,13 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
   function handleSizeChange(val: number) {
     setTextSize(val)
     try { localStorage.setItem(TEXT_SIZE_KEY, String(val)) } catch { /* ignore */ }
-    document.body.style.fontSize = `${val}px`
+    document.documentElement.style.setProperty('--game-font-size', `${val}px`)
   }
 
   function handleColorChange(val: string) {
     setTextColor(val)
     try { localStorage.setItem(TEXT_COLOR_KEY, val) } catch { /* ignore */ }
-    document.body.style.color = val
+    document.documentElement.style.setProperty('--game-text-color', val)
   }
 
   function handleReset() {

@@ -6,11 +6,16 @@
   box-sizing: border-box;
 }
 
+:root {
+  --game-text-color: var(--game-text-color);
+  --game-font-size: 14px;
+}
+
 body {
   background: #0a0a0a;
-  color: #33ff33;
+  color: var(--game-text-color);
   font-family: 'Courier New', 'Menlo', 'Monaco', monospace;
-  font-size: 14px;
+  font-size: var(--game-font-size);
   height: 100vh;
   overflow: hidden;
 }
@@ -84,7 +89,7 @@ body {
   letter-spacing: 1px;
 }
 
-.score-player   { color: #33ff33; }
+.score-player   { color: var(--game-text-color); }
 .score-sep      { color: #888; }
 .score-opponent { color: #ff4444; }
 
@@ -125,8 +130,8 @@ body {
 }
 
 .base-bar--player {
-  border-color: #33ff33;
-  color: #33ff33;
+  border-color: var(--game-text-color);
+  color: var(--game-text-color);
 }
 
 .base-bar-label {
@@ -280,7 +285,7 @@ body {
 }
 
 .lane-unit--player {
-  color: #33ff33;
+  color: var(--game-text-color);
 }
 
 .lane-unit--opponent {
@@ -478,7 +483,7 @@ body {
 }
 
 .card-tile:hover {
-  border-color: #33ff33;
+  border-color: var(--game-text-color);
   background: rgba(51, 255, 51, 0.08);
   transform: translateY(-3px);
   box-shadow: 0 0 12px rgba(51, 255, 51, 0.3);
@@ -654,7 +659,7 @@ body {
   letter-spacing: 2px;
 }
 
-.gameover-score .score-player   { color: #33ff33; }
+.gameover-score .score-player   { color: var(--game-text-color); }
 .gameover-score .score-sep { color: #888; }
 .gameover-score .score-opponent { color: #ff4444; }
 
@@ -663,7 +668,7 @@ body {
 .action-btn {
   background: none;
   border: 2px solid #33ff33;
-  color: #33ff33;
+  color: var(--game-text-color);
   font-family: inherit;
   font-size: 14px;
   padding: 8px 20px;
@@ -776,8 +781,8 @@ body {
   color: #ccc;
 }
 .title-nav-btn:hover {
-  color: #33ff33;
-  border-color: #33ff33;
+  color: var(--game-text-color);
+  border-color: var(--game-text-color);
 }
 
 .title-deck-info {
@@ -818,7 +823,7 @@ body {
   color: #888;
 }
 
-.overlay-count--valid   { color: #33ff33; }
+.overlay-count--valid   { color: var(--game-text-color); }
 .overlay-count--invalid { color: #ff9900; }
 
 /* ─── Filter bar ─────────────────────────────────────── */
@@ -881,8 +886,8 @@ body {
 }
 
 .filter-btn--active {
-  border-color: #33ff33;
-  color: #33ff33;
+  border-color: var(--game-text-color);
+  color: var(--game-text-color);
   background: rgba(51, 255, 51, 0.08);
 }
 
@@ -1207,7 +1212,7 @@ body {
 
 .collection-flash {
   font-size: 12px;
-  color: #33ff33;
+  color: var(--game-text-color);
   animation: fadeFlash 2s ease-out forwards;
   white-space: nowrap;
 }
@@ -1324,7 +1329,7 @@ body {
 }
 
 .battle-event-banner--supplyDrop {
-  color: #33ff33;
+  color: var(--game-text-color);
   border-color: rgba(51, 255, 51, 0.4);
   background: rgba(51, 255, 51, 0.06);
 }
@@ -1639,7 +1644,7 @@ body {
   letter-spacing: 4px;
   padding: 8px;
 }
-.bj-result--youwin, .bj-result--blackjack { color: #33ff33; }
+.bj-result--youwin, .bj-result--blackjack { color: var(--game-text-color); }
 .bj-result--youlose, .bj-result--bust     { color: #ff4444; }
 .bj-result--push  { color: #ffcc00; }
 
@@ -1788,7 +1793,7 @@ body {
 .ld-bid-actions { display: flex; gap: 10px; }
 
 .ld-result { font-size: 22px; font-weight: bold; letter-spacing: 4px; }
-.ld-result--win  { color: #33ff33; }
+.ld-result--win  { color: var(--game-text-color); }
 .ld-result--lose { color: #ff4444; }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1990,9 +1995,9 @@ body {
   animation: nm-pulse 2s ease-in-out infinite;
 }
 .nm-node--available .nm-node-name { color: #bbb; }
-.nm-node--available .nm-node-status { color: #33ff33; }
+.nm-node--available .nm-node-status { color: var(--game-text-color); }
 .nm-node--available:hover {
-  border-color: #33ff33;
+  border-color: var(--game-text-color);
   background: rgba(51, 255, 51, 0.1);
   transform: translateY(-2px);
   box-shadow: 0 0 12px rgba(51, 255, 51, 0.25);
@@ -2008,7 +2013,7 @@ body {
   border-color: #1e3a1e;
   opacity: 0.6;
 }
-.nm-node--completed .nm-node-status { color: #33ff33; }
+.nm-node--completed .nm-node-status { color: var(--game-text-color); }
 
 /* Locked nodes */
 .nm-node--locked {
@@ -2098,7 +2103,7 @@ body {
 .reward-title {
   font-size: 22px;
   font-weight: bold;
-  color: #33ff33;
+  color: var(--game-text-color);
   letter-spacing: 4px;
   text-shadow: 0 0 12px rgba(51, 255, 51, 0.4);
   margin-bottom: 6px;
@@ -2251,7 +2256,7 @@ body {
 .starter-select-title {
   font-size: 22px;
   font-weight: bold;
-  color: #33ff33;
+  color: var(--game-text-color);
   letter-spacing: 3px;
   margin-bottom: 8px;
 }
@@ -2284,14 +2289,14 @@ body {
 }
 
 .starter-pack:hover {
-  border-color: #33ff33;
+  border-color: var(--game-text-color);
   background: rgba(51, 255, 51, 0.04);
 }
 
 .starter-pack-name {
   font-size: 13px;
   font-weight: bold;
-  color: #33ff33;
+  color: var(--game-text-color);
   letter-spacing: 2px;
 }
 
@@ -2471,7 +2476,7 @@ body {
 .starter-bonus-notice {
   margin-top: 8px;
   font-size: 11px;
-  color: #33ff33;
+  color: var(--game-text-color);
   border: 1px solid rgba(51,255,51,0.3);
   padding: 8px 12px;
   line-height: 1.6;
@@ -2651,7 +2656,7 @@ body {
 .cutscene-act-label {
   font-size: 11px;
   letter-spacing: 3px;
-  color: #33ff33;
+  color: var(--game-text-color);
   margin-bottom: 28px;
 }
 
@@ -2914,7 +2919,7 @@ body {
 }
 
 .beo--supply-drop {
-  color: #33ff33;
+  color: var(--game-text-color);
   border-color: rgba(51,255,51,0.4);
   background: rgba(0,30,0,0.88);
   box-shadow: 0 0 40px rgba(51,255,51,0.15);
@@ -2940,7 +2945,7 @@ body {
 
 .event-status-chip--bloodMoon  { color: #ff6666; border-color: rgba(255,68,68,0.4); background: rgba(40,0,0,0.5); }
 .event-status-chip--fogOfWar   { color: #aabbcc; border-color: rgba(170,187,204,0.3); background: rgba(20,25,30,0.5); }
-.event-status-chip--supplyDrop { color: #33ff33; border-color: rgba(51,255,51,0.3); }
+.event-status-chip--supplyDrop { color: var(--game-text-color); border-color: rgba(51,255,51,0.3); }
 .event-status-chip--earthquake { color: #ffcc00; border-color: rgba(255,204,0,0.3); }
 
 /* Sudden death overlay */
@@ -3127,7 +3132,7 @@ body {
 
 .settings-toggle-track--on {
   background: rgba(51,255,51,0.2);
-  border-color: #33ff33;
+  border-color: var(--game-text-color);
 }
 
 .settings-toggle-thumb {
@@ -3235,7 +3240,7 @@ body {
 
 .autobuild-title {
   font-size: 15px;
-  color: #33ff33;
+  color: var(--game-text-color);
   letter-spacing: 2px;
   font-weight: bold;
 }
@@ -3269,14 +3274,14 @@ body {
 }
 
 .autobuild-strategy:hover {
-  border-color: #33ff33;
+  border-color: var(--game-text-color);
   background: rgba(51,255,51,0.05);
 }
 
 .autobuild-strategy-name {
   font-size: 13px;
   font-weight: bold;
-  color: #33ff33;
+  color: var(--game-text-color);
   letter-spacing: 1px;
 }
 
