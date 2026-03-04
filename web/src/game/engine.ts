@@ -1,4 +1,4 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState } from './types'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType } from './types'
 import { makeDeck, makeThorlordDeck, HERO_CARDS } from './cards'
 
 // ─── Constants ────────────────────────────────────────────
@@ -72,6 +72,40 @@ function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
 }
 
 // ─── New Game ────────────────────────────────────────────
+
+// ─── Terrain Generation ───────────────────────────────────
+//
+// Scatter rocks, trees, water, and ruins across the mid-field.
+// Three Y corridors (–55, 0, +55) are guaranteed clear so units
+// always have at least 3 walkable paths from base to base.
+
+const TERRAIN_CLEAR_Y   = [-55, 0, 55] as const  // guaranteed open corridors
+const TERRAIN_CLEAR_HALF = 20                      // half-width of each corridor (px)
+
+function generateTerrain(): TerrainObstacle[] {
+  const TYPES: TerrainType[] = ['rock', 'tree', 'water', 'ruin']
+  const obstacles: TerrainObstacle[] = []
+  const count = 4 + Math.floor(Math.random() * 5)  // 4–8 obstacles per battle
+  let id = 0
+  let tries = 0
+
+  while (obstacles.length < count && tries++ < 150) {
+    const x      = 90  + Math.random() * 320        // 90–410, away from spawn zones
+    const y      = (Math.random() * 150) - 75        // –75 to 75
+    const radius = 12  + Math.random() * 10          // 12–22 px
+    const type   = TYPES[Math.floor(Math.random() * TYPES.length)]
+
+    // Reject if it would block any guaranteed corridor
+    if (TERRAIN_CLEAR_Y.some(cy => Math.abs(y - cy) < TERRAIN_CLEAR_HALF + radius)) continue
+
+    // Reject if it overlaps an existing obstacle (with a small gap buffer)
+    if (obstacles.some(o => Math.hypot(x - o.x, y - o.y) < radius + o.radius + 10)) continue
+
+    obstacles.push({ id: `t${++id}`, type, x, y, radius })
+  }
+
+  return obstacles
+}
 
 export const MAX_HANDICAP = 20
 
@@ -193,6 +227,7 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
     battleEventTimer: BATTLE_EVENT_BASE_MS,
     activeBattleEvent: null,
     bossAI,
+    terrain: generateTerrain(),
   }
 }
 
@@ -269,9 +304,12 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
     // Assign a stable lateral slot to non-wall structures so that units
     // spawned from them start at the same horizontal position.
     if (card.cardType === 'structure' && !card.unit!.isWall) {
-      const STRUCTURE_Y_SLOTS = [-60, 0, 60, -30, 30]
-      const slotIdx = s.field.filter(u => u.moveSpeed === 0 && !u.isWall && u.owner === owner).length
-      unit.y = STRUCTURE_Y_SLOTS[slotIdx % STRUCTURE_Y_SLOTS.length]
+      // Spread buildings evenly; pick first slot not already occupied by a same-side structure
+      const STRUCTURE_Y_SLOTS = [-65, -40, -15, 15, 40, 65, -55, -25, 5, 30, 55, 0, -75, -50, 50, 75]
+      const usedY = new Set(
+        s.field.filter(u => u.moveSpeed === 0 && !u.isWall && u.owner === owner).map(u => u.y)
+      )
+      unit.y = STRUCTURE_Y_SLOTS.find(y => !usedY.has(y)) ?? STRUCTURE_Y_SLOTS[0]
     }
     s.field.push(unit)
     const verb = card.cardType === 'structure' ? 'built' : 'deployed'
@@ -412,10 +450,27 @@ function moveUnits(s: GameState, deltaMs: number): void {
     const fogMult = s.activeBattleEvent?.type === 'fogOfWar' ? 0.5 : 1
     const speed = (inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed) * deltaSec * fogMult
 
+    // Terrain avoidance: lateral repulsion from nearby obstacles.
+    // Flying units soar over terrain; structures are already skipped above.
+    let avoidY = 0
+    if (!unit.flying) {
+      for (const obs of s.terrain) {
+        const toObsX = obs.x - unit.x
+        const toObsY = obs.y - unit.y
+        const dist   = Math.sqrt(toObsX * toObsX + toObsY * toObsY)
+        const pushDist = obs.radius + 50  // detection radius
+        if (dist < pushDist && dist > 0) {
+          const strength = (pushDist - dist) / pushDist  // 0..1, stronger when closer
+          // Push laterally away from the obstacle centre
+          avoidY += (-toObsY / dist) * strength * unit.moveSpeed
+        }
+      }
+    }
+
     // Move at full speed toward target, clamped so we don't overshoot
     const step = Math.min(speed, d)
     unit.x = Math.min(LANE_WIDTH, Math.max(0,         unit.x + (dx / d) * step))
-    unit.y = Math.min(LANE_MAX_Y, Math.max(LANE_MIN_Y, unit.y + (dy / d) * step))
+    unit.y = Math.min(LANE_MAX_Y, Math.max(LANE_MIN_Y, unit.y + (dy / d) * step + avoidY * deltaSec))
   }
 }
 

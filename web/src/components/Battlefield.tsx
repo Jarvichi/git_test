@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { GameState, Unit, LANE_WIDTH, Card } from '../game/types'
+import { GameState, Unit, LANE_WIDTH, Card, TerrainObstacle, TerrainType } from '../game/types'
 import { CardTile } from './CardTile'
 import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
@@ -72,6 +72,36 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       <div className="lane-unit-hp-bar">
         <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />
       </div>
+    </div>
+  )
+}
+
+const TERRAIN_GLYPHS: Record<TerrainType, string[]> = {
+  rock:  ['▓▒', '▒▓', '▓▓▒'],
+  tree:  ['▲', '▲▲', '▲▲▲'],
+  water: ['≋≋', '~~', '≋~≋'],
+  ruin:  ['⊞⊟', '▣⊡', '⊟▤'],
+}
+
+function TerrainTile({ obs }: { obs: TerrainObstacle }) {
+  const topPct  = (1 - obs.x / LANE_WIDTH) * 100
+  const leftPct = 50 + (obs.y / 80) * 36
+  // Pick a stable glyph variant based on obstacle id
+  const variants = TERRAIN_GLYPHS[obs.type]
+  const glyph = variants[parseInt(obs.id.replace('t', ''), 10) % variants.length]
+  const fontSize = Math.round(8 + obs.radius * 0.5)
+  return (
+    <div
+      className={`terrain-obstacle terrain-obstacle--${obs.type}`}
+      style={{
+        top:       `${topPct}%`,
+        left:      `${leftPct}%`,
+        transform: 'translateX(-50%) translateY(-50%)',
+        fontSize:  `${fontSize}px`,
+      }}
+      title={obs.type}
+    >
+      {glyph}
     </div>
   )
 }
@@ -163,6 +193,7 @@ export function Battlefield({ state, onPlayCard }: Props) {
       {/* The Lane — vertical, fills remaining space */}
       <div className="lane">
         <div className="lane-ground" />
+        {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {state.field.map((u, i) => {
           const stackIndex = u.moveSpeed === 0
             ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && o.owner === u.owner).length
