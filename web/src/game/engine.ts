@@ -92,7 +92,7 @@ function generateTerrain(): TerrainObstacle[] {
   while (obstacles.length < count && tries++ < 150) {
     const x      = 90  + Math.random() * 320        // 90–410, away from spawn zones
     const y      = (Math.random() * 150) - 75        // –75 to 75
-    const radius = 12  + Math.random() * 10          // 12–22 px
+    const radius = 20  + Math.random() * 12          // 20–32 px
     const type   = TYPES[Math.floor(Math.random() * TYPES.length)]
 
     // Reject if it would block any guaranteed corridor

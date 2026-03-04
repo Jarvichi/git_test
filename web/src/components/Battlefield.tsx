@@ -78,36 +78,88 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
   )
 }
 
+// ─── Lane background ──────────────────────────────────────────────────────────
+// Full-size SVG rendered as the ground layer: grass, dirt path, crop rows,
+// sandy patches. Uses preserveAspectRatio="none" so it always fills the lane.
+
+function LaneBackground() {
+  const cropRows = Array.from({ length: 30 }, (_, i) => i)
+  return (
+    <svg
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      viewBox="0 0 100 220"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Base grass */}
+      <rect width="100" height="220" fill="#2a5418"/>
+
+      {/* Left crop field */}
+      <rect x="0" y="0" width="24" height="220" fill="#1e4810"/>
+      {cropRows.map(i => (
+        <rect key={i} x="0" y={i * 7.5} width="24" height="3.5" fill="#2a5a14" opacity="0.75"/>
+      ))}
+      <line x1="24" y1="0" x2="24" y2="220" stroke="#3a6820" strokeWidth="0.6" opacity="0.5"/>
+
+      {/* Right sandy / desert strip */}
+      <rect x="74" y="30" width="26" height="120" fill="#7a6030" opacity="0.32"/>
+      <rect x="78" y="45" width="18" height="90"  fill="#8a6c38" opacity="0.22"/>
+
+      {/* Dirt path (slightly winding, centre ~36–64) */}
+      <path d="M36,0 C34,45 38,90 35,132 C32,170 37,195 35,220 L64,220 C62,195 67,170 64,132 C61,90 65,45 63,0 Z"
+        fill="#6a4820" opacity="0.72"/>
+      {/* Path lighter surface */}
+      <path d="M38,0 C36,44 40,88 37,130 C34,168 39,194 37,220 L62,220 C60,194 65,168 62,130 C59,88 63,44 61,0 Z"
+        fill="#8a6030"/>
+      {/* Worn tyre tracks */}
+      <path d="M44,0 C43,38 45,80 43,122 C41,158 44,188 43,220 L49,220 C48,188 51,158 49,122 C47,80 49,38 48,0 Z"
+        fill="#a07848" opacity="0.45"/>
+      <path d="M52,0 C51,38 53,80 51,122 C49,158 52,188 51,220 L57,220 C56,188 59,158 57,122 C55,80 57,38 56,0 Z"
+        fill="#a07848" opacity="0.45"/>
+
+      {/* Grass tufts (mid-field) */}
+      <ellipse cx="29" cy="52"  rx="7" ry="4.5" fill="#3a6820" opacity="0.5"/>
+      <ellipse cx="68" cy="78"  rx="6" ry="4"   fill="#3a6820" opacity="0.45"/>
+      <ellipse cx="27" cy="128" rx="8" ry="5"   fill="#3a6820" opacity="0.5"/>
+      <ellipse cx="70" cy="155" rx="7" ry="4.5" fill="#3a6820" opacity="0.45"/>
+      <ellipse cx="30" cy="195" rx="5" ry="3.5" fill="#3a6820" opacity="0.4"/>
+
+      {/* Path-edge pebbles */}
+      <circle cx="36" cy="42"  r="1.5" fill="#887860" opacity="0.55"/>
+      <circle cx="63" cy="86"  r="1.5" fill="#887860" opacity="0.55"/>
+      <circle cx="35" cy="134" r="1.5" fill="#887860" opacity="0.55"/>
+      <circle cx="64" cy="178" r="1.5" fill="#887860" opacity="0.55"/>
+
+      {/* Sandy dirt patches (right side) */}
+      <ellipse cx="82" cy="52"  rx="6" ry="4" fill="#6a4820" opacity="0.38"/>
+      <ellipse cx="80" cy="112" rx="5" ry="3.5" fill="#6a4820" opacity="0.32"/>
+      <ellipse cx="84" cy="172" rx="6" ry="4" fill="#6a4820" opacity="0.38"/>
+    </svg>
+  )
+}
+
 // ─── Terrain SVG shapes ───────────────────────────────────────────────────────
-// Using inline SVG guarantees rendering regardless of font glyph support.
 
 function RockSvg({ size }: { size: number }) {
   // Dramatic mountain peaks — back range + front double-peak silhouette
   return (
     <svg width={size} height={Math.round(size * 1.25)} viewBox="0 0 38 48" xmlns="http://www.w3.org/2000/svg">
-      {/* Back mountain — single softer peak, darker */}
       <path d="M2,46 C5,44 9,36 16,8 C23,36 27,44 30,46 Z" fill="#525258" opacity="0.65"/>
-      {/* Front range — twin peaks (M shape) with curved sides */}
       <path d="M4,46 C7,42 11,32 17,6 L21,22 L26,4 C30,28 34,42 37,46 Z" fill="#78787e"/>
-      {/* Light edge highlight on left peak */}
       <path d="M17,6 C16,10 15,18 14,28" fill="none" stroke="#aaaab0" strokeWidth="1" opacity="0.6"/>
-      {/* Snow cap hint */}
       <path d="M17,6 L19,14 L21,22 L23,14 L26,4 L24,8 L21,16 L18,8 Z" fill="#d0d0d8" opacity="0.3"/>
     </svg>
   )
 }
 
+// Deciduous (organic blob cluster)
 function TreeSvg({ size }: { size: number }) {
-  // Irregular organic blobs — looks like a topographic forest cluster
   return (
     <svg width={size} height={size} viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg">
-      {/* Shadow base */}
       <path d="M4,22 C0,18 1,11 6,9 C5,5 10,2 15,5 C18,2 24,4 24,9 C28,10 30,16 27,20 C28,24 23,27 18,25 C15,28 8,27 4,22 Z"
         fill="#1e4812" opacity="0.5"/>
-      {/* Main blob */}
       <path d="M5,20 C1,16 2,9 7,8 C6,4 11,1 16,4 C19,1 25,3 25,8 C29,9 30,15 27,19 C28,23 23,26 18,24 C15,27 7,26 5,20 Z"
         fill="#2e6018"/>
-      {/* Lighter interior highlight */}
       <path d="M8,18 C5,14 6,9 10,8 C10,5 14,3 17,6 C20,4 24,7 23,11 C26,13 25,18 22,20 C21,23 17,24 14,21 C12,23 7,22 8,18 Z"
         fill="#3d7a22"/>
       <ellipse cx="15" cy="13" rx="5" ry="4" fill="#52a030" opacity="0.4"/>
@@ -115,33 +167,99 @@ function TreeSvg({ size }: { size: number }) {
   )
 }
 
+// Pine / conifer — tall narrow layered triangle
+function PineTreeSvg({ size }: { size: number }) {
+  return (
+    <svg width={Math.round(size * 0.65)} height={size} viewBox="0 0 18 32" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="9,2 17,13 1,13"  fill="#1a4a1a"/>
+      <polygon points="9,7 18,19 0,19"  fill="#1e5820"/>
+      <polygon points="9,12 18,25 0,25" fill="#245c24"/>
+      <polygon points="9,17 17,28 1,28" fill="#2a6628"/>
+      <rect x="7" y="28" width="4" height="4" fill="#5a3010"/>
+    </svg>
+  )
+}
+
+// Fruit tree — round canopy with red apple dots
+function FruitTreeSvg({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="15" cy="17" rx="13" ry="10" fill="#1e4810" opacity="0.45"/>
+      <ellipse cx="15" cy="15" rx="13" ry="11" fill="#2e5c18"/>
+      <ellipse cx="15" cy="11" rx="10" ry="8"  fill="#3a7020"/>
+      <circle cx="9"  cy="15" r="2.2" fill="#cc2020"/>
+      <circle cx="18" cy="12" r="2"   fill="#dd3030"/>
+      <circle cx="21" cy="17" r="2.2" fill="#cc2020"/>
+      <circle cx="12" cy="19" r="2"   fill="#cc2828"/>
+      <circle cx="9"  cy="15" r="0.8" fill="#ff7070" opacity="0.5"/>
+      <circle cx="21" cy="17" r="0.8" fill="#ff7070" opacity="0.5"/>
+      <line x1="15" y1="23" x2="14" y2="29" stroke="#5a3010" strokeWidth="2.5"/>
+    </svg>
+  )
+}
+
 function WaterSvg({ size }: { size: number }) {
-  // Wide flat puddle — two connected kidney blobs, landscape oriented
   const w = Math.round(size * 1.7)
   return (
     <svg width={w} height={size} viewBox="0 0 52 22" xmlns="http://www.w3.org/2000/svg">
-      {/* Left blob */}
       <path d="M2,13 C0,8 3,3 9,4 C10,1 16,0 19,4 C23,2 27,6 25,11 C28,13 27,19 23,20 C20,22 14,22 11,18 C7,21 1,19 2,13 Z"
         fill="#1a3a7a"/>
-      {/* Right blob */}
       <path d="M24,12 C22,7 25,3 30,4 C32,1 38,1 40,5 C44,4 48,8 47,13 C48,17 44,21 40,20 C37,22 30,22 27,18 C24,20 23,16 24,12 Z"
         fill="#1e4490"/>
-      {/* Shimmer highlights */}
       <ellipse cx="14" cy="10" rx="5" ry="2"   fill="#5090e0" opacity="0.45"/>
       <ellipse cx="37" cy="11" rx="4" ry="1.8" fill="#5090e0" opacity="0.4"/>
     </svg>
   )
 }
 
+// Crumbled stone ruin
 function RuinSvg({ size }: { size: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <rect x="2" y="11" width="5" height="11" fill="#5a4a3a" stroke="#c8a060" strokeWidth="1.5"/>
-      <rect x="9" y="5" width="6" height="17" fill="#4a3a2a" stroke="#c8a060" strokeWidth="1.5"/>
-      <rect x="17" y="14" width="5" height="8" fill="#6a5a4a" stroke="#c8a060" strokeWidth="1.5"/>
-      <line x1="2" y1="11" x2="6" y2="4" stroke="#c8a060" strokeWidth="1.5"/>
-      <line x1="17" y1="14" x2="22" y2="9" stroke="#c8a060" strokeWidth="1.5"/>
-      <line x1="7" y1="16" x2="9" y2="16" stroke="#c8a060" strokeWidth="1"/>
+    <svg width={size} height={size} viewBox="0 0 28 26" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="14" cy="25" rx="12" ry="1.8" fill="#1a1a0a" opacity="0.3"/>
+      <rect x="2"  y="12" width="6"  height="12" fill="#5a4a3a" stroke="#c8a060" strokeWidth="1.2"/>
+      <rect x="10" y="6"  width="8"  height="18" fill="#4a3a2a" stroke="#c8a060" strokeWidth="1.2"/>
+      <rect x="20" y="14" width="6"  height="10" fill="#6a5a4a" stroke="#c8a060" strokeWidth="1.2"/>
+      <line x1="2"  y1="12" x2="7"  y2="4"  stroke="#c8a060" strokeWidth="1.4"/>
+      <line x1="20" y1="14" x2="25" y2="8"  stroke="#c8a060" strokeWidth="1.4"/>
+      <line x1="8"  y1="18" x2="10" y2="18" stroke="#c8a060" strokeWidth="1"/>
+    </svg>
+  )
+}
+
+// Farmhouse with barn-red roof
+function FarmhouseSvg({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 30" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="16" cy="29" rx="14" ry="2" fill="#1a1a0a" opacity="0.3"/>
+      <rect x="3" y="15" width="26" height="13" fill="#a08060" stroke="#c8a060" strokeWidth="1"/>
+      <polygon points="1,15 16,4 31,15" fill="#8a3020" stroke="#aa4030" strokeWidth="1"/>
+      <rect x="13" y="21" width="6" height="7" fill="#5a3a18" stroke="#7a5a30" strokeWidth="0.8"/>
+      <circle cx="18.5" cy="24.5" r="0.8" fill="#c8a060"/>
+      <rect x="4"  y="17" width="6" height="5" fill="#5888a0" stroke="#789898" strokeWidth="0.5"/>
+      <rect x="22" y="17" width="6" height="5" fill="#5888a0" stroke="#789898" strokeWidth="0.5"/>
+      <line x1="7"  y1="17" x2="7"  y2="22" stroke="#789898" strokeWidth="0.5"/>
+      <line x1="4"  y1="19.5" x2="10" y2="19.5" stroke="#789898" strokeWidth="0.5"/>
+      <line x1="25" y1="17" x2="25" y2="22" stroke="#789898" strokeWidth="0.5"/>
+      <line x1="22" y1="19.5" x2="28" y2="19.5" stroke="#789898" strokeWidth="0.5"/>
+    </svg>
+  )
+}
+
+// Stone watchtower with battlements
+function WatchtowerSvg({ size }: { size: number }) {
+  return (
+    <svg width={Math.round(size * 0.55)} height={size} viewBox="0 0 16 30" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="8" cy="29" rx="7" ry="1.5" fill="#1a1a0a" opacity="0.35"/>
+      <rect x="2" y="10" width="12" height="18" fill="#6a5a4a" stroke="#9a8a70" strokeWidth="0.8"/>
+      <line x1="2" y1="15" x2="14" y2="15" stroke="#5a4a3a" strokeWidth="0.5"/>
+      <line x1="2" y1="20" x2="14" y2="20" stroke="#5a4a3a" strokeWidth="0.5"/>
+      <line x1="2" y1="25" x2="14" y2="25" stroke="#5a4a3a" strokeWidth="0.5"/>
+      <rect x="0"  y="6"  width="4" height="5" fill="#7a6a5a" stroke="#9a8a70" strokeWidth="0.8"/>
+      <rect x="6"  y="6"  width="4" height="5" fill="#7a6a5a" stroke="#9a8a70" strokeWidth="0.8"/>
+      <rect x="12" y="6"  width="4" height="5" fill="#7a6a5a" stroke="#9a8a70" strokeWidth="0.8"/>
+      <rect x="7"  y="15" width="2" height="6" fill="#1a1a1a"/>
+      <path d="M1,28 C1,26 3,25 8,25 C13,25 15,26 15,28 L14,29 L2,29 Z" fill="#5a4a3a"/>
     </svg>
   )
 }
@@ -176,24 +294,24 @@ function BlobSvg({ size, shade }: { size: number; shade: number }) {
 function ForestBorder() {
   const blobs: { key: string; top: number; left: number; size: number; shade: number }[] = []
 
-  // Left (y≈-76) and right (y≈+76) — dense wall, step every 14 game-units
-  for (const side of [-76, 76] as const) {
-    for (let ex = 5; ex <= 500; ex += 14) {
-      const yOff  = Math.sin(ex * 0.19 + side) * 3
+  // Left (y≈-84) and right (y≈+84) — tight wall just outside the playable field
+  for (const side of [-84, 84] as const) {
+    for (let ex = 5; ex <= 500; ex += 16) {
+      const yOff  = Math.sin(ex * 0.19 + side) * 2      // ±2 units jitter
       const topPct  = (1 - ex / LANE_WIDTH) * 100
       const leftPct = 50 + ((side + yOff) / 80) * 36
-      const size    = 32 + Math.round(Math.abs(Math.sin(ex * 0.37 + side)) * 12)
+      const size    = 20 + Math.round(Math.abs(Math.sin(ex * 0.37 + side)) * 8)
       const shade   = (Math.sin(ex * 0.53 + side * 0.1) + 1) / 2
       blobs.push({ key: `fe-${side}-${ex}`, top: topPct, left: leftPct, size, shade })
     }
   }
 
-  // Top edge (opponent side) — row of blobs across the width
-  for (let ey = -78; ey <= 78; ey += 14) {
-    const xOff  = Math.sin(ey * 0.23) * 4
-    const topPct  = (1 - (492 + xOff) / LANE_WIDTH) * 100
+  // Top edge (opponent side)
+  for (let ey = -84; ey <= 84; ey += 16) {
+    const xOff  = Math.sin(ey * 0.23) * 3
+    const topPct  = (1 - (495 + xOff) / LANE_WIDTH) * 100
     const leftPct = 50 + (ey / 80) * 36
-    const size    = 30 + Math.round(Math.abs(Math.sin(ey * 0.41)) * 10)
+    const size    = 20 + Math.round(Math.abs(Math.sin(ey * 0.41)) * 8)
     const shade   = (Math.sin(ey * 0.57) + 1) / 2
     blobs.push({ key: `fe-top-${ey}`, top: topPct, left: leftPct, size, shade })
   }
@@ -248,8 +366,26 @@ function BridgeSvg({ size }: { size: number }) {
 function TerrainTile({ obs }: { obs: TerrainObstacle }) {
   const topPct  = (1 - obs.x / LANE_WIDTH) * 100
   const leftPct = 50 + (obs.y / 80) * 36
-  const size    = Math.round(40 + obs.radius * 1.5)   // bigger: ~58–73 px
-  const hasBridge = obs.type === 'water' && obs.radius > 18
+  // Visual size tracks the physical radius so the obstacle looks as large as it blocks
+  const size    = Math.round(obs.radius * 2.8)   // radius 20–32 → 56–90 px
+  const hasBridge = obs.type === 'water' && obs.radius > 26
+
+  // Deterministic variant from obstacle id (0, 1, 2)
+  const variant = parseInt(obs.id.replace('t', ''), 10) % 3
+
+  let shape: React.ReactNode
+  if (obs.type === 'tree') {
+    shape = variant === 0 ? <PineTreeSvg  size={size} />
+          : variant === 1 ? <FruitTreeSvg size={size} />
+          :                 <TreeSvg      size={size} />
+  } else if (obs.type === 'ruin') {
+    shape = variant === 0 ? <RuinSvg       size={size} />
+          : variant === 1 ? <FarmhouseSvg  size={size} />
+          :                 <WatchtowerSvg size={size} />
+  } else {
+    shape = TERRAIN_SHAPES[obs.type](size)
+  }
+
   return (
     <div
       className={`terrain-obstacle terrain-obstacle--${obs.type}`}
@@ -259,10 +395,11 @@ function TerrainTile({ obs }: { obs: TerrainObstacle }) {
         transform: 'translateX(-50%) translateY(-50%)',
         overflow:  'visible',
         position:  'absolute',
+        zIndex:    3,
       }}
       title={obs.type}
     >
-      {TERRAIN_SHAPES[obs.type](size)}
+      {shape}
       {hasBridge && <BridgeSvg size={size} />}
     </div>
   )
@@ -359,6 +496,7 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
       {/* The Lane — vertical, fills remaining space */}
       <div className="lane">
         <div className="lane-ground" />
+        <LaneBackground />
         <ForestBorder />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {state.field.map((u, i) => {

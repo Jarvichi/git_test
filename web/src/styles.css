@@ -276,6 +276,7 @@ body {
 
 .lane-unit {
   position: absolute;
+  z-index: 4;   /* above forest border (1), terrain tiles (3) */
   display: flex;
   flex-direction: column;
   align-items: center;
