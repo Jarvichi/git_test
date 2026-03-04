@@ -78,20 +78,64 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
   )
 }
 
-const TERRAIN_GLYPHS: Record<TerrainType, string[]> = {
-  rock:  ['▓▒', '▒▓', '▓▓▒'],
-  tree:  ['▲', '▲▲', '▲▲▲'],
-  water: ['≋≋', '~~', '≋~≋'],
-  ruin:  ['⊞⊟', '▣⊡', '⊟▤'],
+// ─── Terrain SVG shapes ───────────────────────────────────────────────────────
+// Using inline SVG guarantees rendering regardless of font glyph support.
+
+function RockSvg({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="12,2 22,20 2,20" fill="#6a6a5a" stroke="#bbbbaa" strokeWidth="1.5"/>
+      <polygon points="6,11 18,11 20,20 4,20" fill="#4e4e40" stroke="#999988" strokeWidth="0.8"/>
+      <polygon points="10,6 16,6 18,12 8,12" fill="#7a7a68" stroke="#aaaaaa" strokeWidth="0.5"/>
+    </svg>
+  )
+}
+
+function TreeSvg({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="12,1 22,17 2,17" fill="#1a7a1a" stroke="#44ee44" strokeWidth="1.5"/>
+      <polygon points="12,5 20,17 4,17" fill="#259025" stroke="#66dd66" strokeWidth="0.8"/>
+      <polygon points="12,9 18,17 6,17" fill="#30a030" stroke="#88cc88" strokeWidth="0.5"/>
+      <rect x="9" y="17" width="6" height="6" fill="#5a3010" stroke="#7a5030" strokeWidth="0.8"/>
+    </svg>
+  )
+}
+
+function WaterSvg({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="12" cy="13" rx="11" ry="8" fill="#0a3055" stroke="#44aaff" strokeWidth="1.5"/>
+      <path d="M2,11 Q6,8 12,11 Q18,14 22,11" fill="none" stroke="#88ccff" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M2,15 Q6,12 12,15 Q18,18 22,15" fill="none" stroke="#55aaee" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
+function RuinSvg({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="11" width="5" height="11" fill="#5a4a3a" stroke="#c8a060" strokeWidth="1.5"/>
+      <rect x="9" y="5" width="6" height="17" fill="#4a3a2a" stroke="#c8a060" strokeWidth="1.5"/>
+      <rect x="17" y="14" width="5" height="8" fill="#6a5a4a" stroke="#c8a060" strokeWidth="1.5"/>
+      <line x1="2" y1="11" x2="6" y2="4" stroke="#c8a060" strokeWidth="1.5"/>
+      <line x1="17" y1="14" x2="22" y2="9" stroke="#c8a060" strokeWidth="1.5"/>
+      <line x1="7" y1="16" x2="9" y2="16" stroke="#c8a060" strokeWidth="1"/>
+    </svg>
+  )
+}
+
+const TERRAIN_SHAPES: Record<TerrainType, (size: number) => React.ReactNode> = {
+  rock:  s => <RockSvg  size={s} />,
+  tree:  s => <TreeSvg  size={s} />,
+  water: s => <WaterSvg size={s} />,
+  ruin:  s => <RuinSvg  size={s} />,
 }
 
 function TerrainTile({ obs }: { obs: TerrainObstacle }) {
   const topPct  = (1 - obs.x / LANE_WIDTH) * 100
   const leftPct = 50 + (obs.y / 80) * 36
-  // Pick a stable glyph variant based on obstacle id
-  const variants = TERRAIN_GLYPHS[obs.type]
-  const glyph = variants[parseInt(obs.id.replace('t', ''), 10) % variants.length]
-  const fontSize = Math.round(18 + obs.radius * 0.6)
+  const size    = Math.round(22 + obs.radius * 0.6)
   return (
     <div
       className={`terrain-obstacle terrain-obstacle--${obs.type}`}
@@ -99,11 +143,10 @@ function TerrainTile({ obs }: { obs: TerrainObstacle }) {
         top:       `${topPct}%`,
         left:      `${leftPct}%`,
         transform: 'translateX(-50%) translateY(-50%)',
-        fontSize:  `${fontSize}px`,
       }}
       title={obs.type}
     >
-      {glyph}
+      {TERRAIN_SHAPES[obs.type](size)}
     </div>
   )
 }

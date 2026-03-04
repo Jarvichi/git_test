@@ -183,35 +183,81 @@ function stopTrack(track: MusicTrack): void {
 }
 
 // ─── Battle Music (A minor pentatonic, 95 BPM) ───────────────────────────────
+// 4 phrases × 8 beats each = 32-beat cycle (~20 s). Phrase 4 is a "break".
 
-const BATTLE_BPM       = 95
-const BATTLE_BEAT_SEC  = 60 / BATTLE_BPM
-const BATTLE_VOL       = 0.12
+const BATTLE_BPM      = 95
+const BATTLE_BEAT_SEC = 60 / BATTLE_BPM
+const BATTLE_VOL      = 0.12
 
-const BATTLE_BASS   = [110.0, 130.8, 146.8, 164.8, 196.0]
-const BATTLE_MELODY = [440.0, 523.2, 587.3, 659.3, 784.0]
-const BATTLE_BASS_PAT:   number[]        = [0, 0, 2, 0, 3, 0, 2, 1]
-const BATTLE_MELODY_PAT: (number|null)[] = [0, null, null, 2, null, 3, null, null]
+// A, C, D, E, G  (A minor pentatonic across octaves)
+const BA = [110.0, 130.8, 146.8, 164.8, 196.0]  // bass register
+const BM = [440.0, 523.2, 587.3, 659.3, 784.0]  // melody register
+
+// Bass patterns per phrase (indices into BA)
+const B_BASS = [
+  [0, 0, 2, 0, 3, 0, 2, 1],  // phrase 0 – anchor on A
+  [2, 2, 3, 2, 0, 2, 3, 2],  // phrase 1 – anchor on D
+  [3, 0, 2, 3, 1, 0, 3, 2],  // phrase 2 – wandering
+  [0, 3, 0, 3, 4, 3, 0, 3],  // phrase 3 – tension (G drone)
+] as const
+
+// Melody patterns per phrase (indices into BM, null = rest)
+const B_MEL: (number|null)[][] = [
+  [0, null, null, 2,    null, 3,    null, null],
+  [null, 2, 3,    null, 4,    null, 2,    3   ],
+  [3,    4, null, 3,    2,    null, 1,    null],
+  [4,    4, 3,    null, 2,    1,    null, 0   ],  // descending fill
+]
 
 const bgTrack = makeTrack()
 
+// Intensity-to-phrase-set mapping:
+//  0 (losing)  → phrases 0-1 only (sparse, tense)
+//  1 (even)    → phrases 0-2 (normal 32-beat cycle)
+//  2 (winning) → phrases 1-3 (dense, exciting)
+function battlePhrase(absbeat: number): number {
+  const raw = Math.floor(absbeat / 8)
+  if (battleIntensity === 0) return raw % 2              // only phrases 0,1
+  if (battleIntensity === 2) return 1 + (raw % 3)        // phrases 1,2,3
+  return raw % 4                                         // full cycle
+}
+
 function scheduleBattle(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
   while (track.nextBeatTime < upTo) {
-    const beat = track.beatIndex % 8
-    const t    = track.nextBeatTime
-    const n    = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
-                   musicNote(track, vol, f, type, t + off, dur, v)
+    const absbeat = track.beatIndex
+    const phrase  = battlePhrase(absbeat)
+    const beat    = absbeat % 8
+    const t       = track.nextBeatTime
+    const n       = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
+                      musicNote(track, vol, f, type, t + off, dur, v)
 
-    n(BATTLE_BASS[BATTLE_BASS_PAT[beat]], 'sawtooth', 0, beatSec * 0.85, 0.5)
-    n(BATTLE_BASS[BATTLE_BASS_PAT[beat]] / 2, 'sine', 0, beatSec * 0.9, 0.3)
+    // Bass: always present; louder when intense
+    const bassIdx = B_BASS[phrase][beat]
+    const bassVol = 0.4 + battleIntensity * 0.08
+    n(BA[bassIdx], 'sawtooth', 0, beatSec * 0.85, bassVol)
+    n(BA[bassIdx] / 2, 'sine', 0, beatSec * 0.9, 0.28)
 
-    const melIdx = BATTLE_MELODY_PAT[beat]
-    if (melIdx !== null) n(BATTLE_MELODY[melIdx], 'sine', beatSec * 0.05, beatSec * 0.55, 0.4)
-
-    if (beat === 2 || beat === 6) {
-      n(3000 + Math.random() * 1000, 'square', 0, 0.04, 0.08)
-      n(2000 + Math.random() * 800,  'square', 0, 0.06, 0.06)
+    // Melody: only in intensity ≥ 1, fuller in intensity 2
+    const melIdx = B_MEL[phrase][beat]
+    if (melIdx !== null && battleIntensity >= 1) {
+      const melVol = 0.28 + battleIntensity * 0.08
+      n(BM[melIdx], 'sine', beatSec * 0.05, beatSec * 0.55, melVol)
+      // Double the melody an octave up at intensity 2
+      if (battleIntensity === 2) n(BM[melIdx] * 2, 'sine', beatSec * 0.05, beatSec * 0.45, 0.14)
     }
+
+    // Snare: more hits at higher intensity
+    const snareBeats = battleIntensity === 0 ? [2] :
+                       battleIntensity === 1 ? [2, 6] : [2, 4, 6]
+    if (snareBeats.includes(beat)) {
+      const snareVol = 0.06 + battleIntensity * 0.02
+      n(3000 + Math.random() * 1000, 'square', 0, 0.04, snareVol)
+      n(2000 + Math.random() * 800,  'square', 0, 0.06, snareVol * 0.75)
+    }
+
+    // Phrase 3 tension hit (only reached at intensity ≥ 1)
+    if (phrase === 3 && beat === 0) n(55, 'sine', 0, beatSec * 2, 0.3)
+
     track.nextBeatTime += beatSec
     track.beatIndex++
   }
@@ -223,35 +269,53 @@ export function startBattleMusic(): void {
 export function stopBattleMusic(): void { stopTrack(bgTrack) }
 
 // ─── Title Music (C major, slow pads, 60 BPM) ────────────────────────────────
+// 3 phrases × 8 beats = 24-beat cycle (~24 s). Phrases shift harmonic centre.
 
 const TITLE_BPM      = 60
 const TITLE_BEAT_SEC = 60 / TITLE_BPM
 const TITLE_VOL      = 0.10
 
-// C major pentatonic: C3, E3, G3, A3, C4, E4, G4
-const TITLE_PADS   = [130.8, 164.8, 196.0, 220.0, 261.6, 329.6, 392.0]
-const TITLE_BASS   = [65.4, 65.4, 73.4, 65.4]  // C2, C2, D2, C2
-// 8-beat pad pattern
-const TITLE_PAD_PAT: (number|null)[] = [0, null, 2, null, 4, null, 2, null]
-const TITLE_TOP_PAT: (number|null)[] = [null, 6, null, 5, null, 4, null, 6]
+// C major pentatonic: C3=0, E3=1, G3=2, A3=3, C4=4, E4=5, G4=6
+const TP = [130.8, 164.8, 196.0, 220.0, 261.6, 329.6, 392.0]
+// Bass roots per phrase: C2, G1, A1
+const T_BASS = [65.4, 49.0, 55.0]
+
+// Pad melody + counter-melody per phrase
+const T_PAD: (number|null)[][] = [
+  [0, null, 2, null, 4,    null, 2, null],   // C centre
+  [2, null, 4, null, 6,    null, 4, null],   // G centre
+  [3, null, 5, null, 4,    null, 6, null],   // A centre
+]
+const T_TOP: (number|null)[][] = [
+  [null, 6, null, 5, null, 4,    null, 6],
+  [null, 4, null, 6, null, 5,    null, 3],
+  [null, 6, null, 4, null, 3,    null, 5],
+]
 
 const titleTrack = makeTrack()
 
 function scheduleTitle(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
   while (track.nextBeatTime < upTo) {
-    const beat = track.beatIndex % 8
-    const t    = track.nextBeatTime
-    const n    = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
-                   musicNote(track, vol, f, type, t + off, dur, v)
+    const phrase = Math.floor(track.beatIndex / 8) % 3
+    const beat   = track.beatIndex % 8
+    const t      = track.nextBeatTime
+    const n      = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
+                     musicNote(track, vol, f, type, t + off, dur, v)
 
-    // Slow bass every 2 beats
-    if (beat % 2 === 0) n(TITLE_BASS[beat / 2 % 4], 'sine', 0, beatSec * 1.8, 0.4)
+    // Slow bass every 2 beats, root chosen per phrase
+    if (beat % 2 === 0) {
+      n(T_BASS[phrase], 'sine', 0, beatSec * 1.9, 0.4)
+      n(T_BASS[phrase] / 2, 'sine', 0, beatSec * 1.9, 0.18)
+    }
 
-    const padIdx = TITLE_PAD_PAT[beat]
-    if (padIdx !== null) n(TITLE_PADS[padIdx], 'triangle', 0, beatSec * 1.4, 0.35)
+    const padIdx = T_PAD[phrase][beat]
+    if (padIdx !== null) n(TP[padIdx], 'triangle', 0, beatSec * 1.5, 0.32)
 
-    const topIdx = TITLE_TOP_PAT[beat]
-    if (topIdx !== null) n(TITLE_PADS[topIdx] * 2, 'sine', beatSec * 0.1, beatSec * 0.9, 0.25)
+    const topIdx = T_TOP[phrase][beat]
+    if (topIdx !== null) n(TP[topIdx] * 2, 'sine', beatSec * 0.12, beatSec * 0.85, 0.22)
+
+    // Phrase 2 gets an extra shimmer on beat 3
+    if (phrase === 2 && beat === 3) n(TP[6] * 2, 'sine', beatSec * 0.6, beatSec * 0.3, 0.12)
 
     track.nextBeatTime += beatSec
     track.beatIndex++
@@ -264,43 +328,54 @@ export function startTitleMusic(): void {
 export function stopTitleMusic(): void { stopTrack(titleTrack) }
 
 // ─── Game Over Music ──────────────────────────────────────────────────────────
-// Victory: G major, ascending, upbeat 80 BPM
-// Defeat:  D minor, descending, slow 55 BPM
+// Victory: G major, 3 phrases — opener, build, triumphant climax, 80 BPM
+// Defeat:  D minor, 3 phrases — lament A, lament B, fading echo, 55 BPM
 
 const goTrack = makeTrack()
-
-// G major pentatonic: G3, A3, B3, D4, E4, G4
-const WIN_NOTES  = [196.0, 220.0, 246.9, 293.7, 329.6, 392.0]
-const WIN_PAT: (number|null)[] = [0, null, 2, null, 4, 5, 3, null]
-// D minor pentatonic: D3, F3, G3, A3, C4
-const LOSE_NOTES  = [146.8, 174.6, 196.0, 220.0, 261.6]
-const LOSE_PAT: (number|null)[] = [4, null, 3, null, 2, null, 1, 0]
-
 let goIsVictory = false
 
+// G major pentatonic: G3, A3, B3, D4, E4, G4
+const WN = [196.0, 220.0, 246.9, 293.7, 329.6, 392.0]
+const W_PATS: (number|null)[][] = [
+  [0, null, 2,    null, 3, null, 2, null],   // intro: sparse
+  [0, 2,    null, 3,    4, null, 3, 2   ],   // build: denser
+  [0, 2,    4,    5,    4, 2,    3, 5   ],   // climax: full
+]
+// D minor pentatonic: D3, F3, G3, A3, C4
+const LN = [146.8, 174.6, 196.0, 220.0, 261.6]
+const L_PATS: (number|null)[][] = [
+  [4, null, 3, null, 2, null, 1, 0   ],   // lament A: descending
+  [3, 4,    2, 3,    1, 2,    0, null],   // lament B: stepwise
+  [2, null, 1, null, 0, null, null, null],  // fade: sparse echo
+]
+
 function scheduleGameOver(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
-  const notes = goIsVictory ? WIN_NOTES : LOSE_NOTES
-  const pat   = goIsVictory ? WIN_PAT   : LOSE_PAT
+  const notes = goIsVictory ? WN : LN
+  const pats  = goIsVictory ? W_PATS : L_PATS
   while (track.nextBeatTime < upTo) {
-    const beat = track.beatIndex % 8
-    const t    = track.nextBeatTime
-    const n    = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
-                   musicNote(track, vol, f, type, t + off, dur, v)
+    // After 3 phrases, keep looping: phrase 2 for victory, phrase 1 for defeat
+    const rawPhrase = Math.floor(track.beatIndex / 8)
+    const phrase    = rawPhrase < 3 ? rawPhrase : (goIsVictory ? 2 : 1)
+    const beat      = track.beatIndex % 8
+    const t         = track.nextBeatTime
+    const n         = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
+                        musicNote(track, vol, f, type, t + off, dur, v)
 
     // Bass root every 4 beats
     if (beat % 4 === 0) {
       const root = goIsVictory ? 98.0 : 73.4
-      n(root, 'sine', 0, beatSec * 3.5, 0.4)
-      n(root / 2, 'sine', 0, beatSec * 3.5, 0.25)
+      n(root, 'sine', 0, beatSec * 3.6, 0.42)
+      n(root / 2, 'sine', 0, beatSec * 3.6, 0.22)
     }
 
-    const idx = pat[beat]
+    const idx = pats[phrase][beat]
     if (idx !== null) {
-      n(notes[idx], goIsVictory ? 'sine' : 'triangle', beatSec * 0.02, beatSec * 0.75, 0.5)
-      // Harmony a third above on win
-      if (goIsVictory && idx + 2 < notes.length) {
-        n(notes[idx + 2], 'sine', beatSec * 0.02, beatSec * 0.65, 0.25)
-      }
+      const noteType: OscillatorType = goIsVictory ? 'sine' : 'triangle'
+      // Increasing volume per phrase on victory
+      const noteVol = goIsVictory ? 0.35 + phrase * 0.1 : 0.5
+      n(notes[idx], noteType, beatSec * 0.02, beatSec * 0.75, noteVol)
+      if (goIsVictory && idx + 2 < notes.length)
+        n(notes[idx + 2], 'sine', beatSec * 0.02, beatSec * 0.6, 0.2 + phrase * 0.05)
     }
 
     track.nextBeatTime += beatSec
@@ -317,38 +392,49 @@ export function startGameOverMusic(winner: 'player' | 'opponent' | 'draw'): void
 export function stopGameOverMusic(): void { stopTrack(goTrack) }
 
 // ─── Node Map Music (E minor, mysterious, 70 BPM) ─────────────────────────────
-// Wandering, slightly eerie — suits the between-battle map exploration.
+// 3 phrases × 8 beats. Phrase 0: sparse wander; 1: hopeful climb; 2: tense.
 
 const MAP_BPM      = 70
 const MAP_BEAT_SEC = 60 / MAP_BPM
 const MAP_VOL      = 0.10
 
-// E minor pentatonic: E2(bass), B2, D3, E3, G3, B3, D4, E4
-const MAP_BASS  = [82.4, 82.4, 97.9, 82.4]   // E2, E2, B2, E2
-const MAP_PADS  = [146.8, 164.8, 196.0, 246.9, 293.7, 329.6]
-const MAP_PAD_PAT: (number|null)[] = [0, null, 2, 3, null, 4, null, 1]
-const MAP_TOP_PAT: (number|null)[] = [null, 5, null, null, 4, null, 5, null]
+// E minor pentatonic: E2, B2, D3, E3, G3, B3, D4, E4
+const MP  = [146.8, 164.8, 196.0, 246.9, 293.7, 329.6]  // pad notes
+const MB  = [82.4, 97.9, 73.4]                           // bass roots: E2, B2, D2
+
+const M_PAD: (number|null)[][] = [
+  [0, null, 2, 3,    null, 4,    null, 1   ],  // phrase 0: wandering
+  [2, 3,    4, null, 5,    null, 4,    3   ],  // phrase 1: climbing
+  [4, null, 3, null, 2,    3,    1,    null],  // phrase 2: tense fall
+]
+const M_TOP: (number|null)[][] = [
+  [null, 5, null, null, 4,    null, 5, null],
+  [null, 4, null, 5,    null, null, 3, 5   ],
+  [5,    4, null, 5,    null, 4,    3, null],
+]
+const M_BASS = [[0,0], [1,1], [2,0]]  // bass root indices per phrase [beat0, beat4]
 
 const mapTrack = makeTrack()
 
 function scheduleMap(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
   while (track.nextBeatTime < upTo) {
-    const beat = track.beatIndex % 8
-    const t    = track.nextBeatTime
-    const n    = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
-                   musicNote(track, vol, f, type, t + off, dur, v)
+    const phrase = Math.floor(track.beatIndex / 8) % 3
+    const beat   = track.beatIndex % 8
+    const t      = track.nextBeatTime
+    const n      = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
+                     musicNote(track, vol, f, type, t + off, dur, v)
 
-    // Bass on beats 0 and 4
     if (beat === 0 || beat === 4) {
-      n(MAP_BASS[beat === 0 ? 0 : 2], 'sine', 0, beatSec * 1.9, 0.45)
-      n(MAP_BASS[beat === 0 ? 0 : 2] / 2, 'sine', 0, beatSec * 1.9, 0.2)
+      const bIdx = beat === 0 ? M_BASS[phrase][0] : M_BASS[phrase][1]
+      n(MB[bIdx], 'sine', 0, beatSec * 1.9, 0.45)
+      n(MB[bIdx] / 2, 'sine', 0, beatSec * 1.9, 0.18)
     }
 
-    const padIdx = MAP_PAD_PAT[beat]
-    if (padIdx !== null) n(MAP_PADS[padIdx], 'triangle', 0, beatSec * 1.2, 0.3)
+    const padIdx = M_PAD[phrase][beat]
+    if (padIdx !== null) n(MP[padIdx], 'triangle', 0, beatSec * 1.2, 0.3)
 
-    const topIdx = MAP_TOP_PAT[beat]
-    if (topIdx !== null) n(MAP_PADS[topIdx] * 2, 'sine', beatSec * 0.08, beatSec * 0.7, 0.2)
+    const topIdx = M_TOP[phrase][beat]
+    if (topIdx !== null) n(MP[topIdx] * 2, 'sine', beatSec * 0.08, beatSec * 0.7, 0.18)
 
     track.nextBeatTime += beatSec
     track.beatIndex++
@@ -359,3 +445,17 @@ export function startMapMusic(): void {
   startTrack(mapTrack, MAP_VOL, MAP_BEAT_SEC, scheduleMap, stopMapMusic)
 }
 export function stopMapMusic(): void { stopTrack(mapTrack) }
+
+// ─── Adaptive Battle Music ────────────────────────────────────────────────────
+// The battle track can be "instructed" to shift its intensity and phrase
+// selection based on game state. Call setBattleIntensity() from App.tsx.
+//
+//  0 = calm (losing badly / early game)
+//  1 = normal (evenly matched)
+//  2 = intense (winning / late game with many units)
+
+let battleIntensity = 1  // 0 | 1 | 2
+
+export function setBattleIntensity(level: 0 | 1 | 2): void {
+  battleIntensity = level
+}
