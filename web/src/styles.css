@@ -339,14 +339,12 @@ body {
 }
 
 .lane-unit--wall {
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 3px 6px;
-  border-top: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  background: rgba(255, 255, 255, 0.04);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  border: none;
+  background: none;
   min-width: unset;
 }
 
@@ -354,19 +352,11 @@ body {
   display: none;
 }
 
-.lane-unit--wall .lane-unit-name {
-  font-size: 9px;
-  font-weight: bold;
-  border: 1px solid currentColor;
-  padding: 1px 5px;
-  border-radius: 2px;
-  white-space: nowrap;
-}
-
 .lane-unit--wall .lane-unit-hp-bar {
-  flex: 1;
-  max-width: 200px;
-  height: 6px;
+  flex: none;
+  width: 100%;
+  max-width: none;
+  height: 4px;
 }
 
 /* Upgrade level badge shown next to building name */
