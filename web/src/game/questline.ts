@@ -3,7 +3,7 @@ import { getCardCatalog } from './cards'
 
 // ─── Node & Act types ─────────────────────────────────────
 
-export type NodeType = 'battle' | 'elite' | 'boss' | 'rest' | 'event'
+export type NodeType = 'battle' | 'elite' | 'boss' | 'rest' | 'event' | 'merchant'
 
 export interface QuestNode {
   id: string
@@ -99,6 +99,31 @@ export const EVENT_CATALOG: Record<string, EventData> = {
       { label: 'Leave him be', consequence: 'You are definitely the villain in his story.', effect: { type: 'nothing' } },
     ],
   },
+}
+
+// ─── Merchant ─────────────────────────────────────────────
+
+export const MERCHANT_PRICES: Record<CardRarity, number> = {
+  common:    40,
+  uncommon:  90,
+  rare:      200,
+  legendary: 400,
+}
+
+/** Generates 3 card names for a merchant node: 1 common, 1 uncommon, 1 rare (shuffled). */
+export function generateMerchantCards(): string[] {
+  const catalog = getCardCatalog()
+  const pool    = (r: CardRarity) => catalog.filter(c => c.rarity === r)
+  const pick    = (r: CardRarity) => {
+    const p = pool(r)
+    return p[Math.floor(Math.random() * p.length)].name
+  }
+  const cards = [pick('common'), pick('uncommon'), pick('rare')]
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[cards[i], cards[j]] = [cards[j], cards[i]]
+  }
+  return cards
 }
 
 // ─── Cutscene & dialogue ──────────────────────────────────
@@ -377,15 +402,15 @@ export const ACT_1: Act = {
       label: 'The Ambush',
       description: 'Something ancient was waiting in the treeline.',
       row: 2, col: 0, rowCols: 1,
-      parentIds: ['camp', 'shrine', 'patrol'], childIds: ['ruins', 'war-camp'],
+      parentIds: ['camp', 'shrine', 'patrol'], childIds: ['ruins', 'war-camp', 'market'],
       handicap: 2,
     },
-    // ── Row 3 — two-way branch ────────────────────────────
+    // ── Row 3 — three-way branch ──────────────────────────
     'ruins': {
       id: 'ruins', type: 'event',
       label: 'Watchtower Ruins',
       description: 'A crumbling garrison tower leans against the treeline.',
-      row: 3, col: 0, rowCols: 2,
+      row: 3, col: 0, rowCols: 3,
       parentIds: ['ambush'], childIds: ['captain'],
       eventId: 'ruins',
     },
@@ -393,9 +418,16 @@ export const ACT_1: Act = {
       id: 'war-camp', type: 'battle',
       label: 'War Camp',
       description: 'A fortified enemy camp blocks the road ahead.',
-      row: 3, col: 1, rowCols: 2,
+      row: 3, col: 1, rowCols: 3,
       parentIds: ['ambush'], childIds: ['captain'],
       handicap: 1,
+    },
+    'market': {
+      id: 'market', type: 'merchant',
+      label: 'Travelling Market',
+      description: 'A merchant cart half-hidden in the underbrush. She waves you over.',
+      row: 3, col: 2, rowCols: 3,
+      parentIds: ['ambush'], childIds: ['captain'],
     },
     // ── Row 4 ─────────────────────────────────────────────
     'captain': {
@@ -403,7 +435,7 @@ export const ACT_1: Act = {
       label: 'Siege Captain',
       description: 'A hardened veteran with well-drilled siege troops.',
       row: 4, col: 0, rowCols: 1,
-      parentIds: ['ruins', 'war-camp'], childIds: ['thornlord'],
+      parentIds: ['ruins', 'war-camp', 'market'], childIds: ['thornlord'],
       handicap: 1,
     },
     // ── Row 5 ─────────────────────────────────────────────

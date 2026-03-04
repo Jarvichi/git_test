@@ -11,7 +11,7 @@ import { getCardCatalog } from './game/cards'
 import {
   loadRun, saveRun, clearRun, newRun,
   getAvailableNodeIds, skipSiblings, isActComplete,
-  generateRewardChoices, ACTS,
+  generateRewardChoices, generateMerchantCards, MERCHANT_PRICES, ACTS,
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
   hasSeenIntro, markIntroSeen,
   EVENT_CATALOG, EventChoice,
@@ -19,6 +19,7 @@ import {
 } from './game/questline'
 import { CardRestSelect }       from './components/CardRestSelect'
 import { EventScreen }          from './components/EventScreen'
+import { MerchantScreen, MerchantItem } from './components/MerchantScreen'
 import { CutsceneScreen }       from './components/CutsceneScreen'
 import { BossDialogueScreen }   from './components/BossDialogueScreen'
 import { Battlefield }        from './components/Battlefield'
@@ -63,6 +64,7 @@ type Screen =
   | 'cutscene'
   | 'bossdialogue'
   | 'event'
+  | 'merchant'
   | 'reward'
   | 'actcomplete'
   | 'cardrest'
@@ -87,6 +89,9 @@ export default function App() {
 
   // Active campaign event
   const [activeEvent, setActiveEvent] = useState<typeof EVENT_CATALOG[string] | null>(null)
+
+  // Active merchant
+  const [merchantItems, setMerchantItems] = useState<MerchantItem[]>([])
 
   // Card fatigue
   const [fatiguedCards, setFatiguedCards]       = useState<string[]>(loadFatigued)
@@ -252,6 +257,18 @@ export default function App() {
       }
     }
 
+    if (node.type === 'merchant') {
+      const catalog   = getCardCatalog()
+      const cardNames = generateMerchantCards()
+      const items: MerchantItem[] = cardNames.map(name => {
+        const card = catalog.find(c => c.name === name)!
+        return { card, price: MERCHANT_PRICES[card.rarity] }
+      })
+      setMerchantItems(items)
+      setScreen('merchant')
+      return
+    }
+
     // Boss pre-battle dialogue
     if (node.bossDialogue && node.bossDialogue.length > 0) {
       setBossDialogueNode(node)
@@ -323,6 +340,28 @@ export default function App() {
     saveRun(updatedRun)
     setRun(updatedRun)
     setActiveEvent(null)
+    setScreen('nodemap')
+  }, [run])
+
+  const handleMerchantBuy = useCallback((cardName: string, price: number) => {
+    addCardsToCollection([{ cardName, count: 1 }])
+    const next = loadCrystals() - price
+    saveCrystals(Math.max(0, next))
+    setCrystals(Math.max(0, next))
+  }, [])
+
+  const handleMerchantDone = useCallback(() => {
+    const currentRun = run
+    if (!currentRun) return
+    const nodeId = currentRun.pendingNodeId!
+    const updatedRun: RunState = {
+      ...currentRun,
+      completedNodeIds: [...currentRun.completedNodeIds, nodeId],
+      pendingNodeId: null,
+    }
+    saveRun(updatedRun)
+    setRun(updatedRun)
+    setMerchantItems([])
     setScreen('nodemap')
   }, [run])
 
@@ -593,6 +632,15 @@ export default function App() {
 
       {screen === 'event' && activeEvent && (
         <EventScreen event={activeEvent} onChoice={handleEventChoice} />
+      )}
+
+      {screen === 'merchant' && merchantItems.length > 0 && (
+        <MerchantScreen
+          items={merchantItems}
+          crystals={crystals}
+          onBuy={handleMerchantBuy}
+          onDone={handleMerchantDone}
+        />
       )}
 
       {screen === 'cardrest' && (

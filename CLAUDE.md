@@ -251,7 +251,7 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 - [x] Boss AI: Thornlord (structure-heavy — builds walls every turn)
 - [x] Implement `rest` node type (heal 5 HP)
 - [x] Implement `event` node type (text choice cards with consequences)
-- [ ] Implement `merchant` node (spend crystals, 3 cards offered)
+- [x] Implement `merchant` node (spend crystals, 3 cards offered)
 - [x] Post-battle card reward: pick 1 of 3
 
 **Phase 3 — Relics**
