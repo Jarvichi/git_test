@@ -369,7 +369,7 @@ export const ACT_1: Act = {
       description: 'A rowdy mob has blockaded the trade route. Clear them out.',
       row: 0, col: 0, rowCols: 1,
       parentIds: [], childIds: ['camp', 'shrine', 'patrol'],
-      handicap: 4,
+      handicap: 10,   // commons + uncommons only — manageable for a starter deck
     },
     // ── Row 1 — three-way branch ──────────────────────────
     'camp': {
@@ -394,7 +394,7 @@ export const ACT_1: Act = {
       description: 'A disciplined warband is watching the deeper path.',
       row: 1, col: 2, rowCols: 3,
       parentIds: ['goblin-raid'], childIds: ['ambush'],
-      handicap: 3,
+      handicap: 7,    // uncommons max — slightly harder second battle
     },
     // ── Row 2 ─────────────────────────────────────────────
     'ambush': {
@@ -403,7 +403,7 @@ export const ACT_1: Act = {
       description: 'Something ancient was waiting in the treeline.',
       row: 2, col: 0, rowCols: 1,
       parentIds: ['camp', 'shrine', 'patrol'], childIds: ['ruins', 'war-camp', 'market'],
-      handicap: 2,
+      handicap: 4,    // rares allowed, no legendaries — mid-act difficulty step-up
     },
     // ── Row 3 — three-way branch ──────────────────────────
     'ruins': {
@@ -420,7 +420,7 @@ export const ACT_1: Act = {
       description: 'A fortified enemy camp blocks the road ahead.',
       row: 3, col: 1, rowCols: 3,
       parentIds: ['ambush'], childIds: ['captain'],
-      handicap: 1,
+      handicap: 3,    // rares allowed, no legendaries
     },
     'market': {
       id: 'market', type: 'merchant',
@@ -436,7 +436,7 @@ export const ACT_1: Act = {
       description: 'A hardened veteran with well-drilled siege troops.',
       row: 4, col: 0, rowCols: 1,
       parentIds: ['ruins', 'war-camp', 'market'], childIds: ['thornlord'],
-      handicap: 1,
+      handicap: 1,    // full deck including legendaries — elite fight
     },
     // ── Row 5 ─────────────────────────────────────────────
     'thornlord': {
