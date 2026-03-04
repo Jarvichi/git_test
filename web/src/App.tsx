@@ -44,7 +44,7 @@ import {
   RARE_EVENT_CHANCE, ALL_RARE_EVENTS,
 } from './components/rare-events/types'
 import { CardTile }           from './components/CardTile'
-import { playCardPlay, playVictory, playDefeat, playButtonClick, playBattleEvent, playCardFlip, playRestHeal } from './game/sound'
+import { playCardPlay, playVictory, playDefeat, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic } from './game/sound'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -127,6 +127,16 @@ export default function App() {
     }, TICK_MS)
     return () => clearInterval(id)
   }, [screen, gameState?.phase.type, isGamePaused])
+
+  // ── Background music ─────────────────────────────────────
+  useEffect(() => {
+    if (screen === 'playing' && gameState?.phase.type === 'playing') {
+      startBattleMusic()
+    } else {
+      stopBattleMusic()
+    }
+    return () => stopBattleMusic()
+  }, [screen, gameState?.phase.type])
 
   // ── Rare event trigger ───────────────────────────────────
   useEffect(() => {

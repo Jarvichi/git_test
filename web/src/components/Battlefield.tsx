@@ -91,7 +91,7 @@ function TerrainTile({ obs }: { obs: TerrainObstacle }) {
   // Pick a stable glyph variant based on obstacle id
   const variants = TERRAIN_GLYPHS[obs.type]
   const glyph = variants[parseInt(obs.id.replace('t', ''), 10) % variants.length]
-  const fontSize = Math.round(8 + obs.radius * 0.5)
+  const fontSize = Math.round(18 + obs.radius * 0.6)
   return (
     <div
       className={`terrain-obstacle terrain-obstacle--${obs.type}`}

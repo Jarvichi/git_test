@@ -106,3 +106,101 @@ export function playManaGain() {
   node(700, 'sine', t,       0.05, 0.18)
   node(1050, 'sine', t + 0.05, 0.07, 0.15)
 }
+
+// ─── Background Music ─────────────────────────────────────────────────────────
+// Look-ahead scheduler: every SCHEDULE_INTERVAL_MS we schedule any beats
+// that fall within the next LOOKAHEAD_SEC seconds of audio time.
+
+const BPM           = 95
+const BEAT_SEC      = 60 / BPM
+const LOOKAHEAD_SEC = 0.3
+const SCHEDULE_MS   = 100
+
+// A minor pentatonic: A2, C3, D3, E3, G3
+const BASS_NOTES  = [110.0, 130.8, 146.8, 164.8, 196.0]
+// Upper register melody (same scale, 2 octaves up)
+const MELODY_NOTES = [440.0, 523.2, 587.3, 659.3, 784.0]
+
+// 8-beat pattern (indices into BASS_NOTES / MELODY_NOTES)
+// bass: plays on every beat; melody: sparse fills
+const BASS_PAT:   number[] = [0, 0, 2, 0, 3, 0, 2, 1]
+const MELODY_PAT: (number | null)[] = [0, null, null, 2, null, 3, null, null]
+
+let bgScheduler: ReturnType<typeof setInterval> | null = null
+let bgNextBeatTime  = 0
+let bgBeatIndex     = 0
+let bgMusicGain: GainNode | null = null
+
+function getBgGain(): GainNode | null {
+  const c = getCtx()
+  if (!c) return null
+  if (!bgMusicGain) {
+    bgMusicGain = c.createGain()
+    bgMusicGain.gain.value = 0.12   // softer than SFX master (0.35)
+    bgMusicGain.connect(c.destination)
+  }
+  return bgMusicGain
+}
+
+function bgNote(freq: number, type: OscillatorType, startT: number, dur: number, vol: number): void {
+  const c = getCtx()
+  const g = getBgGain()
+  if (!c || !g) return
+  const osc = c.createOscillator()
+  const gn  = c.createGain()
+  osc.type = type
+  osc.frequency.setValueAtTime(freq, startT)
+  gn.gain.setValueAtTime(vol, startT)
+  gn.gain.exponentialRampToValueAtTime(0.001, startT + dur)
+  osc.connect(gn)
+  gn.connect(g)
+  osc.start(startT)
+  osc.stop(startT + dur + 0.05)
+}
+
+function scheduleBgBeats(upTo: number): void {
+  while (bgNextBeatTime < upTo) {
+    const beat = bgBeatIndex % 8
+
+    // Bass: sawtooth on every beat, long note
+    bgNote(BASS_NOTES[BASS_PAT[beat]], 'sawtooth', bgNextBeatTime, BEAT_SEC * 0.85, 0.5)
+
+    // Sub-bass octave below for warmth
+    bgNote(BASS_NOTES[BASS_PAT[beat]] / 2, 'sine', bgNextBeatTime, BEAT_SEC * 0.9, 0.3)
+
+    // Melody: sparse, on certain beats only
+    const melIdx = MELODY_PAT[beat]
+    if (melIdx !== null) {
+      bgNote(MELODY_NOTES[melIdx], 'sine', bgNextBeatTime + BEAT_SEC * 0.05, BEAT_SEC * 0.55, 0.4)
+    }
+
+    // Snare-like accent on beats 2 and 6 (noise burst via high-freq square)
+    if (beat === 2 || beat === 6) {
+      bgNote(3000 + Math.random() * 1000, 'square', bgNextBeatTime, 0.04, 0.08)
+      bgNote(2000 + Math.random() * 800,  'square', bgNextBeatTime, 0.06, 0.06)
+    }
+
+    bgNextBeatTime += BEAT_SEC
+    bgBeatIndex++
+  }
+}
+
+export function startBattleMusic(): void {
+  if (bgScheduler !== null) return
+  const c = getCtx()
+  if (!c) return
+  bgNextBeatTime = c.currentTime + 0.1
+  bgBeatIndex    = 0
+  bgScheduler    = setInterval(() => {
+    const c2 = getCtx()
+    if (!c2 || !isSoundEnabled()) { stopBattleMusic(); return }
+    scheduleBgBeats(c2.currentTime + LOOKAHEAD_SEC)
+  }, SCHEDULE_MS)
+}
+
+export function stopBattleMusic(): void {
+  if (bgScheduler !== null) {
+    clearInterval(bgScheduler)
+    bgScheduler = null
+  }
+}
