@@ -5,14 +5,19 @@ import {
   loadDeck, saveDeck, buildDeckCards, generatePack,
   loadCollection, saveCollection, loadCrystals, saveCrystals,
   recordCardPlayed, recordUnitDied, addCardsToCollection,
-  CRYSTAL_PACK_COST, DeckEntry,
+  getOwnedCount, DECK_MAX, CRYSTAL_PACK_COST, DeckEntry,
 } from './game/collection'
+import { getCardCatalog } from './game/cards'
 import {
   loadRun, saveRun, clearRun, newRun,
   getAvailableNodeIds, skipSiblings, isActComplete,
   generateRewardChoices, ACTS,
+  loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
+  EVENT_CATALOG, EventChoice,
   QuestNode, RunState,
 } from './game/questline'
+import { CardRestSelect }     from './components/CardRestSelect'
+import { EventScreen }        from './components/EventScreen'
 import { Battlefield }        from './components/Battlefield'
 import { GameOver }           from './components/GameOver'
 import { TitleScreen }        from './components/TitleScreen'
@@ -52,8 +57,10 @@ type Screen =
   | 'deckbuilder'
   | 'pack'
   | 'nodemap'
+  | 'event'
   | 'reward'
   | 'actcomplete'
+  | 'cardrest'
   | 'starterpack'
 
 export default function App() {
@@ -67,6 +74,15 @@ export default function App() {
   const [run, setRun]                   = useState<RunState | null>(loadRun)
   const [rewardChoices, setRewardChoices] = useState<string[]>([])
   const isCampaignRef = useRef(false)   // true while playing a campaign battle
+
+  // Active campaign event
+  const [activeEvent, setActiveEvent] = useState<typeof EVENT_CATALOG[string] | null>(null)
+
+  // Card fatigue
+  const [fatiguedCards, setFatiguedCards]       = useState<string[]>(loadFatigued)
+  const [cardRestCandidates, setCardRestCandidates] = useState<string[]>([])
+  const [bonusPackCards, setBonusPackCards]     = useState<string[]>([])
+  const campaignPlayCountsRef = useRef<Record<string, number>>({})  // per-battle play tracking
 
   // Unit death tracking
   const prevPlayerUnitsRef = useRef<Map<string, string>>(new Map())
@@ -208,16 +224,62 @@ export default function App() {
       return
     }
 
+    if (node.type === 'event' && node.eventId) {
+      const eventData = EVENT_CATALOG[node.eventId]
+      if (eventData) {
+        setActiveEvent(eventData)
+        setScreen('event')
+        return
+      }
+    }
+
     // Start battle
+    campaignPlayCountsRef.current = {}
     isCampaignRef.current = true
     const collection  = loadCollection()
-    const playerCards = buildDeckCards(loadDeck(), collection)
-    const state = newGame(playerCards, node.handicap ?? 0)
+    const fatigued    = loadFatigued()
+    const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
+    const playerCards = buildDeckCards(deckEntries, collection)
+    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     // Apply campaign HP to player base
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     setGameState(state)
     setScreen('playing')
     rollRareEvent()
+  }, [run])
+
+  const handleEventChoice = useCallback((choice: EventChoice) => {
+    const currentRun = run
+    if (!currentRun) return
+    const nodeId = currentRun.pendingNodeId!
+
+    // Apply the effect
+    let updatedRun: RunState = {
+      ...currentRun,
+      completedNodeIds: [...currentRun.completedNodeIds, nodeId],
+      pendingNodeId: null,
+    }
+
+    const effect = choice.effect
+    if (effect.type === 'healHp') {
+      updatedRun = { ...updatedRun, playerHp: Math.min(updatedRun.maxHp, updatedRun.playerHp + effect.amount) }
+    } else if (effect.type === 'damageHp') {
+      updatedRun = { ...updatedRun, playerHp: Math.max(1, updatedRun.playerHp - effect.amount) }
+    } else if (effect.type === 'gainCrystals') {
+      const next = loadCrystals() + effect.amount
+      saveCrystals(next)
+      setCrystals(next)
+    } else if (effect.type === 'gainCard') {
+      const catalog = getCardCatalog()
+      const pool = catalog.filter(c => c.rarity === effect.rarity)
+      const card = pool[Math.floor(Math.random() * pool.length)]
+      if (card) addCardsToCollection([{ cardName: card.name, count: 1 }])
+    }
+
+    saveRun(updatedRun)
+    setRun(updatedRun)
+    setActiveEvent(null)
+    setScreen('nodemap')
   }, [run])
 
   const handleCampaignWin = useCallback(() => {
@@ -227,12 +289,20 @@ export default function App() {
     const nodeId = currentRun.pendingNodeId!
     const node = act.nodes[nodeId]
 
-    // Update run HP from battle result
+    // Merge this battle's card play counts into the run totals
+    const mergedCounts: Record<string, number> = { ...currentRun.cardPlayCounts }
+    for (const [name, n] of Object.entries(campaignPlayCountsRef.current)) {
+      mergedCounts[name] = (mergedCounts[name] ?? 0) + n
+    }
+    campaignPlayCountsRef.current = {}
+
+    // Update run HP and counts from battle result
     const updatedRun: RunState = {
       ...currentRun,
       playerHp: gameState.playerBase.hp,
       completedNodeIds: [...currentRun.completedNodeIds, nodeId],
       pendingNodeId: null,
+      cardPlayCounts: mergedCounts,
     }
     saveRun(updatedRun)
     setRun(updatedRun)
@@ -259,6 +329,43 @@ export default function App() {
   }, [])
 
   const handleActComplete = useCallback(() => {
+    // Check if we have enough play data to offer a rest choice
+    const counts = run?.cardPlayCounts ?? {}
+    const candidates = getTopPlayedCards(counts, 3)
+    if (candidates.length >= 2) {
+      setCardRestCandidates(candidates)
+      setScreen('cardrest')
+    } else {
+      // Not enough data (very short run) — skip rest and go straight to deck reset
+      clearRun()
+      setRun(null)
+      clearFatigued()
+      setFatiguedCards([])
+      setBonusPackCards([])
+      setScreen('starterpack')
+    }
+  }, [run])
+
+  const handleCardRestConfirm = useCallback((resting: string[]) => {
+    saveFatigued(resting)
+    setFatiguedCards(resting)
+
+    // Check if fatiguing those cards shrinks usable collection below DECK_MAX
+    const collection = loadCollection()
+    const catalog = getCardCatalog()
+    const totalOwned = catalog
+      .filter(c => !resting.includes(c.name))
+      .reduce((sum, c) => sum + getOwnedCount(collection, c.name), 0)
+
+    const bonus: string[] = []
+    if (totalOwned < DECK_MAX) {
+      const needed = DECK_MAX - totalOwned
+      const packsNeeded = Math.ceil(needed / 5)
+      for (let i = 0; i < packsNeeded; i++) bonus.push(...generatePack())
+      addCardsToCollection(bonus.map(name => ({ cardName: name, count: 1 })))
+    }
+    setBonusPackCards(bonus)
+
     clearRun()
     setRun(null)
     setScreen('starterpack')
@@ -278,10 +385,13 @@ export default function App() {
     const node = act.nodes[nodeId]
 
     // Retry same node, but HP stays at what it was before this battle
+    campaignPlayCountsRef.current = {}
     isCampaignRef.current = true
     const collection  = loadCollection()
-    const playerCards = buildDeckCards(loadDeck(), collection)
-    const state = newGame(playerCards, node.handicap ?? 0)
+    const fatigued    = loadFatigued()
+    const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
+    const playerCards = buildDeckCards(deckEntries, collection)
+    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     setGameState(state)
     setScreen('playing')
@@ -300,7 +410,13 @@ export default function App() {
     setGameState(s => {
       if (!s) return s
       const card = s.playerHand.find(c => c.id === cardId)
-      if (card) recordCardPlayed(card.name)
+      if (card) {
+        recordCardPlayed(card.name)
+        if (isCampaignRef.current) {
+          campaignPlayCountsRef.current[card.name] =
+            (campaignPlayCountsRef.current[card.name] ?? 0) + 1
+        }
+      }
       return playCard(s, cardId)
     })
   }, [])
@@ -413,8 +529,24 @@ export default function App() {
         />
       )}
 
+      {screen === 'event' && activeEvent && (
+        <EventScreen event={activeEvent} onChoice={handleEventChoice} />
+      )}
+
+      {screen === 'cardrest' && (
+        <CardRestSelect
+          candidates={cardRestCandidates}
+          playCounts={run?.cardPlayCounts ?? {}}
+          onConfirm={handleCardRestConfirm}
+        />
+      )}
+
       {screen === 'starterpack' && (
-        <StarterPackSelect onPick={handleStarterPackPick} />
+        <StarterPackSelect
+          onPick={handleStarterPackPick}
+          fatiguedCards={fatiguedCards}
+          bonusCards={bonusPackCards}
+        />
       )}
 
       {screen === 'collection' && (
@@ -427,7 +559,7 @@ export default function App() {
       )}
 
       {screen === 'deckbuilder' && (
-        <DeckBuilder onBack={() => setScreen('title')} />
+        <DeckBuilder onBack={() => setScreen('title')} fatiguedCards={fatiguedCards} />
       )}
 
       {screen === 'pack' && (

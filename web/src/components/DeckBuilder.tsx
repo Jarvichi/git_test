@@ -21,9 +21,10 @@ import { CardDetailModal } from './CardDetailModal'
 
 interface Props {
   onBack: () => void
+  fatiguedCards?: string[]   // card names that cannot be added to the deck this act
 }
 
-export function DeckBuilder({ onBack }: Props) {
+export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
   const catalog = getCardCatalog()
   const [collection] = useState<CollectionEntry[]>(loadCollection)
   const [deck, setDeck] = useState<DeckEntry[]>(loadDeck)
@@ -37,6 +38,7 @@ export function DeckBuilder({ onBack }: Props) {
   }
 
   function addCard(name: string) {
+    if (fatiguedCards.includes(name)) return
     const owned = getOwnedCount(collection, name)
     const inDeck = inDeckCount(name)
     if (inDeck >= Math.min(owned, COPIES_MAX)) return
@@ -96,12 +98,13 @@ export function DeckBuilder({ onBack }: Props) {
           <div className="deckbuilder-panel-title">YOUR CARDS — click to add</div>
           <div className="collection-grid">
             {ownedCards.map(card => {
-              const owned  = getOwnedCount(collection, card.name)
-              const inDeck = inDeckCount(card.name)
-              const canAdd = inDeck < Math.min(owned, COPIES_MAX) && total < DECK_MAX
-              const lvl    = masteryLevel(getMasteryXp(collection, card.name))
+              const owned    = getOwnedCount(collection, card.name)
+              const inDeck   = inDeckCount(card.name)
+              const resting  = fatiguedCards.includes(card.name)
+              const canAdd   = !resting && inDeck < Math.min(owned, COPIES_MAX) && total < DECK_MAX
+              const lvl      = masteryLevel(getMasteryXp(collection, card.name))
               return (
-                <div key={card.name} className="collection-cell">
+                <div key={card.name} className={`collection-cell${resting ? ' collection-cell--resting' : ''}`}>
                   <CardTile
                     card={card}
                     canAfford={canAdd}
@@ -109,8 +112,10 @@ export function DeckBuilder({ onBack }: Props) {
                   />
                   <div className="cell-footer">
                     <span className="cell-count">
-                      {inDeck}/{owned}
-                      {lvl > 0 && <span className="cell-mastery-badge">★{lvl}</span>}
+                      {resting
+                        ? <span className="cell-resting-label">ZZZ RESTING</span>
+                        : <>{inDeck}/{owned}{lvl > 0 && <span className="cell-mastery-badge">★{lvl}</span>}</>
+                      }
                     </span>
                     <button
                       className="extra-btn cdm-info-btn"

@@ -248,9 +248,9 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 
 **Phase 2 — Campaign**
 - [x] Write Act 1 node map data (5 battle nodes, 1 elite, 1 boss)
-- [ ] Boss AI: Thornlord (structure-heavy — builds walls every turn)
+- [x] Boss AI: Thornlord (structure-heavy — builds walls every turn)
 - [x] Implement `rest` node type (heal 5 HP)
-- [ ] Implement `event` node type (text choice cards with consequences)
+- [x] Implement `event` node type (text choice cards with consequences)
 - [ ] Implement `merchant` node (spend crystals, 3 cards offered)
 - [x] Post-battle card reward: pick 1 of 3
 
@@ -270,3 +270,14 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 - [ ] Act transition cutscenes (text only, terminal style)
 - [ ] Boss dialogue lines (1-3 lines per boss encounter)
 - [ ] Victory screen for completing full questline
+
+**Phase 6 — Game Modes**
+- [ ] Card Draft Mode: free play variant — pick 1 of 3 cards × 8 to build a 24-card deck, then battle (no collection needed)
+- [ ] Daily Challenge: fixed-seed deck + opponent each day; track win/loss per day in localStorage
+
+**Phase 7 — Depth & QoL**
+- [ ] Opponent card reveal: briefly flash the card name when the opponent plays one (currently invisible)
+- [ ] Battle summary screen: stats popup after each battle — cards played, kills by unit, damage dealt, turns taken
+- [ ] Boss Phase 2: bosses change behavior at 40% HP (e.g. Thornlord starts building Farms to flood mana)
+- [ ] Card synergy tags: UI labels showing which cards combo well (e.g. "Goblin" tag shared by Goblin, Barracks, Crypt)
+- [ ] Codebase health review: audit file sizes and complexity, split any files over ~500 lines, extract shared logic

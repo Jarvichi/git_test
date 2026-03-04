@@ -4,9 +4,11 @@ import { getCardCatalog } from '../game/cards'
 
 interface Props {
   onPick: (cards: DeckEntry[]) => void
+  fatiguedCards?: string[]   // card names currently resting — shown with a badge
+  bonusCards?: string[]      // card names auto-added to collection as a top-up bonus
 }
 
-export function StarterPackSelect({ onPick }: Props) {
+export function StarterPackSelect({ onPick, fatiguedCards = [], bonusCards = [] }: Props) {
   const catalog = getCardCatalog()
 
   return (
@@ -17,6 +19,18 @@ export function StarterPackSelect({ onPick }: Props) {
           Your deck returns to basics. Choose a starter kit for the next act.<br />
           Your collection and mastery carry forward untouched.
         </div>
+        {fatiguedCards.length > 0 && (
+          <div className="starter-fatigued-notice">
+            Resting this act: {fatiguedCards.map(n => <span key={n} className="fatigued-tag">{n}</span>)}
+            {' '}— these cards cannot be added to your deck.
+          </div>
+        )}
+        {bonusCards.length > 0 && (
+          <div className="starter-bonus-notice">
+            ★ BONUS PACK — {bonusCards.length} cards added to your collection to keep your deck going:
+            <span className="bonus-card-list"> {bonusCards.join(', ')}</span>
+          </div>
+        )}
       </div>
 
       <div className="starter-packs">
@@ -27,10 +41,12 @@ export function StarterPackSelect({ onPick }: Props) {
             <ul className="starter-pack-list">
               {pack.cards.map(entry => {
                 const card = catalog.find(c => c.name === entry.cardName)
+                const isFatigued = fatiguedCards.includes(entry.cardName)
                 return (
-                  <li key={entry.cardName} className={`spl-item spl-item--${card?.rarity ?? 'common'}`}>
+                  <li key={entry.cardName} className={`spl-item spl-item--${card?.rarity ?? 'common'}${isFatigued ? ' spl-item--resting' : ''}`}>
                     <span className="spl-count">×{entry.count}</span>
                     <span className="spl-name">{entry.cardName}</span>
+                    {isFatigued && <span className="spl-resting-badge">ZZZ</span>}
                   </li>
                 )
               })}

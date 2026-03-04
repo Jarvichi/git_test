@@ -1,5 +1,5 @@
 import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, LANE_WIDTH, BattleEventState } from './types'
-import { makeDeck, HERO_CARDS } from './cards'
+import { makeDeck, makeThorlordDeck, HERO_CARDS } from './cards'
 
 // ─── Constants ────────────────────────────────────────────
 
@@ -96,25 +96,47 @@ function injectHero(deck: Card[], heroPool: Card[]): void {
   deck.splice(pos, 0, { ...hero, id: `hero-${uid()}` })
 }
 
-export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
+export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: string): GameState {
   const playerDeck = shuffle(playerCards ?? makeDeck())
-  const rawOpponentDeck = shuffle(makeDeck())
+
+  // Boss fights use their own curated deck instead of the standard one
+  let rawOpponentDeck: Card[]
+  if (bossAI === 'thornlord') {
+    rawOpponentDeck = shuffle(makeThorlordDeck())
+  } else {
+    rawOpponentDeck = shuffle(makeDeck())
+  }
+
   // Remove cards from the tail of the shuffled deck to weaken the opponent
   const clamp = Math.min(Math.max(0, opponentHandicap), MAX_HANDICAP)
-  const opponentDeck = rawOpponentDeck.slice(0, Math.max(4, rawOpponentDeck.length - clamp))
+  const opponentDeck = bossAI
+    ? rawOpponentDeck  // bosses always play their full deck
+    : rawOpponentDeck.slice(0, Math.max(4, rawOpponentDeck.length - clamp))
 
-  // Inject one hero card per side
+  // Inject one hero card per side (not for bosses — they have their own identity)
   injectHero(playerDeck, HERO_CARDS)
-  injectHero(opponentDeck, HERO_CARDS)
+  if (!bossAI) injectHero(opponentDeck, HERO_CARDS)
 
   const playerHand = playerDeck.splice(0, 4)
   const opponentHand = opponentDeck.splice(0, 4)
 
   const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
 
+  const openingLog: string[] = bossAI === 'thornlord'
+    ? [
+        'THE THORNLORD awakens! Ancient guardian of the Verdant Shard.',
+        'Walls of bark and root rise from the earth — prepare for a siege!',
+      ]
+    : [
+        clamp > 0
+          ? `Battle begins! (Enemy -${clamp} card${clamp !== 1 ? 's' : ''} handicap)`
+          : 'Battle begins! Tap cards to deploy.',
+        `Enemy strategy: ${STRATEGY_LABELS[strategy]}`,
+      ]
+
   return {
     playerBase: { hp: 50, maxHp: 50 },
-    opponentBase: { hp: 50, maxHp: 50 },
+    opponentBase: { hp: 70, maxHp: 70 },  // boss gets extra base HP
     field: [],
     playerHand,
     playerDeck,
@@ -123,14 +145,9 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
     mana: 3,
     maxMana: BASE_MAX_MANA,
     manaAccum: 0,
-    log: [
-      clamp > 0
-        ? `Battle begins! (Enemy -${clamp} card${clamp !== 1 ? 's' : ''} handicap)`
-        : 'Battle begins! Tap cards to deploy.',
-      `Enemy strategy: ${STRATEGY_LABELS[strategy]}`,
-    ],
+    log: openingLog,
     phase: { type: 'playing' },
-    opponentTimer: OPPONENT_INTERVAL_MS,
+    opponentTimer: bossAI === 'thornlord' ? 6000 : OPPONENT_INTERVAL_MS,  // boss acts faster
     opponentStrategy: strategy,
     gameTime: 0,
     playerScore: 0,
@@ -139,6 +156,7 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0): GameState {
     suddenDeathTimer: 0,
     battleEventTimer: BATTLE_EVENT_BASE_MS,
     activeBattleEvent: null,
+    bossAI,
   }
 }
 
@@ -473,6 +491,51 @@ function opponentAI(s: GameState, log: string[]): void {
   if (played === 0) log.push('Opponent holds.')
 }
 
+// ─── Thornlord Boss AI ───────────────────────────────────
+//
+// Priority order each turn:
+//   1. Build Wall (walls every turn is the theme)
+//   2. Spawn-structure (Barracks, Crypt, etc.)
+//   3. Mana structure (Farm)
+//   4. Cheapest available unit
+//   5. Any upgrade
+// Plays up to 3 cards per turn; uses a 6s interval (set in newGame).
+
+function thornlordAI(s: GameState, log: string[]): void {
+  const manaBonus = getManaBonus(s.field, 'opponent')
+  let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
+
+  function tryPlay(): boolean {
+    const hand = s.opponentHand.filter(c => c.cost <= mana)
+    if (hand.length === 0) return false
+
+    // Priority 1: walls
+    const walls = hand.filter(c => c.cardType === 'structure' && c.unit?.isWall)
+    // Priority 2: spawner structures
+    const spawners = hand.filter(c => c.cardType === 'structure' && c.unit?.structureEffect?.type === 'spawn')
+    // Priority 3: mana structures
+    const manaStructs = hand.filter(c => c.cardType === 'structure' && c.unit?.structureEffect?.type === 'mana')
+    // Priority 4: units (cheapest)
+    const units = hand.filter(c => c.cardType === 'unit').sort((a, b) => a.cost - b.cost)
+    // Priority 5: upgrades
+    const upgrades = hand.filter(c => c.cardType === 'upgrade')
+
+    const pick = (walls[0] ?? spawners[0] ?? manaStructs[0] ?? units[0] ?? upgrades[0])
+    if (!pick) return false
+
+    s.opponentHand.splice(s.opponentHand.indexOf(pick), 1)
+    mana -= pick.cost
+    deployCard(s, pick, 'opponent', log)
+    drawCard(s.opponentDeck, s.opponentHand)
+    return true
+  }
+
+  let played = 0
+  while (played < 3 && tryPlay()) played++
+
+  if (played === 0) log.push('The Thornlord is still…')
+}
+
 // ─── Battle Events ────────────────────────────────────────
 
 function triggerBattleEvent(s: GameState, log: string[]): void {
@@ -565,8 +628,13 @@ export function tick(state: GameState, deltaMs: number): GameState {
   // 6. Opponent timer
   s.opponentTimer -= deltaMs
   if (s.opponentTimer <= 0) {
-    opponentAI(s, log)
-    s.opponentTimer = OPPONENT_INTERVAL_MS
+    if (s.bossAI === 'thornlord') {
+      thornlordAI(s, log)
+      s.opponentTimer = 6000
+    } else {
+      opponentAI(s, log)
+      s.opponentTimer = OPPONENT_INTERVAL_MS
+    }
   }
 
   // 7. Battle events
