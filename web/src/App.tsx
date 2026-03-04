@@ -14,6 +14,7 @@ import {
   generateRewardChoices, generateMerchantCards, MERCHANT_PRICES, ACTS,
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
   hasSeenIntro, markIntroSeen,
+  loadRunCount, incrementRunCount, getAct1Intro,
   EVENT_CATALOG, EventChoice,
   CutscenePanel, QuestNode, RunState,
 } from './game/questline'
@@ -32,6 +33,7 @@ import { NodeMap }            from './components/NodeMap'
 import { PostBattleReward }   from './components/PostBattleReward'
 import { ActComplete }        from './components/ActComplete'
 import { StarterPackSelect }  from './components/StarterPackSelect'
+import { SettingsScreen, applyTextSettings } from './components/SettingsScreen'
 import { FakeCrashEvent }     from './components/rare-events/FakeCrashEvent'
 import { BlackjackEvent }     from './components/rare-events/BlackjackEvent'
 import { WrongNumberEvent }   from './components/rare-events/WrongNumberEvent'
@@ -41,7 +43,12 @@ import {
   RareEventKind, RareEventEffect,
   RARE_EVENT_CHANCE, ALL_RARE_EVENTS,
 } from './components/rare-events/types'
+import { CardTile }           from './components/CardTile'
+import { playCardPlay, playVictory, playDefeat, playButtonClick, playBattleEvent, playCardFlip, playRestHeal } from './game/sound'
 import './styles.css'
+
+// Apply saved display settings on load
+applyTextSettings()
 
 const TICK_MS    = 100
 const HANDICAP_KEY = 'jarvs_handicap'
@@ -56,6 +63,7 @@ function loadHandicap(): number {
 
 type Screen =
   | 'title'
+  | 'settings'
   | 'playing'
   | 'collection'
   | 'deckbuilder'
@@ -89,6 +97,8 @@ export default function App() {
 
   // Active campaign event
   const [activeEvent, setActiveEvent] = useState<typeof EVENT_CATALOG[string] | null>(null)
+  // Card revealed after a gainCard event choice
+  const [pendingEventCard, setPendingEventCard] = useState<string | null>(null)
 
   // Active merchant
   const [merchantItems, setMerchantItems] = useState<MerchantItem[]>([])
@@ -211,16 +221,23 @@ export default function App() {
     if (!existing) saveRun(activeRun)
     setRun(activeRun)
 
-    // Show act intro cutscene the first time this act is started
+    // Show act intro cutscene when starting a fresh run
     const act = ACTS[activeRun.actId]
-    if (!existing && act.intro && !hasSeenIntro(activeRun.actId)) {
+    if (!existing) {
+      // Increment run count and get narrative-varied panels
+      const runCount = incrementRunCount()
+      const introToShow = activeRun.actId === 'act1'
+        ? getAct1Intro(runCount)
+        : (act.intro ?? [])
       markIntroSeen(activeRun.actId)
-      setCutscenePanels(act.intro)
-      cutsceneDoneRef.current = () => setScreen('nodemap')
-      setScreen('cutscene')
-    } else {
-      setScreen('nodemap')
+      if (introToShow.length > 0) {
+        setCutscenePanels(introToShow)
+        cutsceneDoneRef.current = () => setScreen('nodemap')
+        setScreen('cutscene')
+        return
+      }
     }
+    setScreen('nodemap')
   }, [])
 
   const handleSelectNode = useCallback((node: QuestNode) => {
@@ -334,7 +351,15 @@ export default function App() {
       const catalog = getCardCatalog()
       const pool = catalog.filter(c => c.rarity === effect.rarity)
       const card = pool[Math.floor(Math.random() * pool.length)]
-      if (card) addCardsToCollection([{ cardName: card.name, count: 1 }])
+      if (card) {
+        addCardsToCollection([{ cardName: card.name, count: 1 }])
+        saveRun(updatedRun)
+        setRun(updatedRun)
+        setActiveEvent(null)
+        setPendingEventCard(card.name)
+        playCardFlip()
+        return   // show card reveal before going to nodemap
+      }
     }
 
     saveRun(updatedRun)
@@ -496,6 +521,7 @@ export default function App() {
   // ── Card plays ───────────────────────────────────────────
 
   const handlePlayCard = useCallback((cardId: string) => {
+    playCardPlay()
     setGameState(s => {
       if (!s) return s
       const card = s.playerHand.find(c => c.id === cardId)
@@ -572,13 +598,39 @@ export default function App() {
     }
   }, [gameState, handleCampaignWin, handleCampaignRetry, handlePlayAgain])
 
+  // ─── Reset game ──────────────────────────────────────────
+  const handleResetGame = useCallback(() => {
+    const KEYS = [
+      'jarv_collection', 'jarv_deck', 'jarv_crystals',
+      'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
+      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
+    ]
+    KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
+    window.location.reload()
+  }, [])
+
   // ── Render ───────────────────────────────────────────────
 
   const actData = run ? ACTS[run.actId] : null
+  const actTheme = run?.actId
 
   return (
     <div className="game-container">
       <div className="game-title">JARV'S AMAZING WEB GAME</div>
+
+      {/* Event card reveal overlay */}
+      {pendingEventCard && (() => {
+        const catalog = getCardCatalog()
+        const card = catalog.find(c => c.name === pendingEventCard)
+        if (!card) { setPendingEventCard(null); return null }
+        return (
+          <div className="event-card-reveal-backdrop" onClick={() => { setPendingEventCard(null); setScreen('nodemap') }}>
+            <div className="event-card-reveal-label">YOU GAINED A CARD</div>
+            <CardTile card={card} canAfford={true} />
+            <div className="event-card-reveal-sub">Click anywhere to continue</div>
+          </div>
+        )
+      })()}
 
       {screen === 'title' && (
         <TitleScreen
@@ -587,7 +639,12 @@ export default function App() {
           onCampaign={handleCampaign}
           onCollection={() => setScreen('collection')}
           onDeckBuilder={() => setScreen('deckbuilder')}
+          onSettings={() => setScreen('settings')}
         />
+      )}
+
+      {screen === 'settings' && (
+        <SettingsScreen onBack={() => setScreen('title')} onResetGame={handleResetGame} />
       )}
 
       {screen === 'nodemap' && run && actData && (
@@ -692,7 +749,7 @@ export default function App() {
           />
         ) : (
           <>
-            <Battlefield state={gameState} onPlayCard={handlePlayCard} />
+            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} />
             {activeRareEvent === 'fakeCrash'   && <FakeCrashEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'blackjack'   && <BlackjackEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'wrongNumber' && <WrongNumberEvent onDone={handleRareEventDone} />}

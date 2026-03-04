@@ -145,6 +145,21 @@ export interface Act {
   outro?: CutscenePanel[]   // shown every time the boss is defeated
 }
 
+// ─── Run counter ──────────────────────────────────────────
+
+const RUN_COUNT_KEY = 'jarv_run_count'
+
+export function loadRunCount(): number {
+  try { return parseInt(localStorage.getItem(RUN_COUNT_KEY) ?? '0', 10) || 0 }
+  catch { return 0 }
+}
+
+export function incrementRunCount(): number {
+  const next = loadRunCount() + 1
+  try { localStorage.setItem(RUN_COUNT_KEY, String(next)) } catch { /* ignore */ }
+  return next
+}
+
 // ─── Intro seen-tracking ──────────────────────────────────
 
 const SEEN_INTROS_KEY = 'jarv_seen_intros'
@@ -159,6 +174,200 @@ export function markIntroSeen(actId: string): void {
     const seen = JSON.parse(localStorage.getItem(SEEN_INTROS_KEY) ?? '[]') as string[]
     if (!seen.includes(actId)) localStorage.setItem(SEEN_INTROS_KEY, JSON.stringify([...seen, actId]))
   } catch { /* ignore */ }
+}
+
+// ─── Narrative variation ──────────────────────────────────
+// Returns slightly different intro panels based on how many runs the player has done.
+
+/** A seeded pseudo-random from the run count — keeps text stable per run number. */
+function seeded(n: number, offset = 0): number {
+  const x = Math.sin(n * 127.1 + offset * 311.7) * 43758.5453123
+  return x - Math.floor(x)
+}
+
+function pick<T>(arr: T[], n: number, offset = 0): T {
+  return arr[Math.floor(seeded(n, offset) * arr.length)]
+}
+
+// Variants for the opening line about Jarv's state of mind
+const JARV_MOODS = [
+  'Now, technically, unemployed.',
+  'Now, technically, a free agent.',
+  'Now, effectively, between employers.',
+  'Now, in the administrative sense, without portfolio.',
+  'Now — if you were being generous — on sabbatical.',
+]
+
+const JARV_INTROS = [
+  "You have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.",
+  "You have a deck of cards, a half-remembered oath, and an extremely stubborn refusal to think too hard about any of this.",
+  "You have a deck of cards, a persistent headache, and the growing suspicion that this wasn't your first time here.",
+  "You have a deck of cards, a strategy you haven't fully thought through, and the particular confidence of someone with nothing left to lose.",
+  "You have a deck of cards. You always have a deck of cards. That, at least, has been consistent.",
+]
+
+const FOREST_DESC = [
+  "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
+  "Your compass points to the Verdant Shard — a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
+  "Your compass points toward the Verdant Shard. The forest ahead is old enough to have opinions about you.",
+  "The Verdant Shard pulses at the edge of your compass bearing — a realm of old growth and older grudges, sealed since the Fracture.",
+]
+
+const THORNLORD_DESC = [
+  "The shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible.",
+  "The Thornlord seals the shard's pathways. He is ancient, uncompromising, and deeply inconvenient. You've dealt with worse. Probably.\n\nAt least, it feels like you have.",
+  "The Thornlord waits at the end of the shard. Older than the Dominion. Older than most things people are afraid of. He has not spoken to a living soul in forty years.\n\nYou wonder, briefly, if he'll recognise you.",
+  "The Thornlord seals every path through the Verdant Shard. Traders who've survived say he is patient, thorough, and has never once reconsidered a decision.\n\nYou have a plan. You've had plans before.",
+]
+
+const PRIOR_RUN_SUMMARIES = [
+  // run 2+
+  "The path felt familiar — the way a dream feels familiar, just before it turns wrong.",
+  "You stepped into the Verdant Shard with the uneasy sense that you'd stepped here before. You pushed the feeling aside. There was work to do.",
+  "Something about the first battle. The angle of the light. The particular way the Goblins charged. A déjà vu so precise it was almost a memory.",
+  "The forest seemed quieter than it should have been. As though it recognised you, and was deciding whether to be pleased about it.",
+]
+
+const PRIOR_RUN_OPENINGS = [
+  "You remember — and here is the strange part — getting this far before. Not the same choices. But the same road.",
+  "The scholar on the boulder didn't look up when you approached. 'Again?' he said. 'You're ahead of schedule.'",
+  "The Thornlord, when you finally stood before him, was already watching you. As though he had been expecting you. As though he had been expecting this for some time.",
+  "The goblins at the first barricade looked familiar. Not familiar the way people are familiar — familiar the way furniture in a childhood home is familiar. Something about the arrangement of them.",
+]
+
+const MILESTONE_OPENINGS: Record<number, string[]> = {
+  5: [
+    "The fifth time through the Verdant Shard, a bird called out your name. That was new.",
+    "Fifth campaign. The Thornlord paused before his opening monologue this time. As though choosing different words.",
+  ],
+  10: [
+    "Ten campaigns. The Wandering Scholar had written something in his margins. Your name. A question mark.",
+    "You notice things on the tenth pass that you hadn't noticed before. The way the Forest Patrol waits a little too perfectly. The way the shrine seems to already know your choice.",
+  ],
+  25: [
+    "Twenty-five campaigns. The Thornlord opens with silence now, instead of threats. It feels more honest.",
+    "After twenty-five runs, the goblins at the first checkpoint have started waving before attacking you. You choose not to read into this.",
+  ],
+  50: [
+    "Something is different this time. The sky above the Verdant Shard is slightly the wrong colour. The compass hesitates before pointing.",
+    "On the fiftieth campaign, you notice the cracks. Small ones. In the edges of things. The world is tired of resetting itself.",
+  ],
+  100: [
+    // Boss speaks directly to the player
+    "The Thornlord looks past you. Past Jarv. Directly at the person holding the cards.\n\n'You again,' he says. 'Not the tactician. You. I know you. I've been watching you since the beginning.'\n\nA pause. A root curls against the ground like a finger drumming.\n\n'A hundred times you've come here. A hundred times I've fallen. I am the oldest thing in this shard and you have made me your tutorial boss.'\n\nHe sounds almost amused. Almost.",
+  ],
+}
+
+/**
+ * Returns Act 1 intro panels modified based on how many times the campaign has been run.
+ * On the first run, returns the standard intro.
+ * On subsequent runs, adds references to prior attempts and subtle variations.
+ */
+export function getAct1Intro(runCount: number): CutscenePanel[] {
+  const n = runCount
+
+  // Milestone text overrides (e.g. run 100)
+  if (n >= 100 && MILESTONE_OPENINGS[100]) {
+    return [
+      {
+        title: 'THE THORNLORD KNOWS',
+        text: pick(MILESTONE_OPENINGS[100], n),
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n, 3)}\n\n${pick(THORNLORD_DESC, n, 2)}`,
+      },
+    ]
+  }
+
+  if (n >= 50 && MILESTONE_OPENINGS[50]) {
+    const panels: CutscenePanel[] = [
+      {
+        title: 'FIFTY CAMPAIGNS',
+        text: pick(MILESTONE_OPENINGS[50], n),
+      },
+    ]
+    panels.push({
+      title: 'THE WANDERER',
+      text: `You are Jarv. Former tactician of the Dominion's western campaigns. ${pick(JARV_MOODS, n)}\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall.\n\n${pick(JARV_INTROS, n, 1)}`,
+    })
+    panels.push({
+      title: 'THE VERDANT SHARD',
+      text: `${pick(FOREST_DESC, n, 2)}\n\n${pick(THORNLORD_DESC, n, 1)}`,
+    })
+    panels.push({ title: 'YOUR MISSION', text: 'Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way.' })
+    return panels
+  }
+
+  if (n >= 25 && MILESTONE_OPENINGS[25]) {
+    return [
+      { title: 'TWENTY-FIVE', text: pick(MILESTONE_OPENINGS[25], n) },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 2)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n, 1)}\n\n${pick(THORNLORD_DESC, n)}`,
+      },
+    ]
+  }
+
+  if (n >= 10 && MILESTONE_OPENINGS[10]) {
+    return [
+      { title: 'AGAIN', text: pick(MILESTONE_OPENINGS[10], n) },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
+      },
+      { title: 'YOUR MISSION', text: 'Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You\'ve always known how this goes.' },
+    ]
+  }
+
+  if (n >= 5 && MILESTONE_OPENINGS[5]) {
+    return [
+      { title: 'THE FIFTH TIME', text: pick(MILESTONE_OPENINGS[5], n) },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
+      },
+    ]
+  }
+
+  if (n >= 2) {
+    // Summary of last run + subtle deja vu
+    const summary = pick(PRIOR_RUN_SUMMARIES, n)
+    const opening = pick(PRIOR_RUN_OPENINGS, n)
+    return [
+      {
+        title: 'THE FRACTURE',
+        text: `Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant.\n\n${summary}`,
+      },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
+      },
+      {
+        title: 'A FEELING',
+        text: `And yet — ${opening}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time.`,
+      },
+    ]
+  }
+
+  // First run: standard intro
+  return ACT_1.intro ?? []
 }
 
 // ─── Run state ────────────────────────────────────────────

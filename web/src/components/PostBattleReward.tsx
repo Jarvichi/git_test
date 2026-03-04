@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { CardTile } from './CardTile'
 import { getCardCatalog } from '../game/cards'
 import { NodeType } from '../game/questline'
@@ -21,7 +21,33 @@ const NODE_FLAVOUR: Record<NodeType, string> = {
 
 export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
   const catalog = getCardCatalog()
-  const cards = choices.map(name => catalog.find(c => c.name === name)).filter(Boolean) as ReturnType<typeof getCardCatalog>[number][]
+  const cards   = choices.map(name => catalog.find(c => c.name === name)).filter(Boolean) as ReturnType<typeof getCardCatalog>[number][]
+
+  // Track which cards have been flipped (revealed face-up)
+  const [flipped, setFlipped] = useState<boolean[]>(cards.map(() => false))
+  const [picked,  setPicked]  = useState<string | null>(null)
+
+  // Sequentially reveal cards with a short stagger
+  useEffect(() => {
+    const timers = cards.map((_, i) =>
+      setTimeout(() => {
+        setFlipped(prev => {
+          const next = [...prev]
+          next[i] = true
+          return next
+        })
+      }, 350 + i * 450)
+    )
+    return () => timers.forEach(clearTimeout)
+  }, [])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handlePick(name: string) {
+    if (picked || !flipped[cards.findIndex(c => c.name === name)]) return
+    setPicked(name)
+    setTimeout(() => onPick(name), 380)
+  }
+
+  const allFlipped = flipped.every(Boolean)
 
   return (
     <div className="reward-screen">
@@ -31,21 +57,33 @@ export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
       </div>
 
       <div className="reward-cards">
-        {cards.map(card => (
-          <div key={card.name} className="reward-card-wrap">
-            <CardTile
-              card={card}
-              canAfford={true}
-              onClick={() => onPick(card.name)}
-            />
-            <div className="reward-card-label">{card.name}</div>
+        {cards.map((card, i) => (
+          <div key={card.name} className="reward-card-flip-wrap">
+            <div
+              className={`reward-card-flipper${flipped[i] ? ' reward-card-flipper--flipped' : ''}`}
+              onClick={() => handlePick(card.name)}
+              style={{
+                cursor: flipped[i] && !picked ? 'pointer' : 'default',
+                opacity: picked && picked !== card.name ? 0.3 : 1,
+                transition: 'opacity 0.3s ease',
+              }}
+            >
+              {/* Back face */}
+              <div className="reward-card-back">✦</div>
+              {/* Front face */}
+              <div className="reward-card-face">
+                <CardTile card={card} canAfford={true} onClick={() => handlePick(card.name)} />
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
-      <button className="action-btn reward-skip-btn" onClick={onSkip}>
-        SKIP REWARD
-      </button>
+      {allFlipped && !picked && (
+        <button className="action-btn reward-skip-btn" onClick={onSkip}>
+          SKIP REWARD
+        </button>
+      )}
     </div>
   )
 }

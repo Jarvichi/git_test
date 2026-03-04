@@ -24,11 +24,117 @@ interface Props {
   fatiguedCards?: string[]   // card names that cannot be added to the deck this act
 }
 
+type AutoStrategy = 'aggro' | 'control' | 'balanced' | 'ranged'
+
+const AUTO_STRATEGIES: { id: AutoStrategy; name: string; desc: string }[] = [
+  { id: 'aggro',    name: 'AGGRO',    desc: 'Flood the field with cheap, fast units. Speed is your weapon.' },
+  { id: 'ranged',   name: 'RANGED',   desc: 'Archers and bypass units that ignore walls. Strike from safety.' },
+  { id: 'control',  name: 'CONTROL',  desc: 'Walls, Farms, and structures to grind the enemy down slowly.' },
+  { id: 'balanced', name: 'BALANCED', desc: 'A mix of everything — units, structures, and upgrades.' },
+]
+
+function buildAutoDeck(
+  strategy: AutoStrategy,
+  collection: CollectionEntry[],
+  fatiguedCards: string[],
+): DeckEntry[] {
+  const catalog = getCardCatalog()
+
+  // Only consider cards the player owns and aren't resting
+  const available = catalog.filter(
+    c => getOwnedCount(collection, c.name) > 0 && !fatiguedCards.includes(c.name)
+  )
+
+  // Score each card based on strategy
+  function score(c: typeof available[0]): number {
+    const ownedCopies = Math.min(getOwnedCount(collection, c.name), COPIES_MAX)
+    let s = 0
+
+    if (strategy === 'aggro') {
+      if (c.cardType === 'unit')      s += c.cost <= 2 ? 100 : c.cost <= 3 ? 60 : 20
+      if (c.cardType === 'upgrade')   s += 30
+      if (c.cardType === 'structure') s += c.unit?.isWall ? 5 : 15
+      // Bonus for fast units
+      if (c.unit && c.unit.moveSpeed >= 40) s += 30
+
+    } else if (strategy === 'ranged') {
+      if (c.cardType === 'unit' && c.unit?.bypassWall) s += 100
+      if (c.cardType === 'unit' && !c.unit?.bypassWall) s += 20
+      if (c.cardType === 'upgrade')   s += 40
+      if (c.cardType === 'structure') s += c.unit?.structureEffect?.type === 'mana' ? 30 : 10
+
+    } else if (strategy === 'control') {
+      if (c.cardType === 'structure' && c.unit?.isWall) s += 100
+      if (c.cardType === 'structure' && !c.unit?.isWall) s += 80
+      if (c.cardType === 'upgrade')   s += 40
+      if (c.cardType === 'unit')      s += c.cost >= 4 ? 30 : 10
+
+    } else { // balanced
+      if (c.cardType === 'unit')      s += 60
+      if (c.cardType === 'structure') s += 50
+      if (c.cardType === 'upgrade')   s += 40
+    }
+
+    // Prefer higher rarity (more powerful)
+    const rarityBonus: Record<string, number> = { common: 0, uncommon: 10, rare: 20, legendary: 35 }
+    s += rarityBonus[c.rarity] ?? 0
+
+    // More owned copies = more reliable draw
+    s += ownedCopies * 5
+
+    return s
+  }
+
+  const scored = available
+    .map(c => ({ card: c, score: score(c), maxCopies: Math.min(getOwnedCount(collection, c.name), COPIES_MAX) }))
+    .sort((a, b) => b.score - a.score)
+
+  const deck: DeckEntry[] = []
+  let total = 0
+
+  // Phase 1: grab 1 copy of each top-scored card until we have 15-20 distinct cards
+  for (const { card, maxCopies } of scored) {
+    if (total >= 20) break
+    if (maxCopies < 1) continue
+    deck.push({ cardName: card.name, count: 1 })
+    total++
+  }
+
+  // Phase 2: fill remaining slots with extra copies of top cards
+  for (const { card, maxCopies } of scored) {
+    if (total >= DECK_MAX) break
+    const entry = deck.find(e => e.cardName === card.name)
+    if (!entry) continue
+    const canAdd = maxCopies - entry.count
+    if (canAdd <= 0) continue
+    const toAdd = Math.min(canAdd, DECK_MAX - total)
+    entry.count += toAdd
+    total += toAdd
+  }
+
+  // Phase 3: if still below DECK_MIN, add any remaining owned cards
+  for (const { card, maxCopies } of scored) {
+    if (total >= DECK_MAX) break
+    const existing = deck.find(e => e.cardName === card.name)
+    if (existing && existing.count >= maxCopies) continue
+    if (!existing) {
+      deck.push({ cardName: card.name, count: 1 })
+      total++
+    } else {
+      existing.count++
+      total++
+    }
+  }
+
+  return deck.filter(e => e.count > 0)
+}
+
 export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
   const catalog = getCardCatalog()
   const [collection] = useState<CollectionEntry[]>(loadCollection)
   const [deck, setDeck] = useState<DeckEntry[]>(loadDeck)
   const [detailCard, setDetailCard] = useState<Card | null>(null)
+  const [showAutoBuild, setShowAutoBuild] = useState(false)
 
   const total = deckTotalCards(deck)
   const valid = isDeckValid(deck)
@@ -64,6 +170,12 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
       }
       return next
     })
+  }
+
+  function handleAutoBuild(strategy: AutoStrategy) {
+    const built = buildAutoDeck(strategy, collection, fatiguedCards)
+    setDeck(built)
+    setShowAutoBuild(false)
   }
 
   function handleSave() {
@@ -169,6 +281,13 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
               />
             </div>
             <button
+              className="action-btn"
+              style={{ fontSize: '11px', padding: '5px 10px', borderColor: 'rgba(51,255,51,0.4)', color: '#aaa' }}
+              onClick={() => setShowAutoBuild(true)}
+            >
+              ⚡ AUTO BUILD
+            </button>
+            <button
               className={`action-btn${valid ? ' action-btn--large' : ''}`}
               onClick={handleSave}
               disabled={!valid}
@@ -178,6 +297,36 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Auto-build strategy picker */}
+      {showAutoBuild && (
+        <div className="autobuild-backdrop" onClick={() => setShowAutoBuild(false)}>
+          <div className="autobuild-panel" onClick={e => e.stopPropagation()}>
+            <div>
+              <div className="autobuild-title">⚡ AUTO BUILD</div>
+              <div className="autobuild-sub">
+                Choose a strategy. Your owned cards will be arranged into the strongest possible deck for that style.
+                Resting cards are excluded.
+              </div>
+            </div>
+            <div className="autobuild-strategies">
+              {AUTO_STRATEGIES.map(s => (
+                <button
+                  key={s.id}
+                  className="autobuild-strategy"
+                  onClick={() => handleAutoBuild(s.id)}
+                >
+                  <span className="autobuild-strategy-name">{s.name}</span>
+                  <span className="autobuild-strategy-desc">{s.desc}</span>
+                </button>
+              ))}
+            </div>
+            <button className="action-btn autobuild-cancel" onClick={() => setShowAutoBuild(false)}>
+              CANCEL
+            </button>
+          </div>
+        </div>
+      )}
 
       {detailCard && (
         <CardDetailModal

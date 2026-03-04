@@ -28,6 +28,7 @@ interface Props {
 
 type RarityFilter = 'all' | CardRarity
 type TypeFilter   = 'all' | CardType
+type SpecialFilter = 'upgradeable'
 
 function MasteryBar({ xp }: { xp: number }) {
   const { level, current, needed } = masteryProgress(xp)
@@ -46,19 +47,26 @@ function MasteryBar({ xp }: { xp: number }) {
 export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack, onBack }: Props) {
   const catalog = getCardCatalog()
   const [collection, setCollection] = useState<CollectionEntry[]>(loadCollection)
-  const [typeFilter,   setTypeFilter]   = useState<TypeFilter>('all')
-  const [rarityFilter, setRarityFilter] = useState<RarityFilter>('all')
+  const [typeFilter,    setTypeFilter]    = useState<TypeFilter>('all')
+  const [rarityFilter,  setRarityFilter]  = useState<RarityFilter>('all')
+  const [specialFilter, setSpecialFilter] = useState<SpecialFilter | null>(null)
   const [flash, setFlash]       = useState<string | null>(null)
   const [detailCard, setDetailCard] = useState<Card | null>(null)
 
-  const filtered = catalog.filter(c =>
-    (typeFilter   === 'all' || c.cardType === typeFilter) &&
-    (rarityFilter === 'all' || c.rarity   === rarityFilter)
-  )
-
   const totalOwned  = collection.reduce((s, e) => s + e.count, 0)
   const totalExtras = collection.reduce((s, e) => s + Math.max(0, e.count - COPIES_MAX), 0)
+  const totalUpgradeable = collection.reduce((s, e) => s + (Math.max(0, e.count - COPIES_MAX) > 0 ? 1 : 0), 0)
   const canBuyPack  = crystals >= CRYSTAL_PACK_COST
+
+  const filtered = catalog.filter(c => {
+    if (typeFilter   !== 'all' && c.cardType !== typeFilter)   return false
+    if (rarityFilter !== 'all' && c.rarity   !== rarityFilter) return false
+    if (specialFilter === 'upgradeable') {
+      const owned = getOwnedCount(collection, c.name)
+      if (Math.max(0, owned - COPIES_MAX) === 0) return false
+    }
+    return true
+  })
 
   function notify(msg: string) {
     setFlash(msg)
@@ -73,6 +81,21 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
     saveCrystals(next)
     onCrystalsChanged(next)
     notify(`+${gained} 💎`)
+  }
+
+  function handleMasterAll() {
+    let updated = [...collection]
+    let totalGained = 0
+    for (const entry of collection) {
+      const extras = Math.max(0, entry.count - COPIES_MAX)
+      if (extras > 0) {
+        updated = masterAllExtras(updated, entry.cardName)
+        totalGained += extras
+      }
+    }
+    saveCollection(updated)
+    setCollection(updated)
+    notify(`+${totalGained} mastery XP across all cards!`)
   }
 
   function handleDisenchantCard(cardName: string) {
@@ -101,6 +124,10 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
       : `+${extras} mastery XP for ${cardName}`)
   }
 
+  function toggleSpecial() {
+    setSpecialFilter(prev => prev === 'upgradeable' ? null : 'upgradeable')
+  }
+
   return (
     <div className="overlay-screen">
       {/* Header */}
@@ -120,6 +147,14 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
           🔮 Disenchant extras ({totalExtras})
         </button>
         <button
+          className="action-btn collection-master-btn"
+          onClick={handleMasterAll}
+          disabled={totalUpgradeable === 0}
+          title="Convert all extra copies into mastery XP"
+        >
+          ★ Upgrade all ({totalUpgradeable})
+        </button>
+        <button
           className="action-btn collection-pack-btn"
           onClick={canBuyPack ? onBuyCrystalPack : undefined}
           disabled={!canBuyPack}
@@ -129,7 +164,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
         {flash && <span className="collection-flash">{flash}</span>}
       </div>
 
-      {/* Filters — single scrollable row */}
+      {/* Filters */}
       <div className="filter-bar">
         {(['all', 'unit', 'structure', 'upgrade'] as const).map(t => (
           <button
@@ -150,6 +185,15 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
             {r === 'all' ? 'ALL' : r.slice(0, 3).toUpperCase()}
           </button>
         ))}
+        <span className="filter-sep">|</span>
+        <button
+          className={`filter-btn${specialFilter === 'upgradeable' ? ' filter-btn--active' : ''}`}
+          onClick={toggleSpecial}
+          title="Show only cards with extra copies that can be mastered"
+          style={specialFilter === 'upgradeable' ? { borderColor: '#ffd700', color: '#ffd700' } : {}}
+        >
+          ★ UPG
+        </button>
         <span className="filter-owned">{totalOwned} cards</span>
       </div>
 
@@ -166,7 +210,6 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
             <div key={card.name} className={`collection-cell${owned === 0 ? ' collection-cell--unowned' : ''}`}>
               <CardTile card={card} canAfford={true} onClick={() => setDetailCard(card)} />
 
-              {/* Count + per-card actions on one compact row */}
               <div className="cell-footer">
                 <span className="cell-count">
                   ×{owned}{lvl > 0 && <span className="cell-mastery-badge">★{lvl}</span>}
@@ -191,7 +234,6 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
                 )}
               </div>
 
-              {/* Mastery progress bar (only when mastered) */}
               {xp > 0 && <MasteryBar xp={xp} />}
             </div>
           )
