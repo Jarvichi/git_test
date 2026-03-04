@@ -1,4 +1,4 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, LANE_WIDTH, BattleEventState } from './types'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState } from './types'
 import { makeDeck, makeThorlordDeck, HERO_CARDS } from './cards'
 
 // ─── Constants ────────────────────────────────────────────
@@ -81,6 +81,31 @@ export const MAX_HANDICAP = 20
  * @param opponentHandicap  Cards removed from the opponent's deck (adaptive difficulty).
  *   Increases by 1 on each player loss, decreases by 1 on each win (floor 0).
  */
+// ─── Difficulty scaling ───────────────────────────────────
+//
+// The handicap (0–20) controls what rarities the opponent can draw.
+// 0  = hardest (full deck, legendaries included) — player is on a win-streak
+// 20 = easiest (commons only) — player has been losing repeatedly
+//
+// Thresholds also apply to campaign nodes: a node with handicap 8 puts the
+// opponent on uncommon-max, making early acts beatable with a starter deck.
+
+const RARITY_RANK: Record<CardRarity, number> = { common: 0, uncommon: 1, rare: 2, legendary: 3 }
+
+function maxRarityForHandicap(h: number): CardRarity {
+  if (h >= 12) return 'common'
+  if (h >= 7)  return 'uncommon'
+  if (h >= 3)  return 'rare'
+  return 'legendary'
+}
+
+/** Opponent acts faster at low handicap (player is skilled), slower at high handicap (player is struggling). */
+function opponentIntervalForHandicap(h: number): number {
+  if (h >= 10) return 10000
+  if (h >= 5)  return 9000
+  return OPPONENT_INTERVAL_MS  // 8000
+}
+
 const STRATEGIES: GameState['opponentStrategy'][] = ['swarm', 'turtle', 'rush']
 const STRATEGY_LABELS: Record<GameState['opponentStrategy'], string> = {
   swarm:  'Swarming with cheap units!',
@@ -100,18 +125,19 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
   const playerDeck = shuffle(playerCards ?? makeDeck())
 
   // Boss fights use their own curated deck instead of the standard one
-  let rawOpponentDeck: Card[]
-  if (bossAI === 'thornlord') {
-    rawOpponentDeck = shuffle(makeThorlordDeck())
-  } else {
-    rawOpponentDeck = shuffle(makeDeck())
-  }
-
-  // Remove cards from the tail of the shuffled deck to weaken the opponent
   const clamp = Math.min(Math.max(0, opponentHandicap), MAX_HANDICAP)
-  const opponentDeck = bossAI
-    ? rawOpponentDeck  // bosses always play their full deck
-    : rawOpponentDeck.slice(0, Math.max(4, rawOpponentDeck.length - clamp))
+
+  let opponentDeck: Card[]
+  if (bossAI === 'thornlord') {
+    opponentDeck = shuffle(makeThorlordDeck())  // bosses always play their full deck
+  } else {
+    // Filter the opponent deck to only include cards up to the allowed rarity tier.
+    // This makes the handicap system meaningful: at high handicap the opponent
+    // draws only commons (comparable to a starter deck), never Behemoths.
+    const maxRarity = maxRarityForHandicap(clamp)
+    const filtered  = makeDeck().filter(c => RARITY_RANK[c.rarity] <= RARITY_RANK[maxRarity])
+    opponentDeck = shuffle(filtered)
+  }
 
   // Inject one hero card per side (not for bosses — they have their own identity)
   injectHero(playerDeck, HERO_CARDS)
@@ -122,6 +148,15 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
 
   const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
 
+  const maxRarity     = bossAI ? 'legendary' : maxRarityForHandicap(clamp)
+  const oppIntervalMs = bossAI === 'thornlord' ? 6000 : opponentIntervalForHandicap(clamp)
+
+  const diffLabel =
+    maxRarity === 'common'    ? 'common-only' :
+    maxRarity === 'uncommon'  ? 'no rares/legendaries' :
+    maxRarity === 'rare'      ? 'no legendaries' :
+    'full strength'
+
   const openingLog: string[] = bossAI === 'thornlord'
     ? [
         'THE THORNLORD awakens! Ancient guardian of the Verdant Shard.',
@@ -129,7 +164,7 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
       ]
     : [
         clamp > 0
-          ? `Battle begins! (Enemy -${clamp} card${clamp !== 1 ? 's' : ''} handicap)`
+          ? `Battle begins! (Enemy difficulty: ${diffLabel})`
           : 'Battle begins! Tap cards to deploy.',
         `Enemy strategy: ${STRATEGY_LABELS[strategy]}`,
       ]
@@ -147,7 +182,8 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
     manaAccum: 0,
     log: openingLog,
     phase: { type: 'playing' },
-    opponentTimer: bossAI === 'thornlord' ? 6000 : OPPONENT_INTERVAL_MS,  // boss acts faster
+    opponentTimer: oppIntervalMs,
+    opponentIntervalMs: oppIntervalMs,
     opponentStrategy: strategy,
     gameTime: 0,
     playerScore: 0,
@@ -633,7 +669,7 @@ export function tick(state: GameState, deltaMs: number): GameState {
       s.opponentTimer = 6000
     } else {
       opponentAI(s, log)
-      s.opponentTimer = OPPONENT_INTERVAL_MS
+      s.opponentTimer = s.opponentIntervalMs
     }
   }
 

@@ -16,6 +16,7 @@ const NODE_FLAVOUR: Record<NodeType, string> = {
   boss:     'The shard guardian is defeated. A legendary prize awaits.',
   rest:     '',
   event:    '',
+  merchant: '',
 }
 
 export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {

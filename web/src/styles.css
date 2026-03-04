@@ -2604,3 +2604,226 @@ body {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Cutscene Screen ─────────────────────────────────────── */
+
+.cutscene-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 420px;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 48px 32px 32px;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+}
+
+.cutscene-content {
+  flex: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cutscene-content--visible {
+  opacity: 1;
+}
+
+.cutscene-act-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #33ff33;
+  margin-bottom: 28px;
+}
+
+.cutscene-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cutscene-paragraph {
+  font-size: 13px;
+  color: #bbb;
+  line-height: 1.9;
+  margin: 0;
+}
+
+.cutscene-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid #1a1a1a;
+  margin-top: 32px;
+}
+
+.cutscene-progress {
+  font-size: 10px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+.cutscene-continue {
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 2px;
+  animation: blink 1.4s step-end infinite;
+}
+
+/* ── Merchant Screen ─────────────────────────────────────── */
+
+.merchant-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.merchant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid #332200;
+  padding-bottom: 10px;
+}
+
+.merchant-title {
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: #cc9933;
+}
+
+.merchant-crystals {
+  font-size: 14px;
+  color: #ffcc44;
+  letter-spacing: 1px;
+}
+
+.merchant-tagline {
+  font-size: 12px;
+  color: #886633;
+  font-style: italic;
+  padding: 0 4px;
+}
+
+.merchant-items {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex: 1;
+  align-items: flex-start;
+  padding: 8px 0;
+}
+
+.merchant-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.merchant-item--bought {
+  opacity: 0.5;
+}
+
+.merchant-item-footer {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.merchant-buy-btn {
+  background: #1a1200;
+  border-color: #cc9933;
+  color: #ffcc44;
+  min-width: 72px;
+}
+
+.merchant-buy-btn:hover:not(:disabled) {
+  background: #2a2000;
+  border-color: #ffcc44;
+}
+
+.merchant-buy-btn--poor {
+  border-color: #442200;
+  color: #664400;
+  cursor: not-allowed;
+}
+
+.merchant-purchased {
+  font-size: 10px;
+  color: #33cc66;
+  letter-spacing: 2px;
+}
+
+.merchant-leave {
+  align-self: center;
+  margin-top: 8px;
+}
+
+/* ── Boss Dialogue Screen ────────────────────────────────── */
+
+.boss-dialogue-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  min-height: 340px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+}
+
+.boss-dialogue-speaker {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #cc4444;
+  border-bottom: 1px solid #331111;
+  padding-bottom: 16px;
+}
+
+.boss-dialogue-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.boss-dialogue-line {
+  font-size: 16px;
+  color: #cc8866;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.boss-dialogue-line--new {
+  animation: fadeIn 0.4s ease;
+}
+
+.boss-dialogue-footer {
+  padding-top: 24px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.boss-dialogue-continue {
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 2px;
+  animation: blink 1.4s step-end infinite;
+}
+
+.boss-dialogue-fight {
+  font-size: 11px;
+  color: #cc4444;
+  letter-spacing: 3px;
+  animation: blink 0.9s step-end infinite;
+}

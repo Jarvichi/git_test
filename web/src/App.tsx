@@ -11,13 +11,17 @@ import { getCardCatalog } from './game/cards'
 import {
   loadRun, saveRun, clearRun, newRun,
   getAvailableNodeIds, skipSiblings, isActComplete,
-  generateRewardChoices, ACTS,
+  generateRewardChoices, generateMerchantCards, MERCHANT_PRICES, ACTS,
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
+  hasSeenIntro, markIntroSeen,
   EVENT_CATALOG, EventChoice,
-  QuestNode, RunState,
+  CutscenePanel, QuestNode, RunState,
 } from './game/questline'
-import { CardRestSelect }     from './components/CardRestSelect'
-import { EventScreen }        from './components/EventScreen'
+import { CardRestSelect }       from './components/CardRestSelect'
+import { EventScreen }          from './components/EventScreen'
+import { MerchantScreen, MerchantItem } from './components/MerchantScreen'
+import { CutsceneScreen }       from './components/CutsceneScreen'
+import { BossDialogueScreen }   from './components/BossDialogueScreen'
 import { Battlefield }        from './components/Battlefield'
 import { GameOver }           from './components/GameOver'
 import { TitleScreen }        from './components/TitleScreen'
@@ -57,7 +61,10 @@ type Screen =
   | 'deckbuilder'
   | 'pack'
   | 'nodemap'
+  | 'cutscene'
+  | 'bossdialogue'
   | 'event'
+  | 'merchant'
   | 'reward'
   | 'actcomplete'
   | 'cardrest'
@@ -75,8 +82,16 @@ export default function App() {
   const [rewardChoices, setRewardChoices] = useState<string[]>([])
   const isCampaignRef = useRef(false)   // true while playing a campaign battle
 
+  // Cutscenes & boss dialogue
+  const [cutscenePanels, setCutscenePanels]   = useState<CutscenePanel[]>([])
+  const cutsceneDoneRef = useRef<() => void>(() => {})
+  const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
+
   // Active campaign event
   const [activeEvent, setActiveEvent] = useState<typeof EVENT_CATALOG[string] | null>(null)
+
+  // Active merchant
+  const [merchantItems, setMerchantItems] = useState<MerchantItem[]>([])
 
   // Card fatigue
   const [fatiguedCards, setFatiguedCards]       = useState<string[]>(loadFatigued)
@@ -191,12 +206,21 @@ export default function App() {
   // ── Campaign ─────────────────────────────────────────────
 
   const handleCampaign = useCallback(() => {
-    // Load or create run
     const existing = loadRun()
     const activeRun = existing ?? newRun('act1')
     if (!existing) saveRun(activeRun)
     setRun(activeRun)
-    setScreen('nodemap')
+
+    // Show act intro cutscene the first time this act is started
+    const act = ACTS[activeRun.actId]
+    if (!existing && act.intro && !hasSeenIntro(activeRun.actId)) {
+      markIntroSeen(activeRun.actId)
+      setCutscenePanels(act.intro)
+      cutsceneDoneRef.current = () => setScreen('nodemap')
+      setScreen('cutscene')
+    } else {
+      setScreen('nodemap')
+    }
   }, [])
 
   const handleSelectNode = useCallback((node: QuestNode) => {
@@ -233,6 +257,25 @@ export default function App() {
       }
     }
 
+    if (node.type === 'merchant') {
+      const catalog   = getCardCatalog()
+      const cardNames = generateMerchantCards()
+      const items: MerchantItem[] = cardNames.map(name => {
+        const card = catalog.find(c => c.name === name)!
+        return { card, price: MERCHANT_PRICES[card.rarity] }
+      })
+      setMerchantItems(items)
+      setScreen('merchant')
+      return
+    }
+
+    // Boss pre-battle dialogue
+    if (node.bossDialogue && node.bossDialogue.length > 0) {
+      setBossDialogueNode(node)
+      setScreen('bossdialogue')
+      return
+    }
+
     // Start battle
     campaignPlayCountsRef.current = {}
     isCampaignRef.current = true
@@ -247,6 +290,24 @@ export default function App() {
     setScreen('playing')
     rollRareEvent()
   }, [run])
+
+  const handleBossDialogueDone = useCallback(() => {
+    const node = bossDialogueNode
+    if (!node || !run) return
+    setBossDialogueNode(null)
+    // Now actually start the battle
+    campaignPlayCountsRef.current = {}
+    isCampaignRef.current = true
+    const collection  = loadCollection()
+    const fatigued    = loadFatigued()
+    const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
+    const playerCards = buildDeckCards(deckEntries, collection)
+    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+    state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
+    setGameState(state)
+    setScreen('playing')
+    rollRareEvent()
+  }, [bossDialogueNode, run])
 
   const handleEventChoice = useCallback((choice: EventChoice) => {
     const currentRun = run
@@ -282,6 +343,28 @@ export default function App() {
     setScreen('nodemap')
   }, [run])
 
+  const handleMerchantBuy = useCallback((cardName: string, price: number) => {
+    addCardsToCollection([{ cardName, count: 1 }])
+    const next = loadCrystals() - price
+    saveCrystals(Math.max(0, next))
+    setCrystals(Math.max(0, next))
+  }, [])
+
+  const handleMerchantDone = useCallback(() => {
+    const currentRun = run
+    if (!currentRun) return
+    const nodeId = currentRun.pendingNodeId!
+    const updatedRun: RunState = {
+      ...currentRun,
+      completedNodeIds: [...currentRun.completedNodeIds, nodeId],
+      pendingNodeId: null,
+    }
+    saveRun(updatedRun)
+    setRun(updatedRun)
+    setMerchantItems([])
+    setScreen('nodemap')
+  }, [run])
+
   const handleCampaignWin = useCallback(() => {
     const currentRun = run
     if (!currentRun || !gameState) return
@@ -309,7 +392,13 @@ export default function App() {
 
     // Check act complete
     if (isActComplete(act, updatedRun)) {
-      setScreen('actcomplete')
+      if (act.outro && act.outro.length > 0) {
+        setCutscenePanels(act.outro)
+        cutsceneDoneRef.current = () => setScreen('actcomplete')
+        setScreen('cutscene')
+      } else {
+        setScreen('actcomplete')
+      }
       return
     }
 
@@ -529,8 +618,29 @@ export default function App() {
         />
       )}
 
+      {screen === 'cutscene' && cutscenePanels.length > 0 && (
+        <CutsceneScreen panels={cutscenePanels} onDone={() => cutsceneDoneRef.current()} />
+      )}
+
+      {screen === 'bossdialogue' && bossDialogueNode?.bossDialogue && (
+        <BossDialogueScreen
+          bossName={bossDialogueNode.label}
+          lines={bossDialogueNode.bossDialogue}
+          onDone={handleBossDialogueDone}
+        />
+      )}
+
       {screen === 'event' && activeEvent && (
         <EventScreen event={activeEvent} onChoice={handleEventChoice} />
+      )}
+
+      {screen === 'merchant' && merchantItems.length > 0 && (
+        <MerchantScreen
+          items={merchantItems}
+          crystals={crystals}
+          onBuy={handleMerchantBuy}
+          onDone={handleMerchantDone}
+        />
       )}
 
       {screen === 'cardrest' && (

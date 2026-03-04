@@ -98,6 +98,7 @@ export interface GameState {
   log: string[]
   phase: GamePhase
   opponentTimer: number      // ms until opponent next acts
+  opponentIntervalMs: number // ms between opponent turns (scales with difficulty)
   opponentStrategy: OpponentStrategy
   gameTime: number           // total elapsed game time in ms
   playerScore: number        // cumulative damage dealt to opponent
