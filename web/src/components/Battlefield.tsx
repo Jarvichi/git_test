@@ -92,22 +92,38 @@ function RockSvg({ size }: { size: number }) {
 }
 
 function TreeSvg({ size }: { size: number }) {
+  // Renders a cluster of 3 trees so individual obstacles read as a small grove
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="12,1 22,17 2,17" fill="#1a7a1a" stroke="#44ee44" strokeWidth="1.5"/>
-      <polygon points="12,5 20,17 4,17" fill="#259025" stroke="#66dd66" strokeWidth="0.8"/>
-      <polygon points="12,9 18,17 6,17" fill="#30a030" stroke="#88cc88" strokeWidth="0.5"/>
-      <rect x="9" y="17" width="6" height="6" fill="#5a3010" stroke="#7a5030" strokeWidth="0.8"/>
+    <svg width={size} height={size} viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg">
+      {/* Left tree */}
+      <polygon points="9,4 17,18 1,18"  fill="#156615" stroke="#3d993d" strokeWidth="0.8"/>
+      <polygon points="9,9 15,18 3,18"  fill="#1d801d" stroke="#55aa55" strokeWidth="0.5"/>
+      <rect x="7" y="18" width="4" height="5" fill="#4a2a0a"/>
+      {/* Right tree */}
+      <polygon points="31,5 39,19 23,19" fill="#147014" stroke="#3d993d" strokeWidth="0.8"/>
+      <polygon points="31,10 37,19 25,19" fill="#1c7c1c" stroke="#55aa55" strokeWidth="0.5"/>
+      <rect x="29" y="19" width="4" height="5" fill="#4a2a0a"/>
+      {/* Centre tree — tallest, in front */}
+      <polygon points="20,0 30,18 10,18"  fill="#1a8c1a" stroke="#44cc44" strokeWidth="1.2"/>
+      <polygon points="20,5 28,18 12,18"  fill="#22a022" stroke="#66dd66" strokeWidth="0.7"/>
+      <polygon points="20,9 26,18 14,18"  fill="#30b030" stroke="#88cc88" strokeWidth="0.5"/>
+      <rect x="17" y="18" width="6" height="7" fill="#5a3010" stroke="#7a5030" strokeWidth="0.7"/>
     </svg>
   )
 }
 
 function WaterSvg({ size }: { size: number }) {
+  // Irregular blob shape using bezier curves — no two pools look the same at different sizes
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="12" cy="13" rx="11" ry="8" fill="#0a3055" stroke="#44aaff" strokeWidth="1.5"/>
-      <path d="M2,11 Q6,8 12,11 Q18,14 22,11" fill="none" stroke="#88ccff" strokeWidth="1.8" strokeLinecap="round"/>
-      <path d="M2,15 Q6,12 12,15 Q18,18 22,15" fill="none" stroke="#55aaee" strokeWidth="1.5" strokeLinecap="round"/>
+    <svg width={size} height={size} viewBox="0 0 34 26" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M5,11 C3,5 7,1 13,2 C17,0 23,1 27,5 C32,6 34,12 30,17 C28,21 22,24 16,23 C9,24 3,21 1,17 C-1,14 3,14 5,11 Z"
+        fill="#0a3055" stroke="#44aaff" strokeWidth="1.2"
+      />
+      <path d="M7,10 Q12,7 18,9"  fill="none" stroke="#88ccff" strokeWidth="1.6" strokeLinecap="round"/>
+      <path d="M5,15 Q12,11 22,14" fill="none" stroke="#66aadd" strokeWidth="1.3" strokeLinecap="round"/>
+      <path d="M9,19 Q16,16 26,18" fill="none" stroke="#55aaee" strokeWidth="1.0" strokeLinecap="round"/>
+      <ellipse cx="22" cy="8" rx="3" ry="1.5" fill="#66ccff" opacity="0.35"/>
     </svg>
   )
 }
@@ -132,10 +148,61 @@ const TERRAIN_SHAPES: Record<TerrainType, (size: number) => React.ReactNode> = {
   ruin:  s => <RuinSvg  size={s} />,
 }
 
+// ─── Forest border ────────────────────────────────────────────────────────────
+// Purely decorative tree line along the left edge, right edge, and top of the
+// battlefield. Uses deterministic (sin-based) offsets so the layout is stable
+// across re-renders without needing game state.
+
+function ForestBorder() {
+  const trees: { key: string; top: number; left: number; size: number }[] = []
+
+  // left edge (y ≈ -74) and right edge (y ≈ +74) — step every ~30px of x
+  for (const side of [-74, 74] as const) {
+    for (let ex = 20; ex <= 490; ex += 28) {
+      const yJitter  = Math.sin(ex * 0.17 + side) * 3      // ±3 px sway
+      const topPct   = (1 - ex / LANE_WIDTH) * 100
+      const leftPct  = 50 + ((side + yJitter) / 80) * 36
+      const size     = 26 + Math.round(Math.abs(Math.sin(ex * 0.31 + side)) * 10)
+      trees.push({ key: `fe-${side}-${ex}`, top: topPct, left: leftPct, size })
+    }
+  }
+
+  // top edge (opponent side, x ≈ 475–500) — fill across the width
+  for (let ey = -68; ey <= 68; ey += 22) {
+    const xJitter  = Math.sin(ey * 0.2) * 5
+    const topPct   = (1 - (485 + xJitter) / LANE_WIDTH) * 100
+    const leftPct  = 50 + (ey / 80) * 36
+    const size     = 24 + Math.round(Math.abs(Math.sin(ey * 0.4)) * 8)
+    trees.push({ key: `fe-top-${ey}`, top: topPct, left: leftPct, size })
+  }
+
+  return (
+    <>
+      {trees.map(t => (
+        <div
+          key={t.key}
+          style={{
+            position: 'absolute',
+            top: `${t.top}%`,
+            left: `${t.left}%`,
+            transform: 'translateX(-50%) translateY(-50%)',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            zIndex: 1,
+            opacity: 0.88,
+          }}
+        >
+          <TreeSvg size={t.size} />
+        </div>
+      ))}
+    </>
+  )
+}
+
 function TerrainTile({ obs }: { obs: TerrainObstacle }) {
   const topPct  = (1 - obs.x / LANE_WIDTH) * 100
   const leftPct = 50 + (obs.y / 80) * 36
-  const size    = Math.round(22 + obs.radius * 0.6)
+  const size    = Math.round(40 + obs.radius * 1.5)   // bigger: ~58–73 px
   return (
     <div
       className={`terrain-obstacle terrain-obstacle--${obs.type}`}
@@ -242,6 +309,7 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
       {/* The Lane — vertical, fills remaining space */}
       <div className="lane">
         <div className="lane-ground" />
+        <ForestBorder />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {state.field.map((u, i) => {
           const stackIndex = u.moveSpeed === 0
