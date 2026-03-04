@@ -13,6 +13,57 @@ interface Props {
 
 const SPAWN_GROW_MS = 1500
 
+// ─── Wall graphic ─────────────────────────────────────────────────────────────
+// Rendered in-place of the sprite for wall units.  Full-width SVG showing
+// staggered stone blocks, battlements, and progressive damage cracks.
+
+function WallSvg({ hp, maxHp, owner }: { hp: number; maxHp: number; owner: 'player' | 'opponent' }) {
+  const dmgPct = 1 - hp / maxHp
+  // Player = cool grey-blue stone; opponent = warm tan stone
+  const [stone, hiStone, merlon] = owner === 'player'
+    ? ['#606878', '#70788a', '#707888'] as const
+    : ['#7a5838', '#8a6848', '#906a40'] as const
+  const op = 1 - dmgPct * 0.4   // fade slightly with damage
+
+  return (
+    <svg
+      width="100%" height="30"
+      viewBox="0 0 360 30"
+      preserveAspectRatio="none"
+      style={{ display: 'block' }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Bottom stone row — 12 blocks */}
+      {Array.from({ length: 12 }, (_, i) => (
+        <rect key={`b${i}`} x={i*30+1} y="17" width="28" height="12" fill={stone}   stroke="#18100a" strokeWidth="0.8" opacity={op}/>
+      ))}
+      {/* Upper row (staggered) */}
+      {Array.from({ length: 13 }, (_, i) => (
+        <rect key={`u${i}`} x={i*30-14} y="8" width="28" height="10" fill={hiStone} stroke="#18100a" strokeWidth="0.8" opacity={op}/>
+      ))}
+      {/* Battlements (merlons) */}
+      {Array.from({ length: 7 }, (_, i) => (
+        <rect key={`m${i}`} x={i*52+2} y="1" width="22" height="9" fill={merlon} stroke="#18100a" strokeWidth="0.8" opacity={op}/>
+      ))}
+      {/* Base shadow strip */}
+      <rect x="0" y="28" width="360" height="2" fill="#0a0500" opacity="0.4"/>
+
+      {/* Progressive damage cracks */}
+      {dmgPct > 0.25 && <line x1="86"  y1="8"  x2="83"  y2="29" stroke="#050200" strokeWidth="1.5" opacity="0.7"/>}
+      {dmgPct > 0.45 && <line x1="200" y1="1"  x2="197" y2="29" stroke="#050200" strokeWidth="2"   opacity="0.8"/>}
+      {dmgPct > 0.65 && (
+        <>
+          <line x1="145" y1="8"  x2="148" y2="29" stroke="#050200" strokeWidth="1.2" opacity="0.7"/>
+          <line x1="290" y1="1"  x2="286" y2="29" stroke="#050200" strokeWidth="1.5" opacity="0.8"/>
+        </>
+      )}
+      {/* Crumbled battlements at heavy damage */}
+      {dmgPct > 0.5 && <rect x="106" y="1" width="22" height="9" fill="#050200" opacity="0.55"/>}
+      {dmgPct > 0.75 && <rect x="264" y="1" width="22" height="9" fill="#050200" opacity="0.7"/>}
+    </svg>
+  )
+}
+
 function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number }) {
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
   const isStructure = unit.moveSpeed === 0
@@ -61,16 +112,20 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
-      {isStructure
-        ? <SpriteImg name={unit.name} className="lane-unit-sprite" />
-        : <AnimatedSpriteImg name={unit.name} frameCount={3} fps={6} className="lane-unit-sprite" />
+      {unit.isWall
+        ? <WallSvg hp={unit.hp} maxHp={unit.maxHp} owner={unit.owner} />
+        : isStructure
+          ? <SpriteImg name={unit.name} className="lane-unit-sprite" />
+          : <AnimatedSpriteImg name={unit.name} frameCount={3} fps={6} className="lane-unit-sprite" />
       }
-      <div className="lane-unit-name">
-        {unit.name}
-        {unit.upgradeLevel != null && unit.upgradeLevel >= 2 && (
-          <span className="lane-unit-level">Lv{unit.upgradeLevel}</span>
-        )}
-      </div>
+      {!unit.isWall && (
+        <div className="lane-unit-name">
+          {unit.name}
+          {unit.upgradeLevel != null && unit.upgradeLevel >= 2 && (
+            <span className="lane-unit-level">Lv{unit.upgradeLevel}</span>
+          )}
+        </div>
+      )}
       <div className="lane-unit-hp-bar">
         <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />
       </div>
@@ -294,8 +349,8 @@ function BlobSvg({ size, shade }: { size: number; shade: number }) {
 function ForestBorder() {
   const blobs: { key: string; top: number; left: number; size: number; shade: number }[] = []
 
-  // Left (y≈-84) and right (y≈+84) — tight wall just outside the playable field
-  for (const side of [-84, 84] as const) {
+  // Left (y≈-95) and right (y≈+95) — tight wall just outside the playable field
+  for (const side of [-95, 95] as const) {
     for (let ex = 5; ex <= 500; ex += 16) {
       const yOff  = Math.sin(ex * 0.19 + side) * 2      // ±2 units jitter
       const topPct  = (1 - ex / LANE_WIDTH) * 100
@@ -307,7 +362,7 @@ function ForestBorder() {
   }
 
   // Top edge (opponent side)
-  for (let ey = -84; ey <= 84; ey += 16) {
+  for (let ey = -95; ey <= 95; ey += 16) {
     const xOff  = Math.sin(ey * 0.23) * 3
     const topPct  = (1 - (495 + xOff) / LANE_WIDTH) * 100
     const leftPct = 50 + (ey / 80) * 36
