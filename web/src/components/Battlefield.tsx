@@ -82,50 +82,53 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
 // Using inline SVG guarantees rendering regardless of font glyph support.
 
 function RockSvg({ size }: { size: number }) {
+  // Dramatic mountain peaks — back range + front double-peak silhouette
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="12,2 22,20 2,20" fill="#6a6a5a" stroke="#bbbbaa" strokeWidth="1.5"/>
-      <polygon points="6,11 18,11 20,20 4,20" fill="#4e4e40" stroke="#999988" strokeWidth="0.8"/>
-      <polygon points="10,6 16,6 18,12 8,12" fill="#7a7a68" stroke="#aaaaaa" strokeWidth="0.5"/>
+    <svg width={size} height={Math.round(size * 1.25)} viewBox="0 0 38 48" xmlns="http://www.w3.org/2000/svg">
+      {/* Back mountain — single softer peak, darker */}
+      <path d="M2,46 C5,44 9,36 16,8 C23,36 27,44 30,46 Z" fill="#525258" opacity="0.65"/>
+      {/* Front range — twin peaks (M shape) with curved sides */}
+      <path d="M4,46 C7,42 11,32 17,6 L21,22 L26,4 C30,28 34,42 37,46 Z" fill="#78787e"/>
+      {/* Light edge highlight on left peak */}
+      <path d="M17,6 C16,10 15,18 14,28" fill="none" stroke="#aaaab0" strokeWidth="1" opacity="0.6"/>
+      {/* Snow cap hint */}
+      <path d="M17,6 L19,14 L21,22 L23,14 L26,4 L24,8 L21,16 L18,8 Z" fill="#d0d0d8" opacity="0.3"/>
     </svg>
   )
 }
 
 function TreeSvg({ size }: { size: number }) {
-  // Round deciduous blob canopies — cluster of overlapping circles
+  // Irregular organic blobs — looks like a topographic forest cluster
   return (
-    <svg width={size} height={size} viewBox="0 0 46 40" xmlns="http://www.w3.org/2000/svg">
-      {/* Back / shadow blobs */}
-      <ellipse cx="11" cy="25" rx="10" ry="9"  fill="#1e4a1e"/>
-      <ellipse cx="35" cy="26" rx="9"  ry="8"  fill="#1e4a1e"/>
-      {/* Mid layer */}
-      <ellipse cx="10" cy="18" rx="9"  ry="8"  fill="#2d6a2d"/>
-      <ellipse cx="36" cy="19" rx="8"  ry="7"  fill="#2a6a2a"/>
-      {/* Centre dominant canopy */}
-      <ellipse cx="23" cy="16" rx="13" ry="12" fill="#317331"/>
-      <ellipse cx="23" cy="11" rx="10" ry="8"  fill="#3a8a3a"/>
-      {/* Highlight */}
-      <ellipse cx="20" cy="9"  rx="5"  ry="3"  fill="#4aaa4a" opacity="0.45"/>
-      {/* Trunks */}
-      <line x1="10" y1="28" x2="9"  y2="39" stroke="#5a3010" strokeWidth="2"/>
-      <line x1="36" y1="28" x2="37" y2="39" stroke="#5a3010" strokeWidth="2"/>
-      <line x1="23" y1="25" x2="22" y2="39" stroke="#4a2a0a" strokeWidth="2.5"/>
+    <svg width={size} height={size} viewBox="0 0 32 28" xmlns="http://www.w3.org/2000/svg">
+      {/* Shadow base */}
+      <path d="M4,22 C0,18 1,11 6,9 C5,5 10,2 15,5 C18,2 24,4 24,9 C28,10 30,16 27,20 C28,24 23,27 18,25 C15,28 8,27 4,22 Z"
+        fill="#1e4812" opacity="0.5"/>
+      {/* Main blob */}
+      <path d="M5,20 C1,16 2,9 7,8 C6,4 11,1 16,4 C19,1 25,3 25,8 C29,9 30,15 27,19 C28,23 23,26 18,24 C15,27 7,26 5,20 Z"
+        fill="#2e6018"/>
+      {/* Lighter interior highlight */}
+      <path d="M8,18 C5,14 6,9 10,8 C10,5 14,3 17,6 C20,4 24,7 23,11 C26,13 25,18 22,20 C21,23 17,24 14,21 C12,23 7,22 8,18 Z"
+        fill="#3d7a22"/>
+      <ellipse cx="15" cy="13" rx="5" ry="4" fill="#52a030" opacity="0.4"/>
     </svg>
   )
 }
 
 function WaterSvg({ size }: { size: number }) {
-  // Irregular blob shape using bezier curves — no two pools look the same at different sizes
+  // Wide flat puddle — two connected kidney blobs, landscape oriented
+  const w = Math.round(size * 1.7)
   return (
-    <svg width={size} height={size} viewBox="0 0 34 26" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M5,11 C3,5 7,1 13,2 C17,0 23,1 27,5 C32,6 34,12 30,17 C28,21 22,24 16,23 C9,24 3,21 1,17 C-1,14 3,14 5,11 Z"
-        fill="#0a3055" stroke="#44aaff" strokeWidth="1.2"
-      />
-      <path d="M7,10 Q12,7 18,9"  fill="none" stroke="#88ccff" strokeWidth="1.6" strokeLinecap="round"/>
-      <path d="M5,15 Q12,11 22,14" fill="none" stroke="#66aadd" strokeWidth="1.3" strokeLinecap="round"/>
-      <path d="M9,19 Q16,16 26,18" fill="none" stroke="#55aaee" strokeWidth="1.0" strokeLinecap="round"/>
-      <ellipse cx="22" cy="8" rx="3" ry="1.5" fill="#66ccff" opacity="0.35"/>
+    <svg width={w} height={size} viewBox="0 0 52 22" xmlns="http://www.w3.org/2000/svg">
+      {/* Left blob */}
+      <path d="M2,13 C0,8 3,3 9,4 C10,1 16,0 19,4 C23,2 27,6 25,11 C28,13 27,19 23,20 C20,22 14,22 11,18 C7,21 1,19 2,13 Z"
+        fill="#1a3a7a"/>
+      {/* Right blob */}
+      <path d="M24,12 C22,7 25,3 30,4 C32,1 38,1 40,5 C44,4 48,8 47,13 C48,17 44,21 40,20 C37,22 30,22 27,18 C24,20 23,16 24,12 Z"
+        fill="#1e4490"/>
+      {/* Shimmer highlights */}
+      <ellipse cx="14" cy="10" rx="5" ry="2"   fill="#5090e0" opacity="0.45"/>
+      <ellipse cx="37" cy="11" rx="4" ry="1.8" fill="#5090e0" opacity="0.4"/>
     </svg>
   )
 }
@@ -217,10 +220,36 @@ function ForestBorder() {
   )
 }
 
+// Bridge shown over large water obstacles (radius > 18)
+function BridgeSvg({ size }: { size: number }) {
+  const w = Math.round(size * 1.7)  // match WaterSvg width
+  return (
+    <svg width={w} height={Math.round(size * 0.5)} viewBox="0 0 52 11" xmlns="http://www.w3.org/2000/svg"
+      style={{ position: 'absolute', top: '25%', left: 0, pointerEvents: 'none' }}>
+      {/* Bridge deck planks */}
+      <rect x="0"  y="4" width="52" height="4" fill="#8a6a3a"/>
+      <line x1="6"  y1="4" x2="6"  y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
+      <line x1="14" y1="4" x2="14" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
+      <line x1="22" y1="4" x2="22" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
+      <line x1="30" y1="4" x2="30" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
+      <line x1="38" y1="4" x2="38" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
+      <line x1="46" y1="4" x2="46" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
+      {/* Railings */}
+      <line x1="0" y1="3" x2="52" y2="3" stroke="#c8a060" strokeWidth="1.5"/>
+      <line x1="0" y1="9" x2="52" y2="9" stroke="#c8a060" strokeWidth="1.5"/>
+      {/* Posts */}
+      {[4, 14, 24, 34, 44].map(x => (
+        <line key={x} x1={x} y1="0" x2={x} y2="11" stroke="#c8a060" strokeWidth="1.5"/>
+      ))}
+    </svg>
+  )
+}
+
 function TerrainTile({ obs }: { obs: TerrainObstacle }) {
   const topPct  = (1 - obs.x / LANE_WIDTH) * 100
   const leftPct = 50 + (obs.y / 80) * 36
   const size    = Math.round(40 + obs.radius * 1.5)   // bigger: ~58–73 px
+  const hasBridge = obs.type === 'water' && obs.radius > 18
   return (
     <div
       className={`terrain-obstacle terrain-obstacle--${obs.type}`}
@@ -228,10 +257,13 @@ function TerrainTile({ obs }: { obs: TerrainObstacle }) {
         top:       `${topPct}%`,
         left:      `${leftPct}%`,
         transform: 'translateX(-50%) translateY(-50%)',
+        overflow:  'visible',
+        position:  'absolute',
       }}
       title={obs.type}
     >
       {TERRAIN_SHAPES[obs.type](size)}
+      {hasBridge && <BridgeSvg size={size} />}
     </div>
   )
 }
