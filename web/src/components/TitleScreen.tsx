@@ -8,9 +8,10 @@ interface Props {
   onCampaign: () => void
   onCollection: () => void
   onDeckBuilder: () => void
+  onSettings: () => void
 }
 
-export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder }: Props) {
+export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder, onSettings }: Props) {
   const deck     = loadDeck()
   const count    = deckTotalCards(deck)
   const valid    = isDeckValid(deck)
@@ -46,6 +47,12 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
 
         <button className="action-btn title-nav-btn" onClick={onCollection}>
           COLLECTION
+        </button>
+
+        <button className="action-btn title-nav-btn" onClick={onSettings}
+          style={{ fontSize: '11px', color: '#888', borderColor: 'rgba(51,255,51,0.25)' }}
+        >
+          ⚙ SETTINGS
         </button>
       </div>
 

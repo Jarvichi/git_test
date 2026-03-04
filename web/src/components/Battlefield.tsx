@@ -3,10 +3,12 @@ import { GameState, Unit, LANE_WIDTH, Card, TerrainObstacle, TerrainType } from 
 import { CardTile } from './CardTile'
 import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
+import { BattleEventOverlay } from './BattleEventOverlay'
 
 interface Props {
   state: GameState
   onPlayCard: (cardId: string) => void
+  actTheme?: string   // e.g. 'act1' — applied as CSS modifier class
 }
 
 const SPAWN_GROW_MS = 1500
@@ -141,8 +143,7 @@ const STRATEGY_LABELS: Record<string, string> = {
   rush:   'RUSH',
 }
 
-export function Battlefield({ state, onPlayCard }: Props) {
-  const logRef = useRef<HTMLDivElement>(null)
+export function Battlefield({ state, onPlayCard, actTheme }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const gameTimeSec = Math.floor(state.gameTime / 1000)
   const minutes = Math.floor(gameTimeSec / 60)
@@ -151,14 +152,21 @@ export function Battlefield({ state, onPlayCard }: Props) {
   const sdSec = Math.ceil(state.suddenDeathTimer / 1000)
   const event = state.activeBattleEvent
 
-  useEffect(() => {
-    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
-  }, [state.log])
-
   return (
-    <div className="battlefield">
+    <div className={`battlefield${actTheme ? ` battlefield--${actTheme}` : ''}`}>
 
-      {/* Top bar: clock, scores, sudden death */}
+      {/* Dramatic battle event overlay (center-screen flash) */}
+      <BattleEventOverlay event={event} />
+
+      {/* Sudden death banner */}
+      {state.suddenDeath && (
+        <div className="sudden-death-overlay">
+          <span className="sudden-death-icon">⚡</span>
+          <span className="sudden-death-text">SUDDEN DEATH — {sdSec}s</span>
+        </div>
+      )}
+
+      {/* Top bar: clock, scores */}
       <div className={`top-bar${state.suddenDeath ? ' top-bar--sudden-death' : ''}`}>
         <span className="game-clock">{timeStr}</span>
         <span className="score-display">
@@ -166,17 +174,15 @@ export function Battlefield({ state, onPlayCard }: Props) {
           <span className="score-sep"> – </span>
           <span className="score-opponent">{state.opponentScore}</span>
         </span>
-        {state.suddenDeath
-          ? <span className="sudden-death-label">⚡ {sdSec}s</span>
-          : null}
+        {event && (
+          <span className={`event-status-chip event-status-chip--${event.type}`}>
+            {event.type === 'bloodMoon' ? '🌑 BLOOD MOON'
+            : event.type === 'fogOfWar' ? '🌫 FOG OF WAR'
+            : event.type === 'supplyDrop' ? '📦 SUPPLY DROP'
+            : '🌋 QUAKE'}
+          </span>
+        )}
       </div>
-
-      {/* Battle event banner */}
-      {event && event.remainingMs > 3000 && (
-        <div className={`battle-event-banner battle-event-banner--${event.type}`}>
-          {event.label}
-        </div>
-      )}
 
       {/* Opponent base */}
       <div className="base-bar base-bar--opponent">
@@ -210,13 +216,6 @@ export function Battlefield({ state, onPlayCard }: Props) {
           MANA {state.mana}/{state.maxMana}
           <ManaBar mana={state.mana} maxMana={state.maxMana} manaAccum={state.manaAccum} />
         </span>
-      </div>
-
-      {/* Combat log */}
-      <div className="combat-log" ref={logRef}>
-        {state.log.slice(-6).map((entry, i) => (
-          <div key={i} className="log-entry">{entry}</div>
-        ))}
       </div>
 
       {/* Hand */}
