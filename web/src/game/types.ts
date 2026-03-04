@@ -69,6 +69,18 @@ export interface BattleEventState {
   remainingMs: number        // duration; instant events use ~3000 just for banner display
 }
 
+// ─── Terrain ─────────────────────────────────────────────
+
+export type TerrainType = 'rock' | 'tree' | 'water' | 'ruin'
+
+export interface TerrainObstacle {
+  id: string
+  type: TerrainType
+  x: number      // forward axis (same coords as units); kept 80–420
+  y: number      // lateral axis; –75 to 75
+  radius: number // avoidance radius, 12–22 px
+}
+
 // ─── Game ────────────────────────────────────────────────
 
 export interface Base {
@@ -108,4 +120,5 @@ export interface GameState {
   battleEventTimer: number   // ms until next battle event fires
   activeBattleEvent: BattleEventState | null
   bossAI?: string            // 'thornlord' etc. — drives boss-specific opponent logic
+  terrain: TerrainObstacle[]
 }

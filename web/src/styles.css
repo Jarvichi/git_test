@@ -374,6 +374,24 @@ body {
   filter: brightness(2.2) drop-shadow(0 0 5px currentColor);
 }
 
+/* ─── Terrain Obstacles ──────────────────────────────── */
+
+.terrain-obstacle {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+  line-height: 1;
+  z-index: 1;
+  opacity: 0.70;
+  letter-spacing: 1px;
+}
+
+.terrain-obstacle--rock  { color: #888; text-shadow: 0 0 4px #444; }
+.terrain-obstacle--tree  { color: #3a7; text-shadow: 0 0 6px #163; }
+.terrain-obstacle--water { color: #48f; text-shadow: 0 0 6px #024; }
+.terrain-obstacle--ruin  { color: #876; text-shadow: 0 0 4px #432; }
+
 /* ─── Cooldown Bar ───────────────────────────────────── */
 
 .cooldown-bar-track {
