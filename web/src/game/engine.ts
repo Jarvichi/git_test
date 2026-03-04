@@ -79,8 +79,8 @@ function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
 // Three Y corridors (–55, 0, +55) are guaranteed clear so units
 // always have at least 3 walkable paths from base to base.
 
-const TERRAIN_CLEAR_Y   = [-55, 0, 55] as const  // guaranteed open corridors
-const TERRAIN_CLEAR_HALF = 20                      // half-width of each corridor (px)
+const TERRAIN_CLEAR_Y   = [-70, 70] as const  // two edge corridors units route around
+const TERRAIN_CLEAR_HALF = 12                  // half-width of each corridor (px)
 
 function generateTerrain(): TerrainObstacle[] {
   const TYPES: TerrainType[] = ['rock', 'tree', 'water', 'ruin']
