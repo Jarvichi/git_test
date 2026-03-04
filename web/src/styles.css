@@ -389,21 +389,12 @@ body {
   position: absolute;
   pointer-events: none;
   user-select: none;
-  text-align: center;
-  line-height: 1;
   z-index: 2;
-  opacity: 1;
-  letter-spacing: 1px;
-  font-weight: bold;
-  background: rgba(0, 0, 0, 0.45);
-  border-radius: 3px;
-  padding: 2px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.25));
 }
-
-.terrain-obstacle--rock  { color: #d0d0c0; text-shadow: 0 0 8px rgba(200,200,180,0.9); }
-.terrain-obstacle--tree  { color: #6fef8a; text-shadow: 0 0 10px rgba(80,240,120,0.9); }
-.terrain-obstacle--water { color: #6fdfff; text-shadow: 0 0 10px rgba(100,220,255,0.9); }
-.terrain-obstacle--ruin  { color: #e0b888; text-shadow: 0 0 8px rgba(210,170,110,0.9); }
 
 /* ─── Cooldown Bar ───────────────────────────────────── */
 

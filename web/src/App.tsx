@@ -44,7 +44,7 @@ import {
   RARE_EVENT_CHANCE, ALL_RARE_EVENTS,
 } from './components/rare-events/types'
 import { CardTile }           from './components/CardTile'
-import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic } from './game/sound'
+import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -151,6 +151,19 @@ export default function App() {
     return () => { stopBattleMusic(); stopTitleMusic(); stopGameOverMusic(); stopMapMusic() }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen, gameState?.phase.type])
+
+  // ── Adaptive battle music intensity ──────────────────────
+  // Runs every tick; 0=calm(losing), 1=normal, 2=intense(winning/many units)
+  useEffect(() => {
+    if (screen !== 'playing' || !gameState || gameState.phase.type !== 'playing') return
+    const scoreDiff  = gameState.playerScore - gameState.opponentScore
+    const unitCount  = gameState.field.filter(u => u.owner === 'player' && u.moveSpeed > 0).length
+    const hpFrac     = gameState.playerBase.hp / gameState.playerBase.maxHp
+    let intensity: 0 | 1 | 2 = 1
+    if (scoreDiff > 20 || unitCount >= 4 || hpFrac < 0.35) intensity = 2
+    else if (scoreDiff < -10 || (hpFrac > 0.8 && unitCount <= 1)) intensity = 0
+    setBattleIntensity(intensity)
+  }, [screen, gameState?.playerScore, gameState?.opponentScore, gameState?.field.length, gameState?.playerBase.hp])
 
   // ── Rare event trigger ───────────────────────────────────
   useEffect(() => {
