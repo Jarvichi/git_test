@@ -92,22 +92,24 @@ function RockSvg({ size }: { size: number }) {
 }
 
 function TreeSvg({ size }: { size: number }) {
-  // Renders a cluster of 3 trees so individual obstacles read as a small grove
+  // Round deciduous blob canopies — cluster of overlapping circles
   return (
-    <svg width={size} height={size} viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg">
-      {/* Left tree */}
-      <polygon points="9,4 17,18 1,18"  fill="#156615" stroke="#3d993d" strokeWidth="0.8"/>
-      <polygon points="9,9 15,18 3,18"  fill="#1d801d" stroke="#55aa55" strokeWidth="0.5"/>
-      <rect x="7" y="18" width="4" height="5" fill="#4a2a0a"/>
-      {/* Right tree */}
-      <polygon points="31,5 39,19 23,19" fill="#147014" stroke="#3d993d" strokeWidth="0.8"/>
-      <polygon points="31,10 37,19 25,19" fill="#1c7c1c" stroke="#55aa55" strokeWidth="0.5"/>
-      <rect x="29" y="19" width="4" height="5" fill="#4a2a0a"/>
-      {/* Centre tree — tallest, in front */}
-      <polygon points="20,0 30,18 10,18"  fill="#1a8c1a" stroke="#44cc44" strokeWidth="1.2"/>
-      <polygon points="20,5 28,18 12,18"  fill="#22a022" stroke="#66dd66" strokeWidth="0.7"/>
-      <polygon points="20,9 26,18 14,18"  fill="#30b030" stroke="#88cc88" strokeWidth="0.5"/>
-      <rect x="17" y="18" width="6" height="7" fill="#5a3010" stroke="#7a5030" strokeWidth="0.7"/>
+    <svg width={size} height={size} viewBox="0 0 46 40" xmlns="http://www.w3.org/2000/svg">
+      {/* Back / shadow blobs */}
+      <ellipse cx="11" cy="25" rx="10" ry="9"  fill="#1e4a1e"/>
+      <ellipse cx="35" cy="26" rx="9"  ry="8"  fill="#1e4a1e"/>
+      {/* Mid layer */}
+      <ellipse cx="10" cy="18" rx="9"  ry="8"  fill="#2d6a2d"/>
+      <ellipse cx="36" cy="19" rx="8"  ry="7"  fill="#2a6a2a"/>
+      {/* Centre dominant canopy */}
+      <ellipse cx="23" cy="16" rx="13" ry="12" fill="#317331"/>
+      <ellipse cx="23" cy="11" rx="10" ry="8"  fill="#3a8a3a"/>
+      {/* Highlight */}
+      <ellipse cx="20" cy="9"  rx="5"  ry="3"  fill="#4aaa4a" opacity="0.45"/>
+      {/* Trunks */}
+      <line x1="10" y1="28" x2="9"  y2="39" stroke="#5a3010" strokeWidth="2"/>
+      <line x1="36" y1="28" x2="37" y2="39" stroke="#5a3010" strokeWidth="2"/>
+      <line x1="23" y1="25" x2="22" y2="39" stroke="#4a2a0a" strokeWidth="2.5"/>
     </svg>
   )
 }
@@ -153,46 +155,62 @@ const TERRAIN_SHAPES: Record<TerrainType, (size: number) => React.ReactNode> = {
 // battlefield. Uses deterministic (sin-based) offsets so the layout is stable
 // across re-renders without needing game state.
 
-function ForestBorder() {
-  const trees: { key: string; top: number; left: number; size: number }[] = []
+// Renders a single round canopy blob for the border wall
+function BlobSvg({ size, shade }: { size: number; shade: number }) {
+  // shade 0–1: varies the green tone so blobs aren't uniform
+  const base = Math.round(30 + shade * 20)   // 30–50 green channel
+  const fill = `rgb(${18 + Math.round(shade * 8)},${base + 60},${18 + Math.round(shade * 8)})`
+  const hi   = `rgb(${30 + Math.round(shade * 10)},${base + 90},${30 + Math.round(shade * 10)})`
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="10" cy="11" rx="10" ry="9"  fill={fill}/>
+      <ellipse cx="10" cy="8"  rx="8"  ry="7"  fill={hi}/>
+      <ellipse cx="8"  cy="6"  rx="4"  ry="3"  fill={hi} opacity="0.5"/>
+    </svg>
+  )
+}
 
-  // left edge (y ≈ -74) and right edge (y ≈ +74) — step every ~30px of x
-  for (const side of [-74, 74] as const) {
-    for (let ex = 20; ex <= 490; ex += 28) {
-      const yJitter  = Math.sin(ex * 0.17 + side) * 3      // ±3 px sway
-      const topPct   = (1 - ex / LANE_WIDTH) * 100
-      const leftPct  = 50 + ((side + yJitter) / 80) * 36
-      const size     = 26 + Math.round(Math.abs(Math.sin(ex * 0.31 + side)) * 10)
-      trees.push({ key: `fe-${side}-${ex}`, top: topPct, left: leftPct, size })
+function ForestBorder() {
+  const blobs: { key: string; top: number; left: number; size: number; shade: number }[] = []
+
+  // Left (y≈-76) and right (y≈+76) — dense wall, step every 14 game-units
+  for (const side of [-76, 76] as const) {
+    for (let ex = 5; ex <= 500; ex += 14) {
+      const yOff  = Math.sin(ex * 0.19 + side) * 3
+      const topPct  = (1 - ex / LANE_WIDTH) * 100
+      const leftPct = 50 + ((side + yOff) / 80) * 36
+      const size    = 32 + Math.round(Math.abs(Math.sin(ex * 0.37 + side)) * 12)
+      const shade   = (Math.sin(ex * 0.53 + side * 0.1) + 1) / 2
+      blobs.push({ key: `fe-${side}-${ex}`, top: topPct, left: leftPct, size, shade })
     }
   }
 
-  // top edge (opponent side, x ≈ 475–500) — fill across the width
-  for (let ey = -68; ey <= 68; ey += 22) {
-    const xJitter  = Math.sin(ey * 0.2) * 5
-    const topPct   = (1 - (485 + xJitter) / LANE_WIDTH) * 100
-    const leftPct  = 50 + (ey / 80) * 36
-    const size     = 24 + Math.round(Math.abs(Math.sin(ey * 0.4)) * 8)
-    trees.push({ key: `fe-top-${ey}`, top: topPct, left: leftPct, size })
+  // Top edge (opponent side) — row of blobs across the width
+  for (let ey = -78; ey <= 78; ey += 14) {
+    const xOff  = Math.sin(ey * 0.23) * 4
+    const topPct  = (1 - (492 + xOff) / LANE_WIDTH) * 100
+    const leftPct = 50 + (ey / 80) * 36
+    const size    = 30 + Math.round(Math.abs(Math.sin(ey * 0.41)) * 10)
+    const shade   = (Math.sin(ey * 0.57) + 1) / 2
+    blobs.push({ key: `fe-top-${ey}`, top: topPct, left: leftPct, size, shade })
   }
 
   return (
     <>
-      {trees.map(t => (
+      {blobs.map(b => (
         <div
-          key={t.key}
+          key={b.key}
           style={{
             position: 'absolute',
-            top: `${t.top}%`,
-            left: `${t.left}%`,
+            top: `${b.top}%`,
+            left: `${b.left}%`,
             transform: 'translateX(-50%) translateY(-50%)',
             pointerEvents: 'none',
             userSelect: 'none',
             zIndex: 1,
-            opacity: 0.88,
           }}
         >
-          <TreeSvg size={t.size} />
+          <BlobSvg size={b.size} shade={b.shade} />
         </div>
       ))}
     </>
