@@ -2,10 +2,10 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { GameState } from './game/types'
 import { newGame, playCard, tick, MAX_HANDICAP } from './game/engine'
 import {
-  loadDeck, buildDeckCards, generatePack,
+  loadDeck, saveDeck, buildDeckCards, generatePack,
   loadCollection, saveCollection, loadCrystals, saveCrystals,
   recordCardPlayed, recordUnitDied, addCardsToCollection,
-  CRYSTAL_PACK_COST,
+  CRYSTAL_PACK_COST, DeckEntry,
 } from './game/collection'
 import {
   loadRun, saveRun, clearRun, newRun,
@@ -22,6 +22,7 @@ import { PackOpening }        from './components/PackOpening'
 import { NodeMap }            from './components/NodeMap'
 import { PostBattleReward }   from './components/PostBattleReward'
 import { ActComplete }        from './components/ActComplete'
+import { StarterPackSelect }  from './components/StarterPackSelect'
 import { FakeCrashEvent }     from './components/rare-events/FakeCrashEvent'
 import { BlackjackEvent }     from './components/rare-events/BlackjackEvent'
 import { WrongNumberEvent }   from './components/rare-events/WrongNumberEvent'
@@ -53,6 +54,7 @@ type Screen =
   | 'nodemap'
   | 'reward'
   | 'actcomplete'
+  | 'starterpack'
 
 export default function App() {
   const [screen, setScreen]       = useState<Screen>('title')
@@ -259,7 +261,12 @@ export default function App() {
   const handleActComplete = useCallback(() => {
     clearRun()
     setRun(null)
-    setScreen('title')
+    setScreen('starterpack')
+  }, [])
+
+  const handleStarterPackPick = useCallback((cards: DeckEntry[]) => {
+    saveDeck(cards)
+    setScreen('deckbuilder')
   }, [])
 
   const handleCampaignRetry = useCallback(() => {
@@ -404,6 +411,10 @@ export default function App() {
           relicDesc={actData.rewardRelicDesc}
           onContinue={handleActComplete}
         />
+      )}
+
+      {screen === 'starterpack' && (
+        <StarterPackSelect onPick={handleStarterPackPick} />
       )}
 
       {screen === 'collection' && (

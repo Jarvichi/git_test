@@ -59,6 +59,53 @@ export const STARTER_DECK: DeckEntry[] = [
   { cardName: 'Sharpen Blades', count: 1 },
 ]
 
+export interface StarterPackOption {
+  id: string
+  name: string
+  description: string
+  cards: DeckEntry[]
+}
+
+/** The three starter packs offered after an act completes. */
+export const STARTER_PACK_OPTIONS: StarterPackOption[] = [
+  {
+    id: 'swarm',
+    name: 'SWARM',
+    description: 'Flood the field with cheap units. Numbers are your armor.',
+    cards: [
+      { cardName: 'Goblin',         count: 4 },
+      { cardName: 'Archer',         count: 3 },
+      { cardName: 'Barbarian',      count: 2 },
+      { cardName: 'Sharpen Blades', count: 1 },
+    ],
+  },
+  {
+    id: 'balanced',
+    name: 'BALANCED',
+    description: 'A reliable mix of offense, defense, and economy.',
+    cards: [
+      { cardName: 'Goblin',         count: 3 },
+      { cardName: 'Archer',         count: 3 },
+      { cardName: 'Barbarian',      count: 2 },
+      { cardName: 'Knight',         count: 2 },
+      { cardName: 'Build Wall',     count: 2 },
+      { cardName: 'Build Farm',     count: 1 },
+      { cardName: 'Sharpen Blades', count: 1 },
+    ],
+  },
+  {
+    id: 'fortress',
+    name: 'FORTRESS',
+    description: 'Fortify your position. Let walls and farms grind them down.',
+    cards: [
+      { cardName: 'Goblin',     count: 2 },
+      { cardName: 'Knight',     count: 2 },
+      { cardName: 'Build Wall', count: 4 },
+      { cardName: 'Build Farm', count: 2 },
+    ],
+  },
+]
+
 // ─── Card stats ───────────────────────────────────────────
 
 const STATS_KEY = 'jarv_card_stats'
