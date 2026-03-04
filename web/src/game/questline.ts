@@ -39,6 +39,7 @@ export interface RunState {
   pendingNodeId: string | null // node currently in battle
   playerHp: number
   maxHp: number
+  cardPlayCounts: Record<string, number>  // cumulative plays per card name this act
 }
 
 const RUN_KEY = 'jarv_run'
@@ -46,7 +47,11 @@ const RUN_KEY = 'jarv_run'
 export function loadRun(): RunState | null {
   try {
     const raw = localStorage.getItem(RUN_KEY)
-    if (raw) return JSON.parse(raw) as RunState
+    if (raw) {
+      const parsed = JSON.parse(raw) as RunState
+      if (!parsed.cardPlayCounts) parsed.cardPlayCounts = {}  // migrate old saves
+      return parsed
+    }
   } catch { /* ignore */ }
   return null
 }
@@ -67,7 +72,34 @@ export function newRun(actId: string): RunState {
     pendingNodeId: null,
     playerHp: 50,
     maxHp: 50,
+    cardPlayCounts: {},
   }
+}
+
+// ─── Card Fatigue ─────────────────────────────────────────
+
+const FATIGUED_KEY = 'jarv_fatigued'
+
+export function loadFatigued(): string[] {
+  try { return JSON.parse(localStorage.getItem(FATIGUED_KEY) ?? '[]') }
+  catch { return [] }
+}
+
+export function saveFatigued(names: string[]): void {
+  localStorage.setItem(FATIGUED_KEY, JSON.stringify(names))
+}
+
+export function clearFatigued(): void {
+  localStorage.removeItem(FATIGUED_KEY)
+}
+
+/** Returns the top N most-played card names from a run's cardPlayCounts. */
+export function getTopPlayedCards(counts: Record<string, number>, n = 3): string[] {
+  return Object.entries(counts)
+    .filter(([, c]) => c > 0)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, n)
+    .map(([name]) => name)
 }
 
 // ─── Map logic ────────────────────────────────────────────
