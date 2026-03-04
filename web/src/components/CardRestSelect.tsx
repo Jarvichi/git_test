@@ -18,12 +18,8 @@ export function CardRestSelect({ candidates, playCounts, onConfirm }: Props) {
   function toggle(name: string) {
     setSelected(prev => {
       const next = new Set(prev)
-      if (next.has(name)) {
-        // Can always deselect unless it would drop below required
-        if (next.size > required) next.delete(name)
-      } else {
-        if (next.size < required) next.add(name)
-      }
+      if (next.has(name)) next.delete(name)
+      else next.add(name)
       return next
     })
   }
@@ -44,18 +40,14 @@ export function CardRestSelect({ candidates, playCounts, onConfirm }: Props) {
       <div className="card-rest-candidates">
         {candidates.map((name, i) => {
           const isSelected = selected.has(name)
-          const canToggle = isSelected
-            ? selected.size > required  // can only deselect if we have more than required
-            : selected.size < required  // can only select if room remains
           return (
             <div
               key={name}
               className={[
                 'card-rest-candidate',
                 isSelected ? 'card-rest-candidate--selected' : '',
-                !canToggle && !isSelected ? 'card-rest-candidate--locked' : '',
               ].join(' ')}
-              onClick={() => canToggle || isSelected ? toggle(name) : undefined}
+              onClick={() => toggle(name)}
             >
               <div className="crc-checkbox">{isSelected ? '[✓]' : '[ ]'}</div>
               <div className="crc-rank">#{i + 1} most used</div>
