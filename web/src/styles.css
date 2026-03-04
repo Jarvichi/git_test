@@ -331,6 +331,10 @@ body {
   padding: 1px 3px;
   border: 1px dashed currentColor;
   border-radius: 2px;
+  max-width: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lane-unit--wall {
@@ -387,15 +391,19 @@ body {
   user-select: none;
   text-align: center;
   line-height: 1;
-  z-index: 1;
-  opacity: 0.70;
+  z-index: 2;
+  opacity: 1;
   letter-spacing: 1px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 3px;
+  padding: 2px 3px;
 }
 
-.terrain-obstacle--rock  { color: #c0c0b0; text-shadow: 0 0 6px rgba(180,180,160,0.6); }
-.terrain-obstacle--tree  { color: #5dca7a; text-shadow: 0 0 8px rgba(60,200,100,0.5); }
-.terrain-obstacle--water { color: #5bcfff; text-shadow: 0 0 8px rgba(80,200,255,0.5); }
-.terrain-obstacle--ruin  { color: #c8a878; text-shadow: 0 0 6px rgba(180,150,100,0.5); }
+.terrain-obstacle--rock  { color: #d0d0c0; text-shadow: 0 0 8px rgba(200,200,180,0.9); }
+.terrain-obstacle--tree  { color: #6fef8a; text-shadow: 0 0 10px rgba(80,240,120,0.9); }
+.terrain-obstacle--water { color: #6fdfff; text-shadow: 0 0 10px rgba(100,220,255,0.9); }
+.terrain-obstacle--ruin  { color: #e0b888; text-shadow: 0 0 8px rgba(210,170,110,0.9); }
 
 /* ─── Cooldown Bar ───────────────────────────────────── */
 

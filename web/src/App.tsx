@@ -44,7 +44,7 @@ import {
   RARE_EVENT_CHANCE, ALL_RARE_EVENTS,
 } from './components/rare-events/types'
 import { CardTile }           from './components/CardTile'
-import { playCardPlay, playVictory, playDefeat, playButtonClick, playBattleEvent, playCardFlip, playRestHeal } from './game/sound'
+import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic } from './game/sound'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -127,6 +127,30 @@ export default function App() {
     }, TICK_MS)
     return () => clearInterval(id)
   }, [screen, gameState?.phase.type, isGamePaused])
+
+  // ── Music router ─────────────────────────────────────────
+  // Exactly one track plays at a time; switching screen stops all others.
+  useEffect(() => {
+    const phase = gameState?.phase
+    stopBattleMusic()
+    stopTitleMusic()
+    stopGameOverMusic()
+    stopMapMusic()
+
+    if (screen === 'title' || screen === 'settings' || screen === 'deckbuilder' || screen === 'collection') {
+      startTitleMusic()
+    } else if (screen === 'nodemap') {
+      startMapMusic()
+    } else if (screen === 'playing') {
+      if (phase?.type === 'playing') {
+        startBattleMusic()
+      } else if (phase?.type === 'gameOver') {
+        startGameOverMusic(phase.winner)
+      }
+    }
+    return () => { stopBattleMusic(); stopTitleMusic(); stopGameOverMusic(); stopMapMusic() }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen, gameState?.phase.type])
 
   // ── Rare event trigger ───────────────────────────────────
   useEffect(() => {
