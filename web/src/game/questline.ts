@@ -17,8 +17,9 @@ export interface QuestNode {
   childIds: string[]
   handicap?: number  // opponent handicap for battle/elite/boss
   restHeal?: number  // HP healed at rest nodes
-  bossAI?: string    // 'thornlord' etc. — triggers a specific boss AI
-  eventId?: string   // key into EVENT_CATALOG for event nodes
+  bossAI?: string        // 'thornlord' etc. — triggers a specific boss AI
+  eventId?: string       // key into EVENT_CATALOG for event nodes
+  bossDialogue?: string[]  // lines the boss speaks before the fight
 }
 
 // ─── Event system ─────────────────────────────────────────
@@ -100,6 +101,13 @@ export const EVENT_CATALOG: Record<string, EventData> = {
   },
 }
 
+// ─── Cutscene & dialogue ──────────────────────────────────
+
+export interface CutscenePanel {
+  title: string
+  text: string
+}
+
 export interface Act {
   id: string
   title: string
@@ -108,6 +116,24 @@ export interface Act {
   startNodeIds: string[]
   rewardRelic: string
   rewardRelicDesc: string
+  intro?: CutscenePanel[]   // shown once when the act begins (first run only)
+  outro?: CutscenePanel[]   // shown every time the boss is defeated
+}
+
+// ─── Intro seen-tracking ──────────────────────────────────
+
+const SEEN_INTROS_KEY = 'jarv_seen_intros'
+
+export function hasSeenIntro(actId: string): boolean {
+  try { return (JSON.parse(localStorage.getItem(SEEN_INTROS_KEY) ?? '[]') as string[]).includes(actId) }
+  catch { return false }
+}
+
+export function markIntroSeen(actId: string): void {
+  try {
+    const seen = JSON.parse(localStorage.getItem(SEEN_INTROS_KEY) ?? '[]') as string[]
+    if (!seen.includes(actId)) localStorage.setItem(SEEN_INTROS_KEY, JSON.stringify([...seen, actId]))
+  } catch { /* ignore */ }
 }
 
 // ─── Run state ────────────────────────────────────────────
@@ -275,6 +301,41 @@ export const ACT_1: Act = {
   rewardRelic: 'Bark Shield',
   rewardRelicDesc: 'Your base gains +10 max HP at the start of every battle.',
   startNodeIds: ['goblin-raid'],
+
+  intro: [
+    {
+      title: 'THE FRACTURE',
+      text: 'Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant — a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it.',
+    },
+    {
+      title: 'THE WANDERER',
+      text: 'You are Jarv. Former tactician of the Dominion\'s western campaigns. Now, technically, unemployed.\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall. The people you knew are either dead, stranded, or figuring out their own problems.\n\nYou have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.',
+    },
+    {
+      title: 'THE VERDANT SHARD',
+      text: 'Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard\'s guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn\'t spoken to anyone in forty years. You\'re choosing to interpret that as optimistically as possible.',
+    },
+    {
+      title: 'YOUR MISSION',
+      text: 'Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side — your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably.',
+    },
+  ],
+
+  outro: [
+    {
+      title: 'THE THORNLORD FALLS',
+      text: 'The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath — then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this.',
+    },
+    {
+      title: 'WHAT HE WAS',
+      text: 'The Thornlord was not evil. He was old, and afraid, and doing what guardians do when the world stops making sense.\n\nYou take the Bark Shield he leaves behind. Not as a trophy. As a reminder that some things only break because nothing else would hold.',
+    },
+    {
+      title: 'THE ROAD AHEAD',
+      text: 'One shard cleared. The ley lines pulse — faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits — and whoever controls it will not be glad to see you.\n\nGood.',
+    },
+  ],
+
   nodes: {
     // ── Row 0 ─────────────────────────────────────────────
     'goblin-raid': {
@@ -354,6 +415,11 @@ export const ACT_1: Act = {
       parentIds: ['captain'], childIds: [],
       handicap: 0,
       bossAI: 'thornlord',
+      bossDialogue: [
+        '"You carry the smell of the shattered world."',
+        '"I sealed these paths to keep the rot from spreading. Clearly I should have built higher walls."',
+        '"You will not pass. The Verdant Shard does not need another wandering tactician."',
+      ],
     },
   },
 }

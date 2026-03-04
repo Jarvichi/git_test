@@ -266,9 +266,9 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 - [ ] (Remaining expansions follow after)
 
 **Phase 5 — Polish**
-- [ ] Backstory intro screen (text crawl or panel art)
-- [ ] Act transition cutscenes (text only, terminal style)
-- [ ] Boss dialogue lines (1-3 lines per boss encounter)
+- [x] Backstory intro screen (text crawl or panel art)
+- [x] Act transition cutscenes (text only, terminal style)
+- [x] Boss dialogue lines (1-3 lines per boss encounter)
 - [ ] Victory screen for completing full questline
 
 **Phase 6 — Game Modes**
