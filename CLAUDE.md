@@ -248,7 +248,7 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 
 **Phase 2 — Campaign**
 - [x] Write Act 1 node map data (5 battle nodes, 1 elite, 1 boss)
-- [ ] Boss AI: Thornlord (structure-heavy — builds walls every turn)
+- [x] Boss AI: Thornlord (structure-heavy — builds walls every turn)
 - [x] Implement `rest` node type (heal 5 HP)
 - [ ] Implement `event` node type (text choice cards with consequences)
 - [ ] Implement `merchant` node (spend crystals, 3 cards offered)
