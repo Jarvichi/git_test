@@ -212,7 +212,7 @@ export default function App() {
     isCampaignRef.current = true
     const collection  = loadCollection()
     const playerCards = buildDeckCards(loadDeck(), collection)
-    const state = newGame(playerCards, node.handicap ?? 0)
+    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     // Apply campaign HP to player base
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     setGameState(state)
@@ -281,7 +281,7 @@ export default function App() {
     isCampaignRef.current = true
     const collection  = loadCollection()
     const playerCards = buildDeckCards(loadDeck(), collection)
-    const state = newGame(playerCards, node.handicap ?? 0)
+    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     setGameState(state)
     setScreen('playing')

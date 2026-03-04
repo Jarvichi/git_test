@@ -639,6 +639,37 @@ export function makeDeck(): Card[] {
   return result
 }
 
+/**
+ * The Thornlord boss deck — wall-heavy with spawner structures and sturdy defenders.
+ * 6× Build Wall ensures walls go down every turn via thornlordAI priority routing.
+ */
+export function makeThorlordDeck(): Card[] {
+  const make = (name: string, count: number): Card[] => {
+    const def = CARD_DEFS.find(d => d.name === name)
+    if (!def) return []
+    return Array.from({ length: count }, () => ({
+      id: uid(),
+      name: def.name,
+      rarity: def.rarity,
+      cost: def.cost,
+      cardType: def.cardType,
+      unit: def.unit,
+      upgradeEffect: def.upgradeEffect,
+      description: def.description,
+      lore: CARD_LORE[def.name],
+    }))
+  }
+  return [
+    ...make('Build Wall',   6),
+    ...make('Barracks',     3),
+    ...make('Build Farm',   2),
+    ...make('Crypt',        2),
+    ...make('Shield Guard', 2),
+    ...make('Knight',       2),
+    ...make('Fortify',      1),
+  ]
+}
+
 export function rarityStars(r: CardRarity): string {
   return '\u2605'.repeat({ common: 1, uncommon: 2, rare: 3, legendary: 4 }[r])
 }

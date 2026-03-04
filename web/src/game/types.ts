@@ -106,4 +106,5 @@ export interface GameState {
   suddenDeathTimer: number   // ms remaining in sudden death (60 000 at start)
   battleEventTimer: number   // ms until next battle event fires
   activeBattleEvent: BattleEventState | null
+  bossAI?: string            // 'thornlord' etc. — drives boss-specific opponent logic
 }

@@ -17,6 +17,7 @@ export interface QuestNode {
   childIds: string[]
   handicap?: number  // opponent handicap for battle/elite/boss
   restHeal?: number  // HP healed at rest nodes
+  bossAI?: string    // 'thornlord' etc. — triggers a specific boss AI
 }
 
 export interface Act {
@@ -210,6 +211,7 @@ export const ACT_1: Act = {
       row: 4, col: 0, rowCols: 1,
       parentIds: ['captain'], childIds: [],
       handicap: 0,
+      bossAI: 'thornlord',
     },
   },
 }
