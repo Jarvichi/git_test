@@ -576,9 +576,17 @@ export default function App() {
 
   const handleMainMenu = useCallback(() => {
     isCampaignRef.current = false
+    // If we're leaving mid-campaign battle, clear pendingNodeId so the node
+    // is selectable again when the player returns via "Continue Campaign".
+    const currentRun = run
+    if (currentRun?.pendingNodeId) {
+      const cleared = { ...currentRun, pendingNodeId: null }
+      saveRun(cleared)
+      setRun(cleared)
+    }
     setScreen('title')
     setGameState(null)
-  }, [])
+  }, [run])
 
   // ── Game over routing ────────────────────────────────────
 
