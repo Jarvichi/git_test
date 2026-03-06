@@ -786,6 +786,14 @@ body {
   border-radius: 6px;
 }
 
+.intro-jarv-credit {
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
+  letter-spacing: 4px;
+  color: #aaa;
+  text-transform: uppercase;
+}
+
 .intro-skip-hint {
   position: absolute;
   bottom: 24px;
