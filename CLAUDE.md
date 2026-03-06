@@ -51,14 +51,42 @@ npm run preview  # Preview production build locally
 ## Permissions
 - Claude has full permission to push and merge code changes
 
+## GitHub Issues Workflow
+
+**GitHub Issues are the primary way users log bugs and suggestions.**
+
+At the start of every session (or when asked):
+1. Fetch open issues: `curl -s "https://api.github.com/repos/Jarvichi/jarvs-amazing-web-game/issues?state=open&per_page=50"`
+2. Review each issue, prioritise by: **critical bugs → gameplay bugs → UX bugs → enhancements → large features**
+3. Add new issues to `todo.md` (repo root) with their GitHub issue number
+4. Commit `todo.md` immediately before starting any work
+5. **After fixing an issue:** close it via the GitHub API with an appropriate comment:
+   ```bash
+   # Post comment
+   curl -s -X POST "https://api.github.com/repos/Jarvichi/jarvs-amazing-web-game/issues/<N>/comments" \
+     -H "Authorization: token $GITHUB_TOKEN" \
+     -d "{\"body\": \"<comment>\"}"
+   # Close issue
+   curl -s -X PATCH "https://api.github.com/repos/Jarvichi/jarvs-amazing-web-game/issues/<N>" \
+     -H "Authorization: token $GITHUB_TOKEN" \
+     -d "{\"state\": \"closed\"}"
+   ```
+
 ## Todo Tracking Workflow
 
-**When completing any todo item:**
+**For every piece of work:**
+1. Update `todo.md` with the task (include GitHub issue number if applicable)
+2. Commit `todo.md` **before** starting work on it
+3. Do the work, commit, and push
+4. Mark the item done in `todo.md`, commit and push
+5. Close the GitHub issue with a comment
+
+**When completing any todo item in CLAUDE.md's Pending Implementation Todos:**
 1. Mark it `[x]` in the "Pending Implementation Todos" section below
 2. Immediately commit CLAUDE.md with message: `docs: check off [item name] in todo list`
 3. Push to the current branch
 
-This keeps the todo list accurate across sessions.
+This keeps both the todo list and CLAUDE.md accurate across sessions.
 
 ## Sprites / Graphics
 
