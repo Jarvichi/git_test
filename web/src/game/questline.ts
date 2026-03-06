@@ -44,17 +44,46 @@ export interface EventData {
   choices: EventChoice[]
 }
 
-export const EVENT_CATALOG: Record<string, EventData> = {
-  'shrine': {
+// ─── Shrine randomisation ─────────────────────────────────
+
+/** Possible pools for each shrine action. One entry is picked at random each visit. */
+const SHRINE_OFFERING_EFFECTS: EventChoice[] = [
+  { label: 'Leave an offering', consequence: 'The shrine accepts your gift — restored 12 HP', effect: { type: 'healHp', amount: 12 } },
+  { label: 'Leave an offering', consequence: 'The glow brightens — +15 crystals', effect: { type: 'gainCrystals', amount: 15 } },
+  { label: 'Leave an offering', consequence: 'The shrine is silent. Nothing happens.', effect: { type: 'nothing' } },
+  { label: 'Leave an offering', consequence: 'Something drains your offering — lose 5 HP', effect: { type: 'damageHp', amount: 5 } },
+]
+const SHRINE_PRAY_EFFECTS: EventChoice[] = [
+  { label: 'Pray for strength', consequence: 'A card materialises from the glow — uncommon', effect: { type: 'gainCard', rarity: 'uncommon' } },
+  { label: 'Pray for strength', consequence: 'The magic guides your wounds — restored 8 HP', effect: { type: 'healHp', amount: 8 } },
+  { label: 'Pray for strength', consequence: 'The shrine tests you — lose 10 HP', effect: { type: 'damageHp', amount: 10 } },
+  { label: 'Pray for strength', consequence: 'You feel oddly lucky — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
+]
+const SHRINE_TAKE_EFFECTS: EventChoice[] = [
+  { label: 'Pocket the ritual stones', consequence: 'You grab them and run — +18 crystals, lose 8 HP', effect: { type: 'damageHp', amount: 8 } },
+  { label: 'Pocket the ritual stones', consequence: 'A common card falls from the stones', effect: { type: 'gainCard', rarity: 'common' } },
+  { label: 'Pocket the ritual stones', consequence: 'The stones crumble to dust. Nothing.', effect: { type: 'nothing' } },
+  { label: 'Pocket the ritual stones', consequence: 'The shrine curses you — lose 15 HP', effect: { type: 'damageHp', amount: 15 } },
+]
+
+function pickRandom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)] }
+
+/** Returns a shrine EventData with randomly selected choice effects. */
+export function generateShrineEvent(): EventData {
+  return {
     id: 'shrine',
     title: 'A Forgotten Shrine',
     description: 'Buried deep in moss and roots, an ancient shrine pulses with faint magic. Carved glyphs glow a dim green. Something still listens here.',
     choices: [
-      { label: 'Leave an offering', consequence: 'Restore 10 HP', effect: { type: 'healHp', amount: 10 } },
-      { label: 'Pray for strength', consequence: 'Add an uncommon card to your collection', effect: { type: 'gainCard', rarity: 'uncommon' } },
-      { label: 'Pocket the ritual stones', consequence: '+10 crystals, but lose 6 HP', effect: { type: 'damageHp', amount: 6 } },
+      pickRandom(SHRINE_OFFERING_EFFECTS),
+      pickRandom(SHRINE_PRAY_EFFECTS),
+      pickRandom(SHRINE_TAKE_EFFECTS),
     ],
-  },
+  }
+}
+
+export const EVENT_CATALOG: Record<string, EventData> = {
+  'shrine': generateShrineEvent(), // default (overridden per-visit in App)
 
   'ruins': {
     id: 'ruins',
