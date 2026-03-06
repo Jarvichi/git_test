@@ -14,7 +14,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 ## 🟠 Gameplay Bugs / Regressions
 
 - [ ] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size)
-- [~] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance
+- [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance
 
 ---
 
