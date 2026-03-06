@@ -44,6 +44,9 @@ import {
   RARE_EVENT_CHANCE, ALL_RARE_EVENTS,
 } from './components/rare-events/types'
 import { CardTile }           from './components/CardTile'
+import { DailyLoginModal }   from './components/DailyLoginModal'
+import { InventoryScreen }   from './components/InventoryScreen'
+import { hasDailyReward, claimDailyReward, addToInventory, DailyReward } from './game/dailyLogin'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import './styles.css'
 
@@ -77,6 +80,7 @@ type Screen =
   | 'actcomplete'
   | 'cardrest'
   | 'starterpack'
+  | 'inventory'
 
 export default function App() {
   const [screen, setScreen]       = useState<Screen>('title')
@@ -112,10 +116,35 @@ export default function App() {
   // Unit death tracking
   const prevPlayerUnitsRef = useRef<Map<string, string>>(new Map())
 
+  // Daily login reward
+  const [dailyReward, setDailyReward] = useState<DailyReward | null>(null)
+
   // Rare events
   const [rareEventScheduled, setRareEventScheduled] = useState<{ kind: RareEventKind; triggerMs: number } | null>(null)
   const [activeRareEvent,    setActiveRareEvent]    = useState<RareEventKind | null>(null)
   const [isGamePaused,       setIsGamePaused]       = useState(false)
+
+  // ── Daily login reward ────────────────────────────────────
+  useEffect(() => {
+    if (hasDailyReward()) {
+      const reward = claimDailyReward()
+      const catalog = getCardCatalog()
+      if (reward.type === 'card') {
+        // Resolve a random card name
+        const card = catalog[Math.floor(Math.random() * catalog.length)]
+        reward.cardName = card.name
+        addCardsToCollection([{ cardName: card.name, count: 1 }])
+      } else if (reward.type === 'pack') {
+        const names = Array.from({ length: 5 }, () => catalog[Math.floor(Math.random() * catalog.length)].name)
+        reward.packCards = names
+        addCardsToCollection(names.map(n => ({ cardName: n, count: 1 })))
+      } else if (reward.type === 'uselessItem' && reward.item) {
+        addToInventory(reward.item)
+      }
+      setDailyReward(reward)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // ── Game loop ────────────────────────────────────────────
   useEffect(() => {
@@ -733,6 +762,7 @@ export default function App() {
           onCollection={() => setScreen('collection')}
           onDeckBuilder={() => setScreen('deckbuilder')}
           onSettings={() => setScreen('settings')}
+          onInventory={() => setScreen('inventory')}
         />
       )}
 
@@ -826,6 +856,13 @@ export default function App() {
         <PackOpening pack={pack} onDone={handlePackDone} />
       )}
 
+      {screen === 'inventory' && (
+        <InventoryScreen
+          onBack={() => setScreen('title')}
+          onCrystalsChanged={handleCrystalsChanged}
+        />
+      )}
+
       {screen === 'playing' && gameState && (
         gameState.phase.type === 'gameOver' ? (
           <GameOver
@@ -850,6 +887,13 @@ export default function App() {
             {activeRareEvent === 'liarsDice'   && <LiarsDiceEvent   onDone={handleRareEventDone} />}
           </>
         )
+      )}
+      {/* Daily login reward modal — shown as overlay on first visit each day */}
+      {dailyReward && (
+        <DailyLoginModal
+          reward={dailyReward}
+          onClose={() => setDailyReward(null)}
+        />
       )}
     </div>
   )

@@ -21,14 +21,14 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 ## 🟡 UX / UI Bugs
 
 - [ ] **#58** Screen size: battlefield + hand don't fit on small phone screens — scale to viewport
-- [ ] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
+- [x] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
 - [ ] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
 
 ---
 
 ## 🟢 Enhancements — High Value
 
-- [ ] **#51** Daily login rewards: wire DailyLoginModal + InventoryScreen into App.tsx (files exist, not integrated)
+- [x] **#51** Daily login rewards: wire DailyLoginModal + InventoryScreen into App.tsx (files exist, not integrated)
 - [ ] **#57** Campaign shrines: hide expected rewards; randomise options; one option can be negative
 - [ ] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke; soft lives system
 - [ ] **#61** Battlefield: buildings spread across multiple rows from centre; upgrade level visual feedback
