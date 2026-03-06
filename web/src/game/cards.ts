@@ -218,17 +218,17 @@ const CARD_DEFS: CardDef[] = [
     deckCount: 3,
   },
   {
-    name: 'Build Farm', rarity: 'uncommon', cost: 2, cardType: 'structure',
+    name: 'Build Farm', rarity: 'uncommon', cost: 3, cardType: 'structure',
     unit: {
       name: 'Farm', attack: 0, maxHp: 20, isWall: false, bypassWall: false,
       moveSpeed: 0, attackRange: 0, attackCooldownMs: 0,
       structureEffect: { type: 'mana', amount: 1 },
     },
-    description: '+1 max mana while standing.',
+    description: '+1 max mana. Upgrade: +1 more mana.',
     deckCount: 2,
   },
   {
-    name: 'Barracks', rarity: 'uncommon', cost: 2, cardType: 'structure',
+    name: 'Barracks', rarity: 'uncommon', cost: 3, cardType: 'structure',
     unit: {
       name: 'Barracks', attack: 0, maxHp: 25, isWall: false, bypassWall: false,
       moveSpeed: 0, attackRange: 0, attackCooldownMs: 0,
@@ -238,7 +238,7 @@ const CARD_DEFS: CardDef[] = [
     deckCount: 2,
   },
   {
-    name: 'Arcane Tower', rarity: 'rare', cost: 3, cardType: 'structure',
+    name: 'Arcane Tower', rarity: 'rare', cost: 4, cardType: 'structure',
     unit: {
       name: 'Arc.Tower', attack: 0, maxHp: 20, isWall: false, bypassWall: false,
       moveSpeed: 0, attackRange: 0, attackCooldownMs: 0,

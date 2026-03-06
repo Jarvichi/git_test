@@ -296,6 +296,11 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
           }
           note += ', spawn×2'
         }
+        if (existing.structureEffect?.type === 'mana') {
+          const manaEffect = existing.structureEffect as { type: 'mana'; amount: number }
+          manaEffect.amount += 1
+          note += ', mana+1'
+        }
         const who = owner === 'player' ? 'You' : 'Opponent'
         log.push(`${who} upgraded ${existing.name}! (${note})`)
         return
