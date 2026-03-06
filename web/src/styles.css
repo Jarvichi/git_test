@@ -2119,11 +2119,13 @@ body {
   gap: 12px;          /* must match .nm-row gap */
   height: 28px;
   width: 100%;
+  overflow: visible;
 }
 
 .nm-conn-slot {
   position: relative;
   height: 100%;
+  overflow: visible;
 }
 
 .nm-conn-v {
@@ -2133,8 +2135,9 @@ body {
   background: #4a4a4a;
   transform: translateX(-50%);
 }
-.nm-conn-v--top { top: 0;   height: 50%; }
-.nm-conn-v--bot { top: 50%; height: 50%; }
+/* Extend 3px past the connector strip edges to bridge sub-pixel gaps */
+.nm-conn-v--top { top: -3px; height: calc(50% + 3px); }
+.nm-conn-v--bot { top: 50%;  height: calc(50% + 3px); }
 
 .nm-conn-h {
   position: absolute;
