@@ -499,6 +499,7 @@ export interface RunState {
   maxHp: number
   cardPlayCounts: Record<string, number>  // cumulative plays per card name this act
   nodeFailCounts: Record<string, number>  // times each node has been lost
+  earnedCards: string[]        // card names won as battle rewards this run (usable in subsequent battles)
 }
 
 const RUN_KEY = 'jarv_run'
@@ -515,6 +516,7 @@ export function loadRun(): RunState | null {
     if (!parsed.nodeFailCounts) parsed.nodeFailCounts = {}
     if (!Array.isArray(parsed.completedNodeIds)) parsed.completedNodeIds = []
     if (!Array.isArray(parsed.skippedNodeIds)) parsed.skippedNodeIds = []
+    if (!Array.isArray(parsed.earnedCards)) parsed.earnedCards = []
     if (typeof parsed.playerHp !== 'number' || isNaN(parsed.playerHp)) parsed.playerHp = 50
     if (typeof parsed.maxHp !== 'number' || isNaN(parsed.maxHp) || parsed.maxHp <= 0) parsed.maxHp = 50
     parsed.playerHp = Math.max(1, Math.min(parsed.maxHp, parsed.playerHp))
@@ -568,6 +570,7 @@ export function newRun(actId: string): RunState {
     maxHp: 50,
     cardPlayCounts: {},
     nodeFailCounts: {},
+    earnedCards: [],
   }
 }
 

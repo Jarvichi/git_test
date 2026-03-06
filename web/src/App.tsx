@@ -333,6 +333,8 @@ export default function App() {
         const fatigued    = loadFatigued()
         const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
         const playerCards = buildDeckCards(deckEntries, collection)
+        const earnedEntries = (activeRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+        if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
         const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
         state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
         setGameState(state)
@@ -409,6 +411,9 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
+    // Include cards earned as rewards earlier this run
+    const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     // Apply campaign HP to player base
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
@@ -428,6 +433,8 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
+    const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
     setGameState(state)
@@ -550,8 +557,14 @@ export default function App() {
 
   const handleRewardPick = useCallback((cardName: string) => {
     addCardsToCollection([{ cardName, count: 1 }])
+    // Also track in run so the card is available in subsequent campaign battles this act
+    if (run) {
+      const updatedRun = { ...run, earnedCards: [...(run.earnedCards ?? []), cardName] }
+      saveRun(updatedRun)
+      setRun(updatedRun)
+    }
     setScreen('nodemap')
-  }, [])
+  }, [run])
 
   const handleRewardSkip = useCallback(() => {
     setScreen('nodemap')
@@ -629,6 +642,8 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
+    const earnedEntries = (withFail.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     setGameState(state)
