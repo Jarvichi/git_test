@@ -38,6 +38,12 @@ export function MerchantScreen({ items, crystals, onBuy, onDone }: Props) {
         "Everything has a price. Today, at least these have <em>reasonable</em> ones."
       </div>
 
+      {balance === 0 && (
+        <div className="merchant-broke-hint">
+          No crystals? Earn them by winning battles in <strong>Quick Play</strong> or <strong>Campaign</strong> — every victory pays out.
+        </div>
+      )}
+
       <div className="merchant-items">
         {items.map(item => {
           const bought  = purchased.has(item.card.name)

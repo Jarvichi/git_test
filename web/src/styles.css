@@ -2519,6 +2519,19 @@ body {
 
 /* ── Campaign abandon button ─────────────────────────────── */
 
+.gameover-hint {
+  max-width: 320px;
+  margin: 6px auto 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+  border-radius: 4px;
+  background: rgba(255, 204, 0, 0.05);
+  font-size: 12px;
+  color: #ccaa44;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .gameover-abandon-btn {
   border-color: rgba(255, 68, 68, 0.3);
   color: #ff6666;
@@ -2909,6 +2922,17 @@ body {
   color: #886633;
   font-style: italic;
   padding: 0 4px;
+}
+
+.merchant-broke-hint {
+  margin: 8px 0 4px;
+  padding: 7px 12px;
+  border: 1px solid rgba(136, 102, 51, 0.4);
+  border-radius: 4px;
+  background: rgba(136, 102, 51, 0.06);
+  font-size: 12px;
+  color: #997744;
+  line-height: 1.5;
 }
 
 .merchant-items {

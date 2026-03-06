@@ -536,6 +536,12 @@ export default function App() {
       return
     }
 
+    // Grant crystals for winning
+    const crystalReward = node.type === 'boss' ? 25 : node.type === 'elite' ? 15 : 10
+    const newCrystals = loadCrystals() + crystalReward
+    saveCrystals(newCrystals)
+    setCrystals(newCrystals)
+
     // Show card reward
     const choices = generateRewardChoices(node.type)
     setRewardChoices(choices)
@@ -606,6 +612,15 @@ export default function App() {
     const nodeId = currentRun.pendingNodeId
     if (!nodeId) { setScreen('nodemap'); return }
     const node = act.nodes[nodeId]
+
+    // Record the failure
+    const prevCount = currentRun.nodeFailCounts[nodeId] ?? 0
+    const withFail: RunState = {
+      ...currentRun,
+      nodeFailCounts: { ...currentRun.nodeFailCounts, [nodeId]: prevCount + 1 },
+    }
+    saveRun(withFail)
+    setRun(withFail)
 
     // Retry same node, but HP stays at what it was before this battle
     campaignPlayCountsRef.current = {}
@@ -869,8 +884,14 @@ export default function App() {
         />
       )}
 
-      {screen === 'playing' && gameState && (
-        gameState.phase.type === 'gameOver' ? (
+      {screen === 'playing' && gameState && (() => {
+        const pendingId = run?.pendingNodeId
+        const failCount = pendingId ? (run?.nodeFailCounts?.[pendingId] ?? 0) : 0
+        const quickPlayHint = isCampaignRef.current
+          && gameState.phase.type === 'gameOver'
+          && gameState.phase.winner !== 'player'
+          && failCount >= 2
+        return gameState.phase.type === 'gameOver' ? (
           <GameOver
             state={gameState}
             winner={gameState.phase.winner}
@@ -882,6 +903,7 @@ export default function App() {
             }
             onMainMenu={handleMainMenu}
             campaignAbandon={isCampaignRef.current ? handleAbandonRun : undefined}
+            quickPlayHint={quickPlayHint}
           />
         ) : (
           <>
@@ -893,7 +915,8 @@ export default function App() {
             {activeRareEvent === 'liarsDice'   && <LiarsDiceEvent   onDone={handleRareEventDone} />}
           </>
         )
-      )}
+      })()}
+
       {/* Daily login reward modal — shown as overlay on first visit each day */}
       {dailyReward && (
         <DailyLoginModal
