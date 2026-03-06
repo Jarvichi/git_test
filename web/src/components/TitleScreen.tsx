@@ -9,9 +9,10 @@ interface Props {
   onCollection: () => void
   onDeckBuilder: () => void
   onSettings: () => void
+  onInventory: () => void
 }
 
-export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder, onSettings }: Props) {
+export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder, onSettings, onInventory }: Props) {
   const deck     = loadDeck()
   const count    = deckTotalCards(deck)
   const valid    = isDeckValid(deck)
@@ -47,6 +48,10 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
 
         <button className="action-btn title-nav-btn" onClick={onCollection}>
           COLLECTION
+        </button>
+
+        <button className="action-btn title-nav-btn" onClick={onInventory}>
+          🎒 INVENTORY
         </button>
 
         <button className="action-btn title-nav-btn" onClick={onSettings}
