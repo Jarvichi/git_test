@@ -1315,9 +1315,10 @@ body {
   white-space: nowrap;
 }
 .extra-btn--disenchant { border-color: rgba(136, 204, 255, 0.4); color: #88ccff; }
-.extra-btn--disenchant:hover { background: rgba(136, 204, 255, 0.12); border-color: #88ccff; }
+.extra-btn--disenchant:hover:not(:disabled) { background: rgba(136, 204, 255, 0.12); border-color: #88ccff; }
 .extra-btn--master { border-color: rgba(255, 215, 0, 0.4); color: #ffd700; }
-.extra-btn--master:hover { background: rgba(255, 215, 0, 0.12); border-color: #ffd700; }
+.extra-btn--master:hover:not(:disabled) { background: rgba(255, 215, 0, 0.12); border-color: #ffd700; }
+.extra-btn--disabled, .extra-btn:disabled { opacity: 0.3; cursor: default; }
 .cdm-info-btn {
   border-color: #333;
   color: #555;
