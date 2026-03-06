@@ -411,6 +411,7 @@ export interface RunState {
   playerHp: number
   maxHp: number
   cardPlayCounts: Record<string, number>  // cumulative plays per card name this act
+  nodeFailCounts: Record<string, number>  // times each node has been lost
 }
 
 const RUN_KEY = 'jarv_run'
@@ -424,6 +425,7 @@ export function loadRun(): RunState | null {
     // ── Validate and repair ────────────────────────────────────────────────────
     // Ensure required fields exist (migrate old saves)
     if (!parsed.cardPlayCounts) parsed.cardPlayCounts = {}
+    if (!parsed.nodeFailCounts) parsed.nodeFailCounts = {}
     if (!Array.isArray(parsed.completedNodeIds)) parsed.completedNodeIds = []
     if (!Array.isArray(parsed.skippedNodeIds)) parsed.skippedNodeIds = []
     if (typeof parsed.playerHp !== 'number' || isNaN(parsed.playerHp)) parsed.playerHp = 50
@@ -478,6 +480,7 @@ export function newRun(actId: string): RunState {
     playerHp: 50,
     maxHp: 50,
     cardPlayCounts: {},
+    nodeFailCounts: {},
   }
 }
 

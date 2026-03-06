@@ -30,7 +30,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 
 - [x] **#51** Daily login rewards: wire DailyLoginModal + InventoryScreen into App.tsx (files exist, not integrated)
 - [x] **#57** Campaign shrines: hide expected rewards; randomise options; one option can be negative
-- [ ] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke; soft lives system
+- [x] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke
 - [ ] **#61** Battlefield: buildings spread across multiple rows from centre; upgrade level visual feedback
 - [ ] **#49** Deck builder: add sort / filter / search
 - [ ] **#48** Collection screen: make sort/filter button labels obvious

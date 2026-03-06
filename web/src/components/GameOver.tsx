@@ -12,6 +12,8 @@ interface Props {
   onMainMenu: () => void
   /** If set, show an Abandon Run button (campaign mode only). */
   campaignAbandon?: () => void
+  /** Show a hint to try Quick Play and grow their deck (shown after 2+ failures). */
+  quickPlayHint?: boolean
 }
 
 const VICTORY_ART = `   \\o/
@@ -35,7 +37,7 @@ const DRAW_ART = `  =====
   =====
   DRAW!`
 
-export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onMainMenu, campaignAbandon }: Props) {
+export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onMainMenu, campaignAbandon, quickPlayHint }: Props) {
   const won  = winner === 'player'
   const draw = winner === 'draw'
   const css  = won ? 'gameover--win' : draw ? 'gameover--draw' : 'gameover--lose'
@@ -86,6 +88,12 @@ export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onM
         )}
       </div>
       {handicapNote && <div className="gameover-handicap">{handicapNote}</div>}
+
+      {quickPlayHint && (
+        <div className="gameover-hint">
+          💡 Struggling? Try <strong>Quick Play</strong> from the main menu to win more cards and strengthen your deck.
+        </div>
+      )}
 
       <div className="gameover-actions">
         {won && onOpenPack && (

@@ -6,7 +6,7 @@ interface Props {
 
 type Slide = 'awesome' | 'jarv'
 
-const SLIDE_DURATION_MS = 3000
+const SLIDE_DURATION_MS = 4500
 
 export function IntroScreen({ onDone }: Props) {
   const [slide, setSlide] = useState<Slide>('awesome')
@@ -56,6 +56,7 @@ export function IntroScreen({ onDone }: Props) {
             alt="Jarv"
             className="intro-jarv-logo"
           />
+          <div className="intro-jarv-credit">A Jarv Creation</div>
         </div>
       )}
 
