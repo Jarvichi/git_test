@@ -1120,10 +1120,16 @@ body {
 
 .cell-footer {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 3px;
+  padding: 3px 0 0;
+  width: 100%;
+}
+
+.cell-footer-buttons {
+  display: flex;
   gap: 2px;
-  padding: 2px 0 0;
-  min-height: 18px;
+  width: 100%;
 }
 
 .cell-count {

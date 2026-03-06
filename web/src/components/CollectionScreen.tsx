@@ -232,22 +232,24 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
                 <span className="cell-count">
                   ×{owned}{lvl > 0 && <span className="cell-mastery-badge">★{lvl}</span>}
                 </span>
-                <button
-                  className={`extra-btn extra-btn--disenchant${extras === 0 ? ' extra-btn--disabled' : ''}`}
-                  onClick={extras > 0 ? () => handleDisenchantCard(card.name) : undefined}
-                  disabled={extras === 0}
-                  title={extras > 0 ? `Sell extra copies for +${disenchantVal} 💎` : 'No extra copies to sell'}
-                >
-                  Sell{extras > 0 ? ` +${disenchantVal}💎` : ''}
-                </button>
-                <button
-                  className={`extra-btn extra-btn--master${extras === 0 ? ' extra-btn--disabled' : ''}`}
-                  onClick={extras > 0 ? () => handleMasterCard(card.name) : undefined}
-                  disabled={extras === 0}
-                  title={extras > 0 ? `Convert ${extras} extra cop${extras === 1 ? 'y' : 'ies'} into mastery XP` : 'No extra copies to upgrade'}
-                >
-                  Upgrade{extras > 0 ? ` +${extras}XP` : ''}
-                </button>
+                <div className="cell-footer-buttons">
+                  <button
+                    className={`extra-btn extra-btn--disenchant${extras === 0 ? ' extra-btn--disabled' : ''}`}
+                    onClick={extras > 0 ? () => handleDisenchantCard(card.name) : undefined}
+                    disabled={extras === 0}
+                    title={extras > 0 ? `Sell extra copies for +${disenchantVal} 💎` : 'No extra copies to sell'}
+                  >
+                    Sell{extras > 0 ? ` +${disenchantVal}💎` : ''}
+                  </button>
+                  <button
+                    className={`extra-btn extra-btn--master${extras === 0 ? ' extra-btn--disabled' : ''}`}
+                    onClick={extras > 0 ? () => handleMasterCard(card.name) : undefined}
+                    disabled={extras === 0}
+                    title={extras > 0 ? `Convert ${extras} extra cop${extras === 1 ? 'y' : 'ies'} into mastery XP` : 'No extra copies to upgrade'}
+                  >
+                    Upgrade{extras > 0 ? ` +${extras}XP` : ''}
+                  </button>
+                </div>
               </div>
 
               {xp > 0 && <MasteryBar xp={xp} />}
