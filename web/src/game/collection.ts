@@ -199,6 +199,22 @@ function extraCount(entry: CollectionEntry): number {
   return Math.max(0, entry.count - COPIES_MAX)
 }
 
+/**
+ * Trim any deck entries whose count exceeds the current collection count for that card.
+ * Call this after any disenchant/upgrade operation to keep the deck consistent.
+ * Returns true if the deck was modified (and already saved).
+ */
+export function syncDeckToCollection(collection: CollectionEntry[]): boolean {
+  const deck = loadDeck()
+  const trimmed = deck.map(e => {
+    const owned = getOwnedCount(collection, e.cardName)
+    return owned < e.count ? { ...e, count: owned } : e
+  }).filter(e => e.count > 0)
+  const changed = trimmed.some((e, i) => e.count !== deck[i]?.count || trimmed.length !== deck.length)
+  if (changed) saveDeck(trimmed)
+  return changed
+}
+
 /** Disenchant all extras for a single card → gain crystals, count drops to COPIES_MAX. */
 export function disenchantCard(
   collection: CollectionEntry[],

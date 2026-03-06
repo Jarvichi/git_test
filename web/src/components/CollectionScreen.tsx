@@ -11,6 +11,7 @@ import {
   disenchantCard,
   disenchantAllExtras,
   masterAllExtras,
+  syncDeckToCollection,
   CollectionEntry,
   DISENCHANT_VALUE,
   CRYSTAL_PACK_COST,
@@ -76,6 +77,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
   function handleDisenchantAll() {
     const { collection: updated, gained } = disenchantAllExtras(collection)
     saveCollection(updated)
+    syncDeckToCollection(updated)
     setCollection(updated)
     const next = crystals + gained
     saveCrystals(next)
@@ -94,6 +96,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
       }
     }
     saveCollection(updated)
+    syncDeckToCollection(updated)
     setCollection(updated)
     notify(`+${totalGained} mastery XP across all cards!`)
   }
@@ -101,6 +104,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
   function handleDisenchantCard(cardName: string) {
     const { collection: updated, gained } = disenchantCard(collection, cardName)
     saveCollection(updated)
+    syncDeckToCollection(updated)
     setCollection(updated)
     const next = crystals + gained
     saveCrystals(next)
@@ -115,6 +119,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
     if (extras === 0) return
     const updated = masterAllExtras(collection, cardName)
     saveCollection(updated)
+    syncDeckToCollection(updated)
     setCollection(updated)
     const after = getMasteryXp(updated, cardName)
     const { level: lvlBefore } = masteryProgress(before)
