@@ -366,12 +366,32 @@ body {
 
 /* Upgrade level badge shown next to building name */
 .lane-unit-level {
-  margin-left: 4px;
-  font-size: 8px;
+  margin-left: 3px;
+  font-size: 7px;
   font-weight: bold;
+  letter-spacing: -0.5px;
+}
+.lane-unit-level--1 {
+  color: #88cc88;
+  text-shadow: 0 0 3px rgba(136, 204, 136, 0.5);
+}
+.lane-unit-level--2 {
   color: #ffcc00;
-  text-shadow: 0 0 4px rgba(255, 204, 0, 0.7);
-  letter-spacing: 0.5px;
+  text-shadow: 0 0 5px rgba(255, 204, 0, 0.8);
+}
+.lane-unit-level--3 {
+  color: #cc88ff;
+  text-shadow: 0 0 6px rgba(200, 100, 255, 0.9);
+}
+
+/* Upgraded building glow — outer ring based on level */
+.lane-unit--upgraded-2 {
+  outline: 1px solid rgba(255, 204, 0, 0.6);
+  box-shadow: 0 0 6px rgba(255, 204, 0, 0.5);
+}
+.lane-unit--upgraded-3 {
+  outline: 1px solid rgba(200, 100, 255, 0.7);
+  box-shadow: 0 0 8px rgba(200, 100, 255, 0.7);
 }
 
 /* Attack flash — brief brightness burst when a unit strikes */
