@@ -6,8 +6,8 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 
 ## 🔴 Critical Bugs
 
-- [ ] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
-- [ ] **#56** Campaign run-count text always says "fifth time" after run 5 — fix to use actual count
+- [x] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
+- [x] **#56** Campaign run-count text always says "fifth time" after run 5 — fix to use actual count
 
 ---
 
@@ -64,3 +64,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 ## ✅ Done
 
 - [x] Daily login reward system created (files only — integration pending above)
+- [x] **#53** Campaign soft-lock fixed (pendingNodeId resume, run validation, actcomplete guard)
+- [x] **#56** Campaign run-count ordinal text fixed (sixth/seventh/eighth/ninth)
+
+> Note: GitHub API issue closing requires auth token (`GITHUB_TOKEN`). Issues must be closed manually or token added to env.

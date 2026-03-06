@@ -60,7 +60,7 @@ At the start of every session (or when asked):
 2. Review each issue, prioritise by: **critical bugs → gameplay bugs → UX bugs → enhancements → large features**
 3. Add new issues to `todo.md` (repo root) with their GitHub issue number
 4. Commit `todo.md` immediately before starting any work
-5. **After fixing an issue:** close it via the GitHub API with an appropriate comment:
+5. **After fixing an issue:** close it via the GitHub API with an appropriate comment (requires `GITHUB_TOKEN` in env — if unavailable, note it in todo.md for manual close):
    ```bash
    # Post comment
    curl -s -X POST "https://api.github.com/repos/Jarvichi/jarvs-amazing-web-game/issues/<N>/comments" \
