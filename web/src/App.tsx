@@ -258,8 +258,9 @@ export default function App() {
     if (!existing) saveRun(activeRun)
     setRun(activeRun)
 
-    // Show act intro cutscene when starting a fresh run
     const act = ACTS[activeRun.actId]
+
+    // Show act intro cutscene when starting a fresh run
     if (!existing) {
       // Increment run count and get narrative-varied panels
       const runCount = incrementRunCount()
@@ -274,6 +275,46 @@ export default function App() {
         return
       }
     }
+
+    // If there's a pending node (e.g. player refreshed mid-campaign), resume it directly
+    if (activeRun.pendingNodeId) {
+      const node = act.nodes[activeRun.pendingNodeId]
+      if (node) {
+        if (node.type === 'event' && node.eventId) {
+          const eventData = EVENT_CATALOG[node.eventId]
+          if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
+        }
+        if (node.type === 'merchant') {
+          const catalog = getCardCatalog()
+          const cardNames = generateMerchantCards()
+          const items: MerchantItem[] = cardNames.map(name => {
+            const card = catalog.find(c => c.name === name)!
+            return { card, price: MERCHANT_PRICES[card.rarity] }
+          })
+          setMerchantItems(items)
+          setScreen('merchant')
+          return
+        }
+        // For battle nodes (including boss): go straight to battle
+        campaignPlayCountsRef.current = {}
+        isCampaignRef.current = true
+        const collection  = loadCollection()
+        const fatigued    = loadFatigued()
+        const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
+        const playerCards = buildDeckCards(deckEntries, collection)
+        const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+        state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
+        setGameState(state)
+        setScreen('playing')
+        rollRareEvent()
+        return
+      }
+      // pendingNodeId points to a non-existent node — clear it and show map
+      const repaired = { ...activeRun, pendingNodeId: null }
+      saveRun(repaired)
+      setRun(repaired)
+    }
+
     setScreen('nodemap')
   }, [])
 
@@ -656,8 +697,15 @@ export default function App() {
 
   // ── Render ───────────────────────────────────────────────
 
-  const actData = run ? ACTS[run.actId] : null
+  const actData = run ? ACTS[run.actId] ?? null : null
   const actTheme = run?.actId
+
+  // Guard: if we somehow land on actcomplete without valid actData, escape to title
+  if (screen === 'actcomplete' && !actData) {
+    clearRun()
+    setRun(null)
+    setScreen('title')
+  }
 
   return (
     <div className="game-container">

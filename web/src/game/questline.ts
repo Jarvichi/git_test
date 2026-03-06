@@ -329,8 +329,10 @@ export function getAct1Intro(runCount: number): CutscenePanel[] {
   }
 
   if (n >= 5 && MILESTONE_OPENINGS[5]) {
+    const ordinals: Record<number, string> = { 5: 'FIFTH', 6: 'SIXTH', 7: 'SEVENTH', 8: 'EIGHTH', 9: 'NINTH' }
+    const ordinal = ordinals[n] ?? `${n}TH`
     return [
-      { title: 'THE FIFTH TIME', text: pick(MILESTONE_OPENINGS[5], n) },
+      { title: `THE ${ordinal} TIME`, text: pick(MILESTONE_OPENINGS[5], n) },
       {
         title: 'THE WANDERER',
         text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
@@ -387,13 +389,47 @@ const RUN_KEY = 'jarv_run'
 export function loadRun(): RunState | null {
   try {
     const raw = localStorage.getItem(RUN_KEY)
-    if (raw) {
-      const parsed = JSON.parse(raw) as RunState
-      if (!parsed.cardPlayCounts) parsed.cardPlayCounts = {}  // migrate old saves
-      return parsed
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as RunState
+
+    // ── Validate and repair ────────────────────────────────────────────────────
+    // Ensure required fields exist (migrate old saves)
+    if (!parsed.cardPlayCounts) parsed.cardPlayCounts = {}
+    if (!Array.isArray(parsed.completedNodeIds)) parsed.completedNodeIds = []
+    if (!Array.isArray(parsed.skippedNodeIds)) parsed.skippedNodeIds = []
+    if (typeof parsed.playerHp !== 'number' || isNaN(parsed.playerHp)) parsed.playerHp = 50
+    if (typeof parsed.maxHp !== 'number' || isNaN(parsed.maxHp) || parsed.maxHp <= 0) parsed.maxHp = 50
+    parsed.playerHp = Math.max(1, Math.min(parsed.maxHp, parsed.playerHp))
+
+    // Ensure actId is valid
+    const act = ACTS[parsed.actId]
+    if (!act) {
+      console.warn('[run] Invalid actId — clearing run')
+      localStorage.removeItem(RUN_KEY)
+      return null
     }
-  } catch { /* ignore */ }
-  return null
+
+    // Remove any node IDs that don't exist in the act
+    const validIds = new Set(Object.keys(act.nodes))
+    parsed.completedNodeIds = parsed.completedNodeIds.filter(id => validIds.has(id))
+    parsed.skippedNodeIds   = parsed.skippedNodeIds.filter(id => validIds.has(id))
+    if (parsed.pendingNodeId && !validIds.has(parsed.pendingNodeId)) {
+      parsed.pendingNodeId = null
+    }
+
+    // If act is already complete with no pendingNode, clear run so a fresh one starts
+    if (isActComplete(act, parsed) && !parsed.pendingNodeId) {
+      console.warn('[run] Act already complete — clearing stale run')
+      localStorage.removeItem(RUN_KEY)
+      return null
+    }
+
+    return parsed
+  } catch {
+    // Corrupt JSON — clear and start fresh
+    try { localStorage.removeItem(RUN_KEY) } catch { /* ignore */ }
+    return null
+  }
 }
 
 export function saveRun(run: RunState): void {
