@@ -107,11 +107,27 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
         `lane-unit--${unit.owner}`,
         isStructure ? 'lane-unit--structure' : '',
         unit.isWall ? 'lane-unit--wall' : '',
+        unit.flying ? 'lane-unit--flying' : '',
         isAttacking ? 'lane-unit--attacking' : '',
       ].filter(Boolean).join(' ')}
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
     >
+      {/* Ground shadow cast by flying units */}
+      {unit.flying && (
+        <div style={{
+          position: 'absolute',
+          bottom: '-14px',
+          left: '50%',
+          width: '30px',
+          height: '10px',
+          background: 'radial-gradient(ellipse, rgba(0,0,0,0.55) 0%, transparent 70%)',
+          transform: 'translateX(-50%)',
+          filter: 'blur(3px)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }} />
+      )}
       {unit.isWall
         ? <WallSvg hp={unit.hp} maxHp={unit.maxHp} owner={unit.owner} />
         : isStructure
@@ -331,10 +347,11 @@ const TERRAIN_SHAPES: Record<TerrainType, (size: number) => React.ReactNode> = {
 // battlefield. Uses deterministic (sin-based) offsets so the layout is stable
 // across re-renders without needing game state.
 
-// Renders a single round canopy blob for the border wall
+// ── Themed border blob SVGs ──────────────────────────────────────────────────
+
+// act1 / default — green tree canopy
 function BlobSvg({ size, shade }: { size: number; shade: number }) {
-  // shade 0–1: varies the green tone so blobs aren't uniform
-  const base = Math.round(30 + shade * 20)   // 30–50 green channel
+  const base = Math.round(30 + shade * 20)
   const fill = `rgb(${18 + Math.round(shade * 8)},${base + 60},${18 + Math.round(shade * 8)})`
   const hi   = `rgb(${30 + Math.round(shade * 10)},${base + 90},${30 + Math.round(shade * 10)})`
   return (
@@ -346,7 +363,63 @@ function BlobSvg({ size, shade }: { size: number; shade: number }) {
   )
 }
 
-function ForestBorder() {
+// act2 — rocky cliff / fortress stone
+function RockBorderBlob({ size, shade }: { size: number; shade: number }) {
+  const g    = Math.round(80 + shade * 30)
+  const fill = `rgb(${g - 10},${g},${g + 5})`
+  const hi   = `rgb(${g + 20},${g + 22},${g + 28})`
+  return (
+    <svg width={size} height={Math.round(size * 0.85)} viewBox="0 0 22 19" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="11" cy="18" rx="10" ry="3" fill="#1a1a1a" opacity="0.35"/>
+      <polygon points="1,17 5,7 11,2 17,7 21,17" fill={fill}/>
+      <polygon points="5,17 9,6 12,1 15,7 18,17" fill={hi} opacity="0.65"/>
+      <line x1="11" y1="2" x2="10" y2="8" stroke="white" strokeWidth="0.5" opacity="0.3"/>
+    </svg>
+  )
+}
+
+// act3 — dead trees / ashen mounds
+function AshBorderBlob({ size, shade }: { size: number; shade: number }) {
+  const g    = Math.round(28 + shade * 18)
+  const dark = `rgb(${g + 8},${g},${g - 4})`
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 22" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="12" width="4" height="10" fill="#2a2010" rx="1"/>
+      <line x1="10" y1="14" x2="3"  y2="8"  stroke={dark} strokeWidth="1.6"/>
+      <line x1="10" y1="13" x2="17" y2="7"  stroke={dark} strokeWidth="1.6"/>
+      <line x1="3"  y1="8"  x2="1"  y2="4"  stroke={dark} strokeWidth="1"/>
+      <line x1="3"  y1="8"  x2="6"  y2="4"  stroke={dark} strokeWidth="1"/>
+      <line x1="17" y1="7"  x2="19" y2="3"  stroke={dark} strokeWidth="1"/>
+      <ellipse cx="10" cy="21" rx="7" ry="2.5" fill="#4a3a28" opacity="0.7"/>
+    </svg>
+  )
+}
+
+// act4 — crystal / ice shards
+function CrystalBorderBlob({ size, shade }: { size: number; shade: number }) {
+  const b    = Math.round(150 + shade * 50)
+  const fill = `rgb(15,${Math.round(b * 0.6)},${b})`
+  const hi   = `rgb(60,${Math.round(b * 0.78)},${b})`
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 24" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="5,22  3,12  6,3   8,12  7,22"  fill={fill} opacity="0.88"/>
+      <polygon points="10,22 8,9  12,1  15,9  13,22"  fill={hi}   opacity="0.95"/>
+      <polygon points="14,22 13,14 16,7  18,14 17,22"  fill={fill} opacity="0.82"/>
+      <line x1="12" y1="2" x2="11" y2="8" stroke="white" strokeWidth="0.7" opacity="0.55"/>
+    </svg>
+  )
+}
+
+type BorderTheme = 'act1' | 'act2' | 'act3' | 'act4' | undefined
+
+function BorderBlob({ size, shade, theme }: { size: number; shade: number; theme: BorderTheme }) {
+  if (theme === 'act2') return <RockBorderBlob   size={size} shade={shade} />
+  if (theme === 'act3') return <AshBorderBlob    size={size} shade={shade} />
+  if (theme === 'act4') return <CrystalBorderBlob size={size} shade={shade} />
+  return <BlobSvg size={size} shade={shade} />
+}
+
+function ForestBorder({ theme }: { theme?: string }) {
   const blobs: { key: string; top: number; left: number; size: number; shade: number }[] = []
 
   // Left (y≈-95) and right (y≈+95) — tight wall just outside the playable field
@@ -386,33 +459,35 @@ function ForestBorder() {
             zIndex: 1,
           }}
         >
-          <BlobSvg size={b.size} shade={b.shade} />
+          <BorderBlob size={b.size} shade={b.shade} theme={theme as BorderTheme} />
         </div>
       ))}
     </>
   )
 }
 
-// Bridge shown over large water obstacles (radius > 18)
+// Bridge shown over large water obstacles — runs top-to-bottom (unit travel direction)
 function BridgeSvg({ size }: { size: number }) {
-  const w = Math.round(size * 1.7)  // match WaterSvg width
+  const bw = Math.round(size * 0.42)   // narrow bridge deck
   return (
-    <svg width={w} height={Math.round(size * 0.5)} viewBox="0 0 52 11" xmlns="http://www.w3.org/2000/svg"
-      style={{ position: 'absolute', top: '25%', left: 0, pointerEvents: 'none' }}>
-      {/* Bridge deck planks */}
-      <rect x="0"  y="4" width="52" height="4" fill="#8a6a3a"/>
-      <line x1="6"  y1="4" x2="6"  y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
-      <line x1="14" y1="4" x2="14" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
-      <line x1="22" y1="4" x2="22" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
-      <line x1="30" y1="4" x2="30" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
-      <line x1="38" y1="4" x2="38" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
-      <line x1="46" y1="4" x2="46" y2="8" stroke="#6a4a22" strokeWidth="1.2"/>
-      {/* Railings */}
-      <line x1="0" y1="3" x2="52" y2="3" stroke="#c8a060" strokeWidth="1.5"/>
-      <line x1="0" y1="9" x2="52" y2="9" stroke="#c8a060" strokeWidth="1.5"/>
-      {/* Posts */}
-      {[4, 14, 24, 34, 44].map(x => (
-        <line key={x} x1={x} y1="0" x2={x} y2="11" stroke="#c8a060" strokeWidth="1.5"/>
+    <svg
+      width={bw} height={size}
+      viewBox="0 0 12 30"
+      style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none' }}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Bridge deck */}
+      <rect x="2" y="0" width="8" height="30" fill="#8a6a3a"/>
+      {/* Horizontal planks (perpendicular to travel) */}
+      {[3, 8, 13, 18, 23, 28].map(y => (
+        <line key={y} x1="2" y1={y} x2="10" y2={y} stroke="#6a4a22" strokeWidth="1.2"/>
+      ))}
+      {/* Left and right railings */}
+      <line x1="1"  y1="0" x2="1"  y2="30" stroke="#c8a060" strokeWidth="1.5"/>
+      <line x1="11" y1="0" x2="11" y2="30" stroke="#c8a060" strokeWidth="1.5"/>
+      {/* Cross-support posts */}
+      {[0, 8, 16, 24].map(y => (
+        <line key={y} x1="0" y1={y} x2="12" y2={y} stroke="#c8a060" strokeWidth="1"/>
       ))}
     </svg>
   )
@@ -450,7 +525,7 @@ function TerrainTile({ obs }: { obs: TerrainObstacle }) {
         transform: 'translateX(-50%) translateY(-50%)',
         overflow:  'visible',
         position:  'absolute',
-        zIndex:    3,
+        zIndex:    2,
       }}
       title={obs.type}
     >
@@ -552,7 +627,7 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
       <div className="lane">
         <div className="lane-ground" />
         <LaneBackground />
-        <ForestBorder />
+        <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {state.field.map((u, i) => {
           const stackIndex = u.moveSpeed === 0

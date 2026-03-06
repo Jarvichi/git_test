@@ -1,5 +1,6 @@
 import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType } from './types'
 import { makeDeck, makeThorlordDeck, HERO_CARDS } from './cards'
+import { playUnitDeath, playBuildingDestroyed } from './sound'
 
 // ─── Constants ────────────────────────────────────────────
 
@@ -498,6 +499,8 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
       unit.attackTimer = unit.attackCooldownMs
       if (target.hp <= 0) {
         log.push(`${unit.name} destroyed ${target.name}!`)
+        if (target.moveSpeed === 0) playBuildingDestroyed()
+        else playUnitDeath()
       }
     } else {
       // No enemies in range — attack the base if close enough

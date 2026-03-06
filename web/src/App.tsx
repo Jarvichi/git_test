@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { GameState } from './game/types'
 import { newGame, playCard, tick, MAX_HANDICAP } from './game/engine'
 import {
