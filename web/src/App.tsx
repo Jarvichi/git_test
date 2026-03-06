@@ -86,16 +86,40 @@ type Screen =
   | 'inventory'
 
 export default function App() {
-  const [screen, setScreen]       = useState<Screen>(loadSkipIntro() ? 'title' : 'intro')
-  const [gameState, setGameState] = useState<GameState | null>(null)
+  // ── Startup: auto-resume a pending campaign battle on page refresh ──────────
+  // If the player refreshed mid-battle, pendingNodeId is still set. We build the
+  // game state immediately so they land straight back in the battle.
+  const [_startup] = useState(() => {
+    const savedRun = loadRun()
+    if (savedRun?.pendingNodeId) {
+      const act  = ACTS[savedRun.actId]
+      const node = act?.nodes[savedRun.pendingNodeId]
+      if (node && (node.type === 'battle' || node.type === 'boss' || node.type === 'elite')) {
+        const collection  = loadCollection()
+        const fatigued    = loadFatigued()
+        const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
+        const playerCards = buildDeckCards(deckEntries, collection)
+        const earnedEntries = (savedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+        if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
+        const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+        state.playerBase = { hp: savedRun.playerHp, maxHp: savedRun.maxHp }
+        if (savedRun.activeRelic) getRelicDef(savedRun.activeRelic)?.applyToGame(state)
+        return { screen: 'playing' as Screen, gameState: state as GameState | null, run: savedRun, isCampaign: true }
+      }
+    }
+    return { screen: (loadSkipIntro() ? 'title' : 'intro') as Screen, gameState: null as GameState | null, run: savedRun as RunState | null, isCampaign: false }
+  })
+
+  const [screen, setScreen]       = useState<Screen>(_startup.screen)
+  const [gameState, setGameState] = useState<GameState | null>(_startup.gameState)
   const [pack, setPack]           = useState<string[]>([])
   const [handicap, setHandicap]   = useState<number>(loadHandicap)
   const [crystals, setCrystals]   = useState<number>(loadCrystals)
 
   // Campaign run state
-  const [run, setRun]                   = useState<RunState | null>(loadRun)
+  const [run, setRun]                   = useState<RunState | null>(_startup.run)
   const [rewardChoices, setRewardChoices] = useState<string[]>([])
-  const isCampaignRef = useRef(false)   // true while playing a campaign battle
+  const isCampaignRef = useRef(_startup.isCampaign)   // true while playing a campaign battle
 
   // Cutscenes & boss dialogue
   const [cutscenePanels, setCutscenePanels]   = useState<CutscenePanel[]>([])

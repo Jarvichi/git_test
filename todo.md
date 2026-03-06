@@ -34,7 +34,8 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke
 - [x] **#61** Battlefield: buildings spread across multiple rows from centre; upgrade level visual feedback
 - [x] **#49** Deck builder: add sort / filter / search (already implemented — closing)
-- [ ] **#48** Collection screen: make sort/filter button labels obvious
+- [x] **#48** Deck builder filter labels: now use full words (Units, Structs, Upgrades, Common, Uncommon, Rare, Legendary, + TYPE/RARITY/SORT group labels) — needs manual close
+- [x] **#73** Campaign hack: page refresh now auto-resumes into the active battle (no title screen shown) — needs manual close
 - [ ] **#50** Sound: better battle music; death cries for units; crash sound for building destruction
 
 ---
@@ -65,7 +66,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] **#54** Intro screen: "Awesome Software Presents" logo → Jarv SVG → title (skip setting in settings)
 - [ ] **#44** Battlefield z-order: water → rocks → walls → trees → surroundings; units above walls, under canopy; flyers above all
 - [ ] **#45** Battlefield scenery themed to environment (rocks/water/ice/canyon)
-- [ ] **#43** Flying units cast a shadow
+- [x] **#43** Flying units cast a shadow (already implemented)
 - [ ] **#61** Battlefield: projectile animations; damage/blood augments on sprites; death/climb animations
 - [ ] **#68** Dark / Light mode toggle in settings
 - [ ] **#67** Cross-device persistent game state (design only for now)
