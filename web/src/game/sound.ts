@@ -61,8 +61,26 @@ export function playCardPlay() {
 
 export function playUnitDeath() {
   const t = now()
-  node(200, 'sawtooth', t,       0.08, 0.2)
-  node(140, 'square',   t + 0.05, 0.12, 0.15)
+  // Short descending cry: pitch drops as the unit falls
+  node(320, 'sine',     t,        0.06, 0.22)
+  node(240, 'sine',     t + 0.04, 0.08, 0.20)
+  node(160, 'sawtooth', t + 0.09, 0.12, 0.18)
+  node(100, 'square',   t + 0.16, 0.14, 0.12)
+}
+
+export function playBuildingDestroyed() {
+  const c = getCtx()
+  if (!c || !masterGain) return
+  const t = c.currentTime
+  // Deep crumbling crash: low rumble + mid crunch + high debris scatter
+  node(80,   'sawtooth', t,        0.20, 0.45)
+  node(55,   'sine',     t,        0.30, 0.40)
+  node(140,  'sawtooth', t + 0.05, 0.15, 0.35)
+  node(220,  'square',   t + 0.08, 0.10, 0.28)
+  // Noise burst (simulate with fast-sweeping high tone)
+  node(2200, 'square',   t,        0.04, 0.30)
+  node(1800, 'square',   t + 0.02, 0.05, 0.25)
+  node(3000, 'sawtooth', t + 0.01, 0.03, 0.20)
 }
 
 export function playVictory() {
@@ -182,44 +200,50 @@ function stopTrack(track: MusicTrack): void {
   }
 }
 
-// ─── Battle Music (A minor pentatonic, 95 BPM) ───────────────────────────────
-// 4 phrases × 8 beats each = 32-beat cycle (~20 s). Phrase 4 is a "break".
+// ─── Battle Music (D Dorian, 115 BPM) ────────────────────────────────────────
+// Aggressive, driving tempo with kick, snare, bass, harmony, and lead melody.
+// 4 phrases × 8 beats = 32-beat cycle (~16.5 s).
 
-const BATTLE_BPM      = 95
+const BATTLE_BPM      = 115
 const BATTLE_BEAT_SEC = 60 / BATTLE_BPM
-const BATTLE_VOL      = 0.12
+const BATTLE_VOL      = 0.13
 
-// A, C, D, E, G  (A minor pentatonic across octaves)
-const BA = [110.0, 130.8, 146.8, 164.8, 196.0]  // bass register
-const BM = [440.0, 523.2, 587.3, 659.3, 784.0]  // melody register
+// D Dorian: D, E, F, A, C  across registers
+const BA = [73.4,  87.3,  98.0,  130.8, 146.8]  // bass (D2–D3 range)
+const BM = [293.7, 349.2, 392.0, 523.2, 587.3]  // melody (D4–D5 range)
+const BH = [587.3, 698.5, 784.0, 1046.5, 1174.7] // high harmony (D5–D6)
 
-// Bass patterns per phrase (indices into BA)
+// Bass patterns per phrase
 const B_BASS = [
-  [0, 0, 2, 0, 3, 0, 2, 1],  // phrase 0 – anchor on A
-  [2, 2, 3, 2, 0, 2, 3, 2],  // phrase 1 – anchor on D
-  [3, 0, 2, 3, 1, 0, 3, 2],  // phrase 2 – wandering
-  [0, 3, 0, 3, 4, 3, 0, 3],  // phrase 3 – tension (G drone)
+  [0, 0, 2, 0, 1, 0, 2, 0],  // phrase 0 – grounded on D
+  [2, 2, 1, 2, 3, 2, 1, 2],  // phrase 1 – walks up
+  [0, 3, 2, 3, 0, 2, 1, 0],  // phrase 2 – tension
+  [4, 4, 3, 4, 2, 3, 1, 0],  // phrase 3 – climax descent
 ] as const
 
-// Melody patterns per phrase (indices into BM, null = rest)
+// Melody patterns per phrase
 const B_MEL: (number|null)[][] = [
-  [0, null, null, 2,    null, 3,    null, null],
-  [null, 2, 3,    null, 4,    null, 2,    3   ],
-  [3,    4, null, 3,    2,    null, 1,    null],
-  [4,    4, 3,    null, 2,    1,    null, 0   ],  // descending fill
+  [0, null, 2, null, 1, null, 3,    null],
+  [null, 3, null, 4, null, 2, null, 3   ],
+  [2,    3, 4,    null, 3, 2, null, 1   ],
+  [4,    4, 3,    2,    4, 3, 2,    0   ],
+]
+
+// High harmony (played only at intensity 2)
+const B_HARM: (number|null)[][] = [
+  [null, 1, null, 3,    null, 2, null, 4   ],
+  [2,    null, 3, null, 4,    null, 2, null],
+  [null, 4, 3,    null, 4,    null, 3, 2   ],
+  [3,    null, 4, 3,    null, 4, 3,    null],
 ]
 
 const bgTrack = makeTrack()
 
-// Intensity-to-phrase-set mapping:
-//  0 (losing)  → phrases 0-1 only (sparse, tense)
-//  1 (even)    → phrases 0-2 (normal 32-beat cycle)
-//  2 (winning) → phrases 1-3 (dense, exciting)
 function battlePhrase(absbeat: number): number {
   const raw = Math.floor(absbeat / 8)
-  if (battleIntensity === 0) return raw % 2              // only phrases 0,1
-  if (battleIntensity === 2) return 1 + (raw % 3)        // phrases 1,2,3
-  return raw % 4                                         // full cycle
+  if (battleIntensity === 0) return raw % 2
+  if (battleIntensity === 2) return 1 + (raw % 3)
+  return raw % 4
 }
 
 function scheduleBattle(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
@@ -231,32 +255,56 @@ function scheduleBattle(track: MusicTrack, vol: number, beatSec: number, upTo: n
     const n       = (f: number, type: OscillatorType, off: number, dur: number, v: number) =>
                       musicNote(track, vol, f, type, t + off, dur, v)
 
-    // Bass: always present; louder when intense
-    const bassIdx = B_BASS[phrase][beat]
-    const bassVol = 0.4 + battleIntensity * 0.08
-    n(BA[bassIdx], 'sawtooth', 0, beatSec * 0.85, bassVol)
-    n(BA[bassIdx] / 2, 'sine', 0, beatSec * 0.9, 0.28)
+    // Kick drum — every beat 0 and 4 (louder at higher intensity)
+    const kickVol = 0.35 + battleIntensity * 0.06
+    if (beat === 0 || beat === 4) {
+      n(80,  'sine',     0,          0.12, kickVol)
+      n(55,  'sine',     0,          0.18, kickVol * 0.7)
+      n(400, 'sawtooth', 0,          0.03, kickVol * 0.25)  // click transient
+    }
+    // Extra kick on beat 2 at intensity 2
+    if (beat === 2 && battleIntensity === 2) n(80, 'sine', 0, 0.10, kickVol * 0.6)
 
-    // Melody: only in intensity ≥ 1, fuller in intensity 2
+    // Bass — always present
+    const bassIdx = B_BASS[phrase][beat]
+    const bassVol = 0.42 + battleIntensity * 0.07
+    n(BA[bassIdx], 'sawtooth', 0, beatSec * 0.80, bassVol)
+    n(BA[bassIdx] * 1.5, 'sine', beatSec * 0.02, beatSec * 0.5, 0.18)  // 5th harmony
+
+    // Snare on beats 2 and 6 (intensity 0: beat 2 only)
+    const snareBeats = battleIntensity === 0 ? [2] : [2, 6]
+    if (snareBeats.includes(beat) || (battleIntensity === 2 && beat === 5)) {
+      const sv = 0.08 + battleIntensity * 0.025
+      n(3200 + Math.random() * 800, 'square', 0, 0.04, sv)
+      n(2400 + Math.random() * 600, 'square', 0, 0.06, sv * 0.8)
+      n(1600 + Math.random() * 400, 'square', 0, 0.07, sv * 0.55)
+    }
+
+    // Hi-hat 16th note pulse at intensity ≥ 1
+    if (battleIntensity >= 1) {
+      n(6000 + Math.random() * 1000, 'square', beatSec * 0.5, 0.02, 0.03)
+      if (battleIntensity === 2) n(7000, 'square', beatSec * 0.25, 0.015, 0.025)
+    }
+
+    // Melody — intensity ≥ 1
     const melIdx = B_MEL[phrase][beat]
     if (melIdx !== null && battleIntensity >= 1) {
-      const melVol = 0.28 + battleIntensity * 0.08
-      n(BM[melIdx], 'sine', beatSec * 0.05, beatSec * 0.55, melVol)
-      // Double the melody an octave up at intensity 2
-      if (battleIntensity === 2) n(BM[melIdx] * 2, 'sine', beatSec * 0.05, beatSec * 0.45, 0.14)
+      const mv = 0.30 + battleIntensity * 0.07
+      n(BM[melIdx], 'sine', beatSec * 0.04, beatSec * 0.60, mv)
+      if (battleIntensity === 2) n(BM[melIdx], 'triangle', beatSec * 0.04, beatSec * 0.55, mv * 0.3)
     }
 
-    // Snare: more hits at higher intensity
-    const snareBeats = battleIntensity === 0 ? [2] :
-                       battleIntensity === 1 ? [2, 6] : [2, 4, 6]
-    if (snareBeats.includes(beat)) {
-      const snareVol = 0.06 + battleIntensity * 0.02
-      n(3000 + Math.random() * 1000, 'square', 0, 0.04, snareVol)
-      n(2000 + Math.random() * 800,  'square', 0, 0.06, snareVol * 0.75)
+    // High harmony — intensity 2 only
+    if (battleIntensity === 2) {
+      const hIdx = B_HARM[phrase][beat]
+      if (hIdx !== null) n(BH[hIdx], 'sine', beatSec * 0.06, beatSec * 0.45, 0.15)
     }
 
-    // Phrase 3 tension hit (only reached at intensity ≥ 1)
-    if (phrase === 3 && beat === 0) n(55, 'sine', 0, beatSec * 2, 0.3)
+    // Phrase climax accent (beat 0 of phrase 3)
+    if (phrase === 3 && beat === 0) {
+      n(55, 'sine', 0, beatSec * 1.8, 0.32)
+      n(110, 'sawtooth', 0, beatSec * 0.5, 0.2)
+    }
 
     track.nextBeatTime += beatSec
     track.beatIndex++

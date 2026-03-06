@@ -276,7 +276,7 @@ body {
 
 .lane-unit {
   position: absolute;
-  z-index: 4;   /* above forest border (1), terrain tiles (3) */
+  z-index: 4;   /* above forest border (1), obstacles (2), walls (3) */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -346,6 +346,11 @@ body {
   border: none;
   background: none;
   min-width: unset;
+  z-index: 3;   /* walls are below regular units (4) but above terrain (2) */
+}
+
+.lane-unit--flying {
+  z-index: 5;   /* flying units hover above everything else */
 }
 
 .lane-unit--wall .lane-unit-sprite {
@@ -725,6 +730,19 @@ body {
   margin-top: 4px;
 }
 
+/* Uniform button size in the game-over action row */
+.gameover-actions .action-btn {
+  width: 200px;
+  font-size: 13px;
+  padding: 9px 20px;
+  box-sizing: border-box;
+}
+.gameover-actions .action-btn.action-btn--large {
+  font-size: 13px;
+  padding: 9px 20px;
+  animation: none;
+}
+
 /* ─── Title Screen ───────────────────────────────────── */
 
 .title-screen {
@@ -759,14 +777,26 @@ body {
   gap: 10px;
 }
 
+/* Uniform sizing for all title screen buttons */
+.title-buttons .action-btn {
+  width: 220px;
+  font-size: 13px;
+  padding: 9px 20px;
+  box-sizing: border-box;
+}
+
+/* Keep campaign button visually distinct (gold) without changing its size */
+.title-buttons .action-btn.action-btn--large {
+  font-size: 13px;
+  padding: 9px 20px;
+  animation: none;
+}
+
 .title-play-btn {
-  min-width: 200px;
+  /* size now from .title-buttons .action-btn */
 }
 
 .title-nav-btn {
-  min-width: 160px;
-  font-size: 13px;
-  padding: 7px 18px;
   border-color: rgba(51, 255, 51, 0.5);
   color: #ccc;
 }
@@ -881,6 +911,52 @@ body {
   background: rgba(51, 255, 51, 0.08);
 }
 
+.filter-group-label {
+  font-size: 9px;
+  color: #666;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* Smaller variant for deck-builder filter bar */
+.filter-btn--sm {
+  font-size: 9px;
+  padding: 2px 6px;
+}
+
+/* ─── Deck builder search + filter ──────────────────── */
+
+.deckbuilder-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 6px;
+  border-bottom: 1px solid #222;
+  margin-bottom: 4px;
+}
+
+.deckbuilder-search {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  border-radius: 3px;
+  color: var(--game-text-color);
+  font-family: inherit;
+  font-size: 11px;
+  padding: 4px 8px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.deckbuilder-search:focus { border-color: #555; }
+.deckbuilder-search::placeholder { color: #555; }
+
+.deckbuilder-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  align-items: center;
+}
+
 /* ─── Collection Grid ────────────────────────────────── */
 
 .collection-grid {
@@ -896,6 +972,13 @@ body {
 .collection-cell {
   display: flex;
   flex-direction: column;
+  width: 112px;   /* fixed width so every card is the same size */
+  flex-shrink: 0;
+}
+
+.collection-cell .card-tile {
+  width: 100%;   /* fill the fixed cell width */
+  box-sizing: border-box;
 }
 
 .collection-cell--unowned {
@@ -2991,6 +3074,54 @@ body {
 .battlefield--act1 .top-bar { border-color: #1a3a1a; }
 .battlefield--act1 .base-bar--opponent { border-color: #883333; }
 
+/* Act 2 — Iron Citadel (stone/grey fortresses) */
+.battlefield--act2 .lane {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(130, 130, 140, 0.015) 0px,
+      rgba(130, 130, 140, 0.015) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    linear-gradient(180deg, #0a0a0c 0%, #0d0d10 40%, #0a0a0c 100%);
+  border-color: #2a2a38;
+}
+.battlefield--act2 .top-bar { border-color: #2a2a38; }
+.battlefield--act2 .base-bar--opponent { border-color: #884422; }
+
+/* Act 3 — Ashen Wastes (dark scorched earth) */
+.battlefield--act3 .lane {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(60, 40, 20, 0.025) 0px,
+      rgba(60, 40, 20, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    linear-gradient(180deg, #0a0604 0%, #0e0a06 40%, #0a0604 100%);
+  border-color: #2a1a0a;
+}
+.battlefield--act3 .top-bar { border-color: #2a1a0a; }
+.battlefield--act3 .base-bar--opponent { border-color: #6a2288; }
+
+/* Act 4 — Crystal Spire (arcane blue glow) */
+.battlefield--act4 .lane {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(20, 80, 180, 0.018) 0px,
+      rgba(20, 80, 180, 0.018) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    linear-gradient(180deg, #040812 0%, #060c18 40%, #040812 100%);
+  border-color: #0a1a3a;
+}
+.battlefield--act4 .top-bar { border-color: #0a1a3a; }
+.battlefield--act4 .base-bar--opponent { border-color: #2244aa; }
+
 /* Fallback (quick play / unknown act) stays with defaults */
 
 /* ═══════════════════════════════════════════════════════════
@@ -3333,4 +3464,188 @@ body {
   text-align: center;
   margin-top: -12px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   DAILY LOGIN MODAL
+   ═══════════════════════════════════════════════════════════ */
+
+.daily-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.25s ease;
+}
+
+.daily-modal {
+  background: #0d0d0d;
+  border: 2px solid rgba(255,200,50,0.6);
+  border-radius: 6px;
+  padding: 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 240px;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255,200,50,0.2);
+}
+
+.daily-modal-header {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffcc00;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(255,200,50,0.6);
+}
+
+.daily-modal-sub {
+  font-size: 11px;
+  color: #888;
+  margin-top: -6px;
+}
+
+.daily-modal-reward {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.daily-modal-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.daily-modal-value {
+  font-size: 16px;
+  color: #ffcc00;
+  font-weight: bold;
+}
+
+.daily-modal-desc {
+  font-size: 11px;
+  color: #aaa;
+  max-width: 240px;
+}
+
+.daily-modal-card-wrap {
+  margin: 4px 0;
+}
+
+.daily-modal-useless-note {
+  font-size: 10px;
+  color: #666;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INVENTORY SCREEN
+   ═══════════════════════════════════════════════════════════ */
+
+.inventory-count {
+  font-size: 11px;
+  color: #666;
+}
+
+.inventory-intro {
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+  padding: 6px 0 2px;
+  line-height: 1.5;
+}
+
+.inventory-intro-small {
+  font-size: 10px;
+  color: #555;
+  font-style: italic;
+}
+
+.inventory-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-size: 13px;
+}
+
+.inventory-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+  overflow-y: auto;
+  flex: 1;
+  align-content: flex-start;
+}
+
+.inventory-cell {
+  width: 100px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 4px;
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+  transition: border-color 0.15s;
+}
+
+.inventory-cell:hover {
+  border-color: #444;
+}
+
+.inventory-item-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.inventory-item-name {
+  font-size: 9px;
+  font-weight: bold;
+  color: #ccc;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.inventory-item-desc {
+  font-size: 8px;
+  color: #666;
+  text-align: center;
+  line-height: 1.3;
+  font-style: italic;
+}
+
+/* ── The 42-item secret panel ──────────────────────────── */
+.inventory-secret-panel {
+  background: linear-gradient(135deg, #080020, #100030);
+  border: 2px solid rgba(150,80,255,0.6);
+  border-radius: 6px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  animation: pulseSecret 2s ease-in-out infinite;
+  box-shadow: 0 0 30px rgba(150,80,255,0.25);
+}
+
+@keyframes pulseSecret {
+  0%, 100% { box-shadow: 0 0 20px rgba(150,80,255,0.2); }
+  50%       { box-shadow: 0 0 40px rgba(150,80,255,0.45); }
+}
+
+.inventory-secret-icon  { font-size: 32px; }
+.inventory-secret-title { font-size: 13px; color: #c060ff; font-weight: bold; letter-spacing: 2px; }
+.inventory-secret-msg   { font-size: 12px; color: #e0b0ff; font-style: italic; max-width: 280px; }
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Card } from '../game/types'
+import React, { useState, useMemo } from 'react'
+import { Card, CardType, CardRarity } from '../game/types'
 import { getCardCatalog } from '../game/cards'
 import {
   loadCollection,
@@ -135,6 +135,10 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
   const [deck, setDeck] = useState<DeckEntry[]>(loadDeck)
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const [showAutoBuild, setShowAutoBuild] = useState(false)
+  const [search, setSearch]         = useState('')
+  const [typeFilter, setTypeFilter]   = useState<'all' | CardType>('all')
+  const [rarityFilter, setRarityFilter] = useState<'all' | CardRarity>('all')
+  const [sortBy, setSortBy]           = useState<'cost' | 'name' | 'rarity'>('cost')
 
   const total = deckTotalCards(deck)
   const valid = isDeckValid(deck)
@@ -183,8 +187,24 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
     onBack()
   }
 
-  // Only show cards the player owns
-  const ownedCards = catalog.filter(c => getOwnedCount(collection, c.name) > 0)
+  // Filtered + sorted collection panel
+  const rarityOrder: Record<string, number> = { legendary: 0, rare: 1, uncommon: 2, common: 3 }
+  const ownedCards = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return catalog
+      .filter(c => {
+        if (getOwnedCount(collection, c.name) === 0) return false
+        if (typeFilter !== 'all' && c.cardType !== typeFilter) return false
+        if (rarityFilter !== 'all' && c.rarity !== rarityFilter) return false
+        if (q && !c.name.toLowerCase().includes(q)) return false
+        return true
+      })
+      .sort((a, b) => {
+        if (sortBy === 'name')   return a.name.localeCompare(b.name)
+        if (sortBy === 'rarity') return rarityOrder[a.rarity] - rarityOrder[b.rarity]
+        return a.cost - b.cost || a.name.localeCompare(b.name)   // cost (default)
+      })
+  }, [catalog, collection, search, typeFilter, rarityFilter, sortBy])
 
   // Deck list sorted by cost then name
   const deckList = [...deck].sort((a, b) => {
@@ -208,6 +228,50 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
         {/* ── Left: collection ── */}
         <div className="deckbuilder-collection">
           <div className="deckbuilder-panel-title">YOUR CARDS — click to add</div>
+
+          {/* Search + filter bar */}
+          <div className="deckbuilder-filters">
+            <input
+              className="deckbuilder-search"
+              type="text"
+              placeholder="Search cards..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+            <div className="deckbuilder-filter-row">
+              {(['all','unit','structure','upgrade'] as const).map(t => (
+                <button
+                  key={t}
+                  className={`filter-btn filter-btn--sm${typeFilter === t ? ' filter-btn--active' : ''}`}
+                  onClick={() => setTypeFilter(t)}
+                >
+                  {t === 'all' ? 'All' : t === 'structure' ? 'Str' : t[0].toUpperCase() + t.slice(1, 3)}
+                </button>
+              ))}
+              <span className="filter-sep">|</span>
+              {(['all','common','uncommon','rare','legendary'] as const).map(r => (
+                <button
+                  key={r}
+                  className={`filter-btn filter-btn--sm${rarityFilter === r ? ' filter-btn--active' : ''}`}
+                  onClick={() => setRarityFilter(r)}
+                >
+                  {r === 'all' ? 'All' : r.slice(0,3)}
+                </button>
+              ))}
+              <span className="filter-sep">|</span>
+              {(['cost','name','rarity'] as const).map(s => (
+                <button
+                  key={s}
+                  className={`filter-btn filter-btn--sm${sortBy === s ? ' filter-btn--active' : ''}`}
+                  onClick={() => setSortBy(s)}
+                  title={`Sort by ${s}`}
+                >
+                  {s === 'cost' ? '💰' : s === 'name' ? 'A–Z' : '★'}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="collection-grid">
             {ownedCards.map(card => {
               const owned    = getOwnedCount(collection, card.name)

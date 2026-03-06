@@ -166,23 +166,36 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
 
       {/* Filters */}
       <div className="filter-bar">
-        {(['all', 'unit', 'structure', 'upgrade'] as const).map(t => (
+        <span className="filter-group-label">TYPE:</span>
+        {([
+          ['all',       'All'],
+          ['unit',      'Units'],
+          ['structure', 'Structures'],
+          ['upgrade',   'Upgrades'],
+        ] as const).map(([val, label]) => (
           <button
-            key={t}
-            className={`filter-btn${typeFilter === t ? ' filter-btn--active' : ''}`}
-            onClick={() => setTypeFilter(t)}
+            key={val}
+            className={`filter-btn${typeFilter === val ? ' filter-btn--active' : ''}`}
+            onClick={() => setTypeFilter(val as TypeFilter)}
           >
-            {t === 'all' ? 'ALL' : t === 'structure' ? 'STR' : t.slice(0, 3).toUpperCase()}
+            {label}
           </button>
         ))}
         <span className="filter-sep">|</span>
-        {(['all', 'common', 'uncommon', 'rare', 'legendary'] as const).map(r => (
+        <span className="filter-group-label">RARITY:</span>
+        {([
+          ['all',       'All'],
+          ['common',    'Common'],
+          ['uncommon',  'Uncommon'],
+          ['rare',      'Rare'],
+          ['legendary', 'Legendary'],
+        ] as const).map(([val, label]) => (
           <button
-            key={r}
-            className={`filter-btn${rarityFilter === r ? ' filter-btn--active' : ''}`}
-            onClick={() => setRarityFilter(r)}
+            key={val}
+            className={`filter-btn${rarityFilter === val ? ' filter-btn--active' : ''}`}
+            onClick={() => setRarityFilter(val as RarityFilter)}
           >
-            {r === 'all' ? 'ALL' : r.slice(0, 3).toUpperCase()}
+            {label}
           </button>
         ))}
         <span className="filter-sep">|</span>
@@ -192,7 +205,7 @@ export function CollectionScreen({ crystals, onCrystalsChanged, onBuyCrystalPack
           title="Show only cards with extra copies that can be mastered"
           style={specialFilter === 'upgradeable' ? { borderColor: '#ffd700', color: '#ffd700' } : {}}
         >
-          ★ UPG
+          ★ Upgradeable
         </button>
         <span className="filter-owned">{totalOwned} cards</span>
       </div>
