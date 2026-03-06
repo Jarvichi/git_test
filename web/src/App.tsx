@@ -15,7 +15,7 @@ import {
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
   hasSeenIntro, markIntroSeen,
   loadRunCount, incrementRunCount, getAct1Intro,
-  EVENT_CATALOG, generateShrineEvent, EventChoice,
+  EVENT_CATALOG, generateShrineEvent, generateRuinsEvent, EventChoice,
   CutscenePanel, QuestNode, RunState,
 } from './game/questline'
 import { CardRestSelect }       from './components/CardRestSelect'
@@ -359,7 +359,7 @@ export default function App() {
       const node = act.nodes[activeRun.pendingNodeId]
       if (node) {
         if (node.type === 'event' && node.eventId) {
-          const eventData = node.eventId === 'shrine' ? generateShrineEvent() : EVENT_CATALOG[node.eventId]
+          const eventData = node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId]
           if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
         }
         if (node.type === 'merchant') {
@@ -425,7 +425,7 @@ export default function App() {
     }
 
     if (node.type === 'event' && node.eventId) {
-      const eventData = node.eventId === 'shrine' ? generateShrineEvent() : EVENT_CATALOG[node.eventId]
+      const eventData = node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId]
       if (eventData) {
         setActiveEvent(eventData)
         setScreen('event')
