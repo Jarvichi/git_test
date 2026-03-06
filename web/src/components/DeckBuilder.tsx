@@ -239,34 +239,51 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
               onChange={e => setSearch(e.target.value)}
             />
             <div className="deckbuilder-filter-row">
-              {(['all','unit','structure','upgrade'] as const).map(t => (
+              <span className="filter-group-label">TYPE:</span>
+            {([
+              ['all',       'All'],
+              ['unit',      'Units'],
+              ['structure', 'Structs'],
+              ['upgrade',   'Upgrades'],
+            ] as const).map(([val, label]) => (
                 <button
-                  key={t}
-                  className={`filter-btn filter-btn--sm${typeFilter === t ? ' filter-btn--active' : ''}`}
-                  onClick={() => setTypeFilter(t)}
+                  key={val}
+                  className={`filter-btn filter-btn--sm${typeFilter === val ? ' filter-btn--active' : ''}`}
+                  onClick={() => setTypeFilter(val as typeof typeFilter)}
                 >
-                  {t === 'all' ? 'All' : t === 'structure' ? 'Str' : t[0].toUpperCase() + t.slice(1, 3)}
+                  {label}
                 </button>
               ))}
               <span className="filter-sep">|</span>
-              {(['all','common','uncommon','rare','legendary'] as const).map(r => (
+              <span className="filter-group-label">RARITY:</span>
+              {([
+                ['all',       'All'],
+                ['common',    'Common'],
+                ['uncommon',  'Uncommon'],
+                ['rare',      'Rare'],
+                ['legendary', 'Legendary'],
+              ] as const).map(([val, label]) => (
                 <button
-                  key={r}
-                  className={`filter-btn filter-btn--sm${rarityFilter === r ? ' filter-btn--active' : ''}`}
-                  onClick={() => setRarityFilter(r)}
+                  key={val}
+                  className={`filter-btn filter-btn--sm${rarityFilter === val ? ' filter-btn--active' : ''}`}
+                  onClick={() => setRarityFilter(val as typeof rarityFilter)}
                 >
-                  {r === 'all' ? 'All' : r.slice(0,3)}
+                  {label}
                 </button>
               ))}
               <span className="filter-sep">|</span>
-              {(['cost','name','rarity'] as const).map(s => (
+              <span className="filter-group-label">SORT:</span>
+              {([
+                ['cost',   'Cost'],
+                ['name',   'A–Z'],
+                ['rarity', 'Rarity'],
+              ] as const).map(([val, label]) => (
                 <button
-                  key={s}
-                  className={`filter-btn filter-btn--sm${sortBy === s ? ' filter-btn--active' : ''}`}
-                  onClick={() => setSortBy(s)}
-                  title={`Sort by ${s}`}
+                  key={val}
+                  className={`filter-btn filter-btn--sm${sortBy === val ? ' filter-btn--active' : ''}`}
+                  onClick={() => setSortBy(val as typeof sortBy)}
                 >
-                  {s === 'cost' ? '💰' : s === 'name' ? 'A–Z' : '★'}
+                  {label}
                 </button>
               ))}
             </div>
