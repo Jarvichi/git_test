@@ -33,7 +33,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] **#57** Campaign shrines: hide expected rewards; randomise options; one option can be negative
 - [x] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke
 - [x] **#61** Battlefield: buildings spread across multiple rows from centre; upgrade level visual feedback
-- [ ] **#49** Deck builder: add sort / filter / search
+- [x] **#49** Deck builder: add sort / filter / search (already implemented — closing)
 - [ ] **#48** Collection screen: make sort/filter button labels obvious
 - [ ] **#50** Sound: better battle music; death cries for units; crash sound for building destruction
 
@@ -42,11 +42,21 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 ## 🔵 Enhancements — Medium
 
 - [ ] **#64** Tutorials: deck builder tutorial; gameplay tutorial; lock campaign until 30 cards collected
-- [ ] **#47** Buff/upgrade cards need icons/images
+- [x] **#47** Buff/upgrade cards need icons/images (already implemented in CardTile.tsx UpgradeIcon)
 - [ ] **#66** Debugging: feedback/bug submission screen; export/import localStorage behind `?debug` URL param
 - [ ] **#60** Rare event — The Gambler: tap-to-guess modal, win all cards or lose everything; rubber chicken consolation; track rare event log
 - [ ] **#52** More secrets scattered through the game
 - [ ] **#55** Anti-hacking: checksum on card collection + inventory; warn on mismatch; safe first-load migration
+
+---
+
+## 🟣 Relic System (Phase 3 — partial)
+
+- [x] **Relic storage** — `RunState.activeRelic` added; saved to `jarv_relics` on act complete; auto-equipped for next run; effects applied at battle start
+- [x] Relic data in `web/src/game/relics.ts` (Bark Shield + Iron Standard defined)
+- [x] Relic effects applied at campaign battle start in `App.tsx`
+- [ ] Relic display on Battlefield HUD
+- [ ] Relic selection screen between acts (currently auto-equips last earned)
 
 ---
 
