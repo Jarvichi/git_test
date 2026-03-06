@@ -699,13 +699,47 @@ body {
 
 /* ─── Mobile ─────────────────────────────────────────── */
 
+/* dvh falls back to vh on older browsers */
+@supports (height: 100dvh) {
+  body, .game-container { height: 100dvh; }
+}
+
 @media (max-width: 480px) {
   body { font-size: 12px; }
   .game-container { padding: 4px 6px; }
   .game-title { font-size: 13px; letter-spacing: 1px; }
+
+  /* Cards in hand fill their grid cell; drop fixed 100px width */
+  .hand-cards .card-tile { width: 100%; min-width: 0; padding: 5px 6px; }
+  .hand-cards { gap: 4px; padding-bottom: 4px; }
+
+  /* Collection cards keep fixed width — hand is what overflows */
   .card-tile { width: 78px; padding: 6px 8px; }
+  .card-title { font-size: 9px; }
+  .card-stats { font-size: 8px; }
+  .card-tag   { font-size: 7px; }
+
+  .lane { min-height: 120px; }
   .lane-unit-name { font-size: 8px; }
   .mana-pip { width: 8px; height: 8px; }
+
+  .base-bar { padding: 3px 8px; gap: 6px; }
+  .base-bar-info { font-size: 10px; gap: 4px; }
+  .hp-bar-track { height: 13px; }
+}
+
+/* Very small phones (≤380px — iPhone SE, older Android) */
+@media (max-width: 380px) {
+  .game-container { padding: 2px 4px; }
+  .game-title { font-size: 12px; padding: 2px 0 3px; }
+
+  /* 3 cards per row so each has a reasonable touch target */
+  .hand-cards { grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .hand-cards .card-tile { padding: 4px 5px; }
+  .card-title { font-size: 8px; }
+
+  .lane { min-height: 90px; }
+  .battlefield { gap: 3px; }
 }
 
 /* ─── Gold button variant (pack open) ───────────────── */
