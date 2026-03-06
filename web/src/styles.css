@@ -1120,10 +1120,16 @@ body {
 
 .cell-footer {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 3px;
+  padding: 3px 0 0;
+  width: 100%;
+}
+
+.cell-footer-buttons {
+  display: flex;
   gap: 2px;
-  padding: 2px 0 0;
-  min-height: 18px;
+  width: 100%;
 }
 
 .cell-count {
@@ -2088,80 +2094,66 @@ body {
 .nm-map {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0;
   flex: 1;
   overflow-y: auto;
-  padding: 16px 0 8px;
+  padding: 16px 8px 8px;
 }
 
-/* ── Connectors ── */
-
-.nm-connector {
-  display: flex;
-  justify-content: center;
-  height: 24px;
+.nm-map-inner {
   width: 100%;
-  position: relative;
-}
-
-.nm-connector--straight .nm-connector-line {
-  width: 2px;
-  height: 100%;
-  background: #3a3a3a;
-}
-
-.nm-connector-arms {
+  max-width: 360px;
+  margin: 0 auto;
   display: flex;
-  width: 220px;
-  justify-content: space-between;
-  align-items: flex-start;
-  height: 100%;
-  position: relative;
+  flex-direction: column;
 }
 
-.nm-connector-arms::before {
-  content: '';
+/* ── Connectors (grid-aligned) ──────────────────────────────────────────────
+   Each .nm-conn uses the same CSS grid column structure as the adjacent node
+   row, so .nm-conn-v lines sit at exactly the centre of the node above/below.
+   .nm-conn-h (the horizontal bar) extends ±7px into the gaps so there is no
+   visible gap in the bar between adjacent grid cells.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.nm-conn {
+  display: grid;
+  gap: 12px;          /* must match .nm-row gap */
+  height: 28px;
+  width: 100%;
+}
+
+.nm-conn-slot {
+  position: relative;
+  height: 100%;
+}
+
+.nm-conn-v {
   position: absolute;
   left: 50%;
-  top: 0;
   width: 2px;
-  height: 50%;
-  background: #3a3a3a;
+  background: #4a4a4a;
   transform: translateX(-50%);
 }
+.nm-conn-v--top { top: 0;   height: 50%; }
+.nm-conn-v--bot { top: 50%; height: 50%; }
 
-.nm-connector-arm {
-  width: 2px;
-  height: 100%;
-  background: #3a3a3a;
-  position: relative;
-}
-
-.nm-connector-arm::before {
-  content: '';
+.nm-conn-h {
   position: absolute;
   top: 50%;
   height: 2px;
-  background: #3a3a3a;
+  background: #4a4a4a;
+  transform: translateY(-50%);
+  left: -7px;   /* extends into left gap to join adjacent cell */
+  right: -7px;  /* extends into right gap */
 }
-
-.nm-connector-arm--left::before {
-  left: 0;
-  right: -108px;
-}
-
-.nm-connector-arm--right::before {
-  right: 0;
-  left: -108px;
-}
+.nm-conn-h--s { left: 50%; }   /* bar starts at centre of this cell */
+.nm-conn-h--e { right: 50%; }  /* bar ends at centre of this cell */
 
 /* ── Rows ── */
 
 .nm-row {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
+  display: grid;
+  gap: 12px;          /* must match .nm-conn gap */
+  width: 100%;
 }
 
 /* ── Node buttons ── */
