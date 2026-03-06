@@ -87,9 +87,13 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
   } else if (isStructure) {
     // Structures anchor to their base edge; horizontal position from unit.y (same scale as mobile units)
     const hPct = 50 + (unit.y / 80) * 36
+    // Spread into multiple rows: every 6 buildings push one row deeper into the field
+    const BUILDINGS_PER_ROW = 6
+    const row = Math.floor(stackIndex / BUILDINGS_PER_ROW)
+    const rowDepthPx = row * 44
     style = unit.owner === 'player'
-      ? { bottom: '5px', left: `${hPct}%`, transform: 'translateX(-50%)' }
-      : { top: '5px', left: `${hPct}%`, transform: 'translateX(-50%)' }
+      ? { bottom: `${5 + rowDepthPx}px`, left: `${hPct}%`, transform: 'translateX(-50%)' }
+      : { top: `${5 + rowDepthPx}px`, left: `${hPct}%`, transform: 'translateX(-50%)' }
   } else {
     // Mobile units: lateral position derived from unit.y (-80..80 → 14..86%)
     const hPct = 50 + (unit.y / 80) * 36
@@ -109,6 +113,7 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
         unit.isWall ? 'lane-unit--wall' : '',
         unit.flying ? 'lane-unit--flying' : '',
         isAttacking ? 'lane-unit--attacking' : '',
+        isStructure && unit.upgradeLevel && unit.upgradeLevel >= 2 ? `lane-unit--upgraded-${Math.min(unit.upgradeLevel, 3)}` : '',
       ].filter(Boolean).join(' ')}
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
@@ -137,8 +142,10 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       {!unit.isWall && (
         <div className="lane-unit-name">
           {unit.name}
-          {unit.upgradeLevel != null && unit.upgradeLevel >= 2 && (
-            <span className="lane-unit-level">Lv{unit.upgradeLevel}</span>
+          {unit.upgradeLevel != null && unit.upgradeLevel >= 1 && (
+            <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, 3)}`}>
+              {'★'.repeat(unit.upgradeLevel)}
+            </span>
           )}
         </div>
       )}
@@ -630,8 +637,8 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
         <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {state.field.map((u, i) => {
-          const stackIndex = u.moveSpeed === 0
-            ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && o.owner === u.owner).length
+          const stackIndex = u.moveSpeed === 0 && !u.isWall
+            ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && !o.isWall && o.owner === u.owner).length
             : 0
           return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} />
         })}
