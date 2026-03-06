@@ -39,7 +39,9 @@ export function EventScreen({ event, onChoice }: Props) {
             >
               <span className="event-choice-letter">{String.fromCharCode(65 + i)}.</span>
               <span className="event-choice-label">{choice.label}</span>
-              <span className="event-choice-consequence">→ {choice.consequence}</span>
+              {isChosen && picked && (
+                <span className="event-choice-consequence">→ {choice.consequence}</span>
+              )}
             </button>
           )
         })}
