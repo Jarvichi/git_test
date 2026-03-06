@@ -8,6 +8,16 @@ interface Props {
 
 const TEXT_SIZE_KEY  = 'jarv_text_size'
 const TEXT_COLOR_KEY = 'jarv_text_color'
+const SKIP_INTRO_KEY = 'jarv_skip_intro'
+
+export function loadSkipIntro(): boolean {
+  try { return localStorage.getItem(SKIP_INTRO_KEY) === 'true' }
+  catch { return false }
+}
+
+export function saveSkipIntro(val: boolean): void {
+  try { localStorage.setItem(SKIP_INTRO_KEY, String(val)) } catch { /* ignore */ }
+}
 
 export function loadTextSize(): number {
   try { return parseFloat(localStorage.getItem(TEXT_SIZE_KEY) ?? '14') || 14 }
@@ -35,15 +45,22 @@ const TEXT_COLOR_PRESETS = [
 ]
 
 export function SettingsScreen({ onBack, onResetGame }: Props) {
-  const [soundOn,   setSoundOn]   = useState(isSoundEnabled)
-  const [textSize,  setTextSize]  = useState(loadTextSize)
-  const [textColor, setTextColor] = useState(loadTextColor)
+  const [soundOn,    setSoundOn]    = useState(isSoundEnabled)
+  const [textSize,   setTextSize]   = useState(loadTextSize)
+  const [textColor,  setTextColor]  = useState(loadTextColor)
+  const [skipIntro,  setSkipIntro]  = useState(loadSkipIntro)
   const [confirmReset, setConfirmReset] = useState(false)
 
   function handleSoundToggle() {
     const next = !soundOn
     setSoundOn(next)
     setSoundEnabled(next)
+  }
+
+  function handleSkipIntroToggle() {
+    const next = !skipIntro
+    setSkipIntro(next)
+    saveSkipIntro(next)
   }
 
   function handleSizeChange(val: number) {
@@ -81,6 +98,22 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
             </div>
             <div className="settings-toggle" onClick={handleSoundToggle}>
               <div className={`settings-toggle-track${soundOn ? ' settings-toggle-track--on' : ''}`}>
+                <div className="settings-toggle-thumb" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Intro */}
+        <div className="settings-section">
+          <div className="settings-section-title">STARTUP</div>
+          <div className="settings-row">
+            <div>
+              <div className="settings-label">Skip intro on startup</div>
+              <div className="settings-sublabel">Skip the Awesome Software splash screens</div>
+            </div>
+            <div className="settings-toggle" onClick={handleSkipIntroToggle}>
+              <div className={`settings-toggle-track${skipIntro ? ' settings-toggle-track--on' : ''}`}>
                 <div className="settings-toggle-thumb" />
               </div>
             </div>

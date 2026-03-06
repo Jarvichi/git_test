@@ -1,0 +1,53 @@
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Background -->
+<rect width="600" height="600" fill="#123C46"/>
+
+<!-- Hoodie -->
+<path d="M170 360
+         C160 420 170 500 300 500
+         C430 500 440 420 430 360
+         C420 310 380 290 300 290
+         C220 290 180 310 170 360Z"
+      fill="#3c4048"/>
+
+<!-- Neck -->
+<rect x="270" y="260" width="60" height="60" rx="10" fill="#67D0E6"/>
+
+<!-- Head -->
+<ellipse cx="300" cy="210" rx="110" ry="120" fill="#67D0E6"/>
+
+<!-- Hair -->
+<path d="M210 150
+         L260 90
+         L320 80
+         L370 120
+         L360 160
+         C330 140 290 140 260 150Z"
+      fill="#6FAE3B"/>
+
+<!-- Beard -->
+<path d="M210 220
+         C220 320 380 320 390 220
+         C360 260 240 260 210 220Z"
+      fill="#6FAE3B"/>
+
+<!-- Eyes -->
+<circle cx="255" cy="205" r="10" fill="#111"/>
+<circle cx="345" cy="205" r="10" fill="#111"/>
+
+<!-- Nose -->
+<path d="M300 210 L290 235 L310 235 Z" fill="#4aaec5"/>
+
+<!-- Mouth -->
+<rect x="260" y="250" width="80" height="25" rx="10" fill="white"/>
+<rect x="275" y="258" width="50" height="10" rx="5" fill="#c0c0c0"/>
+
+<!-- Shirt -->
+<path d="M250 330
+         C270 300 330 300 350 330
+         L350 360
+         L250 360Z"
+      fill="#b63a4b"/>
+
+</svg>

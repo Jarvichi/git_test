@@ -33,7 +33,8 @@ import { NodeMap }            from './components/NodeMap'
 import { PostBattleReward }   from './components/PostBattleReward'
 import { ActComplete }        from './components/ActComplete'
 import { StarterPackSelect }  from './components/StarterPackSelect'
-import { SettingsScreen, applyTextSettings } from './components/SettingsScreen'
+import { SettingsScreen, applyTextSettings, loadSkipIntro } from './components/SettingsScreen'
+import { IntroScreen } from './components/IntroScreen'
 import { FakeCrashEvent }     from './components/rare-events/FakeCrashEvent'
 import { BlackjackEvent }     from './components/rare-events/BlackjackEvent'
 import { WrongNumberEvent }   from './components/rare-events/WrongNumberEvent'
@@ -65,6 +66,7 @@ function loadHandicap(): number {
 }
 
 type Screen =
+  | 'intro'
   | 'title'
   | 'settings'
   | 'playing'
@@ -83,7 +85,7 @@ type Screen =
   | 'inventory'
 
 export default function App() {
-  const [screen, setScreen]       = useState<Screen>('title')
+  const [screen, setScreen]       = useState<Screen>(loadSkipIntro() ? 'title' : 'intro')
   const [gameState, setGameState] = useState<GameState | null>(null)
   const [pack, setPack]           = useState<string[]>([])
   const [handicap, setHandicap]   = useState<number>(loadHandicap)
@@ -753,6 +755,10 @@ export default function App() {
           </div>
         )
       })()}
+
+      {screen === 'intro' && (
+        <IntroScreen onDone={() => setScreen('title')} />
+      )}
 
       {screen === 'title' && (
         <TitleScreen
