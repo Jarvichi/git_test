@@ -66,7 +66,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] **#54** Intro screen: "Awesome Software Presents" logo → Jarv SVG → title (skip setting in settings)
 - [ ] **#44** Battlefield z-order: water → rocks → walls → trees → surroundings; units above walls, under canopy; flyers above all
 - [ ] **#45** Battlefield scenery themed to environment (rocks/water/ice/canyon)
-- [ ] **#43** Flying units cast a shadow
+- [x] **#43** Flying units cast a shadow (already implemented)
 - [ ] **#61** Battlefield: projectile animations; damage/blood augments on sprites; death/climb animations
 - [ ] **#68** Dark / Light mode toggle in settings
 - [ ] **#67** Cross-device persistent game state (design only for now)
