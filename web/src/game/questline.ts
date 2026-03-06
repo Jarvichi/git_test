@@ -287,15 +287,46 @@ const MILESTONE_OPENINGS: Record<number, string[]> = {
   ],
 }
 
+// ─── Ordinal helper ───────────────────────────────────────────────────────────
+function ordinalWord(n: number): string {
+  const words: Record<number, string> = {
+    5:  'FIFTH',    6:  'SIXTH',     7:  'SEVENTH',    8: 'EIGHTH',
+    9:  'NINTH',   10: 'TENTH',     11: 'ELEVENTH',   12: 'TWELFTH',
+    13: 'THIRTEENTH', 14: 'FOURTEENTH', 15: 'FIFTEENTH', 16: 'SIXTEENTH',
+    17: 'SEVENTEENTH', 18: 'EIGHTEENTH', 19: 'NINETEENTH', 20: 'TWENTIETH',
+    21: 'TWENTY-FIRST', 22: 'TWENTY-SECOND', 23: 'TWENTY-THIRD',
+    24: 'TWENTY-FOURTH', 30: 'THIRTIETH', 40: 'FORTIETH',
+  }
+  if (words[n]) return words[n]
+  const suffix = (n % 10 === 1 && n % 100 !== 11) ? 'ST'
+               : (n % 10 === 2 && n % 100 !== 12) ? 'ND'
+               : (n % 10 === 3 && n % 100 !== 13) ? 'RD'
+               : 'TH'
+  return `${n}${suffix}`
+}
+
+// Texts for "between-milestone" runs (11-24, 26-49, 51-99).
+// Each entry is a function so it can embed the actual run number.
+const MID_RUN_OPENINGS: Array<(n: number) => string> = [
+  n => `The ${ordinalWord(n).toLowerCase()} time through the Verdant Shard. The Thornlord has stopped rehearsing his opening speech.`,
+  n => `Campaign ${n}. The Wandering Scholar barely looks up anymore. He has your name pre-written in the margin.`,
+  n => `${n} campaigns in. The goblins at the first barricade have started placing bets on how quickly you'll get past them.`,
+  n => `${n} times you've stood at this shard's edge. The trees have started leaning away slightly when you approach.`,
+  n => `Run ${n}. You walk in before dawn, which is new. Everything else is exactly as you left it.`,
+  n => `The ${ordinalWord(n).toLowerCase()} attempt. You recognise the smell now. Damp bark and old magic and something else — familiarity.`,
+  n => `${n} campaigns. The Wandering Scholar has started making tea before you arrive. He knows the timing by heart.`,
+]
+
 /**
  * Returns Act 1 intro panels modified based on how many times the campaign has been run.
  * On the first run, returns the standard intro.
  * On subsequent runs, adds references to prior attempts and subtle variations.
+ * Milestones (10, 25, 50, 100) get special text; all other runs get dynamic text with the actual number.
  */
 export function getAct1Intro(runCount: number): CutscenePanel[] {
   const n = runCount
 
-  // Milestone text overrides (e.g. run 100)
+  // ── Run 100+ milestone ────────────────────────────────────
   if (n >= 100 && MILESTONE_OPENINGS[100]) {
     return [
       {
@@ -309,7 +340,26 @@ export function getAct1Intro(runCount: number): CutscenePanel[] {
     ]
   }
 
-  if (n >= 50 && MILESTONE_OPENINGS[50]) {
+  // ── Runs 51–99: between 50 and 100 ───────────────────────
+  if (n > 50 && n < 100) {
+    const ordinal = ordinalWord(n)
+    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
+    return [
+      { title: `THE ${ordinal} TIME`, text: opening },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 1)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n, 2)}\n\n${pick(THORNLORD_DESC, n, 1)}`,
+      },
+      { title: 'YOUR MISSION', text: 'Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way.' },
+    ]
+  }
+
+  // ── Run 50 milestone ──────────────────────────────────────
+  if (n === 50 && MILESTONE_OPENINGS[50]) {
     const panels: CutscenePanel[] = [
       {
         title: 'FIFTY CAMPAIGNS',
@@ -328,7 +378,25 @@ export function getAct1Intro(runCount: number): CutscenePanel[] {
     return panels
   }
 
-  if (n >= 25 && MILESTONE_OPENINGS[25]) {
+  // ── Runs 26–49: between 25 and 50 ────────────────────────
+  if (n > 25 && n < 50) {
+    const ordinal = ordinalWord(n)
+    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
+    return [
+      { title: `THE ${ordinal} TIME`, text: opening },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 2)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n, 1)}\n\n${pick(THORNLORD_DESC, n)}`,
+      },
+    ]
+  }
+
+  // ── Run 25 milestone ──────────────────────────────────────
+  if (n === 25 && MILESTONE_OPENINGS[25]) {
     return [
       { title: 'TWENTY-FIVE', text: pick(MILESTONE_OPENINGS[25], n) },
       {
@@ -342,9 +410,12 @@ export function getAct1Intro(runCount: number): CutscenePanel[] {
     ]
   }
 
-  if (n >= 10 && MILESTONE_OPENINGS[10]) {
+  // ── Runs 11–24: between 10 and 25 ────────────────────────
+  if (n > 10 && n < 25) {
+    const ordinal = ordinalWord(n)
+    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
     return [
-      { title: 'AGAIN', text: pick(MILESTONE_OPENINGS[10], n) },
+      { title: `THE ${ordinal} TIME`, text: opening },
       {
         title: 'THE WANDERER',
         text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
@@ -357,9 +428,25 @@ export function getAct1Intro(runCount: number): CutscenePanel[] {
     ]
   }
 
+  // ── Run 10 milestone ──────────────────────────────────────
+  if (n === 10 && MILESTONE_OPENINGS[10]) {
+    return [
+      { title: 'THE TENTH TIME', text: pick(MILESTONE_OPENINGS[10], n) },
+      {
+        title: 'THE WANDERER',
+        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
+      },
+      {
+        title: 'THE VERDANT SHARD',
+        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
+      },
+      { title: 'YOUR MISSION', text: 'Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You\'ve always known how this goes.' },
+    ]
+  }
+
+  // ── Runs 5–9 ─────────────────────────────────────────────
   if (n >= 5 && MILESTONE_OPENINGS[5]) {
-    const ordinals: Record<number, string> = { 5: 'FIFTH', 6: 'SIXTH', 7: 'SEVENTH', 8: 'EIGHTH', 9: 'NINTH' }
-    const ordinal = ordinals[n] ?? `${n}TH`
+    const ordinal = ordinalWord(n)
     return [
       { title: `THE ${ordinal} TIME`, text: pick(MILESTONE_OPENINGS[5], n) },
       {

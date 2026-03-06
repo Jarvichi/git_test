@@ -8,12 +8,13 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 
 - [x] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
 - [x] **#56** Campaign run-count text always says "fifth time" after run 5 — fix to use actual count
+- [x] **Intro always says "tenth"** (no issue#) — runs 11–24 (and 26–49 etc.) still show milestone run text
 
 ---
 
 ## 🟠 Gameplay Bugs / Regressions
 
-- [ ] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size)
+- [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size)
 - [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance
 
 ---

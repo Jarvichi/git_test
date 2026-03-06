@@ -464,11 +464,21 @@ function moveUnits(s: GameState, deltaMs: number): void {
         const toObsX = obs.x - unit.x
         const toObsY = obs.y - unit.y
         const dist   = Math.sqrt(toObsX * toObsX + toObsY * toObsY)
-        const pushDist = obs.radius + 50  // detection radius
+        const pushDist = obs.radius + 55  // detection radius (slightly wider than before)
         if (dist < pushDist && dist > 0) {
           const strength = (pushDist - dist) / pushDist  // 0..1, stronger when closer
-          // Push laterally away from the obstacle centre
-          avoidY += (-toObsY / dist) * strength * unit.moveSpeed
+          // Determine lateral push direction. When a unit approaches nearly head-on
+          // (toObsY ≈ 0), the normal formula gives zero push and units walk through
+          // the obstacle. Break symmetry deterministically using the unit id.
+          let lateralDir: number
+          if (Math.abs(toObsY) < 5) {
+            // head-on: pick a side based on unit id so the same unit always goes the same way
+            const idNum = parseInt(unit.id.replace(/\D/g, ''), 10) || 0
+            lateralDir = (idNum % 2 === 0) ? -1 : 1
+          } else {
+            lateralDir = -toObsY / dist
+          }
+          avoidY += lateralDir * strength * unit.moveSpeed * 1.8
         }
       }
     }
