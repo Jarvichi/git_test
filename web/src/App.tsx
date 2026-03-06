@@ -48,6 +48,7 @@ import { CardTile }           from './components/CardTile'
 import { DailyLoginModal }   from './components/DailyLoginModal'
 import { InventoryScreen }   from './components/InventoryScreen'
 import { hasDailyReward, claimDailyReward, addToInventory, DailyReward } from './game/dailyLogin'
+import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import './styles.css'
 
@@ -285,7 +286,12 @@ export default function App() {
 
   const handleCampaign = useCallback(() => {
     const existing = loadRun()
-    const activeRun = existing ?? newRun('act1')
+    let activeRun = existing ?? newRun('act1')
+    // Auto-equip the most recently earned relic for fresh runs (no selection screen yet)
+    if (!existing) {
+      const earned = loadEarnedRelics()
+      if (earned.length > 0) activeRun = { ...activeRun, activeRelic: earned[earned.length - 1] }
+    }
     if (!existing) saveRun(activeRun)
     setRun(activeRun)
 
@@ -333,8 +339,11 @@ export default function App() {
         const fatigued    = loadFatigued()
         const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
         const playerCards = buildDeckCards(deckEntries, collection)
+        const earnedEntries = (activeRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+        if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
         const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
         state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
+        if (activeRun.activeRelic) getRelicDef(activeRun.activeRelic)?.applyToGame(state)
         setGameState(state)
         setScreen('playing')
         rollRareEvent()
@@ -409,9 +418,13 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
+    // Include cards earned as rewards earlier this run
+    const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
-    // Apply campaign HP to player base
+    // Apply campaign HP and active relic to player base
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
+    if (updatedRun.activeRelic) getRelicDef(updatedRun.activeRelic)?.applyToGame(state)
     setGameState(state)
     setScreen('playing')
     rollRareEvent()
@@ -428,8 +441,11 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
+    const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
+    if (run.activeRelic) getRelicDef(run.activeRelic)?.applyToGame(state)
     setGameState(state)
     setScreen('playing')
     rollRareEvent()
@@ -550,14 +566,26 @@ export default function App() {
 
   const handleRewardPick = useCallback((cardName: string) => {
     addCardsToCollection([{ cardName, count: 1 }])
+    // Also track in run so the card is available in subsequent campaign battles this act
+    if (run) {
+      const updatedRun = { ...run, earnedCards: [...(run.earnedCards ?? []), cardName] }
+      saveRun(updatedRun)
+      setRun(updatedRun)
+    }
     setScreen('nodemap')
-  }, [])
+  }, [run])
 
   const handleRewardSkip = useCallback(() => {
     setScreen('nodemap')
   }, [])
 
   const handleActComplete = useCallback(() => {
+    // Persist the act's relic reward to the player's permanent relic collection
+    if (run) {
+      const act = ACTS[run.actId]
+      if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
+    }
+
     // Check if we have enough play data to offer a rest choice
     const counts = run?.cardPlayCounts ?? {}
     const candidates = getTopPlayedCards(counts, 3)
@@ -629,8 +657,11 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
+    const earnedEntries = (withFail.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
+    if (withFail.activeRelic) getRelicDef(withFail.activeRelic)?.applyToGame(state)
     setGameState(state)
     setScreen('playing')
     rollRareEvent()
