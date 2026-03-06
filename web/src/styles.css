@@ -2108,7 +2108,7 @@ body {
 .nm-connector--straight .nm-connector-line {
   width: 2px;
   height: 100%;
-  background: #2a2a2a;
+  background: #3a3a3a;
 }
 
 .nm-connector-arms {
@@ -2127,14 +2127,14 @@ body {
   top: 0;
   width: 2px;
   height: 50%;
-  background: #2a2a2a;
+  background: #3a3a3a;
   transform: translateX(-50%);
 }
 
 .nm-connector-arm {
   width: 2px;
   height: 100%;
-  background: #2a2a2a;
+  background: #3a3a3a;
   position: relative;
 }
 
@@ -2143,7 +2143,7 @@ body {
   position: absolute;
   top: 50%;
   height: 2px;
-  background: #2a2a2a;
+  background: #3a3a3a;
 }
 
 .nm-connector-arm--left::before {
@@ -2170,32 +2170,58 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 10px 14px;
-  border: 1px solid #2a2a2a;
+  gap: 3px;
+  padding: 8px 12px 10px;
+  border: 1px solid #2e2e2e;
+  border-top-width: 2px;
   border-radius: 6px;
-  background: #0a0a0a;
+  background: #0d0d0d;
   cursor: default;
-  min-width: 100px;
+  min-width: 96px;
   transition: all 0.15s;
   font-family: inherit;
 }
 
-.nm-node-icon  { font-size: 20px; line-height: 1; }
-.nm-node-name  { font-size: 11px; color: #aaa; letter-spacing: 0.5px; text-align: center; }
+.nm-node-type-badge {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  opacity: 0.7;
+  margin-bottom: 1px;
+}
+.nm-node-type-badge--battle   { color: #888; }
+.nm-node-type-badge--elite    { color: #c8a020; }
+.nm-node-type-badge--boss     { color: #c03030; }
+.nm-node-type-badge--rest     { color: #4090b0; }
+.nm-node-type-badge--event    { color: #8050b0; }
+.nm-node-type-badge--merchant { color: #a06020; }
+
+.nm-node-icon  { font-size: 22px; line-height: 1; }
+.nm-node-name  { font-size: 11px; color: #999; letter-spacing: 0.5px; text-align: center; line-height: 1.3; }
 .nm-node-status { font-size: 9px; letter-spacing: 1px; min-height: 12px; }
+
+/* Type-coloured top border (visible even when locked) */
+.nm-node--battle   { border-top-color: #282828; }
+.nm-node--elite    { border-top-color: #3a2800; }
+.nm-node--boss     { border-top-color: #3a0a0a; }
+.nm-node--rest     { border-top-color: #0a2535; }
+.nm-node--event    { border-top-color: #250a3a; }
+.nm-node--merchant { border-top-color: #301800; }
 
 /* Available nodes */
 .nm-node--available {
   cursor: pointer;
   border-color: rgba(51, 255, 51, 0.4);
+  border-top-color: rgba(51, 255, 51, 0.5);
   background: rgba(51, 255, 51, 0.04);
   animation: nm-pulse 2s ease-in-out infinite;
 }
-.nm-node--available .nm-node-name { color: #bbb; }
+.nm-node--available .nm-node-name { color: #ccc; }
 .nm-node--available .nm-node-status { color: var(--game-text-color); }
+.nm-node--available .nm-node-type-badge { opacity: 1; }
 .nm-node--available:hover {
   border-color: var(--game-text-color);
+  border-top-color: var(--game-text-color);
   background: rgba(51, 255, 51, 0.1);
   transform: translateY(-2px);
   box-shadow: 0 0 12px rgba(51, 255, 51, 0.25);
@@ -2215,7 +2241,7 @@ body {
 
 /* Locked nodes */
 .nm-node--locked {
-  opacity: 0.25;
+  opacity: 0.42;
 }
 
 /* Skipped nodes (branch not taken) */
@@ -2239,11 +2265,14 @@ body {
 /* Node type colours */
 .nm-node--boss.nm-node--available {
   border-color: rgba(255, 68, 68, 0.5);
+  border-top-color: #ff4444;
   background: rgba(255, 0, 0, 0.04);
   animation: nm-boss-pulse 1.5s ease-in-out infinite;
 }
+.nm-node--boss.nm-node--available .nm-node-type-badge { color: #ff5555; opacity: 1; }
 .nm-node--boss.nm-node--available:hover {
   border-color: #ff4444;
+  border-top-color: #ff6666;
   background: rgba(255, 68, 68, 0.1);
   box-shadow: 0 0 16px rgba(255, 68, 68, 0.3);
 }
@@ -2254,24 +2283,54 @@ body {
 
 .nm-node--elite.nm-node--available {
   border-color: rgba(255, 200, 50, 0.5);
+  border-top-color: #ffc832;
   background: rgba(255, 200, 50, 0.03);
 }
+.nm-node--elite.nm-node--available .nm-node-type-badge { color: #ffc832; opacity: 1; }
 .nm-node--elite.nm-node--available:hover {
   border-color: #ffc832;
+  border-top-color: #ffe080;
   background: rgba(255, 200, 50, 0.1);
   box-shadow: 0 0 12px rgba(255, 200, 50, 0.25);
 }
 
 .nm-node--rest.nm-node--available {
   border-color: rgba(100, 200, 255, 0.4);
+  border-top-color: #64c8ff;
   background: rgba(100, 200, 255, 0.03);
 }
+.nm-node--rest.nm-node--available .nm-node-type-badge { color: #64c8ff; opacity: 1; }
 .nm-node--rest.nm-node--available:hover {
   border-color: #64c8ff;
+  border-top-color: #90d8ff;
   background: rgba(100, 200, 255, 0.1);
   box-shadow: 0 0 12px rgba(100, 200, 255, 0.2);
 }
 .nm-node--rest.nm-node--available .nm-node-status { color: #64c8ff; }
+
+.nm-node--event.nm-node--available {
+  border-color: rgba(160, 100, 255, 0.4);
+  border-top-color: #a064ff;
+  background: rgba(160, 100, 255, 0.03);
+}
+.nm-node--event.nm-node--available .nm-node-type-badge { color: #b078ff; opacity: 1; }
+.nm-node--event.nm-node--available:hover {
+  border-color: #a064ff;
+  background: rgba(160, 100, 255, 0.1);
+  box-shadow: 0 0 12px rgba(160, 100, 255, 0.2);
+}
+
+.nm-node--merchant.nm-node--available {
+  border-color: rgba(255, 170, 50, 0.4);
+  border-top-color: #ffaa32;
+  background: rgba(255, 170, 50, 0.03);
+}
+.nm-node--merchant.nm-node--available .nm-node-type-badge { color: #ffaa32; opacity: 1; }
+.nm-node--merchant.nm-node--available:hover {
+  border-color: #ffaa32;
+  background: rgba(255, 170, 50, 0.1);
+  box-shadow: 0 0 12px rgba(255, 170, 50, 0.2);
+}
 
 .nm-back-btn {
   margin-top: auto;

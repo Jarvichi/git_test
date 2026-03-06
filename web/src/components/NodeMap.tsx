@@ -9,10 +9,21 @@ interface Props {
 }
 
 const NODE_ICON: Record<string, string> = {
-  battle: '⚔',
-  elite:  '★',
-  boss:   '☠',
-  rest:   '⛺',
+  battle:   '⚔',
+  elite:    '★',
+  boss:     '☠',
+  rest:     '⛺',
+  event:    '?',
+  merchant: '⚖',
+}
+
+const NODE_LABEL: Record<string, string> = {
+  battle:   'BATTLE',
+  elite:    'ELITE',
+  boss:     'BOSS',
+  rest:     'REST',
+  event:    'EVENT',
+  merchant: 'SHOP',
 }
 
 type NodeStatus = 'completed' | 'available' | 'skipped' | 'locked' | 'pending'
@@ -126,7 +137,10 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
                       disabled={!clickable}
                       title={node.description}
                     >
-                      <span className="nm-node-icon">{NODE_ICON[node.type]}</span>
+                      <span className={`nm-node-type-badge nm-node-type-badge--${node.type}`}>
+                        {NODE_LABEL[node.type] ?? node.type.toUpperCase()}
+                      </span>
+                      <span className="nm-node-icon">{NODE_ICON[node.type] ?? '?'}</span>
                       <span className="nm-node-name">{node.label}</span>
                       <span className="nm-node-status">
                         {status === 'completed' && '✓'}

@@ -36,7 +36,8 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] **#49** Deck builder: add sort / filter / search (already implemented — closing)
 - [x] **#48** Deck builder filter labels: now use full words (Units, Structs, Upgrades, Common, Uncommon, Rare, Legendary, + TYPE/RARITY/SORT group labels) — needs manual close
 - [x] **#73** Campaign hack: page refresh now auto-resumes into the active battle (no title screen shown) — needs manual close
-- [ ] **#50** Sound: better battle music; death cries for units; crash sound for building destruction
+- [x] **#50** Sound: better battle music; death cries; crash sound for buildings (already implemented — needs manual close)
+- [x] **#60** Rare event — The Gambler: tap-to-guess modal; win all cards or game reset; rubber chicken consolation; history tracking — needs manual close
 
 ---
 
