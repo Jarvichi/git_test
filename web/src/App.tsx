@@ -40,6 +40,7 @@ import { BlackjackEvent }     from './components/rare-events/BlackjackEvent'
 import { WrongNumberEvent }   from './components/rare-events/WrongNumberEvent'
 import { NarratorEvent }      from './components/rare-events/NarratorEvent'
 import { LiarsDiceEvent }     from './components/rare-events/LiarsDiceEvent'
+import { GamblerEvent }       from './components/rare-events/GamblerEvent'
 import {
   RareEventKind, RareEventEffect,
   RARE_EVENT_CHANCE, ALL_RARE_EVENTS,
@@ -274,6 +275,22 @@ export default function App() {
       const next = loadCrystals() + effect.crystals
       saveCrystals(next)
       setCrystals(next)
+    }
+    if (effect.grantAllCards) {
+      const catalog = getCardCatalog()
+      addCardsToCollection(catalog.map(c => ({ cardName: c.name, count: 1 })))
+    }
+    if (effect.addInventoryItem) {
+      addToInventory(effect.addInventoryItem)
+    }
+    if (effect.resetGame) {
+      const KEYS = [
+        'jarv_collection', 'jarv_deck', 'jarv_crystals',
+        'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
+        'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
+      ]
+      KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
+      window.location.reload()
     }
   }, [])
 
@@ -968,6 +985,7 @@ export default function App() {
             {activeRareEvent === 'wrongNumber' && <WrongNumberEvent onDone={handleRareEventDone} />}
             {activeRareEvent === 'narrator'    && <NarratorEvent    onDone={handleRareEventDone} />}
             {activeRareEvent === 'liarsDice'   && <LiarsDiceEvent   onDone={handleRareEventDone} />}
+            {activeRareEvent === 'gambler'     && <GamblerEvent     onDone={handleRareEventDone} />}
           </>
         )
       })()}
