@@ -22,7 +22,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 
 - [ ] **#58** Screen size: battlefield + hand don't fit on small phone screens — scale to viewport
 - [x] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
-- [ ] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
+- [x] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
 
 ---
 
