@@ -82,19 +82,46 @@ export function generateShrineEvent(): EventData {
   }
 }
 
-export const EVENT_CATALOG: Record<string, EventData> = {
-  'shrine': generateShrineEvent(), // default (overridden per-visit in App)
+// ─── Ruins randomisation ──────────────────────────────────
 
-  'ruins': {
+const RUINS_REST_EFFECTS: EventChoice[] = [
+  { label: 'Rest in the shelter', consequence: 'The quiet heals — restored 15 HP', effect: { type: 'healHp', amount: 15 } },
+  { label: 'Rest in the shelter', consequence: 'You sleep badly. Restored 8 HP', effect: { type: 'healHp', amount: 8 } },
+  { label: 'Rest in the shelter', consequence: 'Something bites you in the night — lose 6 HP', effect: { type: 'damageHp', amount: 6 } },
+  { label: 'Rest in the shelter', consequence: 'You find a pouch under the floorboards — +14 crystals', effect: { type: 'gainCrystals', amount: 14 } },
+]
+
+const RUINS_SEARCH_EFFECTS: EventChoice[] = [
+  { label: 'Search the armory', consequence: 'An uncommon card hidden behind a loose brick', effect: { type: 'gainCard', rarity: 'uncommon' } },
+  { label: 'Search the armory', consequence: 'A rare weapon contract — add a rare card', effect: { type: 'gainCard', rarity: 'rare' } },
+  { label: 'Search the armory', consequence: 'Old coin cache — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
+  { label: 'Search the armory', consequence: 'A rusted trap springs — lose 10 HP', effect: { type: 'damageHp', amount: 10 } },
+]
+
+const RUINS_CLIMB_EFFECTS: EventChoice[] = [
+  { label: 'Climb the watchtower', consequence: 'Good vantage point — +12 crystals from spotted supply cache', effect: { type: 'gainCrystals', amount: 12 } },
+  { label: 'Climb the watchtower', consequence: 'A common card is wedged in the battlements', effect: { type: 'gainCard', rarity: 'common' } },
+  { label: 'Climb the watchtower', consequence: 'The stairs collapse — lose 12 HP', effect: { type: 'damageHp', amount: 12 } },
+  { label: 'Climb the watchtower', consequence: 'Nothing up there. Wind. Old regrets.', effect: { type: 'nothing' } },
+]
+
+/** Returns a ruins EventData with randomly selected choice effects. */
+export function generateRuinsEvent(): EventData {
+  return {
     id: 'ruins',
     title: 'Crumbling Watchtower',
     description: 'A moss-eaten garrison tower leans against the treeline, abandoned mid-battle. A rusted sword stands upright in the earth beside it. The armory gate hangs open.',
     choices: [
-      { label: 'Rest in the shelter', consequence: 'Restore 15 HP', effect: { type: 'healHp', amount: 15 } },
-      { label: 'Search the armory', consequence: 'Add a rare card to your collection', effect: { type: 'gainCard', rarity: 'rare' } },
-      { label: 'Ignore it and push on', consequence: 'Nothing happens. Some choices aren\'t choices.', effect: { type: 'nothing' } },
+      pickRandom(RUINS_REST_EFFECTS),
+      pickRandom(RUINS_SEARCH_EFFECTS),
+      pickRandom(RUINS_CLIMB_EFFECTS),
     ],
-  },
+  }
+}
+
+export const EVENT_CATALOG: Record<string, EventData> = {
+  'shrine': generateShrineEvent(), // default (overridden per-visit in App)
+  'ruins':  generateRuinsEvent(),  // default (overridden per-visit in App)
 
   'goblin-deal': {
     id: 'goblin-deal',
