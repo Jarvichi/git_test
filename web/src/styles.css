@@ -742,6 +742,59 @@ body {
   .battlefield { gap: 3px; }
 }
 
+/* ─── Intro Screen ───────────────────────────────────── */
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+
+.intro-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.intro-awesome-logo {
+  width: min(340px, 80vw);
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.intro-presents {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  letter-spacing: 6px;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.intro-jarv-logo {
+  width: min(300px, 72vw);
+  height: auto;
+  border-radius: 6px;
+}
+
+.intro-skip-hint {
+  position: absolute;
+  bottom: 24px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 2px;
+}
+
 /* ─── Gold button variant (pack open) ───────────────── */
 
 .action-btn--gold {
