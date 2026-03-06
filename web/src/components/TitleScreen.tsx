@@ -54,9 +54,7 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
           🎒 INVENTORY
         </button>
 
-        <button className="action-btn title-nav-btn" onClick={onSettings}
-          style={{ fontSize: '11px', color: '#888', borderColor: 'rgba(51,255,51,0.25)' }}
-        >
+        <button className="action-btn title-nav-btn title-settings-btn" onClick={onSettings}>
           ⚙ SETTINGS
         </button>
       </div>
