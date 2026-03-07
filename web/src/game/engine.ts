@@ -1,5 +1,5 @@
 import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType } from './types'
-import { makeDeck, makeThorlordDeck, HERO_CARDS } from './cards'
+import { makeDeck, makeThorlordDeck, makeKraggDeck, makeAshwalkerDeck, makeNodeDeck, HERO_CARDS } from './cards'
 import { playUnitDeath, playBuildingDestroyed } from './sound'
 import { isNoDamageMode } from './debug'
 
@@ -84,18 +84,52 @@ function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
 const TERRAIN_CLEAR_Y   = [-70, 70] as const  // two edge corridors units route around
 const TERRAIN_CLEAR_HALF = 12                  // half-width of each corridor (px)
 
-function generateTerrain(): TerrainObstacle[] {
-  const TYPES: TerrainType[] = ['rock', 'tree', 'water', 'ruin']
+/**
+ * Tiny seeded PRNG (mulberry32) — deterministic given the same seed.
+ * Used so each node always produces the same terrain layout.
+ */
+function makeRng(seed: number): () => number {
+  let s = seed | 0
+  return () => {
+    s = (Math.imul(s ^ (s >>> 15), s | 1) ^ ((s ^ (Math.imul(s ^ (s >>> 7), s | 61))) >>> 14)) >>> 0
+    return s / 4294967296
+  }
+}
+
+/** Hash a string to a uint32 for use as a terrain seed. */
+function hashStr(str: string): number {
+  let h = 2166136261
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 16777619)
+  }
+  return h >>> 0
+}
+
+/**
+ * Generate terrain for a battle.
+ * @param seed  Optional string seed (node ID). When provided, the layout is deterministic.
+ * @param environment  Act environment — biases which obstacle types appear.
+ */
+function generateTerrain(seed?: string, environment?: string): TerrainObstacle[] {
+  const rng = seed ? makeRng(hashStr(seed)) : Math.random.bind(Math)
+
+  // Bias obstacle types by environment
+  const TYPES: TerrainType[] =
+    environment === 'forest' ? ['tree', 'tree', 'tree', 'rock', 'water']
+    : environment === 'citadel' ? ['rock', 'rock', 'ruin', 'ruin', 'water']
+    : environment === 'ashen'  ? ['ruin', 'ruin', 'rock', 'rock', 'tree']
+    : ['rock', 'tree', 'water', 'ruin']
+
   const obstacles: TerrainObstacle[] = []
-  const count = 4 + Math.floor(Math.random() * 5)  // 4–8 obstacles per battle
+  const count = 4 + Math.floor(rng() * 5)  // 4–8 obstacles per battle
   let id = 0
   let tries = 0
 
   while (obstacles.length < count && tries++ < 150) {
-    const x      = 90  + Math.random() * 320        // 90–410, away from spawn zones
-    const y      = (Math.random() * 150) - 75        // –75 to 75
-    const radius = 20  + Math.random() * 12          // 20–32 px
-    const type   = TYPES[Math.floor(Math.random() * TYPES.length)]
+    const x      = 90  + rng() * 320        // 90–410, away from spawn zones
+    const y      = (rng() * 150) - 75       // –75 to 75
+    const radius = 20  + rng() * 12         // 20–32 px
+    const type   = TYPES[Math.floor(rng() * TYPES.length)]
 
     // Reject if it would block any guaranteed corridor
     if (TERRAIN_CLEAR_Y.some(cy => Math.abs(y - cy) < TERRAIN_CLEAR_HALF + radius)) continue
@@ -157,19 +191,55 @@ function injectHero(deck: Card[], heroPool: Card[]): void {
   deck.splice(pos, 0, { ...hero, id: `hero-${uid()}` })
 }
 
-export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: string): GameState {
-  const playerDeck = shuffle(playerCards ?? makeDeck())
+export interface NewGameOptions {
+  playerCards?: Card[]
+  opponentHandicap?: number
+  bossAI?: string
+  /** Preset enemy deck (card names). Makes each node deterministic and learnable. */
+  enemyDeckNames?: string[]
+  /** Node ID used to seed terrain generation deterministically. */
+  terrainSeed?: string
+  /** Act environment ('forest' | 'citadel' | 'ashen') — themes terrain and log. */
+  environment?: string
+}
 
-  // Boss fights use their own curated deck instead of the standard one
-  const clamp = Math.min(Math.max(0, opponentHandicap), MAX_HANDICAP)
-
-  let opponentDeck: Card[]
-  if (bossAI === 'thornlord') {
-    opponentDeck = shuffle(makeThorlordDeck())  // bosses always play their full deck
+export function newGame(
+  playerCardsOrOpts?: Card[] | NewGameOptions,
+  opponentHandicap = 0,
+  bossAI?: string,
+): GameState {
+  // Support both old positional API and new options object
+  let opts: NewGameOptions
+  if (Array.isArray(playerCardsOrOpts) || playerCardsOrOpts === undefined) {
+    opts = { playerCards: playerCardsOrOpts, opponentHandicap, bossAI }
   } else {
-    // Filter the opponent deck to only include cards up to the allowed rarity tier.
-    // This makes the handicap system meaningful: at high handicap the opponent
-    // draws only commons (comparable to a starter deck), never Behemoths.
+    opts = playerCardsOrOpts
+  }
+
+  const {
+    playerCards,
+    opponentHandicap: handicap = 0,
+    bossAI: boss,
+    enemyDeckNames,
+    terrainSeed,
+    environment,
+  } = opts
+
+  const playerDeck = shuffle(playerCards ?? makeDeck())
+  const clamp = Math.min(Math.max(0, handicap), MAX_HANDICAP)
+
+  // Build opponent deck: boss AI > preset node deck > handicap-filtered random
+  let opponentDeck: Card[]
+  if (boss === 'thornlord') {
+    opponentDeck = shuffle(makeThorlordDeck())
+  } else if (boss === 'kragg') {
+    opponentDeck = shuffle(makeKraggDeck())
+  } else if (boss === 'ashwalker') {
+    opponentDeck = shuffle(makeAshwalkerDeck())
+  } else if (enemyDeckNames && enemyDeckNames.length > 0) {
+    // Preset node deck — deterministic and learnable
+    opponentDeck = makeNodeDeck(enemyDeckNames)
+  } else {
     const maxRarity = maxRarityForHandicap(clamp)
     const filtered  = makeDeck().filter(c => RARITY_RANK[c.rarity] <= RARITY_RANK[maxRarity])
     opponentDeck = shuffle(filtered)
@@ -177,15 +247,17 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
 
   // Inject one hero card per side (not for bosses — they have their own identity)
   injectHero(playerDeck, HERO_CARDS)
-  if (!bossAI) injectHero(opponentDeck, HERO_CARDS)
+  if (!boss) injectHero(opponentDeck, HERO_CARDS)
 
-  const playerHand = playerDeck.splice(0, 4)
+  const playerHand   = playerDeck.splice(0, 4)
   const opponentHand = opponentDeck.splice(0, 4)
 
-  const strategy = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
-
-  const maxRarity     = bossAI ? 'legendary' : maxRarityForHandicap(clamp)
-  const oppIntervalMs = bossAI === 'thornlord' ? 6000 : opponentIntervalForHandicap(clamp)
+  const strategy      = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
+  const maxRarity     = boss ? 'legendary' : maxRarityForHandicap(clamp)
+  const oppIntervalMs = boss === 'thornlord' ? 6000
+    : boss === 'kragg'      ? 5000
+    : boss === 'ashwalker'  ? 4500
+    : opponentIntervalForHandicap(clamp)
 
   const diffLabel =
     maxRarity === 'common'    ? 'common-only' :
@@ -193,11 +265,10 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
     maxRarity === 'rare'      ? 'no legendaries' :
     'full strength'
 
-  const openingLog: string[] = bossAI === 'thornlord'
-    ? [
-        'THE THORNLORD awakens! Ancient guardian of the Verdant Shard.',
-        'Walls of bark and root rise from the earth — prepare for a siege!',
-      ]
+  const openingLog: string[] =
+    boss === 'thornlord'  ? ['THE THORNLORD awakens! Ancient guardian of the Verdant Shard.', 'Walls of bark and root rise from the earth — prepare for a siege!']
+    : boss === 'kragg'    ? ['WARLORD KRAGG takes the field! Iron discipline, iron walls, iron will.', 'The siege weapons are already loaded. The gate does not open for you.']
+    : boss === 'ashwalker' ? ['THE ASHWALKER stirs. The ash rises. The dead remember.', 'An undying horde answers the call — destroy them before they overwhelm you!']
     : [
         clamp > 0
           ? `Battle begins! (Enemy difficulty: ${diffLabel})`
@@ -207,7 +278,7 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
 
   return {
     playerBase: { hp: 50, maxHp: 50 },
-    opponentBase: { hp: 70, maxHp: 70 },  // boss gets extra base HP
+    opponentBase: { hp: boss ? 80 : 70, maxHp: boss ? 80 : 70 },
     field: [],
     playerHand,
     playerDeck,
@@ -228,8 +299,8 @@ export function newGame(playerCards?: Card[], opponentHandicap = 0, bossAI?: str
     suddenDeathTimer: 0,
     battleEventTimer: BATTLE_EVENT_BASE_MS,
     activeBattleEvent: null,
-    bossAI,
-    terrain: generateTerrain(),
+    bossAI: boss,
+    terrain: generateTerrain(terrainSeed, environment),
   }
 }
 
@@ -656,6 +727,96 @@ function thornlordAI(s: GameState, log: string[]): void {
   if (played === 0) log.push('The Thornlord is still…')
 }
 
+// ─── Kragg AI ─────────────────────────────────────────────
+// Warlord Kragg: siege-weapon heavy. Prioritises Catapults and Ballistae,
+// keeps walls up, then floods with infantry. Plays up to 3 cards per turn.
+// Uses a 5s interval (faster than Thornlord but with heavier individual cards).
+
+function kraggAI(s: GameState, log: string[]): void {
+  const manaBonus = getManaBonus(s.field, 'opponent')
+  let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
+
+  function tryPlay(): boolean {
+    const hand = s.opponentHand.filter(c => c.cost <= mana)
+    if (hand.length === 0) return false
+
+    // Priority 1: siege weapons (Catapult, Ballista, Siege Works)
+    const siege = hand.filter(c => c.cardType === 'structure' && !c.unit?.isWall &&
+      ['Catapult', 'Ballista', 'Siege Works'].includes(c.name))
+    // Priority 2: walls
+    const walls = hand.filter(c => c.unit?.isWall)
+    // Priority 3: upgrades (War Drums / Fortify)
+    const upgrades = hand.filter(c => c.cardType === 'upgrade')
+    // Priority 4: heavy melee (Knight, Shield Guard)
+    const heavy = hand.filter(c => c.cardType === 'unit' && !c.unit?.isWall)
+      .sort((a, b) => b.cost - a.cost)
+
+    const pick = siege[0] ?? walls[0] ?? upgrades[0] ?? heavy[0]
+    if (!pick) return false
+
+    s.opponentHand.splice(s.opponentHand.indexOf(pick), 1)
+    mana -= pick.cost
+    deployCard(s, pick, 'opponent', log)
+    drawCard(s.opponentDeck, s.opponentHand)
+    return true
+  }
+
+  let played = 0
+  while (played < 3 && tryPlay()) played++
+
+  if (played === 0) log.push('Kragg waits behind the wall…')
+}
+
+// ─── Ashwalker AI ─────────────────────────────────────────
+// The Ashwalker: undead swarm with sacrificial surges. Floods cheap skeletons
+// every turn; occasionally dumps burst damage via Bloodlust on a full field.
+// Uses a 4.5s interval — fast and aggressive.
+
+function ashwalkerAI(s: GameState, log: string[]): void {
+  const manaBonus = getManaBonus(s.field, 'opponent')
+  let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
+
+  function tryPlay(): boolean {
+    const hand = s.opponentHand.filter(c => c.cost <= mana)
+    if (hand.length === 0) return false
+
+    const oppUnits = s.field.filter(u => u.owner === 'opponent' && !u.isWall)
+
+    // Priority 1: Bloodlust upgrade when 3+ units on field (sacrifice surge)
+    if (oppUnits.length >= 3) {
+      const bloodlust = hand.find(c => c.name === 'Bloodlust')
+      if (bloodlust) {
+        s.opponentHand.splice(s.opponentHand.indexOf(bloodlust), 1)
+        mana -= bloodlust.cost
+        deployCard(s, bloodlust, 'opponent', log)
+        drawCard(s.opponentDeck, s.opponentHand)
+        return true
+      }
+    }
+    // Priority 2: Crypt / Dark Shrine spawner structures
+    const spawners = hand.filter(c => c.cardType === 'structure' && c.unit?.structureEffect?.type === 'spawn')
+    // Priority 3: cheapest unit (flood the field)
+    const units = hand.filter(c => c.cardType === 'unit' && !c.unit?.isWall)
+      .sort((a, b) => a.cost - b.cost)
+    // Priority 4: other upgrades
+    const upgrades = hand.filter(c => c.cardType === 'upgrade' && c.name !== 'Bloodlust')
+
+    const pick = spawners[0] ?? units[0] ?? upgrades[0]
+    if (!pick) return false
+
+    s.opponentHand.splice(s.opponentHand.indexOf(pick), 1)
+    mana -= pick.cost
+    deployCard(s, pick, 'opponent', log)
+    drawCard(s.opponentDeck, s.opponentHand)
+    return true
+  }
+
+  let played = 0
+  while (played < 3 && tryPlay()) played++
+
+  if (played === 0) log.push('The ash stirs…')
+}
+
 // ─── Battle Events ────────────────────────────────────────
 
 function triggerBattleEvent(s: GameState, log: string[]): void {
@@ -754,6 +915,12 @@ export function tick(state: GameState, deltaMs: number): GameState {
     if (s.bossAI === 'thornlord') {
       thornlordAI(s, log)
       s.opponentTimer = 6000
+    } else if (s.bossAI === 'kragg') {
+      kraggAI(s, log)
+      s.opponentTimer = 5000
+    } else if (s.bossAI === 'ashwalker') {
+      ashwalkerAI(s, log)
+      s.opponentTimer = 4500
     } else {
       opponentAI(s, log)
       s.opponentTimer = s.opponentIntervalMs

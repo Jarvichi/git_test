@@ -4,6 +4,8 @@
   "subtitle": "The Ashen Wastes",
   "rewardRelic": "Soulstone",
   "rewardRelicDesc": "Once per battle, when one of your units is destroyed, it is immediately revived with half its original HP.",
+  "environment": "ashen",
+  "rewardTags": ["ashen"],
 
   "intro": [
     {
@@ -193,7 +195,8 @@
       "description": "The dead that patrol the Wastes' edge — faster than they should be, coordinated in ways the dead shouldn't be.",
       "row": 0, "col": 0, "rowCols": 1,
       "parentIds": [], "childIds": ["soul-shrine", "bone-fire", "plague-front"],
-      "handicap": 10
+      "handicap": 10,
+      "enemyDeck": ["Skeleton","Skeleton","Skeleton","Bat","Bat","Bat","Plague Rat","Plague Rat","Specter","Crypt","Rally","Rally"]
     },
 
     "soul-shrine": {
@@ -218,7 +221,8 @@
       "description": "A mass of risen dead, spreading through the ash without direction or pause.",
       "row": 1, "col": 2, "rowCols": 3,
       "parentIds": ["ashfield-scouts"], "childIds": ["risen-horde"],
-      "handicap": 7
+      "handicap": 7,
+      "enemyDeck": ["Skeleton","Skeleton","Plague Rat","Plague Rat","Plague Rat","Bat","Bat","Specter","Specter","Crypt","Dark Shrine","Rally"]
     },
 
     "risen-horde": {
@@ -227,7 +231,8 @@
       "description": "The Wastes' standing army — numberless, tireless, and pointed in your direction.",
       "row": 2, "col": 0, "rowCols": 1,
       "parentIds": ["soul-shrine", "bone-fire", "plague-front"], "childIds": ["shadow-guard", "grave-merchant", "revenant-witch"],
-      "handicap": 4
+      "handicap": 4,
+      "enemyDeck": ["Skeleton","Skeleton","Skeleton","Specter","Specter","Bat","Plague Rat","Crypt","Crypt","Dark Shrine","Bloodlust","Rally","Haste"]
     },
 
     "shadow-guard": {
@@ -236,7 +241,8 @@
       "description": "Risen soldiers who remember their discipline — the most dangerous kind of dead.",
       "row": 3, "col": 0, "rowCols": 3,
       "parentIds": ["risen-horde"], "childIds": ["necrotic-guard"],
-      "handicap": 3
+      "handicap": 3,
+      "enemyDeck": ["Specter","Specter","Specter","Dark Elf","Dark Elf","Skeleton","Skeleton","Crypt","Dark Shrine","Dark Shrine","Necromancer","Bloodlust","Iron Skin"]
     },
     "grave-merchant": {
       "id": "grave-merchant", "type": "merchant",
@@ -252,6 +258,7 @@
       "row": 3, "col": 2, "rowCols": 3,
       "parentIds": ["risen-horde"], "childIds": ["necrotic-guard"],
       "handicap": 1,
+      "enemyDeck": ["Necromancer","Necromancer","Necromancer","Dark Shrine","Dark Shrine","Crypt","Crypt","Skeleton","Skeleton","Specter","Specter","Bloodlust","Vampire","Dark Elf"],
       "bossDialogue": [
         "\"You are not dead. Unusual for this neighbourhood.\"",
         "\"I was a healer, before. The Wastes found that funny.\""
@@ -264,7 +271,8 @@
       "description": "The Ashwalker's personal dead — older, slower, and considerably harder to put down.",
       "row": 4, "col": 0, "rowCols": 1,
       "parentIds": ["shadow-guard", "grave-merchant", "revenant-witch"], "childIds": ["dark-hollow", "bone-brigade", "death-knight"],
-      "handicap": 2
+      "handicap": 2,
+      "enemyDeck": ["Specter","Specter","Specter","Skeleton","Skeleton","Skeleton","Crypt","Crypt","Dark Shrine","Dark Shrine","Necromancer","Necromancer","Iron Skin","Iron Skin","Bloodlust"]
     },
 
     "dark-hollow": {
@@ -281,7 +289,8 @@
       "description": "The Ashwalker's vanguard — what remains of the miners who worked these shafts before the Fracture.",
       "row": 5, "col": 1, "rowCols": 3,
       "parentIds": ["necrotic-guard"], "childIds": ["ashwalker"],
-      "handicap": 0
+      "handicap": 0,
+      "enemyDeck": ["Skeleton","Skeleton","Skeleton","Skeleton","Skeleton","Bat","Bat","Bat","Crypt","Crypt","Dark Shrine","Dark Shrine","Plague Rat","Plague Rat","Rally","Rally"]
     },
     "death-knight": {
       "id": "death-knight", "type": "elite",
@@ -290,6 +299,7 @@
       "row": 5, "col": 2, "rowCols": 3,
       "parentIds": ["necrotic-guard"], "childIds": ["ashwalker"],
       "handicap": -1,
+      "enemyDeck": ["Specter","Specter","Specter","Dark Elf","Dark Elf","Dark Elf","Necromancer","Necromancer","Crypt","Crypt","Dark Shrine","Dark Shrine","Iron Skin","Iron Skin","Bloodlust","Haste"],
       "bossDialogue": [
         "\"I remember orders. I remember duty. I remember everything.\"",
         "\"The Dominion is gone. My orders are not.\""

@@ -4,6 +4,8 @@
   "subtitle": "The Verdant Shard",
   "rewardRelic": "Bark Shield",
   "rewardRelicDesc": "Your base gains +10 max HP at the start of every battle.",
+  "environment": "forest",
+  "rewardTags": ["forest"],
   "startNodeIds": ["goblin-raid"],
 
   "intro": [
@@ -196,7 +198,8 @@
       "description": "A rowdy mob has blockaded the trade route. Clear them out.",
       "row": 0, "col": 0, "rowCols": 1,
       "parentIds": [], "childIds": ["camp", "shrine", "patrol"],
-      "handicap": 10
+      "handicap": 10,
+      "enemyDeck": ["Goblin","Goblin","Goblin","Goblin","Bat","Bat","Bandit","Bandit","Pixie","Pixie","Build Wall","Build Wall","Rally","Rally"]
     },
     "camp": {
       "id": "camp", "type": "rest",
@@ -220,7 +223,8 @@
       "description": "A disciplined warband is watching the deeper path.",
       "row": 1, "col": 2, "rowCols": 3,
       "parentIds": ["goblin-raid"], "childIds": ["ambush"],
-      "handicap": 7
+      "handicap": 7,
+      "enemyDeck": ["Archer","Archer","Archer","Bandit","Bandit","Goblin","Goblin","Pixie","Crossbow","Build Wall","Build Wall","Build Farm","Eagle Eye"]
     },
     "ambush": {
       "id": "ambush", "type": "battle",
@@ -228,7 +232,8 @@
       "description": "Something ancient was waiting in the treeline.",
       "row": 2, "col": 0, "rowCols": 1,
       "parentIds": ["camp", "shrine", "patrol"], "childIds": ["ruins", "war-camp", "market"],
-      "handicap": 4
+      "handicap": 4,
+      "enemyDeck": ["Goblin","Goblin","Bat","Bat","Bat","Bandit","Bandit","Archer","Archer","Troll","Build Wall","Barracks","Rally","Haste"]
     },
     "ruins": {
       "id": "ruins", "type": "event",
@@ -244,7 +249,8 @@
       "description": "A fortified enemy camp blocks the road ahead.",
       "row": 3, "col": 1, "rowCols": 3,
       "parentIds": ["ambush"], "childIds": ["captain"],
-      "handicap": 3
+      "handicap": 3,
+      "enemyDeck": ["Barbarian","Barbarian","Knight","Crossbow","Crossbow","Troll","Archer","Build Wall","Build Wall","Barracks","Sharpen Blades","Haste","Iron Skin"]
     },
     "market": {
       "id": "market", "type": "merchant",
@@ -259,7 +265,8 @@
       "description": "A hardened veteran with well-drilled siege troops.",
       "row": 4, "col": 0, "rowCols": 1,
       "parentIds": ["ruins", "war-camp", "market"], "childIds": ["thornlord"],
-      "handicap": 1
+      "handicap": 1,
+      "enemyDeck": ["Knight","Knight","Catapult","Catapult","Crossbow","Crossbow","Shield Guard","Shield Guard","Build Wall","Build Wall","Garrison","Sharpen Blades","War Drums","Iron Skin","Fortify"]
     },
     "thornlord": {
       "id": "thornlord", "type": "boss",

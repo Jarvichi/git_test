@@ -4,6 +4,8 @@
   "subtitle": "The Iron Citadel",
   "rewardRelic": "Iron Standard",
   "rewardRelicDesc": "Your units begin each battle with +1 ATK.",
+  "environment": "citadel",
+  "rewardTags": ["citadel"],
 
   "intro": [
     {
@@ -193,7 +195,8 @@
       "description": "The Citadel's outer garrison blocks the canyon road. A disciplined force — but thin.",
       "row": 0, "col": 0, "rowCols": 1,
       "parentIds": [], "childIds": ["soldiers-camp", "supply-cache", "outer-wall"],
-      "handicap": 10
+      "handicap": 10,
+      "enemyDeck": ["Shield Guard","Shield Guard","Crossbow","Crossbow","Archer","Archer","Build Wall","Build Wall","Build Wall","Bandit","Bandit","Eagle Eye","Iron Skin"]
     },
 
     "soldiers-camp": {
@@ -218,7 +221,8 @@
       "description": "The first proper fortified position — archers on the ramparts and a gate that won't open.",
       "row": 1, "col": 2, "rowCols": 3,
       "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
-      "handicap": 7
+      "handicap": 7,
+      "enemyDeck": ["Knight","Knight","Crossbow","Crossbow","Crossbow","Shield Guard","Shield Guard","Build Wall","Build Wall","Build Wall","Fortify","Iron Skin","Sharpen Blades"]
     },
 
     "siege-trenches": {
@@ -227,7 +231,8 @@
       "description": "The garrison dug deep. You're going through anyway.",
       "row": 2, "col": 0, "rowCols": 1,
       "parentIds": ["soldiers-camp", "supply-cache", "outer-wall"], "childIds": ["iron-guard", "quartermaster", "field-battery"],
-      "handicap": 4
+      "handicap": 4,
+      "enemyDeck": ["Barbarian","Barbarian","Knight","Crossbow","Crossbow","Catapult","Build Wall","Build Wall","Garrison","Sharpen Blades","Iron Skin","War Drums"]
     },
 
     "iron-guard": {
@@ -236,7 +241,8 @@
       "description": "Elite heavy infantry protecting the mid-canyon checkpoint.",
       "row": 3, "col": 0, "rowCols": 3,
       "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
-      "handicap": 3
+      "handicap": 3,
+      "enemyDeck": ["Knight","Knight","Knight","Shield Guard","Shield Guard","Ballista","Ballista","Crossbow","Build Wall","Build Wall","Garrison","Iron Skin","Fortify"]
     },
     "quartermaster": {
       "id": "quartermaster", "type": "merchant",
@@ -251,7 +257,8 @@
       "description": "A Citadel artillery position — catapults, crossbow banks, and the crew to run them.",
       "row": 3, "col": 2, "rowCols": 3,
       "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
-      "handicap": 3
+      "handicap": 3,
+      "enemyDeck": ["Catapult","Catapult","Ballista","Ballista","Crossbow","Crossbow","Shield Guard","Build Wall","Siege Works","Garrison","War Drums","Sharpen Blades"]
     },
 
     "siege-captain": {
@@ -260,7 +267,8 @@
       "description": "A hardened veteran who has defended this position for three years. He takes it personally.",
       "row": 4, "col": 0, "rowCols": 1,
       "parentIds": ["iron-guard", "quartermaster", "field-battery"], "childIds": ["command-tent", "last-stand", "battle-commander"],
-      "handicap": 1
+      "handicap": 1,
+      "enemyDeck": ["Catapult","Catapult","Knight","Knight","Shield Guard","Shield Guard","Ballista","Crossbow","Crossbow","Build Wall","Build Wall","Siege Works","War Drums","Fortify","Iron Skin","Sharpen Blades"]
     },
 
     "command-tent": {
@@ -277,7 +285,8 @@
       "description": "The remaining garrison makes a final push. Outnumbered. Disciplined.",
       "row": 5, "col": 1, "rowCols": 3,
       "parentIds": ["siege-captain"], "childIds": ["kragg"],
-      "handicap": 0
+      "handicap": 0,
+      "enemyDeck": ["Barbarian","Barbarian","Knight","Knight","Catapult","Ballista","Crossbow","Crossbow","Shield Guard","Build Wall","Build Wall","Garrison","War Drums","Iron Skin"]
     },
     "battle-commander": {
       "id": "battle-commander", "type": "elite",
@@ -285,7 +294,8 @@
       "description": "Kragg's second-in-command. Fights like he has something to prove — he does.",
       "row": 5, "col": 2, "rowCols": 3,
       "parentIds": ["siege-captain"], "childIds": ["kragg"],
-      "handicap": -1
+      "handicap": -1,
+      "enemyDeck": ["Knight","Knight","Knight","Catapult","Catapult","Ballista","Ballista","Crossbow","Build Wall","Build Wall","Siege Works","Garrison","War Drums","War Drums","Fortify","Sharpen Blades","Iron Skin"]
     },
 
     "kragg": {
