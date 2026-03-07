@@ -22,7 +22,7 @@ Issues sourced from GitHub. Last synced: 2026-03-07 (re-checked 2026-03-07).
 
 ## 🟠 Gameplay Bugs
 
-- [ ] **#99** Obstacle avoidance: units give obstacles way too much clearance — reduce buffer zone around obstacle hitboxes
+- [x] **#99** Obstacle avoidance: units give obstacles way too much clearance — reduce buffer zone around obstacle hitboxes (pushDist: obs.radius+55 → obs.radius+22)
 - [ ] **#86** Rewards screen: crystal amount granted after a battle isn't displayed (10/15/25 per node type)
 - [ ] **#80** Difficulty scaling: each subsequent act run should apply a difficulty multiplier to the opponent
 
