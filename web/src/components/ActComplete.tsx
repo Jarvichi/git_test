@@ -6,9 +6,10 @@ interface Props {
   relicName: string
   relicDesc: string
   onContinue: () => void
+  hasNextAct?: boolean
 }
 
-export function ActComplete({ actTitle, actSubtitle, relicName, relicDesc, onContinue }: Props) {
+export function ActComplete({ actTitle, actSubtitle, relicName, relicDesc, onContinue, hasNextAct = false }: Props) {
   return (
     <div className="act-complete">
       <div className="ac-glow" />
@@ -32,7 +33,7 @@ export function ActComplete({ actTitle, actSubtitle, relicName, relicDesc, onCon
       </div>
 
       <button className="action-btn action-btn--large ac-continue-btn" onClick={onContinue}>
-        RETURN TO MENU
+        {hasNextAct ? 'CONTINUE TO NEXT ACT' : 'RETURN TO MENU'}
       </button>
     </div>
   )
