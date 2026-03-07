@@ -1,16 +1,17 @@
-const DEV_MODE_KEY = 'jarv_dev_mode'
-
-export function loadDevMode(): boolean {
-  try { return localStorage.getItem(DEV_MODE_KEY) === 'true' }
-  catch { return false }
-}
-
-export function saveDevMode(v: boolean): void {
-  try { localStorage.setItem(DEV_MODE_KEY, String(v)) } catch { /* ignore */ }
-}
-
+/**
+ * Dev mode is enabled via URL query parameter `?dev=1` or `?dev=true`.
+ * This avoids persisting the flag in user settings; it's intended for temporary
+ * test sessions invoked by appending `?dev=1` to the URL.
+ */
 export function isNoDamageMode(): boolean {
-  return loadDevMode()
+  try {
+    if (typeof window === 'undefined') return false
+    const p = new URLSearchParams(window.location.search)
+    const v = (p.get('dev') ?? p.get('devMode') ?? '').toLowerCase()
+    return v === '1' || v === 'true'
+  } catch {
+    return false
+  }
 }
 
 export default null

@@ -293,7 +293,7 @@ export default function App() {
       const KEYS = [
         'jarv_collection', 'jarv_deck', 'jarv_crystals',
         'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
-        'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count', 'jarv_dev_mode',
+        'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
       ]
       KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
       window.location.reload()
@@ -850,7 +850,7 @@ export default function App() {
     const KEYS = [
       'jarv_collection', 'jarv_deck', 'jarv_crystals',
       'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
-      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count', 'jarv_dev_mode',
+      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
     ]
     KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
     window.location.reload()

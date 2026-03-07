@@ -4,6 +4,7 @@ import { CardTile } from './CardTile'
 import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 import { BattleEventOverlay } from './BattleEventOverlay'
+import { isNoDamageMode } from '../game/debug'
 
 interface Props {
   state: GameState
@@ -615,6 +616,9 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
             : event.type === 'supplyDrop' ? '📦 SUPPLY DROP'
             : '🌋 QUAKE'}
           </span>
+        )}
+        {isNoDamageMode() && (
+          <span className="dev-badge">DEV MODE</span>
         )}
       </div>
 

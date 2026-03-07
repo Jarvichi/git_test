@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { isSoundEnabled, setSoundEnabled } from '../game/sound'
-import { loadDevMode, saveDevMode } from '../game/debug'
 
 interface Props {
   onBack: () => void
@@ -51,7 +50,6 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
   const [textColor,  setTextColor]  = useState(loadTextColor)
   const [skipIntro,  setSkipIntro]  = useState(loadSkipIntro)
   const [confirmReset, setConfirmReset] = useState(false)
-  const [devMode, setDevMode] = useState(loadDevMode)
 
   function handleSoundToggle() {
     const next = !soundOn
@@ -82,11 +80,7 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
     onResetGame()
   }
 
-  function handleDevModeToggle() {
-    const next = !devMode
-    setDevMode(next)
-    saveDevMode(next)
-  }
+  
 
   return (
     <div className="settings-screen">
@@ -181,17 +175,7 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
             </div>
           </div>
 
-          <div className="settings-row">
-            <div>
-              <div className="settings-label">Developer mode</div>
-              <div className="settings-sublabel">When enabled, your base does not take damage</div>
-            </div>
-            <div className="settings-toggle" onClick={handleDevModeToggle}>
-              <div className={`settings-toggle-track${devMode ? ' settings-toggle-track--on' : ''}`}>
-                <div className="settings-toggle-thumb" />
-              </div>
-            </div>
-          </div>
+          
           <div className="settings-row">
             {confirmReset ? (
               <div className="settings-confirm-row">
