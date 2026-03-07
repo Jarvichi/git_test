@@ -127,6 +127,25 @@ export interface CutscenePanel {
   text: string
 }
 
+// ─── Intro rule system ────────────────────────────────────
+
+/** Matches a run count against a simple condition. */
+export interface RuleCondition {
+  op: 'eq' | 'gte' | 'range'
+  value?: number   // used by 'eq' and 'gte'
+  min?: number     // used by 'range'
+  max?: number     // used by 'range'
+}
+
+/**
+ * A single rule in an act's intro rule set.
+ * `panels` title/text may contain substitution tags — see resolveActIntro.
+ */
+export interface IntroRule {
+  condition: RuleCondition
+  panels: CutscenePanel[]
+}
+
 export interface Act {
   id: string
   title: string
@@ -135,8 +154,27 @@ export interface Act {
   startNodeIds: string[]
   rewardRelic: string
   rewardRelicDesc: string
-  intro?: CutscenePanel[]   // shown once when the act begins (first run only)
+  intro?: CutscenePanel[]   // shown on run 1 (fallback when no rule matches)
   outro?: CutscenePanel[]   // shown every time the boss is defeated
+
+  /**
+   * Named string arrays for seeded random picks.
+   * Referenced in panel text/title via {pool:name:seedOffset}.
+   */
+  variantPools?: Record<string, string[]>
+
+  /**
+   * Template strings for dynamic mid-run opening lines.
+   * May contain {n} and {ordinalLower}. Selected via n % length.
+   * Referenced in panel text via {midRunTemplate}.
+   */
+  midRunTemplates?: string[]
+
+  /**
+   * Ordered list of run-count rules. The first matching rule's panels are shown.
+   * Falls back to `intro` if no rule matches (i.e. run 1).
+   */
+  introRules?: IntroRule[]
 }
 
 // ─── Run counter ──────────────────────────────────────────
@@ -170,86 +208,71 @@ export function markIntroSeen(actId: string): void {
   } catch { /* ignore */ }
 }
 
-// ─── Narrative variation ──────────────────────────────────
-// Returns slightly different intro panels based on how many runs the player has done.
+// ─── Intro rule engine ────────────────────────────────────
 
-/** A seeded pseudo-random from the run count — keeps text stable per run number. */
-function seeded(n: number, offset = 0): number {
+/** Seeded pseudo-random — stable per (runCount, offset) pair. */
+function seededPick<T>(arr: T[], n: number, offset = 0): T {
   const x = Math.sin(n * 127.1 + offset * 311.7) * 43758.5453123
-  return x - Math.floor(x)
+  return arr[Math.floor((x - Math.floor(x)) * arr.length)]
 }
 
-function pick<T>(arr: T[], n: number, offset = 0): T {
-  return arr[Math.floor(seeded(n, offset) * arr.length)]
+function matchesCondition(cond: RuleCondition, n: number): boolean {
+  switch (cond.op) {
+    case 'eq':    return n === cond.value
+    case 'gte':   return n >= (cond.value ?? 0)
+    case 'range': return n >= (cond.min ?? 0) && n <= (cond.max ?? Infinity)
+  }
 }
 
-// Variants for the opening line about Jarv's state of mind
-const JARV_MOODS = [
-  'Now, technically, unemployed.',
-  'Now, technically, a free agent.',
-  'Now, effectively, between employers.',
-  'Now, in the administrative sense, without portfolio.',
-  'Now — if you were being generous — on sabbatical.',
-]
+/**
+ * Substitutes tags in a template string:
+ *   {pool:name:offset}  → seeded pick from act.variantPools[name]
+ *   {midRunTemplate}    → entry from act.midRunTemplates at n % length, with {n}/{ordinalLower} resolved
+ *   {ORDINAL}           → ordinalWord(n), e.g. "FIFTH"
+ *   {ordinalLower}      → ordinalWord(n).toLowerCase(), e.g. "fifth"
+ *   {n}                 → run count as a number
+ */
+function resolvePlaceholders(template: string, n: number, act: Act): string {
+  const ordinal = ordinalWord(n)
+  const pools   = act.variantPools    ?? {}
+  const midTmpl = act.midRunTemplates ?? []
 
-const JARV_INTROS = [
-  "You have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.",
-  "You have a deck of cards, a half-remembered oath, and an extremely stubborn refusal to think too hard about any of this.",
-  "You have a deck of cards, a persistent headache, and the growing suspicion that this wasn't your first time here.",
-  "You have a deck of cards, a strategy you haven't fully thought through, and the particular confidence of someone with nothing left to lose.",
-  "You have a deck of cards. You always have a deck of cards. That, at least, has been consistent.",
-]
+  return template
+    .replace(/{ORDINAL}/g,      ordinal)
+    .replace(/{ordinalLower}/g, ordinal.toLowerCase())
+    .replace(/{n}/g,            String(n))
+    .replace(/{midRunTemplate}/g, () => {
+      if (midTmpl.length === 0) return ''
+      return midTmpl[n % midTmpl.length]
+        .replace(/{ORDINAL}/g,      ordinal)
+        .replace(/{ordinalLower}/g, ordinal.toLowerCase())
+        .replace(/{n}/g,            String(n))
+    })
+    .replace(/{pool:([^:}]+):(\d+)}/g, (_, poolName, offsetStr) => {
+      const pool = pools[poolName] ?? []
+      if (pool.length === 0) return ''
+      return seededPick(pool, n, parseInt(offsetStr, 10))
+    })
+}
 
-const FOREST_DESC = [
-  "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
-  "Your compass points to the Verdant Shard — a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
-  "Your compass points toward the Verdant Shard. The forest ahead is old enough to have opinions about you.",
-  "The Verdant Shard pulses at the edge of your compass bearing — a realm of old growth and older grudges, sealed since the Fracture.",
-]
+/**
+ * Returns the intro panels for an act based on run count.
+ * Uses act.introRules (data-driven); falls back to act.intro for run 1.
+ * Generic — new acts need only JSON, no new TypeScript.
+ */
+export function resolveActIntro(act: Act, n: number): CutscenePanel[] {
+  if (n <= 1 || !act.introRules?.length) return act.intro ?? []
+  const rule = act.introRules.find(r => matchesCondition(r.condition, n))
+  if (!rule) return act.intro ?? []
+  return rule.panels.map(p => ({
+    title: resolvePlaceholders(p.title, n, act),
+    text:  resolvePlaceholders(p.text,  n, act),
+  }))
+}
 
-const THORNLORD_DESC = [
-  "The shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible.",
-  "The Thornlord seals the shard's pathways. He is ancient, uncompromising, and deeply inconvenient. You've dealt with worse. Probably.\n\nAt least, it feels like you have.",
-  "The Thornlord waits at the end of the shard. Older than the Dominion. Older than most things people are afraid of. He has not spoken to a living soul in forty years.\n\nYou wonder, briefly, if he'll recognise you.",
-  "The Thornlord seals every path through the Verdant Shard. Traders who've survived say he is patient, thorough, and has never once reconsidered a decision.\n\nYou have a plan. You've had plans before.",
-]
-
-const PRIOR_RUN_SUMMARIES = [
-  // run 2+
-  "The path felt familiar — the way a dream feels familiar, just before it turns wrong.",
-  "You stepped into the Verdant Shard with the uneasy sense that you'd stepped here before. You pushed the feeling aside. There was work to do.",
-  "Something about the first battle. The angle of the light. The particular way the Goblins charged. A déjà vu so precise it was almost a memory.",
-  "The forest seemed quieter than it should have been. As though it recognised you, and was deciding whether to be pleased about it.",
-]
-
-const PRIOR_RUN_OPENINGS = [
-  "You remember — and here is the strange part — getting this far before. Not the same choices. But the same road.",
-  "The scholar on the boulder didn't look up when you approached. 'Again?' he said. 'You're ahead of schedule.'",
-  "The Thornlord, when you finally stood before him, was already watching you. As though he had been expecting you. As though he had been expecting this for some time.",
-  "The goblins at the first barricade looked familiar. Not familiar the way people are familiar — familiar the way furniture in a childhood home is familiar. Something about the arrangement of them.",
-]
-
-const MILESTONE_OPENINGS: Record<number, string[]> = {
-  5: [
-    "The fifth time through the Verdant Shard, a bird called out your name. That was new.",
-    "Fifth campaign. The Thornlord paused before his opening monologue this time. As though choosing different words.",
-  ],
-  10: [
-    "Ten campaigns. The Wandering Scholar had written something in his margins. Your name. A question mark.",
-    "You notice things on the tenth pass that you hadn't noticed before. The way the Forest Patrol waits a little too perfectly. The way the shrine seems to already know your choice.",
-  ],
-  25: [
-    "Twenty-five campaigns. The Thornlord opens with silence now, instead of threats. It feels more honest.",
-    "After twenty-five runs, the goblins at the first checkpoint have started waving before attacking you. You choose not to read into this.",
-  ],
-  50: [
-    "Something is different this time. The sky above the Verdant Shard is slightly the wrong colour. The compass hesitates before pointing.",
-    "On the fiftieth campaign, you notice the cracks. Small ones. In the edges of things. The world is tired of resetting itself.",
-  ],
-  100: [
-    // Boss speaks directly to the player
-    "The Thornlord looks past you. Past Jarv. Directly at the person holding the cards.\n\n'You again,' he says. 'Not the tactician. You. I know you. I've been watching you since the beginning.'\n\nA pause. A root curls against the ground like a finger drumming.\n\n'A hundred times you've come here. A hundred times I've fallen. I am the oldest thing in this shard and you have made me your tutorial boss.'\n\nHe sounds almost amused. Almost.",
-  ],
+/** Thin wrapper for backward compatibility — new code should call resolveActIntro directly. */
+export function getAct1Intro(runCount: number): CutscenePanel[] {
+  return resolveActIntro(ACT_1, runCount)
 }
 
 // ─── Ordinal helper ───────────────────────────────────────────────────────────
@@ -268,189 +291,6 @@ function ordinalWord(n: number): string {
                : (n % 10 === 3 && n % 100 !== 13) ? 'RD'
                : 'TH'
   return `${n}${suffix}`
-}
-
-// Texts for "between-milestone" runs (11-24, 26-49, 51-99).
-// Each entry is a function so it can embed the actual run number.
-const MID_RUN_OPENINGS: Array<(n: number) => string> = [
-  n => `The ${ordinalWord(n).toLowerCase()} time through the Verdant Shard. The Thornlord has stopped rehearsing his opening speech.`,
-  n => `Campaign ${n}. The Wandering Scholar barely looks up anymore. He has your name pre-written in the margin.`,
-  n => `${n} campaigns in. The goblins at the first barricade have started placing bets on how quickly you'll get past them.`,
-  n => `${n} times you've stood at this shard's edge. The trees have started leaning away slightly when you approach.`,
-  n => `Run ${n}. You walk in before dawn, which is new. Everything else is exactly as you left it.`,
-  n => `The ${ordinalWord(n).toLowerCase()} attempt. You recognise the smell now. Damp bark and old magic and something else — familiarity.`,
-  n => `${n} campaigns. The Wandering Scholar has started making tea before you arrive. He knows the timing by heart.`,
-]
-
-/**
- * Returns Act 1 intro panels modified based on how many times the campaign has been run.
- * On the first run, returns the standard intro.
- * On subsequent runs, adds references to prior attempts and subtle variations.
- * Milestones (10, 25, 50, 100) get special text; all other runs get dynamic text with the actual number.
- */
-export function getAct1Intro(runCount: number): CutscenePanel[] {
-  const n = runCount
-
-  // ── Run 100+ milestone ────────────────────────────────────
-  if (n >= 100 && MILESTONE_OPENINGS[100]) {
-    return [
-      {
-        title: 'THE THORNLORD KNOWS',
-        text: pick(MILESTONE_OPENINGS[100], n),
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 3)}\n\n${pick(THORNLORD_DESC, n, 2)}`,
-      },
-    ]
-  }
-
-  // ── Runs 51–99: between 50 and 100 ───────────────────────
-  if (n > 50 && n < 100) {
-    const ordinal = ordinalWord(n)
-    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: opening },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 1)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 2)}\n\n${pick(THORNLORD_DESC, n, 1)}`,
-      },
-      { title: 'YOUR MISSION', text: 'Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way.' },
-    ]
-  }
-
-  // ── Run 50 milestone ──────────────────────────────────────
-  if (n === 50 && MILESTONE_OPENINGS[50]) {
-    const panels: CutscenePanel[] = [
-      {
-        title: 'FIFTY CAMPAIGNS',
-        text: pick(MILESTONE_OPENINGS[50], n),
-      },
-    ]
-    panels.push({
-      title: 'THE WANDERER',
-      text: `You are Jarv. Former tactician of the Dominion's western campaigns. ${pick(JARV_MOODS, n)}\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall.\n\n${pick(JARV_INTROS, n, 1)}`,
-    })
-    panels.push({
-      title: 'THE VERDANT SHARD',
-      text: `${pick(FOREST_DESC, n, 2)}\n\n${pick(THORNLORD_DESC, n, 1)}`,
-    })
-    panels.push({ title: 'YOUR MISSION', text: 'Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way.' })
-    return panels
-  }
-
-  // ── Runs 26–49: between 25 and 50 ────────────────────────
-  if (n > 25 && n < 50) {
-    const ordinal = ordinalWord(n)
-    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: opening },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 2)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 1)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-    ]
-  }
-
-  // ── Run 25 milestone ──────────────────────────────────────
-  if (n === 25 && MILESTONE_OPENINGS[25]) {
-    return [
-      { title: 'TWENTY-FIVE', text: pick(MILESTONE_OPENINGS[25], n) },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 2)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 1)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-    ]
-  }
-
-  // ── Runs 11–24: between 10 and 25 ────────────────────────
-  if (n > 10 && n < 25) {
-    const ordinal = ordinalWord(n)
-    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: opening },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-      { title: 'YOUR MISSION', text: 'Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You\'ve always known how this goes.' },
-    ]
-  }
-
-  // ── Run 10 milestone ──────────────────────────────────────
-  if (n === 10 && MILESTONE_OPENINGS[10]) {
-    return [
-      { title: 'THE TENTH TIME', text: pick(MILESTONE_OPENINGS[10], n) },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-      { title: 'YOUR MISSION', text: 'Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You\'ve always known how this goes.' },
-    ]
-  }
-
-  // ── Runs 5–9 ─────────────────────────────────────────────
-  if (n >= 5 && MILESTONE_OPENINGS[5]) {
-    const ordinal = ordinalWord(n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: pick(MILESTONE_OPENINGS[5], n) },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-    ]
-  }
-
-  if (n >= 2) {
-    // Summary of last run + subtle deja vu
-    const summary = pick(PRIOR_RUN_SUMMARIES, n)
-    const opening = pick(PRIOR_RUN_OPENINGS, n)
-    return [
-      {
-        title: 'THE FRACTURE',
-        text: `Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant.\n\n${summary}`,
-      },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-      {
-        title: 'A FEELING',
-        text: `And yet — ${opening}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time.`,
-      },
-    ]
-  }
-
-  // First run: standard intro
-  return ACT_1.intro ?? []
 }
 
 // ─── Run state ────────────────────────────────────────────
