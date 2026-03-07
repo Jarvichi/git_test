@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-07.
+Issues sourced from GitHub. Last synced: 2026-03-07 (re-checked 2026-03-07).
 
 ---
 
@@ -12,6 +12,7 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 
 ## 🔴 Critical Bugs
 
+- [ ] **#97** Campaign: Act 2 event/shrine nodes launch a battle instead of an event screen — eventId types too specific; need generic event format with description/options/rewards in JSON
 - [x] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
 - [x] **#56** Campaign run-count text always says "fifth time" after run 5 — fix to use actual count
 - [x] **Intro always says "tenth"** (no issue#) — runs 11–24 (and 26–49 etc.) still show milestone run text
@@ -21,6 +22,7 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 
 ## 🟠 Gameplay Bugs
 
+- [ ] **#99** Obstacle avoidance: units give obstacles way too much clearance — reduce buffer zone around obstacle hitboxes
 - [ ] **#86** Rewards screen: crystal amount granted after a battle isn't displayed (10/15/25 per node type)
 - [ ] **#80** Difficulty scaling: each subsequent act run should apply a difficulty multiplier to the opponent
 
@@ -82,6 +84,11 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 - [ ] Act 5 — The Fractured Core (future)
 
 ---
+
+## 🟣 Enhancements — Pending
+
+- [ ] **#100** Unit behavioral traits: avoidance, fleeing, target priority (destroy walls, buildings, boss, protect base) — fall back to default if trait unfulfilled
+- [ ] **#102** Achievements system: per-unit/building kill milestones (1000/10000), witty names, rewards (cards/crystals/items), Gambler/rubber-chicken achievements, act-completion counts, dedicated achievements screen
 
 ## ⚪ Features — Large / Long-term
 
