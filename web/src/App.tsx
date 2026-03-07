@@ -51,6 +51,7 @@ import { InventoryScreen }   from './components/InventoryScreen'
 import { hasDailyReward, claimDailyReward, addToInventory, DailyReward } from './game/dailyLogin'
 import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
+import { isNoDamageMode } from './game/debug'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -260,7 +261,11 @@ export default function App() {
         next = { ...next, opponentBase: { ...next.opponentBase, hp: Math.max(0, next.opponentBase.hp - effect.damage) } }
       }
       if (effect.selfDamage) {
-        next = { ...next, playerBase: { ...next.playerBase, hp: Math.max(0, next.playerBase.hp - effect.selfDamage) } }
+        if (!isNoDamageMode()) {
+          next = { ...next, playerBase: { ...next.playerBase, hp: Math.max(0, next.playerBase.hp - effect.selfDamage) } }
+        } else {
+          // Dev mode enabled — ignore self damage
+        }
       }
       if (effect.killEnemyUnits) {
         const enemies = next.field.filter(u => u.owner === 'opponent' && u.moveSpeed > 0)
@@ -288,7 +293,7 @@ export default function App() {
       const KEYS = [
         'jarv_collection', 'jarv_deck', 'jarv_crystals',
         'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
-        'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
+        'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count', 'jarv_dev_mode',
       ]
       KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
       window.location.reload()
@@ -509,7 +514,9 @@ export default function App() {
     if (effect.type === 'healHp') {
       updatedRun = { ...updatedRun, playerHp: Math.min(updatedRun.maxHp, updatedRun.playerHp + effect.amount) }
     } else if (effect.type === 'damageHp') {
-      updatedRun = { ...updatedRun, playerHp: Math.max(1, updatedRun.playerHp - effect.amount) }
+      if (!isNoDamageMode()) {
+        updatedRun = { ...updatedRun, playerHp: Math.max(1, updatedRun.playerHp - effect.amount) }
+      }
     } else if (effect.type === 'gainCrystals') {
       const next = loadCrystals() + effect.amount
       saveCrystals(next)
@@ -843,7 +850,7 @@ export default function App() {
     const KEYS = [
       'jarv_collection', 'jarv_deck', 'jarv_crystals',
       'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
-      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
+      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count', 'jarv_dev_mode',
     ]
     KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
     window.location.reload()
