@@ -508,16 +508,22 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
     if (target) {
       const prevHp = target.hp
       const bloodMoonMult = s.activeBattleEvent?.type === 'bloodMoon' ? 2 : 1
-      target.hp -= unit.attack * bloodMoonMult
-      const actualDamage = prevHp - Math.max(0, target.hp)
-      if (isPlayer) s.playerScore += actualDamage
-      else s.opponentScore += actualDamage
-      unit.attackTimer = unit.attackCooldownMs
-      if (target.hp <= 0) {
-        log.push(`${unit.name} destroyed ${target.name}!`)
-        if (target.moveSpeed === 0) playBuildingDestroyed()
-        else playUnitDeath()
+      const dmg = unit.attack * bloodMoonMult
+      // Respect developer no-damage mode for player-owned targets
+      if (target.owner === 'player' && isNoDamageMode()) {
+        log.push(`${unit.name} would damage ${target.name} (dev mode — no damage)`)
+      } else {
+        target.hp -= dmg
+        const actualDamage = prevHp - Math.max(0, target.hp)
+        if (isPlayer) s.playerScore += actualDamage
+        else s.opponentScore += actualDamage
+        if (target.hp <= 0) {
+          log.push(`${unit.name} destroyed ${target.name}!`)
+          if (target.moveSpeed === 0) playBuildingDestroyed()
+          else playUnitDeath()
+        }
       }
+      unit.attackTimer = unit.attackCooldownMs
     } else {
       // No enemies in range — attack the base if close enough
       const atEnemyBase = isPlayer
@@ -674,7 +680,10 @@ function triggerBattleEvent(s: GameState, log: string[]): void {
     // Earthquake: all walls take 20 damage
     const dmg = 20
     for (const u of s.field) {
-      if (u.isWall) u.hp = Math.max(0, u.hp - dmg)
+      if (!u.isWall) continue
+      // Don't damage player-owned walls in dev no-damage mode
+      if (u.owner === 'player' && isNoDamageMode()) continue
+      u.hp = Math.max(0, u.hp - dmg)
     }
     s.field = s.field.filter(u => u.hp > 0)
     event = { type: 'earthquake', label: `🌋 EARTHQUAKE! All walls took ${dmg} damage!`, remainingMs: 3000 }

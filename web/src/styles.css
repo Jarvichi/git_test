@@ -83,6 +83,22 @@ body {
   letter-spacing: 2px;
 }
 
+/* Developer mode badge shown when ?dev=1 is present */
+.dev-badge {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  background: #333333;
+  color: #ffee66;
+  border: 1px solid #aa8800;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 11px;
+  z-index: 60;
+  box-shadow: 0 0 6px rgba(170,136,0,0.35);
+}
+
 .score-display {
   font-size: 13px;
   font-weight: bold;
