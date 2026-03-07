@@ -4,6 +4,12 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 
 ---
 
+## 🟠 Active Work
+
+- [ ] **#101** Campaign variety: deterministic enemy decks per node, act-themed cards/rewards, environment backgrounds, seeded terrain, kraggAI + ashwalkerAI boss AIs, card tags, AGENTS.md act creation guidelines
+
+---
+
 ## 🔴 Critical Bugs
 
 - [x] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
