@@ -2107,50 +2107,6 @@ body {
   flex-direction: column;
 }
 
-/* ── Connectors (grid-aligned) ──────────────────────────────────────────────
-   Each .nm-conn uses the same CSS grid column structure as the adjacent node
-   row, so .nm-conn-v lines sit at exactly the centre of the node above/below.
-   .nm-conn-h (the horizontal bar) extends ±7px into the gaps so there is no
-   visible gap in the bar between adjacent grid cells.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-.nm-conn {
-  display: grid;
-  gap: 12px;          /* must match .nm-row gap */
-  height: 28px;
-  width: 100%;
-  overflow: visible;
-}
-
-.nm-conn-slot {
-  position: relative;
-  height: 100%;
-  overflow: visible;
-}
-
-.nm-conn-v {
-  position: absolute;
-  left: 50%;
-  width: 2px;
-  background: #4a4a4a;
-  transform: translateX(-50%);
-}
-/* Extend 3px past the connector strip edges to bridge sub-pixel gaps */
-.nm-conn-v--top { top: -3px; height: calc(50% + 3px); }
-.nm-conn-v--bot { top: 50%;  height: calc(50% + 3px); }
-
-.nm-conn-h {
-  position: absolute;
-  top: 50%;
-  height: 2px;
-  background: #4a4a4a;
-  transform: translateY(-50%);
-  left: -7px;   /* extends into left gap to join adjacent cell */
-  right: -7px;  /* extends into right gap */
-}
-.nm-conn-h--s { left: 50%; }   /* bar starts at centre of this cell */
-.nm-conn-h--e { right: 50%; }  /* bar ends at centre of this cell */
-
 /* ── Rows ── */
 
 .nm-row {
