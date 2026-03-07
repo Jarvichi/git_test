@@ -60,66 +60,68 @@ function buildRows(act: Act): QuestNode[][] {
     .map(r => byRow[r].sort((a, b) => a.col - b.col))
 }
 
-// ── Connector component ─────────────────────────────────────────────────────
-// Uses the same CSS grid as the node rows so vertical lines align perfectly.
+// ── SVG connector ────────────────────────────────────────────────────────────
+// Renders the linking lines between two adjacent rows.
+// Uses the explicit parentIds/childIds graph rather than inferring topology
+// from row lengths. viewBox is maxCols×1 so column centres sit at col+0.5,
+// matching the 1fr CSS grid columns exactly. vectorEffect="non-scaling-stroke"
+// keeps the stroke at a fixed 2px regardless of viewBox scaling.
 
 interface ConnProps {
   prevRow: QuestNode[]
   nextRow: QuestNode[]
   maxCols: number
+  center: number   // visual column for single-node rows
 }
 
-function NodeConnector({ prevRow, nextRow, maxCols }: ConnProps) {
-  const center = Math.floor(maxCols / 2)  // 0-indexed center slot
+function SVGConnector({ prevRow, nextRow, maxCols, center }: ConnProps) {
+  const visualCol = (node: QuestNode, row: QuestNode[]) =>
+    row.length === 1 ? center : node.col
 
-  const isStraight = prevRow.length === 1 && nextRow.length === 1
-  const singleUp   = prevRow.length === 1 && nextRow.length > 1
-  const singleDown = prevRow.length > 1   && nextRow.length === 1
+  const prevById = new Map(prevRow.map(n => [n.id, n]))
 
-  // Which 0-indexed columns have a connection above / below
-  const aboveCols = new Set<number>(
-    isStraight || singleDown
-      ? [center]
-      : prevRow.map(n => n.col),
-  )
-  const belowCols = new Set<number>(
-    isStraight || singleUp
-      ? [center]
-      : nextRow.map(n => n.col),
-  )
+  // Build (parentVisualCol, childVisualCol) pairs from explicit graph edges
+  const connections: [number, number][] = []
+  for (const child of nextRow) {
+    for (const parentId of child.parentIds) {
+      const parent = prevById.get(parentId)
+      if (parent) connections.push([visualCol(parent, prevRow), visualCol(child, nextRow)])
+    }
+  }
 
-  // The horizontal bar spans from the leftmost to rightmost active column
-  const allActive  = [...aboveCols, ...belowCols]
-  const minActive  = Math.min(...allActive)
-  const maxActive  = Math.max(...allActive)
+  if (connections.length === 0) return null
+
+  // Column i centre in viewBox units (viewBox is maxCols wide, 1 tall)
+  const cx = (col: number) => col + 0.5
+
+  // Deduplicate identical paths (same parent col → same child col)
+  const seen = new Set<string>()
+  const unique = connections.filter(([pc, cc]) => {
+    const k = `${pc}:${cc}`
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
 
   return (
-    <div
-      className="nm-conn"
-      style={{ gridTemplateColumns: `repeat(${maxCols}, 1fr)` }}
+    <svg
+      viewBox={`0 0 ${maxCols} 1`}
+      preserveAspectRatio="none"
+      style={{ width: '100%', height: '40px', display: 'block', overflow: 'visible' }}
     >
-      {Array.from({ length: maxCols }, (_, i) => {
-        const above  = aboveCols.has(i)
-        const below  = belowCols.has(i)
-        const inHBar = !isStraight && i >= minActive && i <= maxActive
-        const hStart = inHBar && i === minActive
-        const hEnd   = inHBar && i === maxActive
-
-        return (
-          <div key={i} className="nm-conn-slot">
-            {above && <div className="nm-conn-v nm-conn-v--top" />}
-            {inHBar && (
-              <div className={[
-                'nm-conn-h',
-                hStart ? 'nm-conn-h--s' : '',
-                hEnd   ? 'nm-conn-h--e' : '',
-              ].filter(Boolean).join(' ')} />
-            )}
-            {below && <div className="nm-conn-v nm-conn-v--bot" />}
-          </div>
-        )
-      })}
-    </div>
+      {unique.map(([pc, cc], i) => (
+        <polyline
+          key={i}
+          // Down to midpoint → across → down to bottom
+          points={`${cx(pc)},0 ${cx(pc)},0.5 ${cx(cc)},0.5 ${cx(cc)},1`}
+          fill="none"
+          stroke="#4a4a4a"
+          strokeWidth="2"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+        />
+      ))}
+    </svg>
   )
 }
 
@@ -164,10 +166,11 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
               <React.Fragment key={rowIndex}>
                 {/* Connector above this row */}
                 {rowIndex > 0 && (
-                  <NodeConnector
+                  <SVGConnector
                     prevRow={rows[rowIndex - 1]}
                     nextRow={rowNodes}
                     maxCols={maxCols}
+                    center={center}
                   />
                 )}
 
