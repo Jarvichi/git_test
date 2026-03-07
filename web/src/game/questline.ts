@@ -26,6 +26,8 @@ export interface QuestNode {
   bossDialogue?: string[]  // lines the boss speaks before the fight
   /** Preset enemy deck — card names in order. Makes each node deterministic and learnable. */
   enemyDeck?: string[]
+  /** Visual background theme for this node's battlefield ('forest' | 'ruins' | 'camp' | 'citadel' | 'ashen'). */
+  environment?: string
 }
 
 // ─── Event system ─────────────────────────────────────────

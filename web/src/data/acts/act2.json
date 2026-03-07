@@ -196,6 +196,7 @@
       "row": 0, "col": 0, "rowCols": 1,
       "parentIds": [], "childIds": ["soldiers-camp", "supply-cache", "outer-wall"],
       "handicap": 10,
+      "environment": "citadel",
       "enemyDeck": ["Shield Guard","Shield Guard","Crossbow","Crossbow","Archer","Archer","Build Wall","Build Wall","Build Wall","Bandit","Bandit","Eagle Eye","Iron Skin"]
     },
 
@@ -205,6 +206,7 @@
       "description": "An abandoned forward camp — rations still warm. Rest and recover.",
       "row": 1, "col": 0, "rowCols": 3,
       "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
+      "environment": "camp",
       "restHeal": 10
     },
     "supply-cache": {
@@ -213,6 +215,7 @@
       "description": "A Citadel supply depot, hastily abandoned. The lock is already broken.",
       "row": 1, "col": 1, "rowCols": 3,
       "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
+      "environment": "citadel",
       "eventId": "supply-cache"
     },
     "outer-wall": {
@@ -222,6 +225,7 @@
       "row": 1, "col": 2, "rowCols": 3,
       "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
       "handicap": 7,
+      "environment": "citadel",
       "enemyDeck": ["Knight","Knight","Crossbow","Crossbow","Crossbow","Shield Guard","Shield Guard","Build Wall","Build Wall","Build Wall","Fortify","Iron Skin","Sharpen Blades"]
     },
 
@@ -232,6 +236,7 @@
       "row": 2, "col": 0, "rowCols": 1,
       "parentIds": ["soldiers-camp", "supply-cache", "outer-wall"], "childIds": ["iron-guard", "quartermaster", "field-battery"],
       "handicap": 4,
+      "environment": "ruins",
       "enemyDeck": ["Barbarian","Barbarian","Knight","Crossbow","Crossbow","Catapult","Build Wall","Build Wall","Garrison","Sharpen Blades","Iron Skin","War Drums"]
     },
 
@@ -242,6 +247,7 @@
       "row": 3, "col": 0, "rowCols": 3,
       "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
       "handicap": 3,
+      "environment": "citadel",
       "enemyDeck": ["Knight","Knight","Knight","Shield Guard","Shield Guard","Ballista","Ballista","Crossbow","Build Wall","Build Wall","Garrison","Iron Skin","Fortify"]
     },
     "quartermaster": {
@@ -249,7 +255,8 @@
       "label": "Quartermaster",
       "description": "A disgruntled Citadel supply officer. Turns out loyalty has a price.",
       "row": 3, "col": 1, "rowCols": 3,
-      "parentIds": ["siege-trenches"], "childIds": ["siege-captain"]
+      "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
+      "environment": "citadel"
     },
     "field-battery": {
       "id": "field-battery", "type": "battle",
@@ -258,6 +265,7 @@
       "row": 3, "col": 2, "rowCols": 3,
       "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
       "handicap": 3,
+      "environment": "citadel",
       "enemyDeck": ["Catapult","Catapult","Ballista","Ballista","Crossbow","Crossbow","Shield Guard","Build Wall","Siege Works","Garrison","War Drums","Sharpen Blades"]
     },
 
@@ -268,6 +276,7 @@
       "row": 4, "col": 0, "rowCols": 1,
       "parentIds": ["iron-guard", "quartermaster", "field-battery"], "childIds": ["command-tent", "last-stand", "battle-commander"],
       "handicap": 1,
+      "environment": "citadel",
       "enemyDeck": ["Catapult","Catapult","Knight","Knight","Shield Guard","Shield Guard","Ballista","Crossbow","Crossbow","Build Wall","Build Wall","Siege Works","War Drums","Fortify","Iron Skin","Sharpen Blades"]
     },
 
@@ -277,6 +286,7 @@
       "description": "The Siege Captain's own quarters. Quiet now. Tends to wounds.",
       "row": 5, "col": 0, "rowCols": 3,
       "parentIds": ["siege-captain"], "childIds": ["kragg"],
+      "environment": "camp",
       "restHeal": 8
     },
     "last-stand": {
@@ -286,6 +296,7 @@
       "row": 5, "col": 1, "rowCols": 3,
       "parentIds": ["siege-captain"], "childIds": ["kragg"],
       "handicap": 0,
+      "environment": "citadel",
       "enemyDeck": ["Barbarian","Barbarian","Knight","Knight","Catapult","Ballista","Crossbow","Crossbow","Shield Guard","Build Wall","Build Wall","Garrison","War Drums","Iron Skin"]
     },
     "battle-commander": {
@@ -295,6 +306,7 @@
       "row": 5, "col": 2, "rowCols": 3,
       "parentIds": ["siege-captain"], "childIds": ["kragg"],
       "handicap": -1,
+      "environment": "citadel",
       "enemyDeck": ["Knight","Knight","Knight","Catapult","Catapult","Ballista","Ballista","Crossbow","Build Wall","Build Wall","Siege Works","Garrison","War Drums","War Drums","Fortify","Sharpen Blades","Iron Skin"]
     },
 
@@ -305,6 +317,7 @@
       "row": 6, "col": 0, "rowCols": 1,
       "parentIds": ["command-tent", "last-stand", "battle-commander"], "childIds": [],
       "handicap": 0,
+      "environment": "citadel",
       "bossAI": "kragg",
       "bossDialogue": [
         "\"You walked through my garrison. My garrison that has held for three years.\"",

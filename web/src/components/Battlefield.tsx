@@ -161,60 +161,195 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
 // Full-size SVG rendered as the ground layer: grass, dirt path, crop rows,
 // sandy patches. Uses preserveAspectRatio="none" so it always fills the lane.
 
-function LaneBackground() {
+function LaneBgForest() {
   const cropRows = Array.from({ length: 30 }, (_, i) => i)
   return (
-    <svg
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
-      viewBox="0 0 100 220"
-      preserveAspectRatio="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Base grass */}
+    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      viewBox="0 0 100 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="100" height="220" fill="#2a5418"/>
-
-      {/* Left crop field */}
       <rect x="0" y="0" width="24" height="220" fill="#1e4810"/>
       {cropRows.map(i => (
         <rect key={i} x="0" y={i * 7.5} width="24" height="3.5" fill="#2a5a14" opacity="0.75"/>
       ))}
       <line x1="24" y1="0" x2="24" y2="220" stroke="#3a6820" strokeWidth="0.6" opacity="0.5"/>
-
-      {/* Right sandy / desert strip */}
       <rect x="74" y="30" width="26" height="120" fill="#7a6030" opacity="0.32"/>
       <rect x="78" y="45" width="18" height="90"  fill="#8a6c38" opacity="0.22"/>
-
-      {/* Dirt path (slightly winding, centre ~36–64) */}
-      <path d="M36,0 C34,45 38,90 35,132 C32,170 37,195 35,220 L64,220 C62,195 67,170 64,132 C61,90 65,45 63,0 Z"
-        fill="#6a4820" opacity="0.72"/>
-      {/* Path lighter surface */}
-      <path d="M38,0 C36,44 40,88 37,130 C34,168 39,194 37,220 L62,220 C60,194 65,168 62,130 C59,88 63,44 61,0 Z"
-        fill="#8a6030"/>
-      {/* Worn tyre tracks */}
-      <path d="M44,0 C43,38 45,80 43,122 C41,158 44,188 43,220 L49,220 C48,188 51,158 49,122 C47,80 49,38 48,0 Z"
-        fill="#a07848" opacity="0.45"/>
-      <path d="M52,0 C51,38 53,80 51,122 C49,158 52,188 51,220 L57,220 C56,188 59,158 57,122 C55,80 57,38 56,0 Z"
-        fill="#a07848" opacity="0.45"/>
-
-      {/* Grass tufts (mid-field) */}
+      <path d="M36,0 C34,45 38,90 35,132 C32,170 37,195 35,220 L64,220 C62,195 67,170 64,132 C61,90 65,45 63,0 Z" fill="#6a4820" opacity="0.72"/>
+      <path d="M38,0 C36,44 40,88 37,130 C34,168 39,194 37,220 L62,220 C60,194 65,168 62,130 C59,88 63,44 61,0 Z" fill="#8a6030"/>
+      <path d="M44,0 C43,38 45,80 43,122 C41,158 44,188 43,220 L49,220 C48,188 51,158 49,122 C47,80 49,38 48,0 Z" fill="#a07848" opacity="0.45"/>
+      <path d="M52,0 C51,38 53,80 51,122 C49,158 52,188 51,220 L57,220 C56,188 59,158 57,122 C55,80 57,38 56,0 Z" fill="#a07848" opacity="0.45"/>
       <ellipse cx="29" cy="52"  rx="7" ry="4.5" fill="#3a6820" opacity="0.5"/>
       <ellipse cx="68" cy="78"  rx="6" ry="4"   fill="#3a6820" opacity="0.45"/>
       <ellipse cx="27" cy="128" rx="8" ry="5"   fill="#3a6820" opacity="0.5"/>
       <ellipse cx="70" cy="155" rx="7" ry="4.5" fill="#3a6820" opacity="0.45"/>
-      <ellipse cx="30" cy="195" rx="5" ry="3.5" fill="#3a6820" opacity="0.4"/>
-
-      {/* Path-edge pebbles */}
       <circle cx="36" cy="42"  r="1.5" fill="#887860" opacity="0.55"/>
       <circle cx="63" cy="86"  r="1.5" fill="#887860" opacity="0.55"/>
       <circle cx="35" cy="134" r="1.5" fill="#887860" opacity="0.55"/>
-      <circle cx="64" cy="178" r="1.5" fill="#887860" opacity="0.55"/>
-
-      {/* Sandy dirt patches (right side) */}
-      <ellipse cx="82" cy="52"  rx="6" ry="4" fill="#6a4820" opacity="0.38"/>
+      <ellipse cx="82" cy="52"  rx="6" ry="4"   fill="#6a4820" opacity="0.38"/>
       <ellipse cx="80" cy="112" rx="5" ry="3.5" fill="#6a4820" opacity="0.32"/>
-      <ellipse cx="84" cy="172" rx="6" ry="4" fill="#6a4820" opacity="0.38"/>
     </svg>
   )
+}
+
+function LaneBgRuins() {
+  return (
+    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      viewBox="0 0 100 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Muted mossy ground */}
+      <rect width="100" height="220" fill="#3a4030"/>
+      {/* Stone rubble fields — left */}
+      <rect x="0" y="0" width="22" height="220" fill="#2e3428"/>
+      <rect x="2" y="18"  width="18" height="6"  fill="#50503a" opacity="0.7"/>
+      <rect x="0" y="52"  width="14" height="5"  fill="#44443a" opacity="0.6"/>
+      <rect x="4" y="88"  width="16" height="7"  fill="#50503a" opacity="0.65"/>
+      <rect x="1" y="130" width="20" height="5"  fill="#44443a" opacity="0.6"/>
+      <rect x="3" y="168" width="15" height="6"  fill="#50503a" opacity="0.7"/>
+      <rect x="0" y="200" width="18" height="5"  fill="#44443a" opacity="0.6"/>
+      {/* Stone rubble — right */}
+      <rect x="76" y="0" width="24" height="220" fill="#2e3428"/>
+      <rect x="80" y="30"  width="16" height="6" fill="#50503a" opacity="0.7"/>
+      <rect x="78" y="74"  width="18" height="5" fill="#44443a" opacity="0.6"/>
+      <rect x="82" y="112" width="14" height="7" fill="#50503a" opacity="0.65"/>
+      <rect x="79" y="155" width="17" height="5" fill="#44443a" opacity="0.6"/>
+      <rect x="81" y="190" width="15" height="6" fill="#50503a" opacity="0.7"/>
+      {/* Worn stone centre path */}
+      <path d="M34,0 C33,50 36,100 34,140 C32,178 35,200 34,220 L66,220 C65,200 68,178 66,140 C64,100 67,50 66,0 Z" fill="#4a4438" opacity="0.8"/>
+      <path d="M36,0 C35,48 38,98 36,138 C34,176 37,199 36,220 L64,220 C63,199 66,176 64,138 C62,98 65,48 64,0 Z" fill="#5a5248"/>
+      {/* Flagstone cracks */}
+      <line x1="42" y1="30"  x2="58" y2="38"  stroke="#3a3830" strokeWidth="0.8" opacity="0.5"/>
+      <line x1="44" y1="75"  x2="56" y2="80"  stroke="#3a3830" strokeWidth="0.8" opacity="0.5"/>
+      <line x1="40" y1="120" x2="60" y2="128" stroke="#3a3830" strokeWidth="0.8" opacity="0.5"/>
+      <line x1="43" y1="165" x2="57" y2="170" stroke="#3a3830" strokeWidth="0.8" opacity="0.5"/>
+      {/* Scattered loose stones */}
+      <circle cx="28" cy="44"  r="2" fill="#606058" opacity="0.6"/>
+      <circle cx="72" cy="90"  r="2" fill="#606058" opacity="0.6"/>
+      <circle cx="26" cy="140" r="2" fill="#606058" opacity="0.6"/>
+      <circle cx="74" cy="185" r="2" fill="#606058" opacity="0.6"/>
+      {/* Moss patches on stones */}
+      <ellipse cx="10" cy="70"  rx="5" ry="3" fill="#3a5028" opacity="0.5"/>
+      <ellipse cx="88" cy="130" rx="4" ry="2.5" fill="#3a5028" opacity="0.45"/>
+      <ellipse cx="12" cy="180" rx="6" ry="3" fill="#3a5028" opacity="0.5"/>
+    </svg>
+  )
+}
+
+function LaneBgCamp() {
+  return (
+    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      viewBox="0 0 100 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Churned dirt base */}
+      <rect width="100" height="220" fill="#5a3c1e"/>
+      {/* Darker mud strips — footfall lanes */}
+      <rect x="0"  y="0" width="20" height="220" fill="#3e2810" opacity="0.7"/>
+      <rect x="80" y="0" width="20" height="220" fill="#3e2810" opacity="0.7"/>
+      {/* Trodden central track */}
+      <path d="M32,0 C30,55 34,110 31,155 C29,188 33,205 32,220 L68,220 C67,205 71,188 69,155 C66,110 70,55 68,0 Z" fill="#4a3018" opacity="0.75"/>
+      <path d="M36,0 C34,54 38,108 35,153 C33,186 37,204 36,220 L64,220 C63,204 67,186 65,153 C62,108 66,54 64,0 Z" fill="#6a4828"/>
+      {/* Wagon ruts */}
+      <path d="M41,0 C40,42 42,85 40,128 C38,164 41,192 40,220 L45,220 C44,192 47,164 45,128 C43,85 45,42 44,0 Z" fill="#7a5838" opacity="0.5"/>
+      <path d="M56,0 C55,42 57,85 55,128 C53,164 56,192 55,220 L60,220 C59,192 62,164 60,128 C58,85 60,42 59,0 Z" fill="#7a5838" opacity="0.5"/>
+      {/* Scattered gravel */}
+      <circle cx="24" cy="35"  r="1.5" fill="#8a7060" opacity="0.6"/>
+      <circle cx="76" cy="68"  r="1.5" fill="#8a7060" opacity="0.55"/>
+      <circle cx="22" cy="105" r="1.5" fill="#8a7060" opacity="0.6"/>
+      <circle cx="78" cy="145" r="1.5" fill="#8a7060" opacity="0.55"/>
+      <circle cx="25" cy="185" r="1.5" fill="#8a7060" opacity="0.6"/>
+      {/* Dry hay/straw patches */}
+      <ellipse cx="10" cy="50"  rx="7" ry="3.5" fill="#7a6830" opacity="0.45"/>
+      <ellipse cx="88" cy="100" rx="6" ry="3"   fill="#7a6830" opacity="0.4"/>
+      <ellipse cx="12" cy="160" rx="8" ry="3.5" fill="#7a6830" opacity="0.45"/>
+      <ellipse cx="86" cy="200" rx="5" ry="2.5" fill="#7a6830" opacity="0.4"/>
+      {/* Muddy puddles */}
+      <ellipse cx="29" cy="82"  rx="4" ry="2" fill="#2e2010" opacity="0.55"/>
+      <ellipse cx="71" cy="128" rx="3.5" ry="1.8" fill="#2e2010" opacity="0.5"/>
+    </svg>
+  )
+}
+
+function LaneBgCitadel() {
+  return (
+    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      viewBox="0 0 100 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Stone base */}
+      <rect width="100" height="220" fill="#5a5a60"/>
+      {/* Cobblestone grid — left margin */}
+      <rect x="0" y="0" width="22" height="220" fill="#4a4a50"/>
+      {[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(r => [0,1].map(c => (
+        <rect key={`cl-${r}-${c}`} x={c*11 + 1} y={r*16 + 2} width="9" height="12" fill="#545460" opacity="0.7" rx="0.5"/>
+      )))}
+      {/* Cobblestone grid — right margin */}
+      <rect x="78" y="0" width="22" height="220" fill="#4a4a50"/>
+      {[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].map(r => [0,1].map(c => (
+        <rect key={`cr-${r}-${c}`} x={78 + c*11 + 1} y={r*16 + 2} width="9" height="12" fill="#545460" opacity="0.7" rx="0.5"/>
+      )))}
+      {/* Worn flagstone centre lane */}
+      <path d="M33,0 C32,55 35,110 33,155 C31,185 34,205 33,220 L67,220 C66,205 69,185 67,155 C65,110 68,55 67,0 Z" fill="#686870" opacity="0.8"/>
+      <path d="M35,0 C34,53 37,108 35,153 C33,183 36,204 35,220 L65,220 C64,204 67,183 65,153 C63,108 66,53 65,0 Z" fill="#787880"/>
+      {/* Flagstone joints */}
+      <line x1="35" y1="44"  x2="65" y2="44"  stroke="#5a5a62" strokeWidth="0.7" opacity="0.6"/>
+      <line x1="35" y1="88"  x2="65" y2="88"  stroke="#5a5a62" strokeWidth="0.7" opacity="0.6"/>
+      <line x1="35" y1="132" x2="65" y2="132" stroke="#5a5a62" strokeWidth="0.7" opacity="0.6"/>
+      <line x1="35" y1="176" x2="65" y2="176" stroke="#5a5a62" strokeWidth="0.7" opacity="0.6"/>
+      <line x1="50" y1="0"   x2="50" y2="220" stroke="#5a5a62" strokeWidth="0.5" opacity="0.4"/>
+      {/* Iron grate drains */}
+      <rect x="46" cy="66"  width="8" height="5" fill="#3a3a40" opacity="0.5" rx="0.5"/>
+      <rect x="46" cy="154" width="8" height="5" fill="#3a3a40" opacity="0.5" rx="0.5"/>
+      {/* Battle-worn scratches */}
+      <line x1="38" y1="60"  x2="46" y2="70"  stroke="#888898" strokeWidth="0.5" opacity="0.4"/>
+      <line x1="55" y1="110" x2="62" y2="120" stroke="#888898" strokeWidth="0.5" opacity="0.4"/>
+      <line x1="40" y1="155" x2="50" y2="162" stroke="#888898" strokeWidth="0.5" opacity="0.4"/>
+      {/* Bloodstains / dark patches */}
+      <ellipse cx="42" cy="95"  rx="3" ry="2" fill="#3a2820" opacity="0.4"/>
+      <ellipse cx="60" cy="140" rx="2.5" ry="1.5" fill="#3a2820" opacity="0.35"/>
+    </svg>
+  )
+}
+
+function LaneBgAshen() {
+  return (
+    <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      viewBox="0 0 100 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Scorched earth base */}
+      <rect width="100" height="220" fill="#1e1c18"/>
+      {/* Ash fields — left */}
+      <rect x="0" y="0" width="24" height="220" fill="#161410"/>
+      <ellipse cx="10" cy="40"  rx="8" ry="5"   fill="#2e2c28" opacity="0.7"/>
+      <ellipse cx="12" cy="100" rx="10" ry="6"  fill="#2e2c28" opacity="0.65"/>
+      <ellipse cx="8"  cy="165" rx="7" ry="4.5" fill="#2e2c28" opacity="0.7"/>
+      {/* Ash fields — right */}
+      <rect x="76" y="0" width="24" height="220" fill="#161410"/>
+      <ellipse cx="88" cy="60"  rx="8" ry="5"   fill="#2e2c28" opacity="0.65"/>
+      <ellipse cx="90" cy="130" rx="9" ry="5.5" fill="#2e2c28" opacity="0.7"/>
+      <ellipse cx="86" cy="190" rx="7" ry="4"   fill="#2e2c28" opacity="0.65"/>
+      {/* Scorched centre path */}
+      <path d="M34,0 C33,50 36,105 34,148 C32,182 35,202 34,220 L66,220 C65,202 68,182 66,148 C64,105 67,50 66,0 Z" fill="#141210" opacity="0.9"/>
+      <path d="M36,0 C35,48 38,103 36,146 C34,180 37,201 36,220 L64,220 C63,201 66,180 64,146 C62,103 65,48 64,0 Z" fill="#222018"/>
+      {/* Cracked earth fissures */}
+      <line x1="38" y1="35"  x2="50" y2="48"  stroke="#080808" strokeWidth="1" opacity="0.7"/>
+      <line x1="50" y1="48"  x2="62" y2="58"  stroke="#080808" strokeWidth="0.8" opacity="0.6"/>
+      <line x1="42" y1="95"  x2="58" y2="108" stroke="#080808" strokeWidth="1" opacity="0.7"/>
+      <line x1="40" y1="148" x2="55" y2="160" stroke="#080808" strokeWidth="0.9" opacity="0.65"/>
+      <line x1="55" y1="160" x2="60" y2="172" stroke="#080808" strokeWidth="0.7" opacity="0.6"/>
+      {/* Glowing embers */}
+      <circle cx="28" cy="55"  r="1.2" fill="#c04010" opacity="0.6"/>
+      <circle cx="72" cy="95"  r="1"   fill="#c04010" opacity="0.55"/>
+      <circle cx="26" cy="140" r="1.2" fill="#c04010" opacity="0.6"/>
+      <circle cx="74" cy="180" r="1"   fill="#c04010" opacity="0.5"/>
+      <circle cx="30" cy="200" r="0.8" fill="#d05020" opacity="0.55"/>
+      {/* Pale ash dust streaks */}
+      <ellipse cx="18" cy="78"  rx="6" ry="2.5" fill="#504e48" opacity="0.4"/>
+      <ellipse cx="82" cy="148" rx="5" ry="2"   fill="#504e48" opacity="0.35"/>
+      <ellipse cx="20" cy="205" rx="7" ry="2.5" fill="#504e48" opacity="0.4"/>
+    </svg>
+  )
+}
+
+function LaneBackground({ env }: { env?: string }) {
+  if (env === 'ruins')   return <LaneBgRuins />
+  if (env === 'camp')    return <LaneBgCamp />
+  if (env === 'citadel') return <LaneBgCitadel />
+  if (env === 'ashen')   return <LaneBgAshen />
+  return <LaneBgForest />
 }
 
 // ─── Terrain SVG shapes ───────────────────────────────────────────────────────
@@ -637,7 +772,7 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
       {/* The Lane — vertical, fills remaining space */}
       <div className="lane">
         <div className="lane-ground" />
-        <LaneBackground />
+        <LaneBackground env={state.environment} />
         <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {state.field.map((u, i) => {

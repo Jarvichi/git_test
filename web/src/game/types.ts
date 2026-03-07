@@ -121,4 +121,5 @@ export interface GameState {
   activeBattleEvent: BattleEventState | null
   bossAI?: string            // 'thornlord' etc. — drives boss-specific opponent logic
   terrain: TerrainObstacle[]
+  environment?: string       // battlefield background theme ('forest' | 'ruins' | 'camp' | 'citadel' | 'ashen')
 }
