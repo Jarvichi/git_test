@@ -199,6 +199,7 @@
       "row": 0, "col": 0, "rowCols": 1,
       "parentIds": [], "childIds": ["camp", "shrine", "patrol"],
       "handicap": 10,
+      "environment": "forest",
       "enemyDeck": ["Goblin","Goblin","Goblin","Goblin","Bat","Bat","Bandit","Bandit","Pixie","Pixie","Build Wall","Build Wall","Rally","Rally"]
     },
     "camp": {
@@ -207,6 +208,7 @@
       "description": "A sheltered clearing. Rest here and tend your wounds.",
       "row": 1, "col": 0, "rowCols": 3,
       "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "environment": "camp",
       "restHeal": 10
     },
     "shrine": {
@@ -215,6 +217,7 @@
       "description": "A moss-covered shrine pulses with faint forest magic.",
       "row": 1, "col": 1, "rowCols": 3,
       "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "environment": "forest",
       "eventId": "shrine"
     },
     "patrol": {
@@ -224,6 +227,7 @@
       "row": 1, "col": 2, "rowCols": 3,
       "parentIds": ["goblin-raid"], "childIds": ["ambush"],
       "handicap": 7,
+      "environment": "forest",
       "enemyDeck": ["Archer","Archer","Archer","Bandit","Bandit","Goblin","Goblin","Pixie","Crossbow","Build Wall","Build Wall","Build Farm","Eagle Eye"]
     },
     "ambush": {
@@ -233,6 +237,7 @@
       "row": 2, "col": 0, "rowCols": 1,
       "parentIds": ["camp", "shrine", "patrol"], "childIds": ["ruins", "war-camp", "market"],
       "handicap": 4,
+      "environment": "forest",
       "enemyDeck": ["Goblin","Goblin","Bat","Bat","Bat","Bandit","Bandit","Archer","Archer","Troll","Build Wall","Barracks","Rally","Haste"]
     },
     "ruins": {
@@ -241,6 +246,7 @@
       "description": "A crumbling garrison tower leans against the treeline.",
       "row": 3, "col": 0, "rowCols": 3,
       "parentIds": ["ambush"], "childIds": ["captain"],
+      "environment": "ruins",
       "eventId": "ruins"
     },
     "war-camp": {
@@ -250,6 +256,7 @@
       "row": 3, "col": 1, "rowCols": 3,
       "parentIds": ["ambush"], "childIds": ["captain"],
       "handicap": 3,
+      "environment": "camp",
       "enemyDeck": ["Barbarian","Barbarian","Knight","Crossbow","Crossbow","Troll","Archer","Build Wall","Build Wall","Barracks","Sharpen Blades","Haste","Iron Skin"]
     },
     "market": {
@@ -257,7 +264,8 @@
       "label": "Travelling Market",
       "description": "A merchant cart half-hidden in the underbrush. She waves you over.",
       "row": 3, "col": 2, "rowCols": 3,
-      "parentIds": ["ambush"], "childIds": ["captain"]
+      "parentIds": ["ambush"], "childIds": ["captain"],
+      "environment": "forest"
     },
     "captain": {
       "id": "captain", "type": "elite",
@@ -266,6 +274,7 @@
       "row": 4, "col": 0, "rowCols": 1,
       "parentIds": ["ruins", "war-camp", "market"], "childIds": ["thornlord"],
       "handicap": 1,
+      "environment": "ruins",
       "enemyDeck": ["Knight","Knight","Catapult","Catapult","Crossbow","Crossbow","Shield Guard","Shield Guard","Build Wall","Build Wall","Garrison","Sharpen Blades","War Drums","Iron Skin","Fortify"]
     },
     "thornlord": {
@@ -275,6 +284,7 @@
       "row": 5, "col": 0, "rowCols": 1,
       "parentIds": ["captain"], "childIds": [],
       "handicap": 0,
+      "environment": "ruins",
       "bossAI": "thornlord",
       "bossDialogue": [
         "\"You carry the smell of the shattered world.\"",

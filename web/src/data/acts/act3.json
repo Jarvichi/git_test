@@ -196,6 +196,7 @@
       "row": 0, "col": 0, "rowCols": 1,
       "parentIds": [], "childIds": ["soul-shrine", "bone-fire", "plague-front"],
       "handicap": 10,
+      "environment": "ashen",
       "enemyDeck": ["Skeleton","Skeleton","Skeleton","Bat","Bat","Bat","Plague Rat","Plague Rat","Specter","Crypt","Rally","Rally"]
     },
 
@@ -205,6 +206,7 @@
       "description": "A shrine built from miners' tools, wrapped in old smoke. Something in it still listens.",
       "row": 1, "col": 0, "rowCols": 3,
       "parentIds": ["ashfield-scouts"], "childIds": ["risen-horde"],
+      "environment": "ruins",
       "eventId": "shrine"
     },
     "bone-fire": {
@@ -213,6 +215,7 @@
       "description": "A fire that burns cold — but it burns, and in the Wastes that's enough. Rest here.",
       "row": 1, "col": 1, "rowCols": 3,
       "parentIds": ["ashfield-scouts"], "childIds": ["risen-horde"],
+      "environment": "ashen",
       "restHeal": 10
     },
     "plague-front": {
@@ -222,6 +225,7 @@
       "row": 1, "col": 2, "rowCols": 3,
       "parentIds": ["ashfield-scouts"], "childIds": ["risen-horde"],
       "handicap": 7,
+      "environment": "ashen",
       "enemyDeck": ["Skeleton","Skeleton","Plague Rat","Plague Rat","Plague Rat","Bat","Bat","Specter","Specter","Crypt","Dark Shrine","Rally"]
     },
 
@@ -232,6 +236,7 @@
       "row": 2, "col": 0, "rowCols": 1,
       "parentIds": ["soul-shrine", "bone-fire", "plague-front"], "childIds": ["shadow-guard", "grave-merchant", "revenant-witch"],
       "handicap": 4,
+      "environment": "ashen",
       "enemyDeck": ["Skeleton","Skeleton","Skeleton","Specter","Specter","Bat","Plague Rat","Crypt","Crypt","Dark Shrine","Bloodlust","Rally","Haste"]
     },
 
@@ -242,6 +247,7 @@
       "row": 3, "col": 0, "rowCols": 3,
       "parentIds": ["risen-horde"], "childIds": ["necrotic-guard"],
       "handicap": 3,
+      "environment": "ashen",
       "enemyDeck": ["Specter","Specter","Specter","Dark Elf","Dark Elf","Skeleton","Skeleton","Crypt","Dark Shrine","Dark Shrine","Necromancer","Bloodlust","Iron Skin"]
     },
     "grave-merchant": {
@@ -249,7 +255,8 @@
       "label": "Grave Merchant",
       "description": "A merchant who decided the Wastes were a business opportunity. Somehow still alive. Thriving, even.",
       "row": 3, "col": 1, "rowCols": 3,
-      "parentIds": ["risen-horde"], "childIds": ["necrotic-guard"]
+      "parentIds": ["risen-horde"], "childIds": ["necrotic-guard"],
+      "environment": "ashen"
     },
     "revenant-witch": {
       "id": "revenant-witch", "type": "elite",
@@ -258,6 +265,7 @@
       "row": 3, "col": 2, "rowCols": 3,
       "parentIds": ["risen-horde"], "childIds": ["necrotic-guard"],
       "handicap": 1,
+      "environment": "ruins",
       "enemyDeck": ["Necromancer","Necromancer","Necromancer","Dark Shrine","Dark Shrine","Crypt","Crypt","Skeleton","Skeleton","Specter","Specter","Bloodlust","Vampire","Dark Elf"],
       "bossDialogue": [
         "\"You are not dead. Unusual for this neighbourhood.\"",
@@ -272,6 +280,7 @@
       "row": 4, "col": 0, "rowCols": 1,
       "parentIds": ["shadow-guard", "grave-merchant", "revenant-witch"], "childIds": ["dark-hollow", "bone-brigade", "death-knight"],
       "handicap": 2,
+      "environment": "ashen",
       "enemyDeck": ["Specter","Specter","Specter","Skeleton","Skeleton","Skeleton","Crypt","Crypt","Dark Shrine","Dark Shrine","Necromancer","Necromancer","Iron Skin","Iron Skin","Bloodlust"]
     },
 
@@ -281,6 +290,7 @@
       "description": "A collapsed mineshaft — safe, lightless, and blessedly quiet. Rest here.",
       "row": 5, "col": 0, "rowCols": 3,
       "parentIds": ["necrotic-guard"], "childIds": ["ashwalker"],
+      "environment": "ruins",
       "restHeal": 8
     },
     "bone-brigade": {
@@ -290,6 +300,7 @@
       "row": 5, "col": 1, "rowCols": 3,
       "parentIds": ["necrotic-guard"], "childIds": ["ashwalker"],
       "handicap": 0,
+      "environment": "ashen",
       "enemyDeck": ["Skeleton","Skeleton","Skeleton","Skeleton","Skeleton","Bat","Bat","Bat","Crypt","Crypt","Dark Shrine","Dark Shrine","Plague Rat","Plague Rat","Rally","Rally"]
     },
     "death-knight": {
@@ -299,6 +310,7 @@
       "row": 5, "col": 2, "rowCols": 3,
       "parentIds": ["necrotic-guard"], "childIds": ["ashwalker"],
       "handicap": -1,
+      "environment": "ruins",
       "enemyDeck": ["Specter","Specter","Specter","Dark Elf","Dark Elf","Dark Elf","Necromancer","Necromancer","Crypt","Crypt","Dark Shrine","Dark Shrine","Iron Skin","Iron Skin","Bloodlust","Haste"],
       "bossDialogue": [
         "\"I remember orders. I remember duty. I remember everything.\"",
@@ -313,6 +325,7 @@
       "row": 6, "col": 0, "rowCols": 1,
       "parentIds": ["dark-hollow", "bone-brigade", "death-knight"], "childIds": [],
       "handicap": 0,
+      "environment": "ashen",
       "bossAI": "ashwalker",
       "bossDialogue": [
         "\"You carry the warmth of the living. I remember what that felt like.\"",

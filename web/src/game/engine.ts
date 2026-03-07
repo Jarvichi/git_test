@@ -536,7 +536,7 @@ function moveUnits(s: GameState, deltaMs: number): void {
         const toObsX = obs.x - unit.x
         const toObsY = obs.y - unit.y
         const dist   = Math.sqrt(toObsX * toObsX + toObsY * toObsY)
-        const pushDist = obs.radius + 55  // detection radius (slightly wider than before)
+        const pushDist = obs.radius + 22  // clearance just beyond the obstacle edge
         if (dist < pushDist && dist > 0) {
           const strength = (pushDist - dist) / pushDist  // 0..1, stronger when closer
           // Determine lateral push direction. When a unit approaches nearly head-on
