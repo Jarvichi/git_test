@@ -11,7 +11,7 @@ import { getCardCatalog } from './game/cards'
 import {
   loadRun, saveRun, clearRun, newRun,
   getAvailableNodeIds, skipSiblings, isActComplete,
-  generateRewardChoices, generateMerchantCards, MERCHANT_PRICES, ACTS,
+  generateRewardChoices, generateMerchantCards, MERCHANT_PRICES, ACTS, getNextAct,
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
   hasSeenIntro, markIntroSeen,
   loadRunCount, incrementRunCount, getAct1Intro,
@@ -119,7 +119,8 @@ export default function App() {
 
   // Campaign run state
   const [run, setRun]                   = useState<RunState | null>(_startup.run)
-  const [rewardChoices, setRewardChoices] = useState<string[]>([])
+  const [rewardChoices,  setRewardChoices]  = useState<string[]>([])
+  const [rewardCrystals, setRewardCrystals] = useState(0)
   const isCampaignRef = useRef(_startup.isCampaign)   // true while playing a campaign battle
 
   // Cutscenes & boss dialogue
@@ -602,6 +603,7 @@ export default function App() {
     // Show card reward
     const choices = generateRewardChoices(node.type)
     setRewardChoices(choices)
+    setRewardCrystals(crystalReward)
     setScreen('reward')
   }, [run, gameState])
 
@@ -621,20 +623,52 @@ export default function App() {
   }, [])
 
   const handleActComplete = useCallback(() => {
+    const currentRun = run
+    if (!currentRun) return
+    const act = ACTS[currentRun.actId]
+
     // Persist the act's relic reward to the player's permanent relic collection
-    if (run) {
-      const act = ACTS[run.actId]
-      if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
+    if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
+
+    const nextAct = getNextAct(currentRun.actId)
+
+    if (nextAct) {
+      // ── Progress to next act ──────────────────────────────
+      // Carry HP forward; reset node tracking for the new act
+      const nextRun: RunState = {
+        actId: nextAct.id,
+        completedNodeIds: [],
+        skippedNodeIds: [],
+        pendingNodeId: null,
+        playerHp: currentRun.playerHp,
+        maxHp: currentRun.maxHp,
+        cardPlayCounts: {},
+        nodeFailCounts: {},
+        earnedCards: [],
+        activeRelic: currentRun.activeRelic,
+      }
+      saveRun(nextRun)
+      setRun(nextRun)
+      // Show next act intro cutscene
+      const n = loadRunCount()
+      const introPanels = nextAct.intro ?? []
+      if (introPanels.length > 0) {
+        setCutscenePanels(introPanels)
+        cutsceneDoneRef.current = () => setScreen('nodemap')
+        setScreen('cutscene')
+      } else {
+        setScreen('nodemap')
+      }
+      return
     }
 
-    // Check if we have enough play data to offer a rest choice
-    const counts = run?.cardPlayCounts ?? {}
+    // ── Last act completed — offer card rest then deck reset ──
+    const counts = currentRun.cardPlayCounts ?? {}
     const candidates = getTopPlayedCards(counts, 3)
     if (candidates.length >= 2) {
       setCardRestCandidates(candidates)
       setScreen('cardrest')
     } else {
-      // Not enough data (very short run) — skip rest and go straight to deck reset
       clearRun()
       setRun(null)
       clearFatigued()
@@ -875,6 +909,7 @@ export default function App() {
       {screen === 'reward' && (
         <PostBattleReward
           choices={rewardChoices}
+          crystals={rewardCrystals}
           nodeType={run ? ACTS[run.actId].nodes[run.completedNodeIds[run.completedNodeIds.length - 1]]?.type ?? 'battle' : 'battle'}
           onPick={handleRewardPick}
           onSkip={handleRewardSkip}

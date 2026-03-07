@@ -6,6 +6,7 @@ import { NodeType } from '../game/questline'
 interface Props {
   choices: string[]     // 3 card names
   nodeType: NodeType
+  crystals: number      // crystals awarded for this battle
   onPick: (cardName: string) => void
   onSkip: () => void
 }
@@ -19,7 +20,7 @@ const NODE_FLAVOUR: Record<NodeType, string> = {
   merchant: '',
 }
 
-export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
+export function PostBattleReward({ choices, nodeType, crystals, onPick, onSkip }: Props) {
   const catalog = getCardCatalog()
   const cards   = choices.map(name => catalog.find(c => c.name === name)).filter(Boolean) as ReturnType<typeof getCardCatalog>[number][]
 
@@ -54,6 +55,7 @@ export function PostBattleReward({ choices, nodeType, onPick, onSkip }: Props) {
       <div className="reward-header">
         <div className="reward-title">VICTORY</div>
         <div className="reward-sub">{NODE_FLAVOUR[nodeType]}</div>
+        <div className="reward-crystals">+{crystals} ◆</div>
       </div>
 
       <div className="reward-cards">

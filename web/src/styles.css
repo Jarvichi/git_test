@@ -2323,6 +2323,13 @@ body {
   font-style: italic;
 }
 
+.reward-crystals {
+  font-size: 13px;
+  color: #64c8ff;
+  letter-spacing: 1px;
+  margin-top: 6px;
+}
+
 .reward-cards {
   display: flex;
   gap: 16px;
@@ -2842,6 +2849,11 @@ body {
   border-top: 1px solid #333;
   padding-top: 16px;
   width: 100%;
+}
+
+.event-continue-btn {
+  margin-top: 16px;
+  animation: fadeIn 0.4s ease;
 }
 
 @keyframes fadeIn {

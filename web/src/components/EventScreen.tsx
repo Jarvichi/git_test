@@ -12,8 +12,6 @@ export function EventScreen({ event, onChoice }: Props) {
   function handlePick(choice: EventChoice) {
     if (picked) return
     setPicked(choice)
-    // Brief pause so the result text reads before continuing
-    setTimeout(() => onChoice(choice), 1400)
   }
 
   return (
@@ -24,14 +22,14 @@ export function EventScreen({ event, onChoice }: Props) {
 
       <div className="event-choices">
         {event.choices.map((choice, i) => {
-          const isChosen = picked?.label === choice.label
+          const isChosen   = picked?.label === choice.label
           const isDisabled = picked !== null && !isChosen
           return (
             <button
               key={i}
               className={[
                 'event-choice',
-                isChosen  ? 'event-choice--chosen'   : '',
+                isChosen   ? 'event-choice--chosen'   : '',
                 isDisabled ? 'event-choice--disabled' : '',
               ].join(' ')}
               onClick={() => handlePick(choice)}
@@ -39,7 +37,7 @@ export function EventScreen({ event, onChoice }: Props) {
             >
               <span className="event-choice-letter">{String.fromCharCode(65 + i)}.</span>
               <span className="event-choice-label">{choice.label}</span>
-              {isChosen && picked && (
+              {isChosen && (
                 <span className="event-choice-consequence">→ {choice.consequence}</span>
               )}
             </button>
@@ -48,11 +46,14 @@ export function EventScreen({ event, onChoice }: Props) {
       </div>
 
       {picked && (
-        <div className="event-result">
-          {picked.effect.type === 'nothing'
-            ? picked.consequence
-            : `${picked.consequence}…`}
-        </div>
+        <>
+          <div className="event-result">
+            {picked.effect.type === 'nothing' ? picked.consequence : `${picked.consequence}…`}
+          </div>
+          <button className="action-btn event-continue-btn" onClick={() => onChoice(picked)}>
+            CONTINUE →
+          </button>
+        </>
       )}
     </div>
   )

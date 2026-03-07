@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-06.
+Issues sourced from GitHub. Last synced: 2026-03-07.
 
 ---
 
@@ -9,13 +9,19 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
 - [x] **#56** Campaign run-count text always says "fifth time" after run 5 — fix to use actual count
 - [x] **Intro always says "tenth"** (no issue#) — runs 11–24 (and 26–49 etc.) still show milestone run text
+- [ ] **#90** Campaign events (shrine/ruins): result screen dismisses to map in ~1400 ms — too quick to read; needs Continue button
 
 ---
 
-## 🟠 Gameplay Bugs / Regressions
+## 🟠 Gameplay Bugs
+
+- [ ] **#86** Rewards screen: crystal amount granted after a battle isn't displayed (10/15/25 per node type)
+- [ ] **#80** Difficulty scaling: each subsequent act run should apply a difficulty multiplier to the opponent
 
 - [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size)
 - [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance
+- [ ] **#87** Inventory: item detail modal when tapping a card; relics should appear in inventory
+- [ ] **#88** Event rewards: shrines and watchtowers should occasionally give inventory/relic items (not just HP/crystals/cards)
 
 ---
 
@@ -59,6 +65,15 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 - [x] Relic effects applied at campaign battle start in `App.tsx`
 - [ ] Relic display on Battlefield HUD
 - [ ] Relic selection screen between acts (currently auto-equips last earned)
+
+---
+
+## 🗺️ Campaign Acts
+
+- [ ] Act 2 — The Iron Citadel: act2.json node map, boss Warlord Kragg, Iron Standard relic
+- [ ] Act 3 — The Ashen Wastes: act3.json node map, boss The Ashwalker, Soulstone relic
+- [ ] Act 4 — The Crystal Spire (future)
+- [ ] Act 5 — The Fractured Core (future)
 
 ---
 
