@@ -932,6 +932,7 @@ export default function App() {
           relicName={actData.rewardRelic}
           relicDesc={actData.rewardRelicDesc}
           onContinue={handleActComplete}
+          hasNextAct={!!getNextAct(actData.id)}
         />
       )}
 
