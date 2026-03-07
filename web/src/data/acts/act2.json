@@ -1,0 +1,306 @@
+{
+  "id": "act2",
+  "title": "ACT II",
+  "subtitle": "The Iron Citadel",
+  "rewardRelic": "Iron Standard",
+  "rewardRelicDesc": "Your units begin each battle with +1 ATK.",
+
+  "intro": [
+    {
+      "title": "THE IRON CITADEL",
+      "text": "The Fracture spared the Iron Citadel its chaos — or so the stories go. In truth, the Citadel's warlords sealed the shard themselves, the moment they realised sealing it kept everyone else out.\n\nFor three years they have ruled the rubble with a disciplined fist. Trade routes closed. Refugees turned back at the walls. The shard hoards its iron and feeds on order."
+    },
+    {
+      "title": "THE WANDERER",
+      "text": "You are Jarv. Former tactician of the western campaigns, now nominally a free agent.\n\nYou have a deck of cards, a route through the Citadel's outer defences, and the stubborn conviction that warlords who fortify themselves this thoroughly are usually hiding something embarrassing."
+    },
+    {
+      "title": "THE IRON CITADEL",
+      "text": "The Citadel is a network of fortified garrison points strung across a shattered canyon. Its defenders are disciplined, well-armed, and have had three years to practice waiting.\n\nAt the top, behind the inner wall, is Warlord Kragg. He was a general before the Fracture. He is considerably less reasonable now."
+    },
+    {
+      "title": "YOUR MISSION",
+      "text": "Fight through the garrison line. Reach Warlord Kragg.\n\nBreak the siege. Open the Citadel."
+    }
+  ],
+
+  "outro": [
+    {
+      "title": "THE WALL FALLS",
+      "text": "Kragg's banner comes down.\n\nFor a long moment, nothing happens. Then, from somewhere in the rubble, a single soldier begins to move — not toward you, but toward the sealed gate. Others follow.\n\nThe gate opens for the first time in three years. You watch from the rampart as light floods into the canyon."
+    },
+    {
+      "title": "IRON STANDARD",
+      "text": "Among the Citadel's armoury, you find it — the Iron Standard. The banner carried at the front of every Dominion march before the Fracture.\n\nIt no longer represents anything. But the iron in it remembers.\n\nYou take it with you."
+    }
+  ],
+
+  "variantPools": {
+    "jarvMoods": [
+      "Currently, technically, between warlords.",
+      "Presently operating without a formal command structure.",
+      "In the professional sense, unaffiliated.",
+      "Now — by the Citadel's own accounting — a hostile foreign element.",
+      "Technically trespassing, but with excellent documentation."
+    ],
+    "jarvIntros": [
+      "You have a deck of cards, a route through the outer fortifications, and a growing appreciation for how much walls slow things down.",
+      "You have a deck of cards, a plan that relies on the garrison being slightly less organised than it looks, and enough stubbornness to find out.",
+      "You have a deck of cards and a tactical assessment of the Citadel's defences that is either very accurate or dangerously wrong.",
+      "You have a deck of cards. The Iron Citadel has considerably more cards. You have done this kind of maths before.",
+      "You have a deck of cards and a very reasonable request for passage that you fully expect to be answered with siege weapons."
+    ],
+    "citadelDesc": [
+      "The Iron Citadel sits across a shattered canyon — garrison points chained together by rope bridges and old discipline. From the outside it looks impregnable. From the inside, you suspect, it merely looks expensive.",
+      "The shard is a vertical maze of fortified positions and supply routes. The Citadel's defenders know every route. You have a map drawn by someone who was here six years ago.",
+      "Three years of isolation have made the Citadel's garrison meticulous. Every approach is covered. Every gap is intentional. You intend to use the intentional gaps.",
+      "The Iron Citadel is less a building than a doctrine — a belief that fortified positions solve problems. You've spent your career proving that belief wrong from the outside."
+    ],
+    "kraggDesc": [
+      "Warlord Kragg sealed the shard the week after the Fracture. He said it was to protect the population. He is, by any reasonable accounting, still saying this.\n\nThe population has stopped asking.",
+      "Kragg was a decorated Dominion general before the Fracture. Afterwards, with no Dominion to report to and no orders coming, he gave himself a promotion.\n\nHe has been in command ever since. He is very good at it.",
+      "The Warlord doesn't negotiate and doesn't retreat. He has held the inner keep against three separate uprising attempts, a siege by a rival shard faction, and one extremely persistent merchant collective.\n\nYou represent a new category of problem.",
+      "Kragg's garrison moves like a trained machine. Rotating shifts, signal fires, overlapping fields of fire. He has had three years to make his defences perfect.\n\nPerfect defences, in your experience, still have a weakest point."
+    ],
+    "priorRunSummaries": [
+      "The garrison gate looked exactly as you remembered it. Which was suspicious. Walls shouldn't look familiar.",
+      "You'd climbed this canyon approach before — or something very much like it. The rope bridges swayed in the same pattern. The guards paused at the same moment.",
+      "Something about the second garrison checkpoint. The way the signal fire was positioned. The particular angle of the crossbow emplacements. It felt rehearsed.",
+      "The Citadel's outer walls were exactly as your notes described them. Your notes, which you'd written this morning."
+    ],
+    "priorRunOpenings": [
+      "You remember, faintly, walking this route before. Not the same choices. But the same canyon. The same smell of iron and old stone.",
+      "The gate guard hesitated when you approached. Not with suspicion — with recognition. He covered it quickly. So did you.",
+      "Kragg, when you finally reached him, was already in his armour. As though he'd been expecting an appointment.",
+      "The rope bridge at the third garrison crossing had been repaired since your last attempt. Except you'd never been here before. You were fairly certain you'd never been here before."
+    ],
+    "milestoneOpenings5": [
+      "The fifth approach to the Iron Citadel. The garrison duty roster has a note now: 'Wandering tactician, armed with cards. Annoy level: HIGH.'",
+      "Fifth campaign through the canyon. The crossbow emplacements have been repositioned since last time. Kragg is learning."
+    ],
+    "milestoneOpenings10": [
+      "Ten campaigns. The garrison commander at the outer wall gives you a tired nod before raising the alarm. It's almost professional.",
+      "You've crossed this canyon ten times. The rope bridges have been reinforced twice. You take it as a compliment."
+    ],
+    "milestoneOpenings25": [
+      "Twenty-five campaigns. Kragg no longer bothers with the opening speech. You both know how this goes.",
+      "After twenty-five runs through the Citadel, the garrison has started placing supply crates at your usual entry points. You choose not to ask."
+    ],
+    "milestoneOpenings50": [
+      "On the fiftieth campaign, the outer gate opens before you reach it. Someone inside has been counting.",
+      "Fifty attempts. The garrison's duty log has you listed as a recurring inspection. You have a column."
+    ],
+    "milestoneOpenings100": [
+      "Kragg removes his helmet.\n\n'A hundred times,' he says. Not angry. Not resigned. Something else.\n\n'I've fortified this position against cavalry, siege engines, coordinated assault and one particularly creative attempt involving a trebuchet and a very brave goat.'\n\nHe looks at your deck of cards.\n\n'And yet. Here we are.'\n\nA long pause.\n\n'The garrison has started calling you the Inspection.'"
+    ]
+  },
+
+  "midRunTemplates": [
+    "The {ordinalLower} approach to the Iron Citadel. The canyon looks exactly the same. Kragg has probably moved the crossbow emplacements.",
+    "Campaign {n}. The garrison at the outer wall has your description posted. It is not flattering.",
+    "{n} campaigns through the canyon. The rope bridges have been reinforced. You take that personally.",
+    "{n} times past this gate. The duty guard no longer calls an alarm — he just notes the time.",
+    "Run {n}. You arrive at dawn. The garrison is ready. They are always ready now.",
+    "The {ordinalLower} time through the Citadel. The supply officer has started noting your visits as 'irregular procurement events.'",
+    "{n} campaigns. The signal fires light before you reach the first checkpoint. Kragg has good scouts."
+  ],
+
+  "introRules": [
+    {
+      "condition": { "op": "gte", "value": 100 },
+      "panels": [
+        { "title": "KRAGG KNOWS",        "text": "{pool:milestoneOpenings100:0}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:3}\n\n{pool:kraggDesc:2}" }
+      ]
+    },
+    {
+      "condition": { "op": "range", "min": 51, "max": 99 },
+      "panels": [
+        { "title": "THE {ORDINAL} TIME", "text": "{midRunTemplate}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:1}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:2}\n\n{pool:kraggDesc:1}" },
+        { "title": "YOUR MISSION",       "text": "Fight through the garrison. Reach Kragg. Break the Citadel.\n\nYou know the approach. You always know the approach." }
+      ]
+    },
+    {
+      "condition": { "op": "eq", "value": 50 },
+      "panels": [
+        { "title": "FIFTY CAMPAIGNS",    "text": "{pool:milestoneOpenings50:0}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. Former tactician. Current recurring problem. {pool:jarvMoods:0}\n\nThe Citadel has your description on file. The file is extensive.\n\n{pool:jarvIntros:1}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:2}\n\n{pool:kraggDesc:1}" },
+        { "title": "YOUR MISSION",       "text": "Fight through the garrison. Reach Kragg. Break the Citadel.\n\nYou know the approach. You always know the approach." }
+      ]
+    },
+    {
+      "condition": { "op": "range", "min": 26, "max": 49 },
+      "panels": [
+        { "title": "THE {ORDINAL} TIME", "text": "{midRunTemplate}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:1}\n\n{pool:kraggDesc:0}" }
+      ]
+    },
+    {
+      "condition": { "op": "eq", "value": 25 },
+      "panels": [
+        { "title": "TWENTY-FIVE",        "text": "{pool:milestoneOpenings25:0}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:1}\n\n{pool:kraggDesc:0}" }
+      ]
+    },
+    {
+      "condition": { "op": "range", "min": 11, "max": 24 },
+      "panels": [
+        { "title": "THE {ORDINAL} TIME", "text": "{midRunTemplate}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:0}\n\n{pool:kraggDesc:0}" },
+        { "title": "YOUR MISSION",       "text": "Fight through the garrison. Reach Kragg.\n\nYou know how this goes. You've always known how this goes." }
+      ]
+    },
+    {
+      "condition": { "op": "eq", "value": 10 },
+      "panels": [
+        { "title": "THE TENTH TIME",     "text": "{pool:milestoneOpenings10:0}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:0}\n\n{pool:kraggDesc:0}" },
+        { "title": "YOUR MISSION",       "text": "Fight through the garrison. Reach Kragg.\n\nYou know how this goes. You've always known how this goes." }
+      ]
+    },
+    {
+      "condition": { "op": "range", "min": 5, "max": 9 },
+      "panels": [
+        { "title": "THE {ORDINAL} TIME", "text": "{pool:milestoneOpenings5:0}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:0}\n\n{pool:kraggDesc:0}" }
+      ]
+    },
+    {
+      "condition": { "op": "range", "min": 2, "max": 4 },
+      "panels": [
+        { "title": "THE FRACTURE",       "text": "Three years ago, the Grand Dominion shattered.\n\nThe Iron Citadel's warlords didn't wait to see what came next. They sealed the shard themselves.\n\n{pool:priorRunSummaries:0}" },
+        { "title": "THE WANDERER",       "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}" },
+        { "title": "THE IRON CITADEL",   "text": "{pool:citadelDesc:0}\n\n{pool:kraggDesc:0}" },
+        { "title": "A MEMORY",           "text": "And yet — {pool:priorRunOpenings:0}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThe canyon waits." }
+      ]
+    }
+  ],
+
+  "startNodeIds": ["iron-gate"],
+
+  "nodes": {
+    "iron-gate": {
+      "id": "iron-gate", "type": "battle",
+      "label": "Iron Gate",
+      "description": "The Citadel's outer garrison blocks the canyon road. A disciplined force — but thin.",
+      "row": 0, "col": 0, "rowCols": 1,
+      "parentIds": [], "childIds": ["soldiers-camp", "supply-cache", "outer-wall"],
+      "handicap": 10
+    },
+
+    "soldiers-camp": {
+      "id": "soldiers-camp", "type": "rest",
+      "label": "Soldier's Camp",
+      "description": "An abandoned forward camp — rations still warm. Rest and recover.",
+      "row": 1, "col": 0, "rowCols": 3,
+      "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
+      "restHeal": 10
+    },
+    "supply-cache": {
+      "id": "supply-cache", "type": "event",
+      "label": "Supply Cache",
+      "description": "A Citadel supply depot, hastily abandoned. The lock is already broken.",
+      "row": 1, "col": 1, "rowCols": 3,
+      "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
+      "eventId": "supply-cache"
+    },
+    "outer-wall": {
+      "id": "outer-wall", "type": "battle",
+      "label": "Outer Wall",
+      "description": "The first proper fortified position — archers on the ramparts and a gate that won't open.",
+      "row": 1, "col": 2, "rowCols": 3,
+      "parentIds": ["iron-gate"], "childIds": ["siege-trenches"],
+      "handicap": 7
+    },
+
+    "siege-trenches": {
+      "id": "siege-trenches", "type": "battle",
+      "label": "Siege Trenches",
+      "description": "The garrison dug deep. You're going through anyway.",
+      "row": 2, "col": 0, "rowCols": 1,
+      "parentIds": ["soldiers-camp", "supply-cache", "outer-wall"], "childIds": ["iron-guard", "quartermaster", "field-battery"],
+      "handicap": 4
+    },
+
+    "iron-guard": {
+      "id": "iron-guard", "type": "battle",
+      "label": "Iron Guard",
+      "description": "Elite heavy infantry protecting the mid-canyon checkpoint.",
+      "row": 3, "col": 0, "rowCols": 3,
+      "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
+      "handicap": 3
+    },
+    "quartermaster": {
+      "id": "quartermaster", "type": "merchant",
+      "label": "Quartermaster",
+      "description": "A disgruntled Citadel supply officer. Turns out loyalty has a price.",
+      "row": 3, "col": 1, "rowCols": 3,
+      "parentIds": ["siege-trenches"], "childIds": ["siege-captain"]
+    },
+    "field-battery": {
+      "id": "field-battery", "type": "battle",
+      "label": "Field Battery",
+      "description": "A Citadel artillery position — catapults, crossbow banks, and the crew to run them.",
+      "row": 3, "col": 2, "rowCols": 3,
+      "parentIds": ["siege-trenches"], "childIds": ["siege-captain"],
+      "handicap": 3
+    },
+
+    "siege-captain": {
+      "id": "siege-captain", "type": "elite",
+      "label": "Siege Captain",
+      "description": "A hardened veteran who has defended this position for three years. He takes it personally.",
+      "row": 4, "col": 0, "rowCols": 1,
+      "parentIds": ["iron-guard", "quartermaster", "field-battery"], "childIds": ["command-tent", "last-stand", "battle-commander"],
+      "handicap": 1
+    },
+
+    "command-tent": {
+      "id": "command-tent", "type": "rest",
+      "label": "Command Tent",
+      "description": "The Siege Captain's own quarters. Quiet now. Tends to wounds.",
+      "row": 5, "col": 0, "rowCols": 3,
+      "parentIds": ["siege-captain"], "childIds": ["kragg"],
+      "restHeal": 8
+    },
+    "last-stand": {
+      "id": "last-stand", "type": "battle",
+      "label": "Last Stand",
+      "description": "The remaining garrison makes a final push. Outnumbered. Disciplined.",
+      "row": 5, "col": 1, "rowCols": 3,
+      "parentIds": ["siege-captain"], "childIds": ["kragg"],
+      "handicap": 0
+    },
+    "battle-commander": {
+      "id": "battle-commander", "type": "elite",
+      "label": "Battle Commander",
+      "description": "Kragg's second-in-command. Fights like he has something to prove — he does.",
+      "row": 5, "col": 2, "rowCols": 3,
+      "parentIds": ["siege-captain"], "childIds": ["kragg"],
+      "handicap": -1
+    },
+
+    "kragg": {
+      "id": "kragg", "type": "boss",
+      "label": "Warlord Kragg",
+      "description": "Three years of unchallenged command. An army built on discipline and iron. He has never lost a defensive engagement.",
+      "row": 6, "col": 0, "rowCols": 1,
+      "parentIds": ["command-tent", "last-stand", "battle-commander"], "childIds": [],
+      "handicap": 0,
+      "bossAI": "kragg",
+      "bossDialogue": [
+        "\"You walked through my garrison. My garrison that has held for three years.\"",
+        "\"I don't know what you are. But I know what I am. And I have not lost a defensive engagement in my career.\"",
+        "\"You will not pass. The Iron Citadel does not fall to a card player.\""
+      ]
+    }
+  }
+}
