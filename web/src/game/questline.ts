@@ -1,5 +1,7 @@
 import { CardRarity } from './types'
 import { getCardCatalog } from './cards'
+import act1Data from '../data/acts/act1.json'
+import eventsData from '../data/events.json'
 
 // ─── Node & Act types ─────────────────────────────────────
 
@@ -47,24 +49,9 @@ export interface EventData {
 // ─── Shrine randomisation ─────────────────────────────────
 
 /** Possible pools for each shrine action. One entry is picked at random each visit. */
-const SHRINE_OFFERING_EFFECTS: EventChoice[] = [
-  { label: 'Leave an offering', consequence: 'The shrine accepts your gift — restored 12 HP', effect: { type: 'healHp', amount: 12 } },
-  { label: 'Leave an offering', consequence: 'The glow brightens — +15 crystals', effect: { type: 'gainCrystals', amount: 15 } },
-  { label: 'Leave an offering', consequence: 'The shrine is silent. Nothing happens.', effect: { type: 'nothing' } },
-  { label: 'Leave an offering', consequence: 'Something drains your offering — lose 5 HP', effect: { type: 'damageHp', amount: 5 } },
-]
-const SHRINE_PRAY_EFFECTS: EventChoice[] = [
-  { label: 'Pray for strength', consequence: 'A card materialises from the glow — uncommon', effect: { type: 'gainCard', rarity: 'uncommon' } },
-  { label: 'Pray for strength', consequence: 'The magic guides your wounds — restored 8 HP', effect: { type: 'healHp', amount: 8 } },
-  { label: 'Pray for strength', consequence: 'The shrine tests you — lose 10 HP', effect: { type: 'damageHp', amount: 10 } },
-  { label: 'Pray for strength', consequence: 'You feel oddly lucky — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
-]
-const SHRINE_TAKE_EFFECTS: EventChoice[] = [
-  { label: 'Pocket the ritual stones', consequence: 'You grab them and run — +18 crystals, lose 8 HP', effect: { type: 'damageHp', amount: 8 } },
-  { label: 'Pocket the ritual stones', consequence: 'A common card falls from the stones', effect: { type: 'gainCard', rarity: 'common' } },
-  { label: 'Pocket the ritual stones', consequence: 'The stones crumble to dust. Nothing.', effect: { type: 'nothing' } },
-  { label: 'Pocket the ritual stones', consequence: 'The shrine curses you — lose 15 HP', effect: { type: 'damageHp', amount: 15 } },
-]
+const SHRINE_OFFERING_EFFECTS = eventsData.pools.shrine.offering as EventChoice[]
+const SHRINE_PRAY_EFFECTS      = eventsData.pools.shrine.pray     as EventChoice[]
+const SHRINE_TAKE_EFFECTS      = eventsData.pools.shrine.take     as EventChoice[]
 
 function pickRandom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)] }
 
@@ -84,26 +71,9 @@ export function generateShrineEvent(): EventData {
 
 // ─── Ruins randomisation ──────────────────────────────────
 
-const RUINS_REST_EFFECTS: EventChoice[] = [
-  { label: 'Rest in the shelter', consequence: 'The quiet heals — restored 15 HP', effect: { type: 'healHp', amount: 15 } },
-  { label: 'Rest in the shelter', consequence: 'You sleep badly. Restored 8 HP', effect: { type: 'healHp', amount: 8 } },
-  { label: 'Rest in the shelter', consequence: 'Something bites you in the night — lose 6 HP', effect: { type: 'damageHp', amount: 6 } },
-  { label: 'Rest in the shelter', consequence: 'You find a pouch under the floorboards — +14 crystals', effect: { type: 'gainCrystals', amount: 14 } },
-]
-
-const RUINS_SEARCH_EFFECTS: EventChoice[] = [
-  { label: 'Search the armory', consequence: 'An uncommon card hidden behind a loose brick', effect: { type: 'gainCard', rarity: 'uncommon' } },
-  { label: 'Search the armory', consequence: 'A rare weapon contract — add a rare card', effect: { type: 'gainCard', rarity: 'rare' } },
-  { label: 'Search the armory', consequence: 'Old coin cache — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
-  { label: 'Search the armory', consequence: 'A rusted trap springs — lose 10 HP', effect: { type: 'damageHp', amount: 10 } },
-]
-
-const RUINS_CLIMB_EFFECTS: EventChoice[] = [
-  { label: 'Climb the watchtower', consequence: 'Good vantage point — +12 crystals from spotted supply cache', effect: { type: 'gainCrystals', amount: 12 } },
-  { label: 'Climb the watchtower', consequence: 'A common card is wedged in the battlements', effect: { type: 'gainCard', rarity: 'common' } },
-  { label: 'Climb the watchtower', consequence: 'The stairs collapse — lose 12 HP', effect: { type: 'damageHp', amount: 12 } },
-  { label: 'Climb the watchtower', consequence: 'Nothing up there. Wind. Old regrets.', effect: { type: 'nothing' } },
-]
+const RUINS_REST_EFFECTS   = eventsData.pools.ruins.rest   as EventChoice[]
+const RUINS_SEARCH_EFFECTS = eventsData.pools.ruins.search as EventChoice[]
+const RUINS_CLIMB_EFFECTS  = eventsData.pools.ruins.climb  as EventChoice[]
 
 /** Returns a ruins EventData with randomly selected choice effects. */
 export function generateRuinsEvent(): EventData {
@@ -120,41 +90,9 @@ export function generateRuinsEvent(): EventData {
 }
 
 export const EVENT_CATALOG: Record<string, EventData> = {
-  'shrine': generateShrineEvent(), // default (overridden per-visit in App)
-  'ruins':  generateRuinsEvent(),  // default (overridden per-visit in App)
-
-  'goblin-deal': {
-    id: 'goblin-deal',
-    title: 'A Suspicious Offer',
-    description: 'A goblin scout, notably clean for his kind, sidles up to you from behind a stump. He speaks quickly, gesturing toward a cloth bag that clinks suspiciously.',
-    choices: [
-      { label: 'Take the deal', consequence: '+15 crystals, but lose 8 HP (he bites you on the way out)', effect: { type: 'damageHp', amount: 8 } },
-      { label: 'Trade him a card tip for info', consequence: 'Add a common card to your collection', effect: { type: 'gainCard', rarity: 'common' } },
-      { label: 'Chase him off', consequence: 'He runs. You feel smart but slightly bored.', effect: { type: 'nothing' } },
-    ],
-  },
-
-  'wanderer': {
-    id: 'wanderer',
-    title: 'The Wandering Scholar',
-    description: 'A robed scholar sits cross-legged on a boulder, annotating a crackling tome. He glances up without surprise. "Ah. Another one of Jarv\'s campaigns. Sit."',
-    choices: [
-      { label: 'Ask him to heal you', consequence: 'Restore 8 HP', effect: { type: 'healHp', amount: 8 } },
-      { label: 'Ask about rare tactics', consequence: 'Add a rare card to your collection', effect: { type: 'gainCard', rarity: 'rare' } },
-      { label: 'Ask for the short version', consequence: '+12 crystals (he charges for advice)', effect: { type: 'gainCrystals', amount: 12 } },
-    ],
-  },
-
-  'ambush-merchant': {
-    id: 'ambush-merchant',
-    title: 'Waylaid Merchant',
-    description: 'A merchant\'s cart lists sideways in a ditch, one wheel spinning. The merchant waves you over frantically. "Help me up and I\'ll make it worth your while."',
-    choices: [
-      { label: 'Help right the cart', consequence: 'He rewards you — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
-      { label: 'Take what you need from the cart', consequence: 'Add an uncommon card to your collection (ethically complicated)', effect: { type: 'gainCard', rarity: 'uncommon' } },
-      { label: 'Leave him be', consequence: 'You are definitely the villain in his story.', effect: { type: 'nothing' } },
-    ],
-  },
+  'shrine': generateShrineEvent(), // regenerated per-visit in App
+  'ruins':  generateRuinsEvent(),  // regenerated per-visit in App
+  ...(eventsData.catalog as Record<string, EventData>),
 }
 
 // ─── Merchant ─────────────────────────────────────────────
@@ -716,141 +654,6 @@ export function generateRewardChoices(nodeType: NodeType): string[] {
 
 // ─── Act 1 ────────────────────────────────────────────────
 
-export const ACT_1: Act = {
-  id: 'act1',
-  title: 'ACT I',
-  subtitle: 'The Verdant Shard',
-  rewardRelic: 'Bark Shield',
-  rewardRelicDesc: 'Your base gains +10 max HP at the start of every battle.',
-  startNodeIds: ['goblin-raid'],
-
-  intro: [
-    {
-      title: 'THE FRACTURE',
-      text: 'Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant — a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it.',
-    },
-    {
-      title: 'THE WANDERER',
-      text: 'You are Jarv. Former tactician of the Dominion\'s western campaigns. Now, technically, unemployed.\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall. The people you knew are either dead, stranded, or figuring out their own problems.\n\nYou have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.',
-    },
-    {
-      title: 'THE VERDANT SHARD',
-      text: 'Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard\'s guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn\'t spoken to anyone in forty years. You\'re choosing to interpret that as optimistically as possible.',
-    },
-    {
-      title: 'YOUR MISSION',
-      text: 'Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side — your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably.',
-    },
-  ],
-
-  outro: [
-    {
-      title: 'THE THORNLORD FALLS',
-      text: 'The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath — then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this.',
-    },
-    {
-      title: 'WHAT HE WAS',
-      text: 'The Thornlord was not evil. He was old, and afraid, and doing what guardians do when the world stops making sense.\n\nYou take the Bark Shield he leaves behind. Not as a trophy. As a reminder that some things only break because nothing else would hold.',
-    },
-    {
-      title: 'THE ROAD AHEAD',
-      text: 'One shard cleared. The ley lines pulse — faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits — and whoever controls it will not be glad to see you.\n\nGood.',
-    },
-  ],
-
-  nodes: {
-    // ── Row 0 ─────────────────────────────────────────────
-    'goblin-raid': {
-      id: 'goblin-raid', type: 'battle',
-      label: 'Goblin Raiders',
-      description: 'A rowdy mob has blockaded the trade route. Clear them out.',
-      row: 0, col: 0, rowCols: 1,
-      parentIds: [], childIds: ['camp', 'shrine', 'patrol'],
-      handicap: 10,   // commons + uncommons only — manageable for a starter deck
-    },
-    // ── Row 1 — three-way branch ──────────────────────────
-    'camp': {
-      id: 'camp', type: 'rest',
-      label: 'Woodland Camp',
-      description: 'A sheltered clearing. Rest here and tend your wounds.',
-      row: 1, col: 0, rowCols: 3,
-      parentIds: ['goblin-raid'], childIds: ['ambush'],
-      restHeal: 10,
-    },
-    'shrine': {
-      id: 'shrine', type: 'event',
-      label: 'Ancient Shrine',
-      description: 'A moss-covered shrine pulses with faint forest magic.',
-      row: 1, col: 1, rowCols: 3,
-      parentIds: ['goblin-raid'], childIds: ['ambush'],
-      eventId: 'shrine',
-    },
-    'patrol': {
-      id: 'patrol', type: 'battle',
-      label: 'Forest Patrol',
-      description: 'A disciplined warband is watching the deeper path.',
-      row: 1, col: 2, rowCols: 3,
-      parentIds: ['goblin-raid'], childIds: ['ambush'],
-      handicap: 7,    // uncommons max — slightly harder second battle
-    },
-    // ── Row 2 ─────────────────────────────────────────────
-    'ambush': {
-      id: 'ambush', type: 'battle',
-      label: 'The Ambush',
-      description: 'Something ancient was waiting in the treeline.',
-      row: 2, col: 0, rowCols: 1,
-      parentIds: ['camp', 'shrine', 'patrol'], childIds: ['ruins', 'war-camp', 'market'],
-      handicap: 4,    // rares allowed, no legendaries — mid-act difficulty step-up
-    },
-    // ── Row 3 — three-way branch ──────────────────────────
-    'ruins': {
-      id: 'ruins', type: 'event',
-      label: 'Watchtower Ruins',
-      description: 'A crumbling garrison tower leans against the treeline.',
-      row: 3, col: 0, rowCols: 3,
-      parentIds: ['ambush'], childIds: ['captain'],
-      eventId: 'ruins',
-    },
-    'war-camp': {
-      id: 'war-camp', type: 'battle',
-      label: 'War Camp',
-      description: 'A fortified enemy camp blocks the road ahead.',
-      row: 3, col: 1, rowCols: 3,
-      parentIds: ['ambush'], childIds: ['captain'],
-      handicap: 3,    // rares allowed, no legendaries
-    },
-    'market': {
-      id: 'market', type: 'merchant',
-      label: 'Travelling Market',
-      description: 'A merchant cart half-hidden in the underbrush. She waves you over.',
-      row: 3, col: 2, rowCols: 3,
-      parentIds: ['ambush'], childIds: ['captain'],
-    },
-    // ── Row 4 ─────────────────────────────────────────────
-    'captain': {
-      id: 'captain', type: 'elite',
-      label: 'Siege Captain',
-      description: 'A hardened veteran with well-drilled siege troops.',
-      row: 4, col: 0, rowCols: 1,
-      parentIds: ['ruins', 'war-camp', 'market'], childIds: ['thornlord'],
-      handicap: 1,    // full deck including legendaries — elite fight
-    },
-    // ── Row 5 ─────────────────────────────────────────────
-    'thornlord': {
-      id: 'thornlord', type: 'boss',
-      label: 'The Thornlord',
-      description: 'Ancient guardian of the Verdant Shard. Unbowed for centuries.',
-      row: 5, col: 0, rowCols: 1,
-      parentIds: ['captain'], childIds: [],
-      handicap: 0,
-      bossAI: 'thornlord',
-      bossDialogue: [
-        '"You carry the smell of the shattered world."',
-        '"I sealed these paths to keep the rot from spreading. Clearly I should have built higher walls."',
-        '"You will not pass. The Verdant Shard does not need another wandering tactician."',
-      ],
-    },
-  },
-}
+export const ACT_1: Act = act1Data as Act
 
 export const ACTS: Record<string, Act> = { act1: ACT_1 }

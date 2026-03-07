@@ -1,0 +1,130 @@
+{
+  "id": "act1",
+  "title": "ACT I",
+  "subtitle": "The Verdant Shard",
+  "rewardRelic": "Bark Shield",
+  "rewardRelicDesc": "Your base gains +10 max HP at the start of every battle.",
+  "startNodeIds": ["goblin-raid"],
+
+  "intro": [
+    {
+      "title": "THE FRACTURE",
+      "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant — a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it."
+    },
+    {
+      "title": "THE WANDERER",
+      "text": "You are Jarv. Former tactician of the Dominion's western campaigns. Now, technically, unemployed.\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall. The people you knew are either dead, stranded, or figuring out their own problems.\n\nYou have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable."
+    },
+    {
+      "title": "THE VERDANT SHARD",
+      "text": "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible."
+    },
+    {
+      "title": "YOUR MISSION",
+      "text": "Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side — your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably."
+    }
+  ],
+
+  "outro": [
+    {
+      "title": "THE THORNLORD FALLS",
+      "text": "The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath — then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this."
+    },
+    {
+      "title": "WHAT HE WAS",
+      "text": "The Thornlord was not evil. He was old, and afraid, and doing what guardians do when the world stops making sense.\n\nYou take the Bark Shield he leaves behind. Not as a trophy. As a reminder that some things only break because nothing else would hold."
+    },
+    {
+      "title": "THE ROAD AHEAD",
+      "text": "One shard cleared. The ley lines pulse — faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits — and whoever controls it will not be glad to see you.\n\nGood."
+    }
+  ],
+
+  "nodes": {
+    "goblin-raid": {
+      "id": "goblin-raid", "type": "battle",
+      "label": "Goblin Raiders",
+      "description": "A rowdy mob has blockaded the trade route. Clear them out.",
+      "row": 0, "col": 0, "rowCols": 1,
+      "parentIds": [], "childIds": ["camp", "shrine", "patrol"],
+      "handicap": 10
+    },
+    "camp": {
+      "id": "camp", "type": "rest",
+      "label": "Woodland Camp",
+      "description": "A sheltered clearing. Rest here and tend your wounds.",
+      "row": 1, "col": 0, "rowCols": 3,
+      "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "restHeal": 10
+    },
+    "shrine": {
+      "id": "shrine", "type": "event",
+      "label": "Ancient Shrine",
+      "description": "A moss-covered shrine pulses with faint forest magic.",
+      "row": 1, "col": 1, "rowCols": 3,
+      "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "eventId": "shrine"
+    },
+    "patrol": {
+      "id": "patrol", "type": "battle",
+      "label": "Forest Patrol",
+      "description": "A disciplined warband is watching the deeper path.",
+      "row": 1, "col": 2, "rowCols": 3,
+      "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "handicap": 7
+    },
+    "ambush": {
+      "id": "ambush", "type": "battle",
+      "label": "The Ambush",
+      "description": "Something ancient was waiting in the treeline.",
+      "row": 2, "col": 0, "rowCols": 1,
+      "parentIds": ["camp", "shrine", "patrol"], "childIds": ["ruins", "war-camp", "market"],
+      "handicap": 4
+    },
+    "ruins": {
+      "id": "ruins", "type": "event",
+      "label": "Watchtower Ruins",
+      "description": "A crumbling garrison tower leans against the treeline.",
+      "row": 3, "col": 0, "rowCols": 3,
+      "parentIds": ["ambush"], "childIds": ["captain"],
+      "eventId": "ruins"
+    },
+    "war-camp": {
+      "id": "war-camp", "type": "battle",
+      "label": "War Camp",
+      "description": "A fortified enemy camp blocks the road ahead.",
+      "row": 3, "col": 1, "rowCols": 3,
+      "parentIds": ["ambush"], "childIds": ["captain"],
+      "handicap": 3
+    },
+    "market": {
+      "id": "market", "type": "merchant",
+      "label": "Travelling Market",
+      "description": "A merchant cart half-hidden in the underbrush. She waves you over.",
+      "row": 3, "col": 2, "rowCols": 3,
+      "parentIds": ["ambush"], "childIds": ["captain"]
+    },
+    "captain": {
+      "id": "captain", "type": "elite",
+      "label": "Siege Captain",
+      "description": "A hardened veteran with well-drilled siege troops.",
+      "row": 4, "col": 0, "rowCols": 1,
+      "parentIds": ["ruins", "war-camp", "market"], "childIds": ["thornlord"],
+      "handicap": 1
+    },
+    "thornlord": {
+      "id": "thornlord", "type": "boss",
+      "label": "The Thornlord",
+      "description": "Ancient guardian of the Verdant Shard. Unbowed for centuries.",
+      "row": 5, "col": 0, "rowCols": 1,
+      "parentIds": ["captain"], "childIds": [],
+      "handicap": 0,
+      "bossAI": "thornlord",
+      "bossDialogue": [
+        "\"You carry the smell of the shattered world.\"",
+        "\"I sealed these paths to keep the rot from spreading. Clearly I should have built higher walls.\"",
+        "\"You will not pass. The Verdant Shard does not need another wandering tactician.\""
+      ]
+    }
+  }
+}

@@ -76,7 +76,7 @@ Issues sourced from GitHub. Last synced: 2026-03-06.
 
 ## 🔵 Enhancements — Architecture
 
-- [ ] **#78** External config files: move card definitions, campaign acts, events, and merchant data out of TypeScript into JSON config files with a generic loader
+- [x] **#78** External config files: move card definitions, campaign acts, events, and merchant data out of TypeScript into JSON config files with a generic loader
 
 ---
 
