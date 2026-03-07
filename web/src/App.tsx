@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { GameState } from './game/types'
-import { newGame, playCard, tick, MAX_HANDICAP } from './game/engine'
+import { newGame, NewGameOptions, playCard, tick, MAX_HANDICAP } from './game/engine'
 import {
   loadDeck, saveDeck, buildDeckCards, generatePack,
   loadCollection, saveCollection, loadCrystals, saveCrystals,
@@ -103,7 +103,7 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (savedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: act?.environment })
         state.playerBase = { hp: savedRun.playerHp, maxHp: savedRun.maxHp }
         if (savedRun.activeRelic) getRelicDef(savedRun.activeRelic)?.applyToGame(state)
         return { screen: 'playing' as Screen, gameState: state as GameState | null, run: savedRun, isCampaign: true }
@@ -388,7 +388,7 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (activeRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: act?.environment })
         state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
         if (activeRun.activeRelic) getRelicDef(activeRun.activeRelic)?.applyToGame(state)
         setGameState(state)
@@ -490,7 +490,8 @@ export default function App() {
     const playerCards = buildDeckCards(deckEntries, collection)
     const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+    const act = ACTS[run.actId]
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: act?.environment })
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
     if (run.activeRelic) getRelicDef(run.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -607,8 +608,8 @@ export default function App() {
     saveCrystals(newCrystals)
     setCrystals(newCrystals)
 
-    // Show card reward
-    const choices = generateRewardChoices(node.type)
+    // Show card reward (pass act's reward tags so themed cards surface more often)
+    const choices = generateRewardChoices(node.type, act.rewardTags)
     setRewardChoices(choices)
     setRewardCrystals(crystalReward)
     setScreen('reward')

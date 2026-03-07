@@ -195,6 +195,80 @@ export function makeThorlordDeck(): Card[] {
   ]
 }
 
+/**
+ * Build a deck from an ordered list of card names.
+ * Unknown names are silently skipped.
+ * Used for node-specific deterministic enemy decks.
+ */
+export function makeNodeDeck(names: string[]): Card[] {
+  return names.flatMap(name => {
+    const def = CARD_DEFS.find(d => d.name === name)
+    if (!def) return []
+    return [{
+      id: uid(),
+      name: def.name,
+      rarity: def.rarity,
+      cost: def.cost,
+      cardType: def.cardType,
+      unit: def.unit,
+      upgradeEffect: def.upgradeEffect,
+      description: def.description,
+      lore: CARD_LORE[def.name],
+    }]
+  })
+}
+
+/**
+ * Kragg boss deck — heavy siege weapons, fortified walls, and disciplined infantry.
+ */
+export function makeKraggDeck(): Card[] {
+  const make = (name: string, count: number): Card[] => {
+    const def = CARD_DEFS.find(d => d.name === name)
+    if (!def) return []
+    return Array.from({ length: count }, () => ({
+      id: uid(), name: def.name, rarity: def.rarity, cost: def.cost,
+      cardType: def.cardType, unit: def.unit, upgradeEffect: def.upgradeEffect,
+      description: def.description, lore: CARD_LORE[def.name],
+    }))
+  }
+  return [
+    ...make('Build Wall',   4),
+    ...make('Catapult',     3),
+    ...make('Knight',       3),
+    ...make('Shield Guard', 2),
+    ...make('Ballista',     2),
+    ...make('Siege Works',  1),
+    ...make('War Drums',    1),
+    ...make('Fortify',      1),
+    ...make('Crossbow',     2),
+  ]
+}
+
+/**
+ * Ashwalker boss deck — undead horde with necromantic support and revenant swarms.
+ */
+export function makeAshwalkerDeck(): Card[] {
+  const make = (name: string, count: number): Card[] => {
+    const def = CARD_DEFS.find(d => d.name === name)
+    if (!def) return []
+    return Array.from({ length: count }, () => ({
+      id: uid(), name: def.name, rarity: def.rarity, cost: def.cost,
+      cardType: def.cardType, unit: def.unit, upgradeEffect: def.upgradeEffect,
+      description: def.description, lore: CARD_LORE[def.name],
+    }))
+  }
+  return [
+    ...make('Skeleton',    5),
+    ...make('Specter',     3),
+    ...make('Bat',         3),
+    ...make('Crypt',       2),
+    ...make('Necromancer', 2),
+    ...make('Dark Shrine', 2),
+    ...make('Bloodlust',   1),
+    ...make('Vampire',     1),
+  ]
+}
+
 export function rarityStars(r: CardRarity): string {
   return '\u2605'.repeat({ common: 1, uncommon: 2, rare: 3, legendary: 4 }[r])
 }

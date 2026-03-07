@@ -24,6 +24,8 @@ export interface QuestNode {
   bossAI?: string        // 'thornlord' etc. — triggers a specific boss AI
   eventId?: string       // key into EVENT_CATALOG for event nodes
   bossDialogue?: string[]  // lines the boss speaks before the fight
+  /** Preset enemy deck — card names in order. Makes each node deterministic and learnable. */
+  enemyDeck?: string[]
 }
 
 // ─── Event system ─────────────────────────────────────────
@@ -156,6 +158,10 @@ export interface Act {
   startNodeIds: string[]
   rewardRelic: string
   rewardRelicDesc: string
+  /** Visual environment theme — drives battlefield background CSS class and terrain types. */
+  environment?: string
+  /** Card tags that appear as rewards in this act (e.g. "forest", "citadel"). Empty = all cards eligible. */
+  rewardTags?: string[]
   intro?: CutscenePanel[]   // shown on run 1 (fallback when no rule matches)
   outro?: CutscenePanel[]   // shown every time the boss is defeated
 
@@ -467,29 +473,48 @@ export function isActComplete(act: Act, run: RunState): boolean {
  * elite  → 1 uncommon + 2 rares
  * boss   → 1 rare + 1 legendary + 1 uncommon
  */
-export function generateRewardChoices(nodeType: NodeType): string[] {
+/**
+ * Generate card reward choices after a battle.
+ * @param nodeType  battle | elite | boss — determines rarity pool and choice count
+ * @param actTags   Optional act reward tags (e.g. ["forest"]). When provided,
+ *                  cards matching any tag get a 3× weight boost so themed cards
+ *                  surface more often. Falls back to any card if pool is empty.
+ */
+export function generateRewardChoices(nodeType: NodeType, actTags?: string[]): string[] {
   const catalog = getCardCatalog()
-  const pool = (r: CardRarity) => catalog.filter(c => c.rarity === r)
-  const pick  = (r: CardRarity) => {
-    const p = pool(r)
-    return p[Math.floor(Math.random() * p.length)].name
+
+  // Weighted pool: act-themed cards appear 3× as often
+  function pool(r: CardRarity): string[] {
+    const base = catalog.filter(c => c.rarity === r)
+    if (!actTags?.length) return base.map(c => c.name)
+    const weighted: string[] = []
+    for (const c of base) {
+      const cardTags: string[] = (c as unknown as { tags?: string[] }).tags ?? []
+      const boost = cardTags.some(t => actTags.includes(t)) ? 3 : 1
+      for (let i = 0; i < boost; i++) weighted.push(c.name)
+    }
+    return weighted.length ? weighted : base.map(c => c.name)
   }
 
-  // Shuffle so order is random
-  const choices =
-    nodeType === 'elite' ? [pick('uncommon'), pick('rare'),      pick('rare')]
-    : nodeType === 'boss'  ? [pick('rare'),    pick('legendary'), pick('uncommon')]
-    :                        [pick('common'),   pick('common'),    pick('uncommon')]
+  function pick(r: CardRarity): string {
+    const p = pool(r)
+    return p[Math.floor(Math.random() * p.length)]
+  }
 
-  // Deduplicate just in case
+  // battle = 1 choice; elite = 3 choices skewed rare; boss = 3 choices skewed legendary
+  const rawChoices: string[] =
+    nodeType === 'boss'  ? [pick('rare'), pick('legendary'), pick('rare')]
+    : nodeType === 'elite' ? [pick('uncommon'), pick('rare'), pick('rare')]
+    :                        [pick('common')]  // single card for regular battles
+
+  // Deduplicate
   const seen = new Set<string>()
   const deduped: string[] = []
-  for (const name of choices) {
+  for (const name of rawChoices) {
     if (!seen.has(name)) { seen.add(name); deduped.push(name) }
     else {
-      // replace with a random card of the same rarity
       const rarity = catalog.find(c => c.name === name)?.rarity ?? 'common'
-      const fallback = pool(rarity).find(c => !seen.has(c.name))
+      const fallback = catalog.filter(c => c.rarity === rarity && !seen.has(c.name))[0]
       if (fallback) { seen.add(fallback.name); deduped.push(fallback.name) }
       else deduped.push(name)
     }
