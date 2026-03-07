@@ -627,11 +627,26 @@ export default function App() {
     if (!currentRun) return
     const act = ACTS[currentRun.actId]
 
+    // ── Last act completed — offer card rest then deck reset ──
+    const counts = currentRun.cardPlayCounts ?? {}
+    const candidates = getTopPlayedCards(counts, 3)
+    if (candidates.length >= 2) {
+      setCardRestCandidates(candidates)
+      setScreen('cardrest')
+    } else {
+      clearRun()
+      setRun(null)
+      clearFatigued()
+      setFatiguedCards([])
+      setBonusPackCards([])
+      setScreen('starterpack')
+    }
+
     // Persist the act's relic reward to the player's permanent relic collection
     if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
 
     const nextAct = getNextAct(currentRun.actId)
-
+    
     if (nextAct) {
       // ── Progress to next act ──────────────────────────────
       // Carry HP forward; reset node tracking for the new act
@@ -662,20 +677,7 @@ export default function App() {
       return
     }
 
-    // ── Last act completed — offer card rest then deck reset ──
-    const counts = currentRun.cardPlayCounts ?? {}
-    const candidates = getTopPlayedCards(counts, 3)
-    if (candidates.length >= 2) {
-      setCardRestCandidates(candidates)
-      setScreen('cardrest')
-    } else {
-      clearRun()
-      setRun(null)
-      clearFatigued()
-      setFatiguedCards([])
-      setBonusPackCards([])
-      setScreen('starterpack')
-    }
+
   }, [run])
 
   const handleCardRestConfirm = useCallback((resting: string[]) => {
