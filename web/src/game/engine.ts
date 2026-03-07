@@ -1,6 +1,7 @@
 import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType } from './types'
 import { makeDeck, makeThorlordDeck, HERO_CARDS } from './cards'
 import { playUnitDeath, playBuildingDestroyed } from './sound'
+import { isNoDamageMode } from './debug'
 
 // ─── Constants ────────────────────────────────────────────
 
@@ -532,10 +533,14 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
           s.playerScore += prev - s.opponentBase.hp
           log.push(`${unit.name} hits Enemy Base! -${dmg}HP`)
         } else {
-          const prev = s.playerBase.hp
-          s.playerBase.hp = Math.max(0, s.playerBase.hp - dmg)
-          s.opponentScore += prev - s.playerBase.hp
-          log.push(`${unit.name} hits Your Base! -${dmg}HP`)
+          if (!isNoDamageMode()) {
+            const prev = s.playerBase.hp
+            s.playerBase.hp = Math.max(0, s.playerBase.hp - dmg)
+            s.opponentScore += prev - s.playerBase.hp
+            log.push(`${unit.name} hits Your Base! -${dmg}HP`)
+          } else {
+            log.push(`${unit.name} hits Your Base! (dev mode — no damage)`)
+          }
         }
         unit.attackTimer = unit.attackCooldownMs
       }
