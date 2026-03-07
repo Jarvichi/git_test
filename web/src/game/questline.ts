@@ -1,5 +1,7 @@
 import { CardRarity } from './types'
 import { getCardCatalog } from './cards'
+import act1Data from '../data/acts/act1.json'
+import eventsData from '../data/events.json'
 
 // ─── Node & Act types ─────────────────────────────────────
 
@@ -47,24 +49,9 @@ export interface EventData {
 // ─── Shrine randomisation ─────────────────────────────────
 
 /** Possible pools for each shrine action. One entry is picked at random each visit. */
-const SHRINE_OFFERING_EFFECTS: EventChoice[] = [
-  { label: 'Leave an offering', consequence: 'The shrine accepts your gift — restored 12 HP', effect: { type: 'healHp', amount: 12 } },
-  { label: 'Leave an offering', consequence: 'The glow brightens — +15 crystals', effect: { type: 'gainCrystals', amount: 15 } },
-  { label: 'Leave an offering', consequence: 'The shrine is silent. Nothing happens.', effect: { type: 'nothing' } },
-  { label: 'Leave an offering', consequence: 'Something drains your offering — lose 5 HP', effect: { type: 'damageHp', amount: 5 } },
-]
-const SHRINE_PRAY_EFFECTS: EventChoice[] = [
-  { label: 'Pray for strength', consequence: 'A card materialises from the glow — uncommon', effect: { type: 'gainCard', rarity: 'uncommon' } },
-  { label: 'Pray for strength', consequence: 'The magic guides your wounds — restored 8 HP', effect: { type: 'healHp', amount: 8 } },
-  { label: 'Pray for strength', consequence: 'The shrine tests you — lose 10 HP', effect: { type: 'damageHp', amount: 10 } },
-  { label: 'Pray for strength', consequence: 'You feel oddly lucky — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
-]
-const SHRINE_TAKE_EFFECTS: EventChoice[] = [
-  { label: 'Pocket the ritual stones', consequence: 'You grab them and run — +18 crystals, lose 8 HP', effect: { type: 'damageHp', amount: 8 } },
-  { label: 'Pocket the ritual stones', consequence: 'A common card falls from the stones', effect: { type: 'gainCard', rarity: 'common' } },
-  { label: 'Pocket the ritual stones', consequence: 'The stones crumble to dust. Nothing.', effect: { type: 'nothing' } },
-  { label: 'Pocket the ritual stones', consequence: 'The shrine curses you — lose 15 HP', effect: { type: 'damageHp', amount: 15 } },
-]
+const SHRINE_OFFERING_EFFECTS = eventsData.pools.shrine.offering as EventChoice[]
+const SHRINE_PRAY_EFFECTS      = eventsData.pools.shrine.pray     as EventChoice[]
+const SHRINE_TAKE_EFFECTS      = eventsData.pools.shrine.take     as EventChoice[]
 
 function pickRandom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)] }
 
@@ -84,26 +71,9 @@ export function generateShrineEvent(): EventData {
 
 // ─── Ruins randomisation ──────────────────────────────────
 
-const RUINS_REST_EFFECTS: EventChoice[] = [
-  { label: 'Rest in the shelter', consequence: 'The quiet heals — restored 15 HP', effect: { type: 'healHp', amount: 15 } },
-  { label: 'Rest in the shelter', consequence: 'You sleep badly. Restored 8 HP', effect: { type: 'healHp', amount: 8 } },
-  { label: 'Rest in the shelter', consequence: 'Something bites you in the night — lose 6 HP', effect: { type: 'damageHp', amount: 6 } },
-  { label: 'Rest in the shelter', consequence: 'You find a pouch under the floorboards — +14 crystals', effect: { type: 'gainCrystals', amount: 14 } },
-]
-
-const RUINS_SEARCH_EFFECTS: EventChoice[] = [
-  { label: 'Search the armory', consequence: 'An uncommon card hidden behind a loose brick', effect: { type: 'gainCard', rarity: 'uncommon' } },
-  { label: 'Search the armory', consequence: 'A rare weapon contract — add a rare card', effect: { type: 'gainCard', rarity: 'rare' } },
-  { label: 'Search the armory', consequence: 'Old coin cache — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
-  { label: 'Search the armory', consequence: 'A rusted trap springs — lose 10 HP', effect: { type: 'damageHp', amount: 10 } },
-]
-
-const RUINS_CLIMB_EFFECTS: EventChoice[] = [
-  { label: 'Climb the watchtower', consequence: 'Good vantage point — +12 crystals from spotted supply cache', effect: { type: 'gainCrystals', amount: 12 } },
-  { label: 'Climb the watchtower', consequence: 'A common card is wedged in the battlements', effect: { type: 'gainCard', rarity: 'common' } },
-  { label: 'Climb the watchtower', consequence: 'The stairs collapse — lose 12 HP', effect: { type: 'damageHp', amount: 12 } },
-  { label: 'Climb the watchtower', consequence: 'Nothing up there. Wind. Old regrets.', effect: { type: 'nothing' } },
-]
+const RUINS_REST_EFFECTS   = eventsData.pools.ruins.rest   as EventChoice[]
+const RUINS_SEARCH_EFFECTS = eventsData.pools.ruins.search as EventChoice[]
+const RUINS_CLIMB_EFFECTS  = eventsData.pools.ruins.climb  as EventChoice[]
 
 /** Returns a ruins EventData with randomly selected choice effects. */
 export function generateRuinsEvent(): EventData {
@@ -120,41 +90,9 @@ export function generateRuinsEvent(): EventData {
 }
 
 export const EVENT_CATALOG: Record<string, EventData> = {
-  'shrine': generateShrineEvent(), // default (overridden per-visit in App)
-  'ruins':  generateRuinsEvent(),  // default (overridden per-visit in App)
-
-  'goblin-deal': {
-    id: 'goblin-deal',
-    title: 'A Suspicious Offer',
-    description: 'A goblin scout, notably clean for his kind, sidles up to you from behind a stump. He speaks quickly, gesturing toward a cloth bag that clinks suspiciously.',
-    choices: [
-      { label: 'Take the deal', consequence: '+15 crystals, but lose 8 HP (he bites you on the way out)', effect: { type: 'damageHp', amount: 8 } },
-      { label: 'Trade him a card tip for info', consequence: 'Add a common card to your collection', effect: { type: 'gainCard', rarity: 'common' } },
-      { label: 'Chase him off', consequence: 'He runs. You feel smart but slightly bored.', effect: { type: 'nothing' } },
-    ],
-  },
-
-  'wanderer': {
-    id: 'wanderer',
-    title: 'The Wandering Scholar',
-    description: 'A robed scholar sits cross-legged on a boulder, annotating a crackling tome. He glances up without surprise. "Ah. Another one of Jarv\'s campaigns. Sit."',
-    choices: [
-      { label: 'Ask him to heal you', consequence: 'Restore 8 HP', effect: { type: 'healHp', amount: 8 } },
-      { label: 'Ask about rare tactics', consequence: 'Add a rare card to your collection', effect: { type: 'gainCard', rarity: 'rare' } },
-      { label: 'Ask for the short version', consequence: '+12 crystals (he charges for advice)', effect: { type: 'gainCrystals', amount: 12 } },
-    ],
-  },
-
-  'ambush-merchant': {
-    id: 'ambush-merchant',
-    title: 'Waylaid Merchant',
-    description: 'A merchant\'s cart lists sideways in a ditch, one wheel spinning. The merchant waves you over frantically. "Help me up and I\'ll make it worth your while."',
-    choices: [
-      { label: 'Help right the cart', consequence: 'He rewards you — +20 crystals', effect: { type: 'gainCrystals', amount: 20 } },
-      { label: 'Take what you need from the cart', consequence: 'Add an uncommon card to your collection (ethically complicated)', effect: { type: 'gainCard', rarity: 'uncommon' } },
-      { label: 'Leave him be', consequence: 'You are definitely the villain in his story.', effect: { type: 'nothing' } },
-    ],
-  },
+  'shrine': generateShrineEvent(), // regenerated per-visit in App
+  'ruins':  generateRuinsEvent(),  // regenerated per-visit in App
+  ...(eventsData.catalog as Record<string, EventData>),
 }
 
 // ─── Merchant ─────────────────────────────────────────────
@@ -189,6 +127,25 @@ export interface CutscenePanel {
   text: string
 }
 
+// ─── Intro rule system ────────────────────────────────────
+
+/** Matches a run count against a simple condition. */
+export interface RuleCondition {
+  op: 'eq' | 'gte' | 'range'
+  value?: number   // used by 'eq' and 'gte'
+  min?: number     // used by 'range'
+  max?: number     // used by 'range'
+}
+
+/**
+ * A single rule in an act's intro rule set.
+ * `panels` title/text may contain substitution tags — see resolveActIntro.
+ */
+export interface IntroRule {
+  condition: RuleCondition
+  panels: CutscenePanel[]
+}
+
 export interface Act {
   id: string
   title: string
@@ -197,8 +154,27 @@ export interface Act {
   startNodeIds: string[]
   rewardRelic: string
   rewardRelicDesc: string
-  intro?: CutscenePanel[]   // shown once when the act begins (first run only)
+  intro?: CutscenePanel[]   // shown on run 1 (fallback when no rule matches)
   outro?: CutscenePanel[]   // shown every time the boss is defeated
+
+  /**
+   * Named string arrays for seeded random picks.
+   * Referenced in panel text/title via {pool:name:seedOffset}.
+   */
+  variantPools?: Record<string, string[]>
+
+  /**
+   * Template strings for dynamic mid-run opening lines.
+   * May contain {n} and {ordinalLower}. Selected via n % length.
+   * Referenced in panel text via {midRunTemplate}.
+   */
+  midRunTemplates?: string[]
+
+  /**
+   * Ordered list of run-count rules. The first matching rule's panels are shown.
+   * Falls back to `intro` if no rule matches (i.e. run 1).
+   */
+  introRules?: IntroRule[]
 }
 
 // ─── Run counter ──────────────────────────────────────────
@@ -232,86 +208,71 @@ export function markIntroSeen(actId: string): void {
   } catch { /* ignore */ }
 }
 
-// ─── Narrative variation ──────────────────────────────────
-// Returns slightly different intro panels based on how many runs the player has done.
+// ─── Intro rule engine ────────────────────────────────────
 
-/** A seeded pseudo-random from the run count — keeps text stable per run number. */
-function seeded(n: number, offset = 0): number {
+/** Seeded pseudo-random — stable per (runCount, offset) pair. */
+function seededPick<T>(arr: T[], n: number, offset = 0): T {
   const x = Math.sin(n * 127.1 + offset * 311.7) * 43758.5453123
-  return x - Math.floor(x)
+  return arr[Math.floor((x - Math.floor(x)) * arr.length)]
 }
 
-function pick<T>(arr: T[], n: number, offset = 0): T {
-  return arr[Math.floor(seeded(n, offset) * arr.length)]
+function matchesCondition(cond: RuleCondition, n: number): boolean {
+  switch (cond.op) {
+    case 'eq':    return n === cond.value
+    case 'gte':   return n >= (cond.value ?? 0)
+    case 'range': return n >= (cond.min ?? 0) && n <= (cond.max ?? Infinity)
+  }
 }
 
-// Variants for the opening line about Jarv's state of mind
-const JARV_MOODS = [
-  'Now, technically, unemployed.',
-  'Now, technically, a free agent.',
-  'Now, effectively, between employers.',
-  'Now, in the administrative sense, without portfolio.',
-  'Now — if you were being generous — on sabbatical.',
-]
+/**
+ * Substitutes tags in a template string:
+ *   {pool:name:offset}  → seeded pick from act.variantPools[name]
+ *   {midRunTemplate}    → entry from act.midRunTemplates at n % length, with {n}/{ordinalLower} resolved
+ *   {ORDINAL}           → ordinalWord(n), e.g. "FIFTH"
+ *   {ordinalLower}      → ordinalWord(n).toLowerCase(), e.g. "fifth"
+ *   {n}                 → run count as a number
+ */
+function resolvePlaceholders(template: string, n: number, act: Act): string {
+  const ordinal = ordinalWord(n)
+  const pools   = act.variantPools    ?? {}
+  const midTmpl = act.midRunTemplates ?? []
 
-const JARV_INTROS = [
-  "You have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.",
-  "You have a deck of cards, a half-remembered oath, and an extremely stubborn refusal to think too hard about any of this.",
-  "You have a deck of cards, a persistent headache, and the growing suspicion that this wasn't your first time here.",
-  "You have a deck of cards, a strategy you haven't fully thought through, and the particular confidence of someone with nothing left to lose.",
-  "You have a deck of cards. You always have a deck of cards. That, at least, has been consistent.",
-]
+  return template
+    .replace(/{ORDINAL}/g,      ordinal)
+    .replace(/{ordinalLower}/g, ordinal.toLowerCase())
+    .replace(/{n}/g,            String(n))
+    .replace(/{midRunTemplate}/g, () => {
+      if (midTmpl.length === 0) return ''
+      return midTmpl[n % midTmpl.length]
+        .replace(/{ORDINAL}/g,      ordinal)
+        .replace(/{ordinalLower}/g, ordinal.toLowerCase())
+        .replace(/{n}/g,            String(n))
+    })
+    .replace(/{pool:([^:}]+):(\d+)}/g, (_, poolName, offsetStr) => {
+      const pool = pools[poolName] ?? []
+      if (pool.length === 0) return ''
+      return seededPick(pool, n, parseInt(offsetStr, 10))
+    })
+}
 
-const FOREST_DESC = [
-  "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
-  "Your compass points to the Verdant Shard — a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
-  "Your compass points toward the Verdant Shard. The forest ahead is old enough to have opinions about you.",
-  "The Verdant Shard pulses at the edge of your compass bearing — a realm of old growth and older grudges, sealed since the Fracture.",
-]
+/**
+ * Returns the intro panels for an act based on run count.
+ * Uses act.introRules (data-driven); falls back to act.intro for run 1.
+ * Generic — new acts need only JSON, no new TypeScript.
+ */
+export function resolveActIntro(act: Act, n: number): CutscenePanel[] {
+  if (n <= 1 || !act.introRules?.length) return act.intro ?? []
+  const rule = act.introRules.find(r => matchesCondition(r.condition, n))
+  if (!rule) return act.intro ?? []
+  return rule.panels.map(p => ({
+    title: resolvePlaceholders(p.title, n, act),
+    text:  resolvePlaceholders(p.text,  n, act),
+  }))
+}
 
-const THORNLORD_DESC = [
-  "The shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible.",
-  "The Thornlord seals the shard's pathways. He is ancient, uncompromising, and deeply inconvenient. You've dealt with worse. Probably.\n\nAt least, it feels like you have.",
-  "The Thornlord waits at the end of the shard. Older than the Dominion. Older than most things people are afraid of. He has not spoken to a living soul in forty years.\n\nYou wonder, briefly, if he'll recognise you.",
-  "The Thornlord seals every path through the Verdant Shard. Traders who've survived say he is patient, thorough, and has never once reconsidered a decision.\n\nYou have a plan. You've had plans before.",
-]
-
-const PRIOR_RUN_SUMMARIES = [
-  // run 2+
-  "The path felt familiar — the way a dream feels familiar, just before it turns wrong.",
-  "You stepped into the Verdant Shard with the uneasy sense that you'd stepped here before. You pushed the feeling aside. There was work to do.",
-  "Something about the first battle. The angle of the light. The particular way the Goblins charged. A déjà vu so precise it was almost a memory.",
-  "The forest seemed quieter than it should have been. As though it recognised you, and was deciding whether to be pleased about it.",
-]
-
-const PRIOR_RUN_OPENINGS = [
-  "You remember — and here is the strange part — getting this far before. Not the same choices. But the same road.",
-  "The scholar on the boulder didn't look up when you approached. 'Again?' he said. 'You're ahead of schedule.'",
-  "The Thornlord, when you finally stood before him, was already watching you. As though he had been expecting you. As though he had been expecting this for some time.",
-  "The goblins at the first barricade looked familiar. Not familiar the way people are familiar — familiar the way furniture in a childhood home is familiar. Something about the arrangement of them.",
-]
-
-const MILESTONE_OPENINGS: Record<number, string[]> = {
-  5: [
-    "The fifth time through the Verdant Shard, a bird called out your name. That was new.",
-    "Fifth campaign. The Thornlord paused before his opening monologue this time. As though choosing different words.",
-  ],
-  10: [
-    "Ten campaigns. The Wandering Scholar had written something in his margins. Your name. A question mark.",
-    "You notice things on the tenth pass that you hadn't noticed before. The way the Forest Patrol waits a little too perfectly. The way the shrine seems to already know your choice.",
-  ],
-  25: [
-    "Twenty-five campaigns. The Thornlord opens with silence now, instead of threats. It feels more honest.",
-    "After twenty-five runs, the goblins at the first checkpoint have started waving before attacking you. You choose not to read into this.",
-  ],
-  50: [
-    "Something is different this time. The sky above the Verdant Shard is slightly the wrong colour. The compass hesitates before pointing.",
-    "On the fiftieth campaign, you notice the cracks. Small ones. In the edges of things. The world is tired of resetting itself.",
-  ],
-  100: [
-    // Boss speaks directly to the player
-    "The Thornlord looks past you. Past Jarv. Directly at the person holding the cards.\n\n'You again,' he says. 'Not the tactician. You. I know you. I've been watching you since the beginning.'\n\nA pause. A root curls against the ground like a finger drumming.\n\n'A hundred times you've come here. A hundred times I've fallen. I am the oldest thing in this shard and you have made me your tutorial boss.'\n\nHe sounds almost amused. Almost.",
-  ],
+/** Thin wrapper for backward compatibility — new code should call resolveActIntro directly. */
+export function getAct1Intro(runCount: number): CutscenePanel[] {
+  return resolveActIntro(ACT_1, runCount)
 }
 
 // ─── Ordinal helper ───────────────────────────────────────────────────────────
@@ -330,189 +291,6 @@ function ordinalWord(n: number): string {
                : (n % 10 === 3 && n % 100 !== 13) ? 'RD'
                : 'TH'
   return `${n}${suffix}`
-}
-
-// Texts for "between-milestone" runs (11-24, 26-49, 51-99).
-// Each entry is a function so it can embed the actual run number.
-const MID_RUN_OPENINGS: Array<(n: number) => string> = [
-  n => `The ${ordinalWord(n).toLowerCase()} time through the Verdant Shard. The Thornlord has stopped rehearsing his opening speech.`,
-  n => `Campaign ${n}. The Wandering Scholar barely looks up anymore. He has your name pre-written in the margin.`,
-  n => `${n} campaigns in. The goblins at the first barricade have started placing bets on how quickly you'll get past them.`,
-  n => `${n} times you've stood at this shard's edge. The trees have started leaning away slightly when you approach.`,
-  n => `Run ${n}. You walk in before dawn, which is new. Everything else is exactly as you left it.`,
-  n => `The ${ordinalWord(n).toLowerCase()} attempt. You recognise the smell now. Damp bark and old magic and something else — familiarity.`,
-  n => `${n} campaigns. The Wandering Scholar has started making tea before you arrive. He knows the timing by heart.`,
-]
-
-/**
- * Returns Act 1 intro panels modified based on how many times the campaign has been run.
- * On the first run, returns the standard intro.
- * On subsequent runs, adds references to prior attempts and subtle variations.
- * Milestones (10, 25, 50, 100) get special text; all other runs get dynamic text with the actual number.
- */
-export function getAct1Intro(runCount: number): CutscenePanel[] {
-  const n = runCount
-
-  // ── Run 100+ milestone ────────────────────────────────────
-  if (n >= 100 && MILESTONE_OPENINGS[100]) {
-    return [
-      {
-        title: 'THE THORNLORD KNOWS',
-        text: pick(MILESTONE_OPENINGS[100], n),
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 3)}\n\n${pick(THORNLORD_DESC, n, 2)}`,
-      },
-    ]
-  }
-
-  // ── Runs 51–99: between 50 and 100 ───────────────────────
-  if (n > 50 && n < 100) {
-    const ordinal = ordinalWord(n)
-    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: opening },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 1)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 2)}\n\n${pick(THORNLORD_DESC, n, 1)}`,
-      },
-      { title: 'YOUR MISSION', text: 'Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way.' },
-    ]
-  }
-
-  // ── Run 50 milestone ──────────────────────────────────────
-  if (n === 50 && MILESTONE_OPENINGS[50]) {
-    const panels: CutscenePanel[] = [
-      {
-        title: 'FIFTY CAMPAIGNS',
-        text: pick(MILESTONE_OPENINGS[50], n),
-      },
-    ]
-    panels.push({
-      title: 'THE WANDERER',
-      text: `You are Jarv. Former tactician of the Dominion's western campaigns. ${pick(JARV_MOODS, n)}\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall.\n\n${pick(JARV_INTROS, n, 1)}`,
-    })
-    panels.push({
-      title: 'THE VERDANT SHARD',
-      text: `${pick(FOREST_DESC, n, 2)}\n\n${pick(THORNLORD_DESC, n, 1)}`,
-    })
-    panels.push({ title: 'YOUR MISSION', text: 'Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way.' })
-    return panels
-  }
-
-  // ── Runs 26–49: between 25 and 50 ────────────────────────
-  if (n > 25 && n < 50) {
-    const ordinal = ordinalWord(n)
-    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: opening },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 2)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 1)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-    ]
-  }
-
-  // ── Run 25 milestone ──────────────────────────────────────
-  if (n === 25 && MILESTONE_OPENINGS[25]) {
-    return [
-      { title: 'TWENTY-FIVE', text: pick(MILESTONE_OPENINGS[25], n) },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 2)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n, 1)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-    ]
-  }
-
-  // ── Runs 11–24: between 10 and 25 ────────────────────────
-  if (n > 10 && n < 25) {
-    const ordinal = ordinalWord(n)
-    const opening = MID_RUN_OPENINGS[n % MID_RUN_OPENINGS.length](n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: opening },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-      { title: 'YOUR MISSION', text: 'Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You\'ve always known how this goes.' },
-    ]
-  }
-
-  // ── Run 10 milestone ──────────────────────────────────────
-  if (n === 10 && MILESTONE_OPENINGS[10]) {
-    return [
-      { title: 'THE TENTH TIME', text: pick(MILESTONE_OPENINGS[10], n) },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n, 3)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-      { title: 'YOUR MISSION', text: 'Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You\'ve always known how this goes.' },
-    ]
-  }
-
-  // ── Runs 5–9 ─────────────────────────────────────────────
-  if (n >= 5 && MILESTONE_OPENINGS[5]) {
-    const ordinal = ordinalWord(n)
-    return [
-      { title: `THE ${ordinal} TIME`, text: pick(MILESTONE_OPENINGS[5], n) },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-    ]
-  }
-
-  if (n >= 2) {
-    // Summary of last run + subtle deja vu
-    const summary = pick(PRIOR_RUN_SUMMARIES, n)
-    const opening = pick(PRIOR_RUN_OPENINGS, n)
-    return [
-      {
-        title: 'THE FRACTURE',
-        text: `Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant.\n\n${summary}`,
-      },
-      {
-        title: 'THE WANDERER',
-        text: `You are Jarv. ${pick(JARV_MOODS, n)}\n\n${pick(JARV_INTROS, n)}`,
-      },
-      {
-        title: 'THE VERDANT SHARD',
-        text: `${pick(FOREST_DESC, n)}\n\n${pick(THORNLORD_DESC, n)}`,
-      },
-      {
-        title: 'A FEELING',
-        text: `And yet — ${opening}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time.`,
-      },
-    ]
-  }
-
-  // First run: standard intro
-  return ACT_1.intro ?? []
 }
 
 // ─── Run state ────────────────────────────────────────────
@@ -716,141 +494,6 @@ export function generateRewardChoices(nodeType: NodeType): string[] {
 
 // ─── Act 1 ────────────────────────────────────────────────
 
-export const ACT_1: Act = {
-  id: 'act1',
-  title: 'ACT I',
-  subtitle: 'The Verdant Shard',
-  rewardRelic: 'Bark Shield',
-  rewardRelicDesc: 'Your base gains +10 max HP at the start of every battle.',
-  startNodeIds: ['goblin-raid'],
-
-  intro: [
-    {
-      title: 'THE FRACTURE',
-      text: 'Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant — a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it.',
-    },
-    {
-      title: 'THE WANDERER',
-      text: 'You are Jarv. Former tactician of the Dominion\'s western campaigns. Now, technically, unemployed.\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall. The people you knew are either dead, stranded, or figuring out their own problems.\n\nYou have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.',
-    },
-    {
-      title: 'THE VERDANT SHARD',
-      text: 'Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard\'s guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn\'t spoken to anyone in forty years. You\'re choosing to interpret that as optimistically as possible.',
-    },
-    {
-      title: 'YOUR MISSION',
-      text: 'Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side — your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably.',
-    },
-  ],
-
-  outro: [
-    {
-      title: 'THE THORNLORD FALLS',
-      text: 'The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath — then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this.',
-    },
-    {
-      title: 'WHAT HE WAS',
-      text: 'The Thornlord was not evil. He was old, and afraid, and doing what guardians do when the world stops making sense.\n\nYou take the Bark Shield he leaves behind. Not as a trophy. As a reminder that some things only break because nothing else would hold.',
-    },
-    {
-      title: 'THE ROAD AHEAD',
-      text: 'One shard cleared. The ley lines pulse — faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits — and whoever controls it will not be glad to see you.\n\nGood.',
-    },
-  ],
-
-  nodes: {
-    // ── Row 0 ─────────────────────────────────────────────
-    'goblin-raid': {
-      id: 'goblin-raid', type: 'battle',
-      label: 'Goblin Raiders',
-      description: 'A rowdy mob has blockaded the trade route. Clear them out.',
-      row: 0, col: 0, rowCols: 1,
-      parentIds: [], childIds: ['camp', 'shrine', 'patrol'],
-      handicap: 10,   // commons + uncommons only — manageable for a starter deck
-    },
-    // ── Row 1 — three-way branch ──────────────────────────
-    'camp': {
-      id: 'camp', type: 'rest',
-      label: 'Woodland Camp',
-      description: 'A sheltered clearing. Rest here and tend your wounds.',
-      row: 1, col: 0, rowCols: 3,
-      parentIds: ['goblin-raid'], childIds: ['ambush'],
-      restHeal: 10,
-    },
-    'shrine': {
-      id: 'shrine', type: 'event',
-      label: 'Ancient Shrine',
-      description: 'A moss-covered shrine pulses with faint forest magic.',
-      row: 1, col: 1, rowCols: 3,
-      parentIds: ['goblin-raid'], childIds: ['ambush'],
-      eventId: 'shrine',
-    },
-    'patrol': {
-      id: 'patrol', type: 'battle',
-      label: 'Forest Patrol',
-      description: 'A disciplined warband is watching the deeper path.',
-      row: 1, col: 2, rowCols: 3,
-      parentIds: ['goblin-raid'], childIds: ['ambush'],
-      handicap: 7,    // uncommons max — slightly harder second battle
-    },
-    // ── Row 2 ─────────────────────────────────────────────
-    'ambush': {
-      id: 'ambush', type: 'battle',
-      label: 'The Ambush',
-      description: 'Something ancient was waiting in the treeline.',
-      row: 2, col: 0, rowCols: 1,
-      parentIds: ['camp', 'shrine', 'patrol'], childIds: ['ruins', 'war-camp', 'market'],
-      handicap: 4,    // rares allowed, no legendaries — mid-act difficulty step-up
-    },
-    // ── Row 3 — three-way branch ──────────────────────────
-    'ruins': {
-      id: 'ruins', type: 'event',
-      label: 'Watchtower Ruins',
-      description: 'A crumbling garrison tower leans against the treeline.',
-      row: 3, col: 0, rowCols: 3,
-      parentIds: ['ambush'], childIds: ['captain'],
-      eventId: 'ruins',
-    },
-    'war-camp': {
-      id: 'war-camp', type: 'battle',
-      label: 'War Camp',
-      description: 'A fortified enemy camp blocks the road ahead.',
-      row: 3, col: 1, rowCols: 3,
-      parentIds: ['ambush'], childIds: ['captain'],
-      handicap: 3,    // rares allowed, no legendaries
-    },
-    'market': {
-      id: 'market', type: 'merchant',
-      label: 'Travelling Market',
-      description: 'A merchant cart half-hidden in the underbrush. She waves you over.',
-      row: 3, col: 2, rowCols: 3,
-      parentIds: ['ambush'], childIds: ['captain'],
-    },
-    // ── Row 4 ─────────────────────────────────────────────
-    'captain': {
-      id: 'captain', type: 'elite',
-      label: 'Siege Captain',
-      description: 'A hardened veteran with well-drilled siege troops.',
-      row: 4, col: 0, rowCols: 1,
-      parentIds: ['ruins', 'war-camp', 'market'], childIds: ['thornlord'],
-      handicap: 1,    // full deck including legendaries — elite fight
-    },
-    // ── Row 5 ─────────────────────────────────────────────
-    'thornlord': {
-      id: 'thornlord', type: 'boss',
-      label: 'The Thornlord',
-      description: 'Ancient guardian of the Verdant Shard. Unbowed for centuries.',
-      row: 5, col: 0, rowCols: 1,
-      parentIds: ['captain'], childIds: [],
-      handicap: 0,
-      bossAI: 'thornlord',
-      bossDialogue: [
-        '"You carry the smell of the shattered world."',
-        '"I sealed these paths to keep the rot from spreading. Clearly I should have built higher walls."',
-        '"You will not pass. The Verdant Shard does not need another wandering tactician."',
-      ],
-    },
-  },
-}
+export const ACT_1: Act = act1Data as Act
 
 export const ACTS: Record<string, Act> = { act1: ACT_1 }
