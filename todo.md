@@ -18,8 +18,8 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 - [ ] **#86** Rewards screen: crystal amount granted after a battle isn't displayed (10/15/25 per node type)
 - [ ] **#80** Difficulty scaling: each subsequent act run should apply a difficulty multiplier to the opponent
 
-- [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size)
-- [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance
+ - [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size) (closed on GitHub)
+ - [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance (closed on GitHub)
 - [ ] **#87** Inventory: item detail modal when tapping a card; relics should appear in inventory
 - [ ] **#88** Event rewards: shrines and watchtowers should occasionally give inventory/relic items (not just HP/crystals/cards)
 
@@ -27,7 +27,7 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 
 ## 🟡 UX / UI Bugs
 
-- [x] **#58** Screen size: battlefield + hand don't fit on small phone screens — scale to viewport
+ - [x] **#58** Screen size: battlefield + hand don't fit on small phone screens — scale to viewport (closed on GitHub)
 - [x] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
 - [x] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
 
@@ -37,10 +37,10 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 
 - [x] **#51** Daily login rewards: wire DailyLoginModal + InventoryScreen into App.tsx (files exist, not integrated)
 - [x] **#57** Campaign shrines: hide expected rewards; randomise options; one option can be negative
-- [x] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke
+ - [x] **#59** Campaign QoL: hint after 2 failed attempts; crystals as battle reward; explain merchant when broke (closed on GitHub)
 - [x] **#61** Battlefield: buildings spread across multiple rows from centre; upgrade level visual feedback
 - [x] **#49** Deck builder: add sort / filter / search (already implemented — closing)
-- [x] **#48** Deck builder filter labels: now use full words (Units, Structs, Upgrades, Common, Uncommon, Rare, Legendary, + TYPE/RARITY/SORT group labels) — needs manual close
+ - [x] **#48** Deck builder filter labels: now use full words (Units, Structs, Upgrades, Common, Uncommon, Rare, Legendary, + TYPE/RARITY/SORT group labels) (closed on GitHub)
 - [x] **#73** Campaign hack: page refresh now auto-resumes into the active battle (no title screen shown) — needs manual close
 - [x] **#50** Sound: better battle music; death cries; crash sound for buildings (already implemented — needs manual close)
 - [x] **#60** Rare event — The Gambler: tap-to-guess modal; win all cards or game reset; rubber chicken consolation; history tracking — needs manual close
@@ -79,7 +79,7 @@ Issues sourced from GitHub. Last synced: 2026-03-07.
 
 ## ⚪ Features — Large / Long-term
 
-- [x] **#54** Intro screen: "Awesome Software Presents" logo → Jarv SVG → title (skip setting in settings)
+ - [x] **#54** Intro screen: "Awesome Software Presents" logo → Jarv SVG → title (skip setting in settings) (closed on GitHub)
 - [ ] **#44** Battlefield z-order: water → rocks → walls → trees → surroundings; units above walls, under canopy; flyers above all
 - [ ] **#45** Battlefield scenery themed to environment (rocks/water/ice/canyon)
 - [x] **#43** Flying units cast a shadow (already implemented)
