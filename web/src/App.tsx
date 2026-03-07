@@ -468,8 +468,7 @@ export default function App() {
     // Include cards earned as rewards earlier this run
     const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
-    // Apply campaign HP and active relic to player base
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     if (updatedRun.activeRelic) getRelicDef(updatedRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -744,7 +743,7 @@ export default function App() {
     const playerCards = buildDeckCards(deckEntries, collection)
     const earnedEntries = (withFail.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame(playerCards, node.handicap ?? 0, node.bossAI)
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     if (withFail.activeRelic) getRelicDef(withFail.activeRelic)?.applyToGame(state)
     setGameState(state)
