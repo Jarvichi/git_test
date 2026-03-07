@@ -88,6 +88,25 @@ At the start of every session (or when asked):
 
 This keeps both the todo list and CLAUDE.md accurate across sessions.
 
+## Campaign Event Checklist (for agents)
+
+When creating or modifying campaign act files (`web/src/data/acts/*.json`) ensure any new `eventId` values are present in the events catalog (`web/src/data/events.json`) or handled by the generator functions (`generateShrineEvent`, `generateRuinsEvent`). Follow this checklist:
+
+- **Add event entry:** If the `eventId` is a named catalog entry (not `shrine`/`ruins`), add an entry under `catalog` in `web/src/data/events.json` with `id`, `title`, `description`, and `choices` matching the `EventData` shape.
+- **Generators:** If the event should be procedurally generated per-visit (like `shrine`/`ruins`), prefer adding a generator in `web/src/game/questline.ts` and adding the key to `EVENT_CATALOG` there.
+- **Update act JSON:** Ensure the act node uses the same `eventId` string used in `events.json` (exact match).
+- **Unit tests / quick QA:** Run the dev server and verify that selecting the node opens the event UI (not a battle). Quick local test:
+  ```bash
+  cd web
+  npm run dev
+  # Start the app and navigate to the act, click the new event node
+  ```
+- **Sprites / assets:** If the event includes new named items or cards, ensure their assets (card images, sprites) exist and are committed.
+- **Commit message:** Use a clear message, e.g. `feat(campaign): add supply-cache event + act2 node reference`.
+- **PR description:** Mention the act id and node id, and add a note asking QA to verify the node opens the event screen.
+
+Agents must follow this checklist when authoring or merging act changes to avoid regressions where unknown `eventId` values fall through to other handlers.
+
 ## Sprites / Graphics
 
 Every unit and building needs a sprite. **Whenever new units or buildings are added, their sprites must be created before the task is complete.**

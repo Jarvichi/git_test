@@ -29,6 +29,16 @@
         { "label": "Take what you need from the cart", "consequence": "Add an uncommon card to your collection (ethically complicated)",        "effect": { "type": "gainCard",     "rarity": "uncommon" } },
         { "label": "Leave him be",                     "consequence": "You are definitely the villain in his story.",                           "effect": { "type": "nothing" } }
       ]
+    },
+    "supply-cache": {
+      "id": "supply-cache",
+      "title": "Supply Cache",
+      "description": "A Citadel supply depot, hastily abandoned. Crates lie open and torn sacks spill their contents.",
+      "choices": [
+        { "label": "Search the crates", "consequence": "+12 crystals from scavenged supplies", "effect": { "type": "gainCrystals", "amount": 12 } },
+        { "label": "Pocket something useful", "consequence": "You find an uncommon card among the spoils", "effect": { "type": "gainCard", "rarity": "uncommon" } },
+        { "label": "Leave quickly", "consequence": "Nothing of use remains — you move on.", "effect": { "type": "nothing" } }
+      ]
     }
   },
 

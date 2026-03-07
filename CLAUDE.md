@@ -125,6 +125,8 @@ git push -u origin <branch>
 - Default base branch: `main`
 - Deployment triggers automatically on merge to `main`
 
+**Includes / agent guidance:** See [AGENTS.md](AGENTS.md) for agent workflows, campaign event checklist, and issue/PR handling guidance. Agents should follow the `Campaign Event Checklist` there whenever adding or modifying act nodes that reference `eventId` values.
+
 ---
 
 ## Design Roadmap & Todo List
