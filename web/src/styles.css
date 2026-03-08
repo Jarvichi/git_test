@@ -3783,8 +3783,12 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  cursor: default;
+  cursor: pointer;
   transition: border-color 0.15s;
+  /* reset button defaults */
+  color: inherit;
+  font-family: inherit;
+  text-align: center;
 }
 
 .inventory-cell:hover {
@@ -3835,4 +3839,85 @@ body {
 .inventory-secret-icon  { font-size: 32px; }
 .inventory-secret-title { font-size: 13px; color: #c060ff; font-weight: bold; letter-spacing: 2px; }
 .inventory-secret-msg   { font-size: 12px; color: #e0b0ff; font-style: italic; max-width: 280px; }
+
+/* ── Inventory sections & relic cells ──────────────────── */
+.inventory-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.inventory-section-title {
+  font-size: 10px;
+  color: #666;
+  letter-spacing: 2px;
+  padding: 0 4px;
+}
+
+.inventory-cell--relic {
+  border-color: #3a2a1a !important;
+  background: #0e0a06 !important;
+}
+
+.inventory-cell--relic:hover {
+  border-color: #7a4a1a !important;
+}
+
+/* ── Item / relic detail modal ─────────────────────────── */
+.inventory-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.inventory-detail-modal {
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 280px;
+  width: 90%;
+}
+
+.inventory-detail-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.inventory-detail-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #eee;
+  text-align: center;
+}
+
+.inventory-detail-tag {
+  font-size: 9px;
+  color: #c0860a;
+  letter-spacing: 2px;
+  border: 1px solid #5a3a00;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+.inventory-detail-desc {
+  font-size: 13px;
+  color: #aaa;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.inventory-detail-date {
+  font-size: 10px;
+  color: #555;
+}
 
