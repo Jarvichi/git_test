@@ -14,7 +14,7 @@
   "intro": [
     {
       "title": "THE FRACTURE",
-      "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant \u2014 a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it."
+      "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant — a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it."
     },
     {
       "title": "THE WANDERER",
@@ -22,17 +22,17 @@
     },
     {
       "title": "THE VERDANT SHARD",
-      "text": "Your compass points to the nearest reachable shard \u2014 a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible."
+      "text": "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible."
     },
     {
       "title": "YOUR MISSION",
-      "text": "Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side \u2014 your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably."
+      "text": "Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side — your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably."
     }
   ],
   "outro": [
     {
       "title": "THE THORNLORD FALLS",
-      "text": "The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath \u2014 then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this."
+      "text": "The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath — then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this."
     },
     {
       "title": "WHAT HE WAS",
@@ -40,7 +40,7 @@
     },
     {
       "title": "THE ROAD AHEAD",
-      "text": "One shard cleared. The ley lines pulse \u2014 faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits \u2014 and whoever controls it will not be glad to see you.\n\nGood."
+      "text": "One shard cleared. The ley lines pulse — faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits — and whoever controls it will not be glad to see you.\n\nGood."
     }
   ],
   "variantPools": {
@@ -49,7 +49,7 @@
       "Now, technically, a free agent.",
       "Now, effectively, between employers.",
       "Now, in the administrative sense, without portfolio.",
-      "Now \u2014 if you were being generous \u2014 on sabbatical."
+      "Now — if you were being generous — on sabbatical."
     ],
     "jarvIntros": [
       "You have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.",
@@ -59,10 +59,10 @@
       "You have a deck of cards. You always have a deck of cards. That, at least, has been consistent."
     ],
     "forestDesc": [
-      "Your compass points to the nearest reachable shard \u2014 a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
-      "Your compass points to the Verdant Shard \u2014 a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
+      "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
+      "Your compass points to the Verdant Shard — a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
       "Your compass points toward the Verdant Shard. The forest ahead is old enough to have opinions about you.",
-      "The Verdant Shard pulses at the edge of your compass bearing \u2014 a realm of old growth and older grudges, sealed since the Fracture."
+      "The Verdant Shard pulses at the edge of your compass bearing — a realm of old growth and older grudges, sealed since the Fracture."
     ],
     "thornlordDesc": [
       "The shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible.",
@@ -71,16 +71,16 @@
       "The Thornlord seals every path through the Verdant Shard. Traders who've survived say he is patient, thorough, and has never once reconsidered a decision.\n\nYou have a plan. You've had plans before."
     ],
     "priorRunSummaries": [
-      "The path felt familiar \u2014 the way a dream feels familiar, just before it turns wrong.",
+      "The path felt familiar — the way a dream feels familiar, just before it turns wrong.",
       "You stepped into the Verdant Shard with the uneasy sense that you'd stepped here before. You pushed the feeling aside. There was work to do.",
-      "Something about the first battle. The angle of the light. The particular way the Goblins charged. A d\u00e9j\u00e0 vu so precise it was almost a memory.",
+      "Something about the first battle. The angle of the light. The particular way the Goblins charged. A déjà vu so precise it was almost a memory.",
       "The forest seemed quieter than it should have been. As though it recognised you, and was deciding whether to be pleased about it."
     ],
     "priorRunOpenings": [
-      "You remember \u2014 and here is the strange part \u2014 getting this far before. Not the same choices. But the same road.",
+      "You remember — and here is the strange part — getting this far before. Not the same choices. But the same road.",
       "The scholar on the boulder didn't look up when you approached. 'Again?' he said. 'You're ahead of schedule.'",
       "The Thornlord, when you finally stood before him, was already watching you. As though he had been expecting you. As though he had been expecting this for some time.",
-      "The goblins at the first barricade looked familiar. Not familiar the way people are familiar \u2014 familiar the way furniture in a childhood home is familiar. Something about the arrangement of them."
+      "The goblins at the first barricade looked familiar. Not familiar the way people are familiar — familiar the way furniture in a childhood home is familiar. Something about the arrangement of them."
     ],
     "milestoneOpenings5": [
       "The fifth time through the Verdant Shard, a bird called out your name. That was new.",
@@ -108,7 +108,7 @@
     "{n} campaigns in. The goblins at the first barricade have started placing bets on how quickly you'll get past them.",
     "{n} times you've stood at this shard's edge. The trees have started leaning away slightly when you approach.",
     "Run {n}. You walk in before dawn, which is new. Everything else is exactly as you left it.",
-    "The {ordinalLower} attempt. You recognise the smell now. Damp bark and old magic and something else \u2014 familiarity.",
+    "The {ordinalLower} attempt. You recognise the smell now. Damp bark and old magic and something else — familiarity.",
     "{n} campaigns. The Wandering Scholar has started making tea before you arrive. He knows the timing by heart."
   ],
   "introRules": [
@@ -309,7 +309,7 @@
         },
         {
           "title": "A FEELING",
-          "text": "And yet \u2014 {pool:priorRunOpenings:0}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time."
+          "text": "And yet — {pool:priorRunOpenings:0}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time."
         }
       ]
     }
@@ -334,13 +334,13 @@
       "opponentBaseHp": 175,
       "environment": "forest",
       "enemyDeck": [
-        "Goblin",
+        "Frog Knight",
         "Goblin",
         "Goblin",
         "Goblin",
         "Bat",
         "Bat",
-        "Bandit",
+        "Spore Bat",
         "Bandit",
         "Pixie",
         "Pixie",
@@ -405,12 +405,12 @@
         "Archer",
         "Archer",
         "Archer",
-        "Bandit",
+        "Vine Golem",
         "Bandit",
         "Goblin",
         "Goblin",
         "Pixie",
-        "Crossbow",
+        "Spore Bat",
         "Build Wall",
         "Build Wall",
         "Build Farm",
@@ -441,15 +441,15 @@
       "enemyDeck": [
         "Goblin",
         "Goblin",
+        "Vine Golem",
         "Bat",
         "Bat",
-        "Bat",
-        "Bandit",
+        "Thornbeast",
         "Bandit",
         "Archer",
         "Archer",
         "Troll",
-        "Build Wall",
+        "Thornwall",
         "Barracks",
         "Rally",
         "Haste"
@@ -494,9 +494,9 @@
         "Knight",
         "Crossbow",
         "Crossbow",
-        "Troll",
+        "Elder Treant",
         "Archer",
-        "Build Wall",
+        "Thornwall",
         "Build Wall",
         "Barracks",
         "Sharpen Blades",
