@@ -28,6 +28,10 @@ export interface QuestNode {
   enemyDeck?: string[]
   /** Visual background theme for this node's battlefield ('forest' | 'ruins' | 'camp' | 'citadel' | 'ashen'). */
   environment?: string
+  /** Override opponent play interval (ms). Replaces handicap-derived default. */
+  opponentIntervalMs?: number
+  /** Override opponent base HP. Replaces engine default (95 for bosses, 82 for others). */
+  opponentBaseHp?: number
 }
 
 // ─── Event system ─────────────────────────────────────────

@@ -103,7 +103,7 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (savedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
+        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
         state.playerBase = { hp: savedRun.playerHp, maxHp: savedRun.maxHp }
         if (savedRun.activeRelic) getRelicDef(savedRun.activeRelic)?.applyToGame(state)
         return { screen: 'playing' as Screen, gameState: state as GameState | null, run: savedRun, isCampaign: true }
@@ -388,7 +388,7 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (activeRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
+        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
         state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
         if (activeRun.activeRelic) getRelicDef(activeRun.activeRelic)?.applyToGame(state)
         setGameState(state)
@@ -468,7 +468,7 @@ export default function App() {
     // Include cards earned as rewards earlier this run
     const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     if (updatedRun.activeRelic) getRelicDef(updatedRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -490,7 +490,7 @@ export default function App() {
     const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const act = ACTS[run.actId]
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
     if (run.activeRelic) getRelicDef(run.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -743,7 +743,7 @@ export default function App() {
     const playerCards = buildDeckCards(deckEntries, collection)
     const earnedEntries = (withFail.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment })
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     if (withFail.activeRelic) getRelicDef(withFail.activeRelic)?.applyToGame(state)
     setGameState(state)

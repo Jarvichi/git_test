@@ -201,6 +201,10 @@ export interface NewGameOptions {
   terrainSeed?: string
   /** Act environment ('forest' | 'citadel' | 'ashen') — themes terrain and log. */
   environment?: string
+  /** Override opponent play interval (ms). Defined per-node in act JSON. */
+  opponentIntervalMs?: number
+  /** Override opponent base HP. Defined per-node in act JSON. */
+  opponentBaseHp?: number
 }
 
 export function newGame(
@@ -223,6 +227,8 @@ export function newGame(
     enemyDeckNames,
     terrainSeed,
     environment,
+    opponentIntervalMs: intervalOverride,
+    opponentBaseHp: hpOverride,
   } = opts
 
   const playerDeck = shuffle(playerCards ?? makeDeck())
@@ -254,10 +260,11 @@ export function newGame(
 
   const strategy      = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
   const maxRarity     = boss ? 'legendary' : maxRarityForHandicap(clamp)
-  const oppIntervalMs = boss === 'thornlord' ? 5000
-    : boss === 'kragg'      ? 5000
-    : boss === 'ashwalker'  ? 4500
-    : opponentIntervalForHandicap(clamp)
+  const oppIntervalMs = intervalOverride
+    ?? (boss === 'thornlord' ? 5000
+    :   boss === 'kragg'     ? 5000
+    :   boss === 'ashwalker' ? 4500
+    :   opponentIntervalForHandicap(clamp))
 
   const diffLabel =
     maxRarity === 'common'    ? 'common-only' :
@@ -278,7 +285,7 @@ export function newGame(
 
   return {
     playerBase: { hp: 50, maxHp: 50 },
-    opponentBase: { hp: boss ? 95 : 82, maxHp: boss ? 95 : 82 },
+    opponentBase: { hp: hpOverride ?? (boss ? 95 : 82), maxHp: hpOverride ?? (boss ? 95 : 82) },
     field: [],
     playerHand,
     playerDeck,
@@ -914,17 +921,14 @@ export function tick(state: GameState, deltaMs: number): GameState {
   if (s.opponentTimer <= 0) {
     if (s.bossAI === 'thornlord') {
       thornlordAI(s, log)
-      s.opponentTimer = 5000
     } else if (s.bossAI === 'kragg') {
       kraggAI(s, log)
-      s.opponentTimer = 5000
     } else if (s.bossAI === 'ashwalker') {
       ashwalkerAI(s, log)
-      s.opponentTimer = 4500
     } else {
       opponentAI(s, log)
-      s.opponentTimer = s.opponentIntervalMs
     }
+    s.opponentTimer = s.opponentIntervalMs
   }
 
   // 7. Battle events
