@@ -214,16 +214,25 @@ export default function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // ── Page visibility: pause game loop when tab is hidden ──
+  const [isTabHidden, setIsTabHidden] = useState(() => document.hidden)
+  useEffect(() => {
+    function handleVisibility() { setIsTabHidden(document.hidden) }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [])
+
   // ── Game loop ────────────────────────────────────────────
   useEffect(() => {
     if (screen !== 'playing' || !gameState) return
     if (gameState.phase.type === 'gameOver') return
     if (isGamePaused) return
+    if (isTabHidden) return
     const id = setInterval(() => {
       setGameState(s => s ? tick(s, TICK_MS) : s)
     }, TICK_MS)
     return () => clearInterval(id)
-  }, [screen, gameState?.phase.type, isGamePaused])
+  }, [screen, gameState?.phase.type, isGamePaused, isTabHidden])
 
   // ── Music router ─────────────────────────────────────────
   // Exactly one track plays at a time; switching screen stops all others.

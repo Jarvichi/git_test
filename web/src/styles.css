@@ -3930,3 +3930,17 @@ body {
   color: #555;
 }
 
+
+/* ── Battery / reduced-motion optimisations ────────────────────────────── */
+/* Disable infinite decorative animations for users who prefer reduced motion
+   or on any device where the browser opts in via the media query. This also
+   removes needless paint work on mobile, helping battery life. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
