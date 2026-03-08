@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Legs - dark corroded plate -->
+  <rect x="11" y="22" width="4" height="8" rx="1" fill="#3a3a4a"/>
+  <rect x="17" y="22" width="4" height="8" rx="1" fill="#3a3a4a"/>
+  <!-- Corroded plate body -->
+  <rect x="9" y="13" width="14" height="11" rx="2" fill="#4a4a5a"/>
+  <line x1="16" y1="13" x2="16" y2="24" stroke="#2a2a3a" stroke-width="1"/>
+  <!-- Dark necrotic glow between plates -->
+  <line x1="9" y1="18" x2="23" y2="18" stroke="#6644aa" stroke-width="0.8" opacity="0.7"/>
+  <!-- Heavy pauldrons -->
+  <ellipse cx="7" cy="14" rx="4" ry="3" fill="#3a3a4a"/>
+  <ellipse cx="25" cy="14" rx="4" ry="3" fill="#3a3a4a"/>
+  <!-- Skull helm -->
+  <circle cx="16" cy="9" r="5.5" fill="#4a4a5a"/>
+  <!-- Skull features -->
+  <circle cx="13.5" cy="8.5" r="2" fill="#111"/>
+  <circle cx="18.5" cy="8.5" r="2" fill="#111"/>
+  <!-- Necrotic eye glow -->
+  <circle cx="13.5" cy="8.5" r="1" fill="#6644aa"/>
+  <circle cx="18.5" cy="8.5" r="1" fill="#6644aa"/>
+  <!-- Nasal cavity -->
+  <ellipse cx="16" cy="10.5" rx="1.2" ry="1" fill="#222"/>
+  <!-- Jawline cracks -->
+  <path d="M12,13 L14,14 L16,13 L18,14 L20,13" stroke="#3a3a4a" stroke-width="1" fill="none"/>
+  <!-- Greatsword -->
+  <rect x="23" y="7" width="2.5" height="18" rx="0.5" fill="#555"/>
+  <rect x="20" y="12" width="9" height="2" rx="0.5" fill="#444"/>
+  <polygon points="24.25,7 24.25,4 25.5,7" fill="#666"/>
+  <!-- Shield arm -->
+  <rect x="4" y="13" width="5" height="9" rx="1" fill="#3a3a4a"/>
+  <ellipse cx="6.5" cy="17.5" rx="1.5" ry="2" fill="#2a2a3a"/>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Base platform -->
+  <rect x="8" y="26" width="16" height="4" rx="1" fill="#2a1a3a"/>
+  <rect x="10" y="24" width="12" height="3" rx="0.5" fill="#3a2a4a"/>
+  <!-- Obelisk body -->
+  <polygon points="13,6 19,6 21,24 11,24" fill="#2a1a3a"/>
+  <!-- Obelisk edges - glowing purple -->
+  <line x1="13" y1="6" x2="11" y2="24" stroke="#6633aa" stroke-width="0.8"/>
+  <line x1="19" y1="6" x2="21" y2="24" stroke="#6633aa" stroke-width="0.8"/>
+  <!-- Rune carvings -->
+  <line x1="14" y1="10" x2="18" y2="10" stroke="#aa44ff" stroke-width="0.8" opacity="0.9"/>
+  <line x1="13.5" y1="14" x2="18.5" y2="14" stroke="#aa44ff" stroke-width="0.8" opacity="0.9"/>
+  <line x1="13" y1="18" x2="19" y2="18" stroke="#aa44ff" stroke-width="0.8" opacity="0.9"/>
+  <line x1="16" y1="10" x2="16" y2="18" stroke="#aa44ff" stroke-width="0.5" opacity="0.6"/>
+  <!-- Tip - dark crystal -->
+  <polygon points="14,4 18,4 16,1" fill="#3a1a5a"/>
+  <polygon points="14,4 18,4 16,1" stroke="#cc66ff" stroke-width="0.5" fill="none"/>
+  <!-- Soul wisps floating around -->
+  <circle cx="9" cy="14" r="1.5" fill="#7733cc" opacity="0.7"/>
+  <circle cx="9" cy="14" r="0.8" fill="#cc88ff" opacity="0.9"/>
+  <circle cx="23" cy="18" r="1.2" fill="#7733cc" opacity="0.6"/>
+  <circle cx="23" cy="18" r="0.6" fill="#cc88ff" opacity="0.8"/>
+  <circle cx="11" cy="8" r="1" fill="#5522aa" opacity="0.5"/>
+  <!-- Purple glow on obelisk face -->
+  <rect x="14" y="7" width="4" height="16" rx="1" fill="#6633aa" opacity="0.15"/>
+</svg>

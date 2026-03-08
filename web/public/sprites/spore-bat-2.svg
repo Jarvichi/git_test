@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Wings flat mid-stroke -->
+  <polygon points="16,16 3,14 6,18" fill="#5a3a7a"/>
+  <polygon points="16,16 29,14 26,18" fill="#5a3a7a"/>
+  <line x1="16" y1="16" x2="4" y2="15" stroke="#7a5a9a" stroke-width="0.8"/>
+  <line x1="16" y1="16" x2="28" y2="15" stroke="#7a5a9a" stroke-width="0.8"/>
+  <!-- Body raised -->
+  <ellipse cx="16" cy="16" rx="4" ry="5" fill="#7a4a9a"/>
+  <!-- Head -->
+  <circle cx="16" cy="11" r="4" fill="#8a5aaa"/>
+  <polygon points="13,8 11,3 15,7" fill="#5a3a7a"/>
+  <polygon points="19,8 21,3 17,7" fill="#5a3a7a"/>
+  <circle cx="14.2" cy="10.5" r="1.5" fill="#111"/>
+  <circle cx="17.8" cy="10.5" r="1.5" fill="#111"/>
+  <circle cx="14.2" cy="10.2" r="0.7" fill="#cc44ff"/>
+  <circle cx="17.8" cy="10.2" r="0.7" fill="#cc44ff"/>
+  <circle cx="7" cy="7" r="1" fill="#88cc44" opacity="0.8"/>
+  <circle cx="25" cy="8" r="1.2" fill="#88cc44" opacity="0.8"/>
+  <circle cx="11" cy="21" r="0.8" fill="#aadd55" opacity="0.7"/>
+  <circle cx="21" cy="21" r="0.8" fill="#aadd55" opacity="0.7"/>
+</svg>

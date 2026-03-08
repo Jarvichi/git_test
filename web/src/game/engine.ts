@@ -308,6 +308,7 @@ export function newGame(
     activeBattleEvent: null,
     bossAI: boss,
     terrain: generateTerrain(terrainSeed, environment),
+    environment,
   }
 }
 
@@ -637,9 +638,14 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
 
 // ─── Game Over Check ──────────────────────────────────────
 
+const VICTORY_BONUS = 500
+
 function checkGameOver(s: GameState): boolean {
   if (s.playerBase.hp <= 0 || s.opponentBase.hp <= 0) {
-    s.phase = { type: 'gameOver', winner: s.opponentBase.hp <= 0 ? 'player' : 'opponent' }
+    const winner = s.opponentBase.hp <= 0 ? 'player' : 'opponent'
+    if (winner === 'player') s.playerScore += VICTORY_BONUS
+    else s.opponentScore += VICTORY_BONUS
+    s.phase = { type: 'gameOver', winner }
     return true
   }
   return false

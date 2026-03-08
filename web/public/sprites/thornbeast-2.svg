@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Body raised 1px -->
+  <ellipse cx="16" cy="18" rx="7" ry="6" fill="#3d5c1a"/>
+  <polygon points="12,13 11,7 13,13" fill="#1a3a0a"/>
+  <polygon points="16,12 15,6 17,12" fill="#1a3a0a"/>
+  <polygon points="20,13 19,7 21,13" fill="#1a3a0a"/>
+  <ellipse cx="22" cy="15" rx="5" ry="4" fill="#4a7020"/>
+  <circle cx="24" cy="14" r="1.5" fill="#111"/>
+  <circle cx="21" cy="14.5" r="1.5" fill="#111"/>
+  <circle cx="24" cy="13.7" r="0.7" fill="#ee3333"/>
+  <circle cx="21" cy="14.2" r="0.7" fill="#ee3333"/>
+  <ellipse cx="27" cy="16" rx="3" ry="2" fill="#3d5c1a"/>
+  <line x1="25" y1="16" x2="29" y2="16" stroke="#1a3a0a" stroke-width="1"/>
+  <ellipse cx="9" cy="21" rx="4" ry="2.5" fill="#3d5c1a" transform="rotate(20,9,21)"/>
+  <polygon points="6,23 5,26 7,24" fill="#1a3a0a"/>
+  <polygon points="8,24 7,27 9,25" fill="#1a3a0a"/>
+  <rect x="10" y="23" width="4" height="6" rx="2" fill="#3d5c1a"/>
+  <rect x="17" y="23" width="4" height="6" rx="2" fill="#3d5c1a"/>
+  <polygon points="9,17 5,15 9,19" fill="#1a3a0a"/>
+  <polygon points="11,15 8,12 12,16" fill="#1a3a0a"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Body raised 1px -->
+  <rect x="10" y="21" width="5" height="8" rx="1" fill="#666"/>
+  <rect x="17" y="21" width="5" height="8" rx="1" fill="#666"/>
+  <rect x="9" y="18" width="14" height="5" rx="1" fill="#777"/>
+  <line x1="16" y1="18" x2="16" y2="23" stroke="#555" stroke-width="0.8"/>
+  <rect x="9" y="11" width="14" height="9" rx="2" fill="#888"/>
+  <line x1="16" y1="11" x2="16" y2="20" stroke="#666" stroke-width="1"/>
+  <line x1="9" y1="16" x2="23" y2="16" stroke="#666" stroke-width="0.8"/>
+  <ellipse cx="7" cy="12" rx="4" ry="3" fill="#777"/>
+  <ellipse cx="25" cy="12" rx="4" ry="3" fill="#777"/>
+  <rect x="11" y="4" width="10" height="8" rx="3" fill="#777"/>
+  <rect x="12" y="8" width="8" height="2" rx="0.5" fill="#333"/>
+  <line x1="13" y1="9" x2="19" y2="9" stroke="#88aaff" stroke-width="1"/>
+  <rect x="3" y="11" width="6" height="10" rx="2" fill="#666"/>
+  <rect x="4" y="12" width="4" height="8" rx="1" fill="#555"/>
+  <line x1="6" y1="12" x2="6" y2="20" stroke="#888" stroke-width="0.8"/>
+  <line x1="4" y1="16" x2="8" y2="16" stroke="#888" stroke-width="0.8"/>
+  <rect x="24" y="9" width="2" height="9" rx="0.5" fill="#aaa"/>
+  <rect x="22" y="8" width="6" height="4" rx="1" fill="#999"/>
+</svg>

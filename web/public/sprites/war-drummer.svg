@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Legs -->
+  <rect x="11" y="23" width="4" height="7" rx="1" fill="#8b5e3c"/>
+  <rect x="17" y="23" width="4" height="7" rx="1" fill="#8b5e3c"/>
+  <!-- Body with leather armor -->
+  <rect x="10" y="14" width="12" height="11" rx="2" fill="#8b5e3c"/>
+  <line x1="16" y1="14" x2="16" y2="25" stroke="#6b3e1c" stroke-width="0.8"/>
+  <!-- Belt -->
+  <rect x="10" y="21" width="12" height="2" rx="0.5" fill="#5a3010"/>
+  <!-- Head -->
+  <circle cx="16" cy="10" r="5" fill="#c8956a"/>
+  <!-- War paint stripes -->
+  <line x1="13" y1="8" x2="15" y2="12" stroke="#cc3333" stroke-width="1.5"/>
+  <line x1="17" y1="8" x2="19" y2="12" stroke="#cc3333" stroke-width="1.5"/>
+  <!-- Eyes -->
+  <circle cx="14" cy="9.5" r="1.5" fill="#111"/>
+  <circle cx="18" cy="9.5" r="1.5" fill="#111"/>
+  <!-- Headband -->
+  <rect x="11" y="7" width="10" height="2" rx="1" fill="#cc4400"/>
+  <!-- Drum on left hip -->
+  <ellipse cx="7" cy="20" rx="4" ry="5" fill="#8b5e3c"/>
+  <ellipse cx="7" cy="20" rx="3" ry="4" fill="#ddbb88"/>
+  <line x1="4" y1="18" x2="10" y2="18" stroke="#8b5e3c" stroke-width="0.8"/>
+  <line x1="4" y1="22" x2="10" y2="22" stroke="#8b5e3c" stroke-width="0.8"/>
+  <!-- Drumstick right arm -->
+  <line x1="22" y1="16" x2="28" y2="12" stroke="#8b5e3c" stroke-width="2"/>
+  <circle cx="28" cy="11" r="2" fill="#6b3e1c"/>
+</svg>

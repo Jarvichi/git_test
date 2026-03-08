@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ghostly flowing form - no solid legs, wispy tail -->
+  <ellipse cx="16" cy="24" rx="6" ry="4" fill="#7755aa" opacity="0.4"/>
+  <ellipse cx="16" cy="27" rx="4" ry="3" fill="#6644aa" opacity="0.3"/>
+  <!-- Robe body - translucent -->
+  <ellipse cx="16" cy="19" rx="7" ry="8" fill="#9966cc" opacity="0.7"/>
+  <!-- Robe folds -->
+  <path d="M11,16 Q16,20 21,16" stroke="#7744aa" stroke-width="1" fill="none" opacity="0.8"/>
+  <path d="M10,20 Q16,24 22,20" stroke="#7744aa" stroke-width="1" fill="none" opacity="0.8"/>
+  <!-- Head - ghostly skull -->
+  <circle cx="16" cy="10" r="5.5" fill="#bbaadd" opacity="0.85"/>
+  <!-- Dark hollow eyes -->
+  <ellipse cx="13.5" cy="9" rx="2" ry="2.5" fill="#221133"/>
+  <ellipse cx="18.5" cy="9" rx="2" ry="2.5" fill="#221133"/>
+  <!-- Purple glow in eye sockets -->
+  <ellipse cx="13.5" cy="9" rx="1" ry="1.5" fill="#aa66ff" opacity="0.9"/>
+  <ellipse cx="18.5" cy="9" rx="1" ry="1.5" fill="#aa66ff" opacity="0.9"/>
+  <!-- Wispy crown tendrils -->
+  <path d="M12,5 Q11,2 13,4" stroke="#9966cc" stroke-width="1" fill="none" opacity="0.7"/>
+  <path d="M16,4 Q16,1 16,3" stroke="#bb88ee" stroke-width="1.2" fill="none" opacity="0.8"/>
+  <path d="M20,5 Q21,2 19,4" stroke="#9966cc" stroke-width="1" fill="none" opacity="0.7"/>
+  <!-- Claw hands -->
+  <ellipse cx="8" cy="17" rx="4" ry="2.5" fill="#9966cc" opacity="0.7" transform="rotate(-15,8,17)"/>
+  <line x1="5" y1="16" x2="4" y2="14" stroke="#bbaadd" stroke-width="0.8"/>
+  <line x1="5.5" y1="17.5" x2="4" y2="16" stroke="#bbaadd" stroke-width="0.8"/>
+  <ellipse cx="24" cy="17" rx="4" ry="2.5" fill="#9966cc" opacity="0.7" transform="rotate(15,24,17)"/>
+  <line x1="27" y1="16" x2="28" y2="14" stroke="#bbaadd" stroke-width="0.8"/>
+  <line x1="26.5" y1="17.5" x2="28" y2="16" stroke="#bbaadd" stroke-width="0.8"/>
+</svg>

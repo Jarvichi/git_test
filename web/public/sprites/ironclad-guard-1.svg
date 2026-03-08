@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Legs stride A: left forward, right back -->
+  <rect x="8" y="21" width="5" height="9" rx="1" fill="#666"/>
+  <rect x="18" y="23" width="5" height="7" rx="1" fill="#666"/>
+  <rect x="9" y="19" width="14" height="5" rx="1" fill="#777"/>
+  <line x1="16" y1="19" x2="16" y2="24" stroke="#555" stroke-width="0.8"/>
+  <rect x="9" y="12" width="14" height="9" rx="2" fill="#888"/>
+  <line x1="16" y1="12" x2="16" y2="21" stroke="#666" stroke-width="1"/>
+  <line x1="9" y1="17" x2="23" y2="17" stroke="#666" stroke-width="0.8"/>
+  <ellipse cx="7" cy="13" rx="4" ry="3" fill="#777"/>
+  <ellipse cx="25" cy="13" rx="4" ry="3" fill="#777"/>
+  <rect x="11" y="5" width="10" height="8" rx="3" fill="#777"/>
+  <rect x="12" y="9" width="8" height="2" rx="0.5" fill="#333"/>
+  <line x1="13" y1="10" x2="19" y2="10" stroke="#88aaff" stroke-width="1"/>
+  <!-- Shield pulled slightly back -->
+  <rect x="2" y="13" width="6" height="10" rx="2" fill="#666"/>
+  <rect x="3" y="14" width="4" height="8" rx="1" fill="#555"/>
+  <!-- Mace raised -->
+  <rect x="24" y="8" width="2" height="9" rx="0.5" fill="#aaa"/>
+  <rect x="22" y="7" width="6" height="4" rx="1" fill="#999"/>
+</svg>

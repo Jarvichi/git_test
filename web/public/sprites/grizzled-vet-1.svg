@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect x="9" y="21" width="4" height="9" rx="1" fill="#5a4a30"/>
+  <rect x="18" y="23" width="4" height="7" rx="1" fill="#5a4a30"/>
+  <rect x="10" y="13" width="12" height="11" rx="2" fill="#7a6a40"/>
+  <rect x="12" y="13" width="8" height="5" rx="1" fill="#8a7a50"/>
+  <line x1="13" y1="15" x2="15" y2="18" stroke="#5a4020" stroke-width="1"/>
+  <line x1="18" y1="14" x2="16" y2="17" stroke="#5a4020" stroke-width="1"/>
+  <circle cx="16" cy="9" r="5" fill="#c8956a"/>
+  <line x1="12" y1="8" x2="17" y2="11" stroke="#8a4a2a" stroke-width="1.5"/>
+  <path d="M13,11.5 L16,12.5 L19,11.5" stroke="#5a3010" stroke-width="1" fill="none"/>
+  <ellipse cx="13.5" cy="9" rx="1.8" ry="1.2" fill="#111"/>
+  <ellipse cx="18.5" cy="9" rx="1.8" ry="1.2" fill="#111"/>
+  <line x1="12" y1="7.5" x2="15" y2="7" stroke="#5a3010" stroke-width="1"/>
+  <line x1="17" y1="7" x2="20" y2="7.5" stroke="#5a3010" stroke-width="1"/>
+  <ellipse cx="16" cy="5" rx="5" ry="2.5" fill="#aaa"/>
+  <!-- Sword swinging forward -->
+  <rect x="24" y="8" width="2.5" height="12" rx="0.5" fill="#bbb" transform="rotate(15,24,14)"/>
+  <rect x="21" y="14" width="7" height="1.5" rx="0.5" fill="#999"/>
+  <!-- Left arm back -->
+  <ellipse cx="7" cy="20" rx="4" ry="2.5" fill="#7a6a40"/>
+</svg>

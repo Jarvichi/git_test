@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Trunk body - massive -->
+  <rect x="10" y="14" width="12" height="16" rx="4" fill="#6b4226"/>
+  <!-- Bark texture lines -->
+  <line x1="13" y1="14" x2="13" y2="30" stroke="#4a2a10" stroke-width="0.8"/>
+  <line x1="19" y1="14" x2="19" y2="30" stroke="#4a2a10" stroke-width="0.8"/>
+  <line x1="10" y1="20" x2="22" y2="20" stroke="#4a2a10" stroke-width="0.8"/>
+  <line x1="10" y1="25" x2="22" y2="25" stroke="#4a2a10" stroke-width="0.8"/>
+  <!-- Head / crown -->
+  <circle cx="16" cy="10" r="8" fill="#2d7a1b"/>
+  <!-- Face - ancient, gnarled -->
+  <circle cx="13" cy="9" r="2" fill="#111"/>
+  <circle cx="19" cy="9" r="2" fill="#111"/>
+  <circle cx="13" cy="8.5" r="1" fill="#ddff44"/>
+  <circle cx="19" cy="8.5" r="1" fill="#ddff44"/>
+  <!-- Brow ridges -->
+  <path d="M11,7 Q13,6 15,7" stroke="#1a5a0a" stroke-width="1.5" fill="none"/>
+  <path d="M17,7 Q19,6 21,7" stroke="#1a5a0a" stroke-width="1.5" fill="none"/>
+  <!-- Mouth - long crack -->
+  <path d="M12,13 Q16,14.5 20,13" stroke="#1a3a0a" stroke-width="1.5" fill="none"/>
+  <!-- Branch arms - thick -->
+  <ellipse cx="5" cy="16" rx="6" ry="3" fill="#6b4226" transform="rotate(-25,5,16)"/>
+  <ellipse cx="27" cy="16" rx="6" ry="3" fill="#6b4226" transform="rotate(25,27,16)"/>
+  <!-- Leaf canopy on branches -->
+  <circle cx="3" cy="12" r="3" fill="#2d7a1b"/>
+  <circle cx="29" cy="12" r="3" fill="#2d7a1b"/>
+  <circle cx="6" cy="10" r="2.5" fill="#3a9a20"/>
+  <circle cx="26" cy="10" r="2.5" fill="#3a9a20"/>
+  <!-- Root feet -->
+  <ellipse cx="12" cy="30" rx="3" ry="2" fill="#4a2a10" transform="rotate(-15,12,30)"/>
+  <ellipse cx="20" cy="30" rx="3" ry="2" fill="#4a2a10" transform="rotate(15,20,30)"/>
+</svg>
