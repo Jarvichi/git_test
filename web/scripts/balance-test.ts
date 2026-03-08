@@ -17,17 +17,21 @@ import { makeDeck } from '../src/game/cards'
 
 const TICK_MS      = 100          // ms per simulation step
 const MAX_GAME_MS  = 12 * 60_000  // give up after 12 min game-time
-const RUNS         = 10           // runs per node (different shuffles)
+const RUNS         = 30           // runs per node (different shuffles)
 
 /** Minimum average win time — below this the fight is trivially easy. */
 const MIN_WIN_MS: Record<string, number> = {
-  battle: 25_000,   // 25 s
-  elite:  45_000,   // 45 s
-  boss:   80_000,   // 80 s (bosses last several minutes for skilled players)
+  battle: 60_000,   // 60 s
+  elite:  80_000,   // 80 s
+  boss:  100_000,   // 100 s
 }
 
-/** Only flag "too fast" when the greedy AI wins consistently (≥ this many runs). */
-const SPEED_CHECK_MIN_WINS = 4
+/**
+ * Only flag "too fast" when the greedy AI wins in more than half the runs.
+ * Low win-rate nodes are already hard enough — even if rare wins happen quickly,
+ * a real player who struggles 50%+ of the time is not having a trivially easy fight.
+ */
+const SPEED_CHECK_MIN_WINS = 16  // > 50% of RUNS
 
 /**
  * Minimum greedy win count (out of RUNS) per node type.
@@ -90,6 +94,8 @@ interface ActData {
     handicap?: number
     bossAI?: string
     enemyDeck?: string[]
+    opponentIntervalMs?: number
+    opponentBaseHp?: number
   }>
 }
 
@@ -130,6 +136,8 @@ for (const [actName, actData] of acts) {
       opponentHandicap: handicap,
       bossAI: node.bossAI,
       enemyDeckNames: node.enemyDeck,
+      opponentIntervalMs: node.opponentIntervalMs,
+      opponentBaseHp: node.opponentBaseHp,
     }
 
     // Win test: greedy player

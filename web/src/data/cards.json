@@ -8,7 +8,7 @@
     "crossbow":     { "name": "Crossbow",     "attack": 5,  "maxHp": 14, "isWall": false, "bypassWall": true,  "moveSpeed": 25, "attackRange": 65,  "attackCooldownMs": 2000 },
     "paladin":      { "name": "Paladin",      "attack": 7,  "maxHp": 40, "isWall": false, "bypassWall": false, "moveSpeed": 16, "attackRange": 5,   "attackCooldownMs": 1800 },
     "rogue":        { "name": "Rogue",        "attack": 8,  "maxHp": 11, "isWall": false, "bypassWall": false, "moveSpeed": 58, "attackRange": 5,   "attackCooldownMs": 1200, "climber": true },
-    "catapult":     { "name": "Catapult",     "attack": 18, "maxHp": 12, "isWall": false, "bypassWall": true,  "moveSpeed": 10, "attackRange": 110, "attackCooldownMs": 4000 },
+    "catapult":     { "name": "Catapult",     "attack": 15, "maxHp": 12, "isWall": false, "bypassWall": true,  "moveSpeed": 10, "attackRange": 110, "attackCooldownMs": 4000 },
     "werewolf":     { "name": "Werewolf",     "attack": 9,  "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 62, "attackRange": 5,   "attackCooldownMs": 1400, "climber": true },
     "golem":        { "name": "Golem",        "attack": 14, "maxHp": 70, "isWall": false, "bypassWall": false, "moveSpeed": 8,  "attackRange": 5,   "attackCooldownMs": 2500 },
     "pixie":        { "name": "Pixie",        "attack": 2,  "maxHp": 6,  "isWall": false, "bypassWall": true,  "moveSpeed": 42, "attackRange": 75,  "attackCooldownMs": 1000, "flying": true },
@@ -26,7 +26,7 @@
     "vampire":      { "name": "Vampire",      "attack": 7,  "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 50, "attackRange": 5,   "attackCooldownMs": 1400, "flying": true },
     "griffin":      { "name": "Griffin",      "attack": 9,  "maxHp": 25, "isWall": false, "bypassWall": true,  "moveSpeed": 32, "attackRange": 60,  "attackCooldownMs": 2200, "flying": true },
     "fire-mage":    { "name": "Fire Mage",    "attack": 11, "maxHp": 12, "isWall": false, "bypassWall": true,  "moveSpeed": 18, "attackRange": 75,  "attackCooldownMs": 2500 },
-    "executioner":  { "name": "Executioner",  "attack": 16, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 14, "attackRange": 5,   "attackCooldownMs": 2000 },
+    "executioner":  { "name": "Executioner",  "attack": 13, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 14, "attackRange": 5,   "attackCooldownMs": 2000 },
     "mammoth":      { "name": "Mammoth",      "attack": 12, "maxHp": 55, "isWall": false, "bypassWall": false, "moveSpeed": 11, "attackRange": 5,   "attackCooldownMs": 2600 },
     "dark-elf":     { "name": "Dark Elf",     "attack": 5,  "maxHp": 14, "isWall": false, "bypassWall": true,  "moveSpeed": 45, "attackRange": 70,  "attackCooldownMs": 1600, "climber": true },
     "necromancer":  { "name": "Necromancer",  "attack": 7,  "maxHp": 10, "isWall": false, "bypassWall": true,  "moveSpeed": 16, "attackRange": 80,  "attackCooldownMs": 2200 },
@@ -67,8 +67,8 @@
     },
     {
       "name": "Barracks", "rarity": "uncommon", "cost": 3, "cardType": "structure",
-      "unit": { "name": "Barracks", "attack": 0, "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "goblin", "intervalMs": 8000 } },
-      "description": "Spawns a Goblin every 8s.", "deckCount": 2
+      "unit": { "name": "Barracks", "attack": 0, "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "goblin", "intervalMs": 7000 } },
+      "description": "Spawns a Goblin every 7s.", "deckCount": 2
     },
     {
       "name": "Arcane Tower", "rarity": "rare", "cost": 4, "cardType": "structure",
@@ -150,7 +150,7 @@
     { "name": "Haste",      "rarity": "uncommon",  "cost": 2, "cardType": "upgrade", "upgradeEffect": { "type": "buffSpeed",  "amount": 12 }, "description": "All your units gain +12 speed.",           "deckCount": 0 },
     { "name": "Iron Skin",  "rarity": "uncommon",  "cost": 2, "cardType": "upgrade", "upgradeEffect": { "type": "buffMaxHp",  "amount": 15 }, "description": "All your units gain +15 max HP.",          "deckCount": 0 },
     { "name": "Eagle Eye",  "rarity": "uncommon",  "cost": 2, "cardType": "upgrade", "upgradeEffect": { "type": "buffRange",  "amount": 25 }, "description": "All your units gain +25 attack range.",    "deckCount": 0 },
-    { "name": "War Drums",  "rarity": "rare",      "cost": 3, "cardType": "upgrade", "upgradeEffect": { "type": "buffAttack", "amount": 5  }, "description": "All your units gain +5 attack.",           "deckCount": 0 },
+    { "name": "War Drums",  "rarity": "rare",      "cost": 4, "cardType": "upgrade", "upgradeEffect": { "type": "buffAttack", "amount": 5  }, "description": "All your units gain +5 attack.",           "deckCount": 0 },
     { "name": "Bloodlust",  "rarity": "rare",      "cost": 3, "cardType": "upgrade", "upgradeEffect": { "type": "buffSpeed",  "amount": 25 }, "description": "All your units surge with furious speed.", "deckCount": 0 },
 
     { "name": "Plague Rat",  "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "plague-rat",   "description": "Swarm melee. Incredibly fast attack speed.", "deckCount": 2 },

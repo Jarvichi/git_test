@@ -326,6 +326,7 @@
         "outer-wall"
       ],
       "handicap": 7,
+      "opponentBaseHp": 100,
       "environment": "citadel",
       "enemyDeck": [
         "Shield Guard",
@@ -560,7 +561,9 @@
         "Fortify",
         "Iron Skin",
         "Sharpen Blades"
-      ]
+      ],
+      "opponentIntervalMs": 6000,
+      "opponentBaseHp": 82
     },
     "command-tent": {
       "id": "command-tent",
@@ -646,7 +649,9 @@
         "Fortify",
         "Sharpen Blades",
         "Iron Skin"
-      ]
+      ],
+      "opponentIntervalMs": 6000,
+      "opponentBaseHp": 82
     },
     "kragg": {
       "id": "kragg",
@@ -669,7 +674,9 @@
         "\"You walked through my garrison. My garrison that has held for three years.\"",
         "\"I don't know what you are. But I know what I am. And I have not lost a defensive engagement in my career.\"",
         "\"You will not pass. The Iron Citadel does not fall to a card player.\""
-      ]
+      ],
+      "opponentIntervalMs": 5000,
+      "opponentBaseHp": 95
     }
   }
 }

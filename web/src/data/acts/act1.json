@@ -330,6 +330,8 @@
         "patrol"
       ],
       "handicap": 7,
+      "opponentIntervalMs": 5500,
+      "opponentBaseHp": 175,
       "environment": "forest",
       "enemyDeck": [
         "Goblin",
@@ -397,6 +399,7 @@
         "ambush"
       ],
       "handicap": 4,
+      "opponentBaseHp": 105,
       "environment": "forest",
       "enemyDeck": [
         "Archer",
@@ -433,6 +436,7 @@
         "market"
       ],
       "handicap": 1,
+      "opponentBaseHp": 115,
       "environment": "forest",
       "enemyDeck": [
         "Goblin",
@@ -550,7 +554,9 @@
         "War Drums",
         "Iron Skin",
         "Fortify"
-      ]
+      ],
+      "opponentIntervalMs": 6000,
+      "opponentBaseHp": 92
     },
     "thornlord": {
       "id": "thornlord",
@@ -571,7 +577,9 @@
         "\"You carry the smell of the shattered world.\"",
         "\"I sealed these paths to keep the rot from spreading. Clearly I should have built higher walls.\"",
         "\"You will not pass. The Verdant Shard does not need another wandering tactician.\""
-      ]
+      ],
+      "opponentIntervalMs": 5000,
+      "opponentBaseHp": 95
     }
   }
 }

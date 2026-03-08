@@ -326,6 +326,8 @@
         "plague-front"
       ],
       "handicap": 7,
+      "opponentIntervalMs": 5500,
+      "opponentBaseHp": 145,
       "environment": "ashen",
       "enemyDeck": [
         "Skeleton",
@@ -391,6 +393,7 @@
         "risen-horde"
       ],
       "handicap": 4,
+      "opponentBaseHp": 130,
       "environment": "ashen",
       "enemyDeck": [
         "Skeleton",
@@ -426,6 +429,7 @@
         "revenant-witch"
       ],
       "handicap": 1,
+      "opponentBaseHp": 130,
       "environment": "ashen",
       "enemyDeck": [
         "Skeleton",
@@ -508,25 +512,28 @@
       "handicap": 0,
       "environment": "ruins",
       "enemyDeck": [
-        "Necromancer",
-        "Necromancer",
-        "Necromancer",
-        "Dark Shrine",
-        "Dark Shrine",
-        "Crypt",
-        "Crypt",
+        "Skeleton",
         "Skeleton",
         "Skeleton",
         "Specter",
         "Specter",
-        "Bloodlust",
+        "Dark Elf",
+        "Dark Elf",
         "Vampire",
-        "Dark Elf"
+        "Vampire",
+        "Crypt",
+        "Crypt",
+        "Dark Shrine",
+        "Necromancer",
+        "Bloodlust",
+        "Iron Skin"
       ],
       "bossDialogue": [
         "\"You are not dead. Unusual for this neighbourhood.\"",
         "\"I was a healer, before. The Wastes found that funny.\""
-      ]
+      ],
+      "opponentIntervalMs": 5000,
+      "opponentBaseHp": 165
     },
     "necrotic-guard": {
       "id": "necrotic-guard",
@@ -547,6 +554,7 @@
         "death-knight"
       ],
       "handicap": 0,
+      "opponentBaseHp": 145,
       "environment": "ashen",
       "enemyDeck": [
         "Specter",
@@ -598,6 +606,7 @@
         "ashwalker"
       ],
       "handicap": 0,
+      "opponentBaseHp": 155,
       "environment": "ashen",
       "enemyDeck": [
         "Skeleton",
@@ -655,7 +664,9 @@
       "bossDialogue": [
         "\"I remember orders. I remember duty. I remember everything.\"",
         "\"The Dominion is gone. My orders are not.\""
-      ]
+      ],
+      "opponentIntervalMs": 7000,
+      "opponentBaseHp": 105
     },
     "ashwalker": {
       "id": "ashwalker",
@@ -674,11 +685,34 @@
       "handicap": 0,
       "environment": "ashen",
       "bossAI": "ashwalker",
+      "enemyDeck": [
+        "Skeleton",
+        "Skeleton",
+        "Skeleton",
+        "Skeleton",
+        "Bat",
+        "Bat",
+        "Bat",
+        "Specter",
+        "Specter",
+        "Plague Rat",
+        "Plague Rat",
+        "Crypt",
+        "Crypt",
+        "Dark Shrine",
+        "Dark Shrine",
+        "Bloodlust",
+        "Bloodlust",
+        "Iron Skin",
+        "Rally"
+      ],
       "bossDialogue": [
         "\"You carry the warmth of the living. I remember what that felt like.\"",
         "\"The Wastes take everything eventually. I am simply the mechanism.\"",
         "\"You have come to end me. Many have. I am the Ashwalker. I walk the ash of those who tried.\""
-      ]
+      ],
+      "opponentIntervalMs": 5000,
+      "opponentBaseHp": 90
     }
   }
 }
