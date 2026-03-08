@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Heavy plate legs -->
+  <rect x="10" y="22" width="5" height="8" rx="1" fill="#666"/>
+  <rect x="17" y="22" width="5" height="8" rx="1" fill="#666"/>
+  <!-- Plate skirt -->
+  <rect x="9" y="19" width="14" height="5" rx="1" fill="#777"/>
+  <line x1="16" y1="19" x2="16" y2="24" stroke="#555" stroke-width="0.8"/>
+  <!-- Heavy chest plate -->
+  <rect x="9" y="12" width="14" height="9" rx="2" fill="#888"/>
+  <line x1="16" y1="12" x2="16" y2="21" stroke="#666" stroke-width="1"/>
+  <line x1="9" y1="17" x2="23" y2="17" stroke="#666" stroke-width="0.8"/>
+  <!-- Shoulder pauldrons -->
+  <ellipse cx="7" cy="13" rx="4" ry="3" fill="#777"/>
+  <ellipse cx="25" cy="13" rx="4" ry="3" fill="#777"/>
+  <!-- Helmet -->
+  <rect x="11" y="5" width="10" height="8" rx="3" fill="#777"/>
+  <rect x="12" y="9" width="8" height="2" rx="0.5" fill="#333"/>
+  <!-- Visor slit glow -->
+  <line x1="13" y1="10" x2="19" y2="10" stroke="#88aaff" stroke-width="1"/>
+  <!-- Shield -->
+  <rect x="3" y="12" width="6" height="10" rx="2" fill="#666"/>
+  <rect x="4" y="13" width="4" height="8" rx="1" fill="#555"/>
+  <line x1="6" y1="13" x2="6" y2="21" stroke="#888" stroke-width="0.8"/>
+  <line x1="4" y1="17" x2="8" y2="17" stroke="#888" stroke-width="0.8"/>
+  <!-- Mace -->
+  <rect x="24" y="10" width="2" height="9" rx="0.5" fill="#aaa"/>
+  <rect x="22" y="9" width="6" height="4" rx="1" fill="#999"/>
+  <line x1="22" y1="10" x2="28" y2="10" stroke="#777" stroke-width="0.8"/>
+  <line x1="22" y1="12" x2="28" y2="12" stroke="#777" stroke-width="0.8"/>
+</svg>
