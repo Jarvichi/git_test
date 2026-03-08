@@ -60,6 +60,44 @@ applyTextSettings()
 const TICK_MS    = 100
 const HANDICAP_KEY = 'jarvs_handicap'
 
+// ─── Campaign difficulty scaling ─────────────────────────────────────────────
+//
+// Each run past the first the opponent gets tougher:
+//   - handicap reduced by 2 per run (AI draws better cards / acts faster)
+//   - base HP raised by 10 per run (opponent has more staying power)
+//
+// Example: a node with handicap=7 and default HP 82
+//   run 1 → handicap 7, HP 82
+//   run 2 → handicap 5, HP 92
+//   run 3 → handicap 3, HP 102
+//   run 4 → handicap 1, HP 112
+//   run 5+ → handicap 0, HP 122+
+
+function resolvedNodeOpts(
+  node: QuestNode,
+  actEnv: string | undefined,
+  runCount: number,
+): Omit<NewGameOptions, 'playerCards'> {
+  const extra = Math.max(0, runCount - 1)
+  const handicapReduction = Math.min(extra * 2, MAX_HANDICAP)
+  const hpBonus = extra * 10
+
+  const adjustedHandicap = Math.max(0, (node.handicap ?? 0) - handicapReduction)
+  // Boss default HP is 95; non-boss 82 (mirrors engine.ts defaults)
+  const defaultHp = node.bossAI ? 95 : 82
+  const adjustedHp = (node.opponentBaseHp ?? defaultHp) + hpBonus
+
+  return {
+    opponentHandicap: adjustedHandicap,
+    bossAI: node.bossAI,
+    enemyDeckNames: node.enemyDeck,
+    terrainSeed: node.id,
+    environment: node.environment ?? actEnv,
+    opponentIntervalMs: node.opponentIntervalMs,
+    opponentBaseHp: adjustedHp,
+  }
+}
+
 function loadHandicap(): number {
   try {
     const v = localStorage.getItem(HANDICAP_KEY)
@@ -103,7 +141,7 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (savedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+        const state = newGame({ playerCards, ...resolvedNodeOpts(node, act?.environment, loadRunCount()) })
         state.playerBase = { hp: savedRun.playerHp, maxHp: savedRun.maxHp }
         if (savedRun.activeRelic) getRelicDef(savedRun.activeRelic)?.applyToGame(state)
         return { screen: 'playing' as Screen, gameState: state as GameState | null, run: savedRun, isCampaign: true }
@@ -388,7 +426,7 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (activeRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+        const state = newGame({ playerCards, ...resolvedNodeOpts(node, act?.environment, loadRunCount()) })
         state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
         if (activeRun.activeRelic) getRelicDef(activeRun.activeRelic)?.applyToGame(state)
         setGameState(state)
