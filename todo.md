@@ -1,29 +1,30 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-07 (re-checked 2026-03-07).
+Issues sourced from GitHub. Last synced: 2026-03-08.
 
 ---
 
 ## 🟠 Active Work
 
-- [x] **#101** Campaign variety: deterministic enemy decks per node, act-themed cards/rewards, environment backgrounds, seeded terrain, kraggAI + ashwalkerAI boss AIs — DONE (GitHub token needed to close issue)
+*(none)*
 
 ---
 
 ## 🔴 Critical Bugs
 
-- [ ] **#97** Campaign: Act 2 event/shrine nodes launch a battle instead of an event screen — eventId types too specific; need generic event format with description/options/rewards in JSON
+- [x] **#97** Campaign: Act 2 event/shrine nodes launch a battle instead — fixed by user's "add events" commit (supply-cache/goblin-deal/wanderer/ambush-merchant added to events.json) — needs manual close on GitHub
 - [x] **#53** Campaign soft-lock: `pendingNodeId` left set blocks map; blank screen at act end; validate/repair all localStorage on load
 - [x] **#56** Campaign run-count text always says "fifth time" after run 5 — fix to use actual count
 - [x] **Intro always says "tenth"** (no issue#) — runs 11–24 (and 26–49 etc.) still show milestone run text
-- [ ] **#90** Campaign events (shrine/ruins): result screen dismisses to map in ~1400 ms — too quick to read; needs Continue button
+- [x] **#90** Campaign events (shrine/ruins): result screen dismisses too fast — EventScreen already has CONTINUE button; already fixed — needs manual close on GitHub
 
 ---
 
 ## 🟠 Gameplay Bugs
 
+- [x] **#110** Points: winner could end up with fewer points than loser — fixed: winner gets +500 victory bonus in `checkGameOver` — needs manual close on GitHub
 - [x] **#99** Obstacle avoidance: units give obstacles way too much clearance — reduce buffer zone around obstacle hitboxes (pushDist: obs.radius+55 → obs.radius+22)
-- [ ] **#86** Rewards screen: crystal amount granted after a battle isn't displayed (10/15/25 per node type)
+- [x] **#86** Rewards screen: crystal amount not displayed — already fixed in PostBattleReward component (`+{crystals} ◆`) — needs manual close on GitHub
 - [ ] **#80** Difficulty scaling: each subsequent act run should apply a difficulty multiplier to the opponent
 
  - [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size) (closed on GitHub)
