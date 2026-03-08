@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-08.
+Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08).
 
 ---
 
@@ -25,7 +25,7 @@ Issues sourced from GitHub. Last synced: 2026-03-08.
 - [x] **#110** Points: winner could end up with fewer points than loser — fixed: winner gets +500 victory bonus in `checkGameOver` — needs manual close on GitHub
 - [x] **#99** Obstacle avoidance: units give obstacles way too much clearance — reduce buffer zone around obstacle hitboxes (pushDist: obs.radius+55 → obs.radius+22)
 - [x] **#86** Rewards screen: crystal amount not displayed — already fixed in PostBattleReward component (`+{crystals} ◆`) — needs manual close on GitHub
-- [ ] **#80** Difficulty scaling: each subsequent act run should apply a difficulty multiplier to the opponent
+- [x] **#80** Difficulty scaling: each subsequent run reduces node handicap by 2 and raises opponent HP by 10 (via resolvedNodeOpts helper in App.tsx)
 
  - [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size) (closed on GitHub)
  - [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance (closed on GitHub)
@@ -39,6 +39,8 @@ Issues sourced from GitHub. Last synced: 2026-03-08.
  - [x] **#58** Screen size: battlefield + hand don't fit on small phone screens — scale to viewport (closed on GitHub)
 - [x] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
 - [x] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
+- [ ] **#109** Battery drain: game drains phone battery quickly — reduce animation/render frequency on mobile
+- [ ] **#112** Buff cards UX: players can't tell if buff applies to current units or full battle duration — show status icons above buffed units and/or a HUD indicator for duration buffs
 
 ---
 
@@ -58,9 +60,9 @@ Issues sourced from GitHub. Last synced: 2026-03-08.
 
 ## 🔵 Enhancements — Medium
 
-- [ ] **#64** Tutorials: deck builder tutorial; gameplay tutorial; lock campaign until 30 cards collected
+- [ ] **#64 / #115 / #116** Tutorials: deck builder tutorial (#115); gameplay tutorial (#116); lock campaign until 30 cards collected (#117 — explain quick play)
 - [x] **#47** Buff/upgrade cards need icons/images (already implemented in CardTile.tsx UpgradeIcon)
-- [ ] **#66** Debugging: feedback/bug submission screen; export/import localStorage behind `?debug` URL param
+- [ ] **#66 / #118 / #119** Debugging: feedback/bug submission screen (#118); export/import localStorage to file behind `?debug` URL param (#119); access submissions when planning todos (#118)
 - [ ] **#60** Rare event — The Gambler: tap-to-guess modal, win all cards or lose everything; rubber chicken consolation; track rare event log
 - [ ] **#52** More secrets scattered through the game
 - [ ] **#55** Anti-hacking: checksum on card collection + inventory; warn on mismatch; safe first-load migration
@@ -97,7 +99,8 @@ Issues sourced from GitHub. Last synced: 2026-03-08.
 - [ ] **#44** Battlefield z-order: water → rocks → walls → trees → surroundings; units above walls, under canopy; flyers above all
 - [ ] **#45** Battlefield scenery themed to environment (rocks/water/ice/canyon)
 - [x] **#43** Flying units cast a shadow (already implemented)
-- [ ] **#61** Battlefield: projectile animations; damage/blood augments on sprites; death/climb animations
+- [ ] **#61 / #113** Battlefield: projectile animations; damage/blood augments on sprites; death/climb animations; animation variety (climbing, taking damage, dying, killing) (#113)
+- [ ] **#114** Opponent graphics: replace HP bars with a sprite for each player; unique enemy sprite per campaign level
 - [ ] **#68** Dark / Light mode toggle in settings
 - [ ] **#67** Cross-device persistent game state (design only for now)
 
