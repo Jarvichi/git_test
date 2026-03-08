@@ -121,3 +121,4 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08 
 - [x] **#56** Campaign run-count ordinal text fixed (sixth/seventh/eighth/ninth)
 
 > Note: GitHub API issue closing requires auth token (`GITHUB_TOKEN`). Issues must be closed manually or token added to env.
+> Issues to close manually after merging: **#109**, **#117**, **#119**
