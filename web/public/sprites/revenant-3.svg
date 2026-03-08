@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Swooping right -->
+  <ellipse cx="17" cy="25" rx="6" ry="4" fill="#7755aa" opacity="0.4"/>
+  <ellipse cx="18" cy="28" rx="4" ry="3" fill="#6644aa" opacity="0.3"/>
+  <ellipse cx="17" cy="19" rx="7" ry="8" fill="#9966cc" opacity="0.7"/>
+  <path d="M12,16 Q17,20 22,16" stroke="#7744aa" stroke-width="1" fill="none" opacity="0.8"/>
+  <circle cx="17" cy="10" r="5.5" fill="#bbaadd" opacity="0.85"/>
+  <ellipse cx="14.5" cy="9" rx="2" ry="2.5" fill="#221133"/>
+  <ellipse cx="19.5" cy="9" rx="2" ry="2.5" fill="#221133"/>
+  <ellipse cx="14.5" cy="9" rx="1" ry="1.5" fill="#aa66ff" opacity="0.9"/>
+  <ellipse cx="19.5" cy="9" rx="1" ry="1.5" fill="#aa66ff" opacity="0.9"/>
+  <path d="M17,4 Q17,1 17,3" stroke="#bb88ee" stroke-width="1.2" fill="none" opacity="0.8"/>
+  <path d="M21,5 Q22,2 20,4" stroke="#9966cc" stroke-width="1" fill="none" opacity="0.7"/>
+  <!-- Claws reaching forward opposite side -->
+  <ellipse cx="25" cy="16" rx="4" ry="2.5" fill="#9966cc" opacity="0.7" transform="rotate(25,25,16)"/>
+  <line x1="28" y1="15" x2="30" y2="13" stroke="#bbaadd" stroke-width="0.8"/>
+  <ellipse cx="8" cy="18" rx="4" ry="2.5" fill="#9966cc" opacity="0.7" transform="rotate(-5,8,18)"/>
+</svg>
