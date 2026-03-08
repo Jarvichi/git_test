@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { isSoundEnabled, setSoundEnabled } from '../game/sound'
 
 interface Props {
@@ -44,12 +44,52 @@ const TEXT_COLOR_PRESETS = [
   { label: 'Pink',           value: '#ff88cc' },
 ]
 
+const isDebugMode = new URLSearchParams(window.location.search).has('debug')
+
+function exportLocalStorage(): void {
+  const data: Record<string, string> = {}
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key) data[key] = localStorage.getItem(key) ?? ''
+    }
+  } catch { /* ignore */ }
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href     = url
+  a.download = `jarv-save-${new Date().toISOString().slice(0, 10)}.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 export function SettingsScreen({ onBack, onResetGame }: Props) {
   const [soundOn,    setSoundOn]    = useState(isSoundEnabled)
   const [textSize,   setTextSize]   = useState(loadTextSize)
   const [textColor,  setTextColor]  = useState(loadTextColor)
   const [skipIntro,  setSkipIntro]  = useState(loadSkipIntro)
   const [confirmReset, setConfirmReset] = useState(false)
+  const [importMsg,  setImportMsg]  = useState<string | null>(null)
+  const importRef = useRef<HTMLInputElement>(null)
+
+  function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result as string) as Record<string, string>
+        for (const [key, val] of Object.entries(data)) {
+          localStorage.setItem(key, val)
+        }
+        setImportMsg('Save loaded! Reload the page to apply.')
+      } catch {
+        setImportMsg('Error: invalid save file.')
+      }
+    }
+    reader.readAsText(file)
+    e.target.value = ''
+  }
 
   function handleSoundToggle() {
     const next = !soundOn
@@ -190,6 +230,38 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
             )}
           </div>
         </div>
+
+        {/* Debug (only visible with ?debug URL param) */}
+        {isDebugMode && (
+          <div className="settings-section">
+            <div className="settings-section-title">DEBUG</div>
+
+            <div className="settings-row">
+              <div>
+                <div className="settings-label">Export save data</div>
+                <div className="settings-sublabel">Download all localStorage as a JSON file</div>
+              </div>
+              <button className="action-btn" onClick={exportLocalStorage}>EXPORT</button>
+            </div>
+
+            <div className="settings-row">
+              <div>
+                <div className="settings-label">Import save data</div>
+                <div className="settings-sublabel">Load a previously exported JSON save file</div>
+              </div>
+              <button className="action-btn" onClick={() => importRef.current?.click()}>IMPORT</button>
+              <input ref={importRef} type="file" accept=".json" style={{ display: 'none' }} onChange={handleImport} />
+            </div>
+
+            {importMsg && (
+              <div className="settings-row">
+                <div className="settings-sublabel" style={{ color: importMsg.startsWith('Error') ? '#ff5555' : '#33ff33' }}>
+                  {importMsg}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Info */}
         <div className="settings-section">
