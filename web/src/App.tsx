@@ -32,6 +32,7 @@ import { PackOpening }        from './components/PackOpening'
 import { NodeMap }            from './components/NodeMap'
 import { PostBattleReward }   from './components/PostBattleReward'
 import { ActComplete }        from './components/ActComplete'
+import { RelicSelectScreen }  from './components/RelicSelectScreen'
 import { StarterPackSelect }  from './components/StarterPackSelect'
 import { SettingsScreen, applyTextSettings, loadSkipIntro } from './components/SettingsScreen'
 import { IntroScreen } from './components/IntroScreen'
@@ -123,6 +124,7 @@ type Screen =
   | 'actcomplete'
   | 'cardrest'
   | 'starterpack'
+  | 'relicselect'
   | 'inventory'
 
 export default function App() {
@@ -164,7 +166,8 @@ export default function App() {
 
   // Cutscenes & boss dialogue
   const [cutscenePanels, setCutscenePanels]   = useState<CutscenePanel[]>([])
-  const cutsceneDoneRef = useRef<() => void>(() => {})
+  const cutsceneDoneRef     = useRef<() => void>(() => {})
+  const relicSelectDoneRef  = useRef<(relicName: string | null) => void>(() => {})
   const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
 
   // Active campaign event
@@ -381,30 +384,43 @@ export default function App() {
   const handleCampaign = useCallback(() => {
     const existing = loadRun()
     let activeRun = existing ?? newRun('act1')
-    // Auto-equip the most recently earned relic for fresh runs (no selection screen yet)
-    if (!existing) {
-      const earned = loadEarnedRelics()
-      if (earned.length > 0) activeRun = { ...activeRun, activeRelic: earned[earned.length - 1] }
-    }
+    const earned = !existing ? loadEarnedRelics() : []
+
     if (!existing) saveRun(activeRun)
     setRun(activeRun)
 
     const act = ACTS[activeRun.actId]
 
     // Show act intro cutscene when starting a fresh run
-    if (!existing) {
-      // Increment run count and get narrative-varied panels
-      const runCount = incrementRunCount()
-      const introToShow = activeRun.actId === 'act1'
-        ? getAct1Intro(runCount)
-        : (act.intro ?? [])
-      markIntroSeen(activeRun.actId)
-      if (introToShow.length > 0) {
-        setCutscenePanels(introToShow)
-        cutsceneDoneRef.current = () => setScreen('nodemap')
-        setScreen('cutscene')
-        return
+    const proceedAfterRelicSelect = (chosenRelic: string | null) => {
+      const runWithRelic = { ...activeRun, activeRelic: chosenRelic }
+      saveRun(runWithRelic)
+      setRun(runWithRelic)
+      if (!existing) {
+        const runCount = incrementRunCount()
+        const introToShow = activeRun.actId === 'act1'
+          ? getAct1Intro(runCount)
+          : (act.intro ?? [])
+        markIntroSeen(activeRun.actId)
+        if (introToShow.length > 0) {
+          setCutscenePanels(introToShow)
+          cutsceneDoneRef.current = () => setScreen('nodemap')
+          setScreen('cutscene')
+          return
+        }
       }
+      setScreen('nodemap')
+    }
+
+    if (!existing && earned.length > 0) {
+      relicSelectDoneRef.current = proceedAfterRelicSelect
+      setScreen('relicselect')
+      return
+    }
+
+    if (!existing) {
+      proceedAfterRelicSelect(null)
+      return
     }
 
     // If there's a pending node (e.g. player refreshed mid-campaign), resume it directly
@@ -684,7 +700,51 @@ export default function App() {
     if (!currentRun) return
     const act = ACTS[currentRun.actId]
 
-    // ── Last act completed — offer card rest then deck reset ──
+    // Persist the act's relic reward to the player's permanent relic collection
+    if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
+
+    const nextAct = getNextAct(currentRun.actId)
+
+    if (nextAct) {
+      // ── Progress to next act ──────────────────────────────
+      const earnedRelics = loadEarnedRelics()
+
+      const proceedToNextAct = (chosenRelic: string | null) => {
+        const nextRun: RunState = {
+          actId: nextAct.id,
+          completedNodeIds: [],
+          skippedNodeIds: [],
+          pendingNodeId: null,
+          playerHp: currentRun.playerHp,
+          maxHp: currentRun.maxHp,
+          cardPlayCounts: {},
+          nodeFailCounts: {},
+          earnedCards: [],
+          activeRelic: chosenRelic,
+        }
+        saveRun(nextRun)
+        setRun(nextRun)
+        // Show next act intro cutscene
+        const introPanels = nextAct.intro ?? []
+        if (introPanels.length > 0) {
+          setCutscenePanels(introPanels)
+          cutsceneDoneRef.current = () => setScreen('nodemap')
+          setScreen('cutscene')
+        } else {
+          setScreen('nodemap')
+        }
+      }
+
+      if (earnedRelics.length > 0) {
+        relicSelectDoneRef.current = proceedToNextAct
+        setScreen('relicselect')
+      } else {
+        proceedToNextAct(null)
+      }
+      return
+    }
+
+    // ── Final act completed — offer card rest then deck reset ──
     const counts = currentRun.cardPlayCounts ?? {}
     const candidates = getTopPlayedCards(counts, 3)
     if (candidates.length >= 2) {
@@ -698,43 +758,6 @@ export default function App() {
       setBonusPackCards([])
       setScreen('starterpack')
     }
-
-    // Persist the act's relic reward to the player's permanent relic collection
-    if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
-
-    const nextAct = getNextAct(currentRun.actId)
-    
-    if (nextAct) {
-      // ── Progress to next act ──────────────────────────────
-      // Carry HP forward; reset node tracking for the new act
-      const nextRun: RunState = {
-        actId: nextAct.id,
-        completedNodeIds: [],
-        skippedNodeIds: [],
-        pendingNodeId: null,
-        playerHp: currentRun.playerHp,
-        maxHp: currentRun.maxHp,
-        cardPlayCounts: {},
-        nodeFailCounts: {},
-        earnedCards: [],
-        activeRelic: currentRun.activeRelic,
-      }
-      saveRun(nextRun)
-      setRun(nextRun)
-      // Show next act intro cutscene
-      const n = loadRunCount()
-      const introPanels = nextAct.intro ?? []
-      if (introPanels.length > 0) {
-        setCutscenePanels(introPanels)
-        cutsceneDoneRef.current = () => setScreen('nodemap')
-        setScreen('cutscene')
-      } else {
-        setScreen('nodemap')
-      }
-      return
-    }
-
-
   }, [run])
 
   const handleCardRestConfirm = useCallback((resting: string[]) => {
@@ -1008,6 +1031,14 @@ export default function App() {
           crystals={crystals}
           onBuy={handleMerchantBuy}
           onDone={handleMerchantDone}
+        />
+      )}
+
+      {screen === 'relicselect' && (
+        <RelicSelectScreen
+          earnedRelics={loadEarnedRelics()}
+          currentRelic={run?.activeRelic ?? null}
+          onSelect={relic => relicSelectDoneRef.current(relic)}
         />
       )}
 
