@@ -5,7 +5,7 @@ import { isNoDamageMode } from './debug'
 
 // ─── Constants ────────────────────────────────────────────
 
-const OPPONENT_INTERVAL_MS = 8000
+const OPPONENT_INTERVAL_MS = 6000
 const MANA_REGEN_MS = 3000       // 1 mana every 3 seconds
 const BASE_MAX_MANA = 5
 const SUDDEN_DEATH_MS = 60000
@@ -171,9 +171,9 @@ function maxRarityForHandicap(h: number): CardRarity {
 
 /** Opponent acts faster at low handicap (player is skilled), slower at high handicap (player is struggling). */
 function opponentIntervalForHandicap(h: number): number {
-  if (h >= 10) return 10000
-  if (h >= 5)  return 9000
-  return OPPONENT_INTERVAL_MS  // 8000
+  if (h >= 10) return 8000
+  if (h >= 5)  return 7000
+  return OPPONENT_INTERVAL_MS  // 6000
 }
 
 const STRATEGIES: GameState['opponentStrategy'][] = ['swarm', 'turtle', 'rush']
@@ -254,7 +254,7 @@ export function newGame(
 
   const strategy      = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
   const maxRarity     = boss ? 'legendary' : maxRarityForHandicap(clamp)
-  const oppIntervalMs = boss === 'thornlord' ? 6000
+  const oppIntervalMs = boss === 'thornlord' ? 5000
     : boss === 'kragg'      ? 5000
     : boss === 'ashwalker'  ? 4500
     : opponentIntervalForHandicap(clamp)
@@ -278,7 +278,7 @@ export function newGame(
 
   return {
     playerBase: { hp: 50, maxHp: 50 },
-    opponentBase: { hp: boss ? 80 : 70, maxHp: boss ? 80 : 70 },
+    opponentBase: { hp: boss ? 95 : 82, maxHp: boss ? 95 : 82 },
     field: [],
     playerHand,
     playerDeck,
@@ -914,7 +914,7 @@ export function tick(state: GameState, deltaMs: number): GameState {
   if (s.opponentTimer <= 0) {
     if (s.bossAI === 'thornlord') {
       thornlordAI(s, log)
-      s.opponentTimer = 6000
+      s.opponentTimer = 5000
     } else if (s.bossAI === 'kragg') {
       kraggAI(s, log)
       s.opponentTimer = 5000

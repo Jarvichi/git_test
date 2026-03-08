@@ -5,13 +5,16 @@
   "rewardRelic": "Bark Shield",
   "rewardRelicDesc": "Your base gains +10 max HP at the start of every battle.",
   "environment": "forest",
-  "rewardTags": ["forest"],
-  "startNodeIds": ["goblin-raid"],
-
+  "rewardTags": [
+    "forest"
+  ],
+  "startNodeIds": [
+    "goblin-raid"
+  ],
   "intro": [
     {
       "title": "THE FRACTURE",
-      "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant — a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it."
+      "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant \u2014 a magical detonation the scholars call the Fracture Event. The realm split into isolated shards, each one sealed behind walls of warped space and collapsed ley lines.\n\nNobody knows who caused it. Nobody knows how to undo it."
     },
     {
       "title": "THE WANDERER",
@@ -19,18 +22,17 @@
     },
     {
       "title": "THE VERDANT SHARD",
-      "text": "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible."
+      "text": "Your compass points to the nearest reachable shard \u2014 a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.\n\nThe shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible."
     },
     {
       "title": "YOUR MISSION",
-      "text": "Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side — your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably."
+      "text": "Break through the shard. Reach the Thornlord. Defeat him. Earn passage.\n\nTake whatever cards and crystals you can carry out the other side \u2014 your collection grows with every run, your mastery deepens, and somewhere in the Fractured Core the answer to all of this is waiting.\n\nProbably."
     }
   ],
-
   "outro": [
     {
       "title": "THE THORNLORD FALLS",
-      "text": "The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath — then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this."
+      "text": "The ancient guardian crumples. Roots unravel. Bark splits along fracture lines older than the Dominion.\n\nFor a moment the whole forest holds its breath \u2014 then it exhales. The sealed pathways glow faintly and open like doors that have been waiting for exactly this."
     },
     {
       "title": "WHAT HE WAS",
@@ -38,17 +40,16 @@
     },
     {
       "title": "THE ROAD AHEAD",
-      "text": "One shard cleared. The ley lines pulse — faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits — and whoever controls it will not be glad to see you.\n\nGood."
+      "text": "One shard cleared. The ley lines pulse \u2014 faint, but connected.\n\nYour deck returns to its bones. Your collection carries forward. Somewhere beyond the Verdant Shard, the Iron Citadel waits \u2014 and whoever controls it will not be glad to see you.\n\nGood."
     }
   ],
-
   "variantPools": {
     "jarvMoods": [
       "Now, technically, unemployed.",
       "Now, technically, a free agent.",
       "Now, effectively, between employers.",
       "Now, in the administrative sense, without portfolio.",
-      "Now — if you were being generous — on sabbatical."
+      "Now \u2014 if you were being generous \u2014 on sabbatical."
     ],
     "jarvIntros": [
       "You have a deck of cards, a vague sense of mission, and the navigational instincts of someone who has been lost before and considers it acceptable.",
@@ -58,10 +59,10 @@
       "You have a deck of cards. You always have a deck of cards. That, at least, has been consistent."
     ],
     "forestDesc": [
-      "Your compass points to the nearest reachable shard — a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
-      "Your compass points to the Verdant Shard — a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
+      "Your compass points to the nearest reachable shard \u2014 a dense, ancient forest realm that has grown wild and hostile since the Fracture closed its borders.",
+      "Your compass points to the Verdant Shard \u2014 a place that smells of pine resin and old magic, where the trees remember things the people forgot.",
       "Your compass points toward the Verdant Shard. The forest ahead is old enough to have opinions about you.",
-      "The Verdant Shard pulses at the edge of your compass bearing — a realm of old growth and older grudges, sealed since the Fracture."
+      "The Verdant Shard pulses at the edge of your compass bearing \u2014 a realm of old growth and older grudges, sealed since the Fracture."
     ],
     "thornlordDesc": [
       "The shard's guardian, a being called the Thornlord, has sealed its internal pathways. Local traders say he was old before the Dominion was founded.\n\nLocal traders also say he hasn't spoken to anyone in forty years. You're choosing to interpret that as optimistically as possible.",
@@ -70,16 +71,16 @@
       "The Thornlord seals every path through the Verdant Shard. Traders who've survived say he is patient, thorough, and has never once reconsidered a decision.\n\nYou have a plan. You've had plans before."
     ],
     "priorRunSummaries": [
-      "The path felt familiar — the way a dream feels familiar, just before it turns wrong.",
+      "The path felt familiar \u2014 the way a dream feels familiar, just before it turns wrong.",
       "You stepped into the Verdant Shard with the uneasy sense that you'd stepped here before. You pushed the feeling aside. There was work to do.",
-      "Something about the first battle. The angle of the light. The particular way the Goblins charged. A déjà vu so precise it was almost a memory.",
+      "Something about the first battle. The angle of the light. The particular way the Goblins charged. A d\u00e9j\u00e0 vu so precise it was almost a memory.",
       "The forest seemed quieter than it should have been. As though it recognised you, and was deciding whether to be pleased about it."
     ],
     "priorRunOpenings": [
-      "You remember — and here is the strange part — getting this far before. Not the same choices. But the same road.",
+      "You remember \u2014 and here is the strange part \u2014 getting this far before. Not the same choices. But the same road.",
       "The scholar on the boulder didn't look up when you approached. 'Again?' he said. 'You're ahead of schedule.'",
       "The Thornlord, when you finally stood before him, was already watching you. As though he had been expecting you. As though he had been expecting this for some time.",
-      "The goblins at the first barricade looked familiar. Not familiar the way people are familiar — familiar the way furniture in a childhood home is familiar. Something about the arrangement of them."
+      "The goblins at the first barricade looked familiar. Not familiar the way people are familiar \u2014 familiar the way furniture in a childhood home is familiar. Something about the arrangement of them."
     ],
     "milestoneOpenings5": [
       "The fifth time through the Verdant Shard, a bird called out your name. That was new.",
@@ -101,188 +102,468 @@
       "The Thornlord looks past you. Past Jarv. Directly at the person holding the cards.\n\n'You again,' he says. 'Not the tactician. You. I know you. I've been watching you since the beginning.'\n\nA pause. A root curls against the ground like a finger drumming.\n\n'A hundred times you've come here. A hundred times I've fallen. I am the oldest thing in this shard and you have made me your tutorial boss.'\n\nHe sounds almost amused. Almost."
     ]
   },
-
   "midRunTemplates": [
     "The {ordinalLower} time through the Verdant Shard. The Thornlord has stopped rehearsing his opening speech.",
     "Campaign {n}. The Wandering Scholar barely looks up anymore. He has your name pre-written in the margin.",
     "{n} campaigns in. The goblins at the first barricade have started placing bets on how quickly you'll get past them.",
     "{n} times you've stood at this shard's edge. The trees have started leaning away slightly when you approach.",
     "Run {n}. You walk in before dawn, which is new. Everything else is exactly as you left it.",
-    "The {ordinalLower} attempt. You recognise the smell now. Damp bark and old magic and something else — familiarity.",
+    "The {ordinalLower} attempt. You recognise the smell now. Damp bark and old magic and something else \u2014 familiarity.",
     "{n} campaigns. The Wandering Scholar has started making tea before you arrive. He knows the timing by heart."
   ],
-
   "introRules": [
     {
-      "condition": { "op": "gte", "value": 100 },
+      "condition": {
+        "op": "gte",
+        "value": 100
+      },
       "panels": [
-        { "title": "THE THORNLORD KNOWS",  "text": "{pool:milestoneOpenings100:0}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:3}\n\n{pool:thornlordDesc:2}" }
+        {
+          "title": "THE THORNLORD KNOWS",
+          "text": "{pool:milestoneOpenings100:0}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:3}\n\n{pool:thornlordDesc:2}"
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 51, "max": 99 },
+      "condition": {
+        "op": "range",
+        "min": 51,
+        "max": 99
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME",   "text": "{midRunTemplate}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:1}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:2}\n\n{pool:thornlordDesc:1}" },
-        { "title": "YOUR MISSION",         "text": "Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way." }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{midRunTemplate}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:1}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:2}\n\n{pool:thornlordDesc:1}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way."
+        }
       ]
     },
     {
-      "condition": { "op": "eq", "value": 50 },
+      "condition": {
+        "op": "eq",
+        "value": 50
+      },
       "panels": [
-        { "title": "FIFTY CAMPAIGNS",      "text": "{pool:milestoneOpenings50:0}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. Former tactician of the Dominion's western campaigns. {pool:jarvMoods:0}\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall.\n\n{pool:jarvIntros:1}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:2}\n\n{pool:thornlordDesc:1}" },
-        { "title": "YOUR MISSION",         "text": "Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way." }
+        {
+          "title": "FIFTY CAMPAIGNS",
+          "text": "{pool:milestoneOpenings50:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. Former tactician of the Dominion's western campaigns. {pool:jarvMoods:0}\n\nThe army you served no longer exists. The city you lived in is cut off behind a shard wall.\n\n{pool:jarvIntros:1}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:2}\n\n{pool:thornlordDesc:1}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Break through. Reach the Thornlord. Defeat him.\n\nYou know the way. You always know the way."
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 26, "max": 49 },
+      "condition": {
+        "op": "range",
+        "min": 26,
+        "max": 49
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME",   "text": "{midRunTemplate}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:1}\n\n{pool:thornlordDesc:0}" }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{midRunTemplate}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:1}\n\n{pool:thornlordDesc:0}"
+        }
       ]
     },
     {
-      "condition": { "op": "eq", "value": 25 },
+      "condition": {
+        "op": "eq",
+        "value": 25
+      },
       "panels": [
-        { "title": "TWENTY-FIVE",          "text": "{pool:milestoneOpenings25:0}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:1}\n\n{pool:thornlordDesc:0}" }
+        {
+          "title": "TWENTY-FIVE",
+          "text": "{pool:milestoneOpenings25:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:1}\n\n{pool:thornlordDesc:0}"
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 11, "max": 24 },
+      "condition": {
+        "op": "range",
+        "min": 11,
+        "max": 24
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME",   "text": "{midRunTemplate}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}" },
-        { "title": "YOUR MISSION",         "text": "Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You've always known how this goes." }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{midRunTemplate}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You've always known how this goes."
+        }
       ]
     },
     {
-      "condition": { "op": "eq", "value": 10 },
+      "condition": {
+        "op": "eq",
+        "value": 10
+      },
       "panels": [
-        { "title": "THE TENTH TIME",       "text": "{pool:milestoneOpenings10:0}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}" },
-        { "title": "YOUR MISSION",         "text": "Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You've always known how this goes." }
+        {
+          "title": "THE TENTH TIME",
+          "text": "{pool:milestoneOpenings10:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Break through the shard. Reach the Thornlord.\n\nYou know how this goes. You've always known how this goes."
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 5, "max": 9 },
+      "condition": {
+        "op": "range",
+        "min": 5,
+        "max": 9
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME",   "text": "{pool:milestoneOpenings5:0}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}" }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{pool:milestoneOpenings5:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}"
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 2, "max": 4 },
+      "condition": {
+        "op": "range",
+        "min": 2,
+        "max": 4
+      },
       "panels": [
-        { "title": "THE FRACTURE",         "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant.\n\n{pool:priorRunSummaries:0}" },
-        { "title": "THE WANDERER",         "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}" },
-        { "title": "THE VERDANT SHARD",    "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}" },
-        { "title": "A FEELING",            "text": "And yet — {pool:priorRunOpenings:0}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time." }
+        {
+          "title": "THE FRACTURE",
+          "text": "Three years ago, the Grand Dominion shattered.\n\nNot in war. Not gradually. In a single catastrophic instant.\n\n{pool:priorRunSummaries:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}"
+        },
+        {
+          "title": "THE VERDANT SHARD",
+          "text": "{pool:forestDesc:0}\n\n{pool:thornlordDesc:0}"
+        },
+        {
+          "title": "A FEELING",
+          "text": "And yet \u2014 {pool:priorRunOpenings:0}\n\nYou push the feeling aside. You've always pushed the feeling aside.\n\nThat's how you dreamt it happened, as you step out into the battlefield for the first time."
+        }
       ]
     }
   ],
-
   "nodes": {
     "goblin-raid": {
-      "id": "goblin-raid", "type": "battle",
+      "id": "goblin-raid",
+      "type": "battle",
       "label": "Goblin Raiders",
       "description": "A rowdy mob has blockaded the trade route. Clear them out.",
-      "row": 0, "col": 0, "rowCols": 1,
-      "parentIds": [], "childIds": ["camp", "shrine", "patrol"],
-      "handicap": 10,
+      "row": 0,
+      "col": 0,
+      "rowCols": 1,
+      "parentIds": [],
+      "childIds": [
+        "camp",
+        "shrine",
+        "patrol"
+      ],
+      "handicap": 7,
       "environment": "forest",
-      "enemyDeck": ["Goblin","Goblin","Goblin","Goblin","Bat","Bat","Bandit","Bandit","Pixie","Pixie","Build Wall","Build Wall","Rally","Rally"]
+      "enemyDeck": [
+        "Goblin",
+        "Goblin",
+        "Goblin",
+        "Goblin",
+        "Bat",
+        "Bat",
+        "Bandit",
+        "Bandit",
+        "Pixie",
+        "Pixie",
+        "Build Wall",
+        "Build Wall",
+        "Rally",
+        "Rally"
+      ]
     },
     "camp": {
-      "id": "camp", "type": "rest",
+      "id": "camp",
+      "type": "rest",
       "label": "Woodland Camp",
       "description": "A sheltered clearing. Rest here and tend your wounds.",
-      "row": 1, "col": 0, "rowCols": 3,
-      "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "row": 1,
+      "col": 0,
+      "rowCols": 3,
+      "parentIds": [
+        "goblin-raid"
+      ],
+      "childIds": [
+        "ambush"
+      ],
       "environment": "camp",
       "restHeal": 10
     },
     "shrine": {
-      "id": "shrine", "type": "event",
+      "id": "shrine",
+      "type": "event",
       "label": "Ancient Shrine",
       "description": "A moss-covered shrine pulses with faint forest magic.",
-      "row": 1, "col": 1, "rowCols": 3,
-      "parentIds": ["goblin-raid"], "childIds": ["ambush"],
+      "row": 1,
+      "col": 1,
+      "rowCols": 3,
+      "parentIds": [
+        "goblin-raid"
+      ],
+      "childIds": [
+        "ambush"
+      ],
       "environment": "forest",
       "eventId": "shrine"
     },
     "patrol": {
-      "id": "patrol", "type": "battle",
+      "id": "patrol",
+      "type": "battle",
       "label": "Forest Patrol",
       "description": "A disciplined warband is watching the deeper path.",
-      "row": 1, "col": 2, "rowCols": 3,
-      "parentIds": ["goblin-raid"], "childIds": ["ambush"],
-      "handicap": 7,
-      "environment": "forest",
-      "enemyDeck": ["Archer","Archer","Archer","Bandit","Bandit","Goblin","Goblin","Pixie","Crossbow","Build Wall","Build Wall","Build Farm","Eagle Eye"]
-    },
-    "ambush": {
-      "id": "ambush", "type": "battle",
-      "label": "The Ambush",
-      "description": "Something ancient was waiting in the treeline.",
-      "row": 2, "col": 0, "rowCols": 1,
-      "parentIds": ["camp", "shrine", "patrol"], "childIds": ["ruins", "war-camp", "market"],
+      "row": 1,
+      "col": 2,
+      "rowCols": 3,
+      "parentIds": [
+        "goblin-raid"
+      ],
+      "childIds": [
+        "ambush"
+      ],
       "handicap": 4,
       "environment": "forest",
-      "enemyDeck": ["Goblin","Goblin","Bat","Bat","Bat","Bandit","Bandit","Archer","Archer","Troll","Build Wall","Barracks","Rally","Haste"]
+      "enemyDeck": [
+        "Archer",
+        "Archer",
+        "Archer",
+        "Bandit",
+        "Bandit",
+        "Goblin",
+        "Goblin",
+        "Pixie",
+        "Crossbow",
+        "Build Wall",
+        "Build Wall",
+        "Build Farm",
+        "Eagle Eye"
+      ]
+    },
+    "ambush": {
+      "id": "ambush",
+      "type": "battle",
+      "label": "The Ambush",
+      "description": "Something ancient was waiting in the treeline.",
+      "row": 2,
+      "col": 0,
+      "rowCols": 1,
+      "parentIds": [
+        "camp",
+        "shrine",
+        "patrol"
+      ],
+      "childIds": [
+        "ruins",
+        "war-camp",
+        "market"
+      ],
+      "handicap": 1,
+      "environment": "forest",
+      "enemyDeck": [
+        "Goblin",
+        "Goblin",
+        "Bat",
+        "Bat",
+        "Bat",
+        "Bandit",
+        "Bandit",
+        "Archer",
+        "Archer",
+        "Troll",
+        "Build Wall",
+        "Barracks",
+        "Rally",
+        "Haste"
+      ]
     },
     "ruins": {
-      "id": "ruins", "type": "event",
+      "id": "ruins",
+      "type": "event",
       "label": "Watchtower Ruins",
       "description": "A crumbling garrison tower leans against the treeline.",
-      "row": 3, "col": 0, "rowCols": 3,
-      "parentIds": ["ambush"], "childIds": ["captain"],
+      "row": 3,
+      "col": 0,
+      "rowCols": 3,
+      "parentIds": [
+        "ambush"
+      ],
+      "childIds": [
+        "captain"
+      ],
       "environment": "ruins",
       "eventId": "ruins"
     },
     "war-camp": {
-      "id": "war-camp", "type": "battle",
+      "id": "war-camp",
+      "type": "battle",
       "label": "War Camp",
       "description": "A fortified enemy camp blocks the road ahead.",
-      "row": 3, "col": 1, "rowCols": 3,
-      "parentIds": ["ambush"], "childIds": ["captain"],
-      "handicap": 3,
+      "row": 3,
+      "col": 1,
+      "rowCols": 3,
+      "parentIds": [
+        "ambush"
+      ],
+      "childIds": [
+        "captain"
+      ],
+      "handicap": 0,
       "environment": "camp",
-      "enemyDeck": ["Barbarian","Barbarian","Knight","Crossbow","Crossbow","Troll","Archer","Build Wall","Build Wall","Barracks","Sharpen Blades","Haste","Iron Skin"]
+      "enemyDeck": [
+        "Barbarian",
+        "Barbarian",
+        "Knight",
+        "Crossbow",
+        "Crossbow",
+        "Troll",
+        "Archer",
+        "Build Wall",
+        "Build Wall",
+        "Barracks",
+        "Sharpen Blades",
+        "Haste",
+        "Iron Skin"
+      ]
     },
     "market": {
-      "id": "market", "type": "merchant",
+      "id": "market",
+      "type": "merchant",
       "label": "Travelling Market",
       "description": "A merchant cart half-hidden in the underbrush. She waves you over.",
-      "row": 3, "col": 2, "rowCols": 3,
-      "parentIds": ["ambush"], "childIds": ["captain"],
+      "row": 3,
+      "col": 2,
+      "rowCols": 3,
+      "parentIds": [
+        "ambush"
+      ],
+      "childIds": [
+        "captain"
+      ],
       "environment": "forest"
     },
     "captain": {
-      "id": "captain", "type": "elite",
+      "id": "captain",
+      "type": "elite",
       "label": "Siege Captain",
       "description": "A hardened veteran with well-drilled siege troops.",
-      "row": 4, "col": 0, "rowCols": 1,
-      "parentIds": ["ruins", "war-camp", "market"], "childIds": ["thornlord"],
+      "row": 4,
+      "col": 0,
+      "rowCols": 1,
+      "parentIds": [
+        "ruins",
+        "war-camp",
+        "market"
+      ],
+      "childIds": [
+        "thornlord"
+      ],
       "handicap": 1,
       "environment": "ruins",
-      "enemyDeck": ["Knight","Knight","Catapult","Catapult","Crossbow","Crossbow","Shield Guard","Shield Guard","Build Wall","Build Wall","Garrison","Sharpen Blades","War Drums","Iron Skin","Fortify"]
+      "enemyDeck": [
+        "Knight",
+        "Knight",
+        "Catapult",
+        "Catapult",
+        "Crossbow",
+        "Crossbow",
+        "Shield Guard",
+        "Shield Guard",
+        "Build Wall",
+        "Build Wall",
+        "Garrison",
+        "Sharpen Blades",
+        "War Drums",
+        "Iron Skin",
+        "Fortify"
+      ]
     },
     "thornlord": {
-      "id": "thornlord", "type": "boss",
+      "id": "thornlord",
+      "type": "boss",
       "label": "The Thornlord",
       "description": "Ancient guardian of the Verdant Shard. Unbowed for centuries.",
-      "row": 5, "col": 0, "rowCols": 1,
-      "parentIds": ["captain"], "childIds": [],
+      "row": 5,
+      "col": 0,
+      "rowCols": 1,
+      "parentIds": [
+        "captain"
+      ],
+      "childIds": [],
       "handicap": 0,
       "environment": "ruins",
       "bossAI": "thornlord",
