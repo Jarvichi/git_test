@@ -83,6 +83,23 @@ body {
   letter-spacing: 2px;
 }
 
+/* Relic chip shown in top bar when a relic is active */
+.relic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border: 1px solid rgba(180, 140, 255, 0.5);
+  border-radius: 3px;
+  background: rgba(100, 60, 180, 0.25);
+  color: #c8a8ff;
+  white-space: nowrap;
+  cursor: default;
+  letter-spacing: 0.3px;
+}
+
 /* Developer mode badge shown when ?dev=1 is present */
 .dev-badge {
   position: absolute;
