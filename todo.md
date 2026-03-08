@@ -40,7 +40,7 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08 
 - [x] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
 - [x] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
 - [x] **#109** Battery drain: game drains phone battery quickly — pause game loop when tab hidden; prefers-reduced-motion CSS
-- [ ] **#112** Buff cards UX: players can't tell if buff applies to current units or full battle duration — show status icons above buffed units and/or a HUD indicator for duration buffs
+- [x] **#112** Buff cards UX: players can't tell if buff applies to current units or full battle duration — show status icons above buffed units and/or a HUD indicator for duration buffs
 
 ---
 

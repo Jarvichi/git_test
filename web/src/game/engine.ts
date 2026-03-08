@@ -1,4 +1,4 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType } from './types'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType, BuffTag } from './types'
 import { makeDeck, makeThorlordDeck, makeKraggDeck, makeAshwalkerDeck, makeNodeDeck, HERO_CARDS } from './cards'
 import { playUnitDeath, playBuildingDestroyed } from './sound'
 import { isNoDamageMode } from './debug'
@@ -337,20 +337,24 @@ export function playCard(state: GameState, cardId: string): GameState {
 function applyUpgrade(s: GameState, effect: UpgradeEffect, owner: 'player' | 'opponent', log: string[]): void {
   const units = s.field.filter(u => u.owner === owner)
   const label = owner === 'player' ? 'Your' : 'Enemy'
+  const addBuff = (u: Unit, tag: BuffTag) => {
+    if (!u.buffs) u.buffs = []
+    if (!u.buffs.includes(tag)) u.buffs.push(tag)
+  }
   if (effect.type === 'buffAttack') {
-    for (const u of units) u.attack += effect.amount
+    for (const u of units) { u.attack += effect.amount; addBuff(u, 'atk') }
     log.push(`${label} units gain +${effect.amount} attack!`)
   } else if (effect.type === 'healUnits') {
     for (const u of units) u.hp = Math.min(u.maxHp, u.hp + effect.amount)
     log.push(`${label} units healed ${effect.amount} HP.`)
   } else if (effect.type === 'buffSpeed') {
-    for (const u of units) if (u.moveSpeed > 0) u.moveSpeed += effect.amount
+    for (const u of units) if (u.moveSpeed > 0) { u.moveSpeed += effect.amount; addBuff(u, 'spd') }
     log.push(`${label} units surge +${effect.amount} speed!`)
   } else if (effect.type === 'buffMaxHp') {
-    for (const u of units) { u.maxHp += effect.amount; u.hp = Math.min(u.hp + effect.amount, u.maxHp) }
+    for (const u of units) { u.maxHp += effect.amount; u.hp = Math.min(u.hp + effect.amount, u.maxHp); addBuff(u, 'hp') }
     log.push(`${label} units gain +${effect.amount} max HP!`)
   } else if (effect.type === 'buffRange') {
-    for (const u of units) if (u.attackRange > 0) u.attackRange += effect.amount
+    for (const u of units) if (u.attackRange > 0) { u.attackRange += effect.amount; addBuff(u, 'range') }
     log.push(`${label} units gain +${effect.amount} attack range!`)
   }
 }

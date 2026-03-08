@@ -380,6 +380,34 @@ body {
   height: 4px;
 }
 
+/* Buff status icons shown above buffed units */
+.lane-unit-buffs {
+  display: flex;
+  flex-direction: row;
+  gap: 1px;
+  justify-content: center;
+}
+
+.lane-unit-buff {
+  font-size: 8px;
+  line-height: 1;
+  padding: 0 2px;
+  border-radius: 2px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.55);
+  animation: buff-pulse 1.8s ease-in-out infinite;
+}
+
+.lane-unit-buff--atk { color: #ff8844; border: 1px solid #ff8844; }
+.lane-unit-buff--spd { color: #44ddff; border: 1px solid #44ddff; }
+.lane-unit-buff--hp  { color: #ff4488; border: 1px solid #ff4488; }
+.lane-unit-buff--range { color: #cc88ff; border: 1px solid #cc88ff; }
+
+@keyframes buff-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
 /* Upgrade level badge shown next to building name */
 .lane-unit-level {
   margin-left: 3px;
