@@ -33,6 +33,8 @@ export interface UnitTemplate {
   structureEffect?: StructureEffect
 }
 
+export type BuffTag = 'atk' | 'spd' | 'hp' | 'range'
+
 export interface Unit extends UnitTemplate {
   id: string
   owner: 'player' | 'opponent'
@@ -43,6 +45,7 @@ export interface Unit extends UnitTemplate {
   spawnTimer?: number        // ms until next spawn (spawner buildings only)
   upgradeLevel?: number      // 1 = base, 2+ = upgraded (structures only)
   spawnGrowTimer?: number    // ms remaining in grow-in animation (building spawns only)
+  buffs?: BuffTag[]          // active buff tags for UI display
 }
 
 export interface Card {

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { GameState, Unit, LANE_WIDTH, Card, TerrainObstacle, TerrainType } from '../game/types'
+import { GameState, Unit, LANE_WIDTH, Card, TerrainObstacle, TerrainType, BuffTag } from '../game/types'
 import { CardTile } from './CardTile'
 import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
@@ -148,6 +148,15 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
               {'★'.repeat(unit.upgradeLevel)}
             </span>
           )}
+        </div>
+      )}
+      {unit.buffs && unit.buffs.length > 0 && (
+        <div className="lane-unit-buffs">
+          {unit.buffs.map(tag => (
+            <span key={tag} className={`lane-unit-buff lane-unit-buff--${tag}`}>
+              {tag === 'atk' ? '⚔' : tag === 'spd' ? '▶' : tag === 'hp' ? '♥' : '◎'}
+            </span>
+          ))}
         </div>
       )}
       <div className="lane-unit-hp-bar">
