@@ -2434,6 +2434,109 @@ body {
    ACT COMPLETE
    ═══════════════════════════════════════════════════════════ */
 
+/* ── Relic selection screen ──────────────────────────────────── */
+.relic-select-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.relic-select-header {
+  text-align: center;
+}
+
+.relic-select-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #c8a8ff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 12px rgba(180, 120, 255, 0.7);
+}
+
+.relic-select-subtitle {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #888;
+  max-width: 320px;
+}
+
+.relic-select-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.relic-select-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #444;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: inherit;
+  color: inherit;
+}
+
+.relic-select-card:hover {
+  border-color: #888;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.relic-select-card--chosen {
+  border-color: #c8a8ff;
+  background: rgba(100, 60, 180, 0.25);
+  box-shadow: 0 0 8px rgba(180, 120, 255, 0.3);
+}
+
+.relic-select-card--none {
+  opacity: 0.6;
+}
+
+.relic-select-card--none.relic-select-card--chosen {
+  opacity: 1;
+  border-color: #888;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+.relic-select-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+
+.relic-select-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ddd;
+  margin-bottom: 2px;
+}
+
+.relic-select-desc {
+  font-size: 10px;
+  color: #999;
+  line-height: 1.4;
+}
+
+.relic-select-confirm {
+  margin-top: 4px;
+}
+
+/* ── Act complete ────────────────────────────────────────────── */
 .act-complete {
   display: flex;
   flex-direction: column;
