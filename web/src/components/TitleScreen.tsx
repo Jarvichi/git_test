@@ -1,6 +1,8 @@
 import React from 'react'
-import { loadDeck, deckTotalCards, isDeckValid } from '../game/collection'
+import { loadDeck, loadCollection, deckTotalCards, isDeckValid } from '../game/collection'
 import { loadRun } from '../game/questline'
+
+const CAMPAIGN_UNLOCK_CARDS = 30
 
 interface Props {
   crystals: number
@@ -13,10 +15,13 @@ interface Props {
 }
 
 export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeckBuilder, onSettings, onInventory }: Props) {
-  const deck     = loadDeck()
-  const count    = deckTotalCards(deck)
-  const valid    = isDeckValid(deck)
-  const savedRun = loadRun()
+  const deck           = loadDeck()
+  const count          = deckTotalCards(deck)
+  const valid          = isDeckValid(deck)
+  const savedRun       = loadRun()
+  const collection     = loadCollection()
+  const totalOwned     = collection.reduce((s, e) => s + e.count, 0)
+  const campaignUnlocked = savedRun !== null || totalOwned >= CAMPAIGN_UNLOCK_CARDS
 
   return (
     <div className="title-screen">
@@ -27,11 +32,21 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
         <button
           className="action-btn action-btn--large title-campaign-btn"
           onClick={onCampaign}
-          disabled={!valid}
-          title={valid ? undefined : `Deck needs ${10 - count} more cards`}
+          disabled={!valid || !campaignUnlocked}
+          title={
+            !valid ? `Deck needs ${10 - count} more cards` :
+            !campaignUnlocked ? `Collect ${CAMPAIGN_UNLOCK_CARDS - totalOwned} more cards to unlock Campaign — play Quick Battle to earn cards!` :
+            undefined
+          }
         >
           {savedRun ? '⚔  CONTINUE RUN' : '⚔  CAMPAIGN'}
         </button>
+
+        {!campaignUnlocked && (
+          <div className="title-campaign-locked-hint">
+            🔒 Campaign unlocks at {CAMPAIGN_UNLOCK_CARDS} cards ({totalOwned}/{CAMPAIGN_UNLOCK_CARDS}) — play Quick Battle to earn more!
+          </div>
+        )}
 
         <button
           className="action-btn title-play-btn"
