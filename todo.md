@@ -76,7 +76,7 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08 
 - [x] **Relic storage** — `RunState.activeRelic` added; saved to `jarv_relics` on act complete; auto-equipped for next run; effects applied at battle start
 - [x] Relic data in `web/src/game/relics.ts` (Bark Shield + Iron Standard defined)
 - [x] Relic effects applied at campaign battle start in `App.tsx`
-- [ ] Relic display on Battlefield HUD
+- [x] Relic display on Battlefield HUD
 - [ ] Relic selection screen between acts (currently auto-equips last earned)
 
 ---

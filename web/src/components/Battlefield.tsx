@@ -5,11 +5,13 @@ import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 import { BattleEventOverlay } from './BattleEventOverlay'
 import { isNoDamageMode } from '../game/debug'
+import { getRelicDef } from '../game/relics'
 
 interface Props {
   state: GameState
   onPlayCard: (cardId: string) => void
-  actTheme?: string   // e.g. 'act1' — applied as CSS modifier class
+  actTheme?: string       // e.g. 'act1' — applied as CSS modifier class
+  activeRelic?: string | null  // relic name currently equipped, if any
 }
 
 const SPAWN_GROW_MS = 1500
@@ -722,7 +724,7 @@ const STRATEGY_LABELS: Record<string, string> = {
   rush:   'RUSH',
 }
 
-export function Battlefield({ state, onPlayCard, actTheme }: Props) {
+export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const gameTimeSec = Math.floor(state.gameTime / 1000)
   const minutes = Math.floor(gameTimeSec / 60)
@@ -761,6 +763,14 @@ export function Battlefield({ state, onPlayCard, actTheme }: Props) {
             : '🌋 QUAKE'}
           </span>
         )}
+        {activeRelic && (() => {
+          const def = getRelicDef(activeRelic)
+          return def ? (
+            <span className="relic-chip" title={def.desc}>
+              {def.icon} {def.name}
+            </span>
+          ) : null
+        })()}
         {isNoDamageMode() && (
           <span className="dev-badge">DEV MODE</span>
         )}
