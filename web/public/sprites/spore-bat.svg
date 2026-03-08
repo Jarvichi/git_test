@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Wings -->
+  <polygon points="16,16 4,8 6,18" fill="#5a3a7a"/>
+  <polygon points="16,16 28,8 26,18" fill="#5a3a7a"/>
+  <!-- Wing membrane details -->
+  <line x1="16" y1="16" x2="5" y2="10" stroke="#7a5a9a" stroke-width="0.8"/>
+  <line x1="16" y1="16" x2="27" y2="10" stroke="#7a5a9a" stroke-width="0.8"/>
+  <!-- Body -->
+  <ellipse cx="16" cy="17" rx="4" ry="5" fill="#7a4a9a"/>
+  <!-- Head -->
+  <circle cx="16" cy="12" r="4" fill="#8a5aaa"/>
+  <!-- Ears -->
+  <polygon points="13,9 11,4 15,8" fill="#5a3a7a"/>
+  <polygon points="19,9 21,4 17,8" fill="#5a3a7a"/>
+  <!-- Eyes -->
+  <circle cx="14.2" cy="11.5" r="1.5" fill="#111"/>
+  <circle cx="17.8" cy="11.5" r="1.5" fill="#111"/>
+  <circle cx="14.2" cy="11.2" r="0.7" fill="#cc44ff"/>
+  <circle cx="17.8" cy="11.2" r="0.7" fill="#cc44ff"/>
+  <!-- Spore dots -->
+  <circle cx="7" cy="6" r="1" fill="#88cc44" opacity="0.8"/>
+  <circle cx="25" cy="7" r="1.2" fill="#88cc44" opacity="0.8"/>
+  <circle cx="10" cy="20" r="0.8" fill="#aadd55" opacity="0.7"/>
+  <circle cx="22" cy="19" r="0.8" fill="#aadd55" opacity="0.7"/>
+</svg>
