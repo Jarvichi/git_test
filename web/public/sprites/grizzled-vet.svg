@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Legs - veteran's worn boots -->
+  <rect x="11" y="22" width="4" height="8" rx="1" fill="#5a4a30"/>
+  <rect x="17" y="22" width="4" height="8" rx="1" fill="#5a4a30"/>
+  <!-- Body - scarred leather/plate mix -->
+  <rect x="10" y="13" width="12" height="11" rx="2" fill="#7a6a40"/>
+  <rect x="12" y="13" width="8" height="5" rx="1" fill="#8a7a50"/>
+  <!-- Battle scars / slash marks -->
+  <line x1="13" y1="15" x2="15" y2="18" stroke="#5a4020" stroke-width="1"/>
+  <line x1="18" y1="14" x2="16" y2="17" stroke="#5a4020" stroke-width="1"/>
+  <!-- Head - weathered, stubble, scar -->
+  <circle cx="16" cy="9" r="5" fill="#c8956a"/>
+  <!-- Scar across face -->
+  <line x1="12" y1="8" x2="17" y2="11" stroke="#8a4a2a" stroke-width="1.5"/>
+  <!-- Veteran's scowl -->
+  <path d="M13,11.5 L16,12.5 L19,11.5" stroke="#5a3010" stroke-width="1" fill="none"/>
+  <!-- Eyes - narrowed, battle-hardened -->
+  <ellipse cx="13.5" cy="9" rx="1.8" ry="1.2" fill="#111"/>
+  <ellipse cx="18.5" cy="9" rx="1.8" ry="1.2" fill="#111"/>
+  <!-- Brow furrowed -->
+  <line x1="12" y1="7.5" x2="15" y2="7" stroke="#5a3010" stroke-width="1"/>
+  <line x1="17" y1="7" x2="20" y2="7.5" stroke="#5a3010" stroke-width="1"/>
+  <!-- Veteran's grey hair -->
+  <ellipse cx="16" cy="5" rx="5" ry="2.5" fill="#aaa"/>
+  <!-- Sword - notched, well-used -->
+  <rect x="23" y="10" width="2.5" height="12" rx="0.5" fill="#bbb"/>
+  <rect x="21" y="16" width="7" height="1.5" rx="0.5" fill="#999"/>
+  <rect x="23.5" y="13" width="1" height="1" fill="#888"/>
+  <!-- Left arm -->
+  <ellipse cx="8" cy="18" rx="4" ry="2.5" fill="#7a6a40"/>
+</svg>
