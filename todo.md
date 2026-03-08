@@ -29,7 +29,7 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08)
 
  - [x] **#63** Unit movement: units don't avoid obstacles properly (hitbox mismatch with SVG size) (closed on GitHub)
  - [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance (closed on GitHub)
-- [ ] **#87** Inventory: item detail modal when tapping a card; relics should appear in inventory
+- [x] **#87** Inventory: item detail modal when tapping a card; relics appear in inventory with icon, name, desc
 - [ ] **#88** Event rewards: shrines and watchtowers should occasionally give inventory/relic items (not just HP/crystals/cards)
 
 ---

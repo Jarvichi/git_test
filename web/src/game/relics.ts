@@ -5,6 +5,7 @@
 
 export interface RelicDef {
   name: string
+  icon: string
   desc: string
   /** Apply this relic's passive effect at the start of a new battle. */
   applyToGame: (state: import('./types').GameState) => void
@@ -13,6 +14,7 @@ export interface RelicDef {
 const RELIC_CATALOG: RelicDef[] = [
   {
     name: 'Bark Shield',
+    icon: '🛡️',
     desc: 'Your base gains +10 max HP at the start of every battle.',
     applyToGame(state) {
       state.playerBase.maxHp += 10
@@ -21,6 +23,7 @@ const RELIC_CATALOG: RelicDef[] = [
   },
   {
     name: 'Iron Standard',
+    icon: '⚔️',
     desc: 'All your units start with +1 ATK.',
     applyToGame(state) {
       for (const u of state.field) {
