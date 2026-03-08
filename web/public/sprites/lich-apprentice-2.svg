@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Legs mid-stride, body 1px higher -->
+  <ellipse cx="13" cy="26" rx="3" ry="4" fill="#2a2a3a"/>
+  <ellipse cx="19" cy="26" rx="3" ry="4" fill="#2a2a3a"/>
+  <!-- Robe body - 1px higher -->
+  <polygon points="10,13 9,29 23,29 22,13" fill="#2a2a3a"/>
+  <line x1="16" y1="13" x2="16" y2="29" stroke="#1a1a2a" stroke-width="0.8"/>
+  <!-- Robe trim - purple -->
+  <line x1="9" y1="29" x2="23" y2="29" stroke="#6644aa" stroke-width="1"/>
+  <line x1="10" y1="13" x2="9" y2="29" stroke="#6644aa" stroke-width="0.8"/>
+  <line x1="22" y1="13" x2="23" y2="29" stroke="#6644aa" stroke-width="0.8"/>
+  <!-- Head - 1px higher -->
+  <circle cx="16" cy="9" r="5" fill="#b8a0c0"/>
+  <!-- Dark mage eyes -->
+  <circle cx="13.5" cy="8.5" r="1.8" fill="#111"/>
+  <circle cx="18.5" cy="8.5" r="1.8" fill="#111"/>
+  <circle cx="13.5" cy="8" r="0.9" fill="#aa44ff"/>
+  <circle cx="18.5" cy="8" r="0.9" fill="#aa44ff"/>
+  <!-- Hood pulled back -->
+  <path d="M11,6 Q16,3 21,6" stroke="#2a2a3a" stroke-width="2" fill="none"/>
+  <!-- Grimoire in hand - mid -->
+  <rect x="3" y="15" width="5" height="7" rx="0.5" fill="#3a2a1a"/>
+  <rect x="4" y="16" width="3" height="5" rx="0.5" fill="#2a1a0a"/>
+  <line x1="4" y1="18" x2="7" y2="18" stroke="#aa66ff" stroke-width="0.5"/>
+  <line x1="4" y1="19" x2="7" y2="19" stroke="#aa66ff" stroke-width="0.5"/>
+  <line x1="4" y1="20" x2="7" y2="20" stroke="#aa66ff" stroke-width="0.5"/>
+  <!-- Staff - mid -->
+  <line x1="24" y1="7" x2="22" y2="27" stroke="#6b4a2a" stroke-width="1.5"/>
+  <circle cx="24" cy="7" r="2.5" fill="#221133"/>
+  <circle cx="24" cy="7" r="1.5" fill="#7733cc"/>
+  <circle cx="24" cy="7" r="0.7" fill="#cc88ff"/>
+  <!-- Dark magic wisps -->
+  <path d="M22,17 Q20,15 21,13" stroke="#7733cc" stroke-width="1" fill="none" opacity="0.7"/>
+</svg>
