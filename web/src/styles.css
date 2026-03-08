@@ -2031,6 +2031,15 @@ body {
   box-shadow: 0 0 14px rgba(255, 200, 50, 0.35);
 }
 
+.title-campaign-locked-hint {
+  font-size: 11px;
+  color: #ffaa33;
+  opacity: 0.85;
+  text-align: center;
+  padding: 2px 8px;
+  margin-top: -4px;
+}
+
 .nodemap {
   display: flex;
   flex-direction: column;
