@@ -39,7 +39,7 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08 
  - [x] **#58** Screen size: battlefield + hand don't fit on small phone screens — scale to viewport (closed on GitHub)
 - [x] **#65** Collection screen: Upgrade/Sell buttons always visible (greyed when unavailable), add text labels
 - [x] **#46** UI consistency: title screen buttons same size; collection cards same size; victory screen buttons same size
-- [ ] **#109** Battery drain: game drains phone battery quickly — reduce animation/render frequency on mobile
+- [x] **#109** Battery drain: game drains phone battery quickly — pause game loop when tab hidden; prefers-reduced-motion CSS
 - [ ] **#112** Buff cards UX: players can't tell if buff applies to current units or full battle duration — show status icons above buffed units and/or a HUD indicator for duration buffs
 
 ---
@@ -61,9 +61,10 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08 
 ## 🔵 Enhancements — Medium
 
 - [ ] **#64 / #115 / #116** Tutorials: deck builder tutorial (#115); gameplay tutorial (#116)
-- [ ] **#117** Lock campaign until 30 cards collected; explain quick play needed
+- [x] **#117** Lock campaign until 30 cards collected; show hint to play Quick Battle — done
 - [x] **#47** Buff/upgrade cards need icons/images (already implemented in CardTile.tsx UpgradeIcon)
-- [ ] **#66 / #118 / #119** Debugging: feedback/bug submission screen (#118); export/import localStorage to file behind `?debug` URL param (#119); access submissions when planning todos (#118)
+- [ ] **#66 / #118** Debugging: feedback/bug submission screen (#118); access submissions when planning todos (#118)
+- [x] **#119** Export/import localStorage to file behind `?debug` URL param — added to Settings page
 - [ ] **#60** Rare event — The Gambler: tap-to-guess modal, win all cards or lose everything; rubber chicken consolation; track rare event log
 - [ ] **#52** More secrets scattered through the game
 - [ ] **#55** Anti-hacking: checksum on card collection + inventory; warn on mismatch; safe first-load migration
