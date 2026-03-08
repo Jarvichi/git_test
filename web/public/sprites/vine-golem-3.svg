@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Body -->
+  <ellipse cx="16" cy="18" rx="8" ry="9" fill="#2d5a1b"/>
+  <path d="M10,14 Q8,18 10,22" stroke="#4a8c2a" stroke-width="2" fill="none"/>
+  <path d="M22,14 Q24,18 22,22" stroke="#4a8c2a" stroke-width="2" fill="none"/>
+  <path d="M12,12 Q16,10 20,12" stroke="#3d7a22" stroke-width="1.5" fill="none"/>
+  <!-- Head -->
+  <circle cx="16" cy="9" r="6" fill="#3a7a20"/>
+  <circle cx="13.5" cy="8.5" r="1.8" fill="#111"/>
+  <circle cx="18.5" cy="8.5" r="1.8" fill="#111"/>
+  <circle cx="13.5" cy="8.2" r="0.9" fill="#88ee44"/>
+  <circle cx="18.5" cy="8.2" r="0.9" fill="#88ee44"/>
+  <path d="M13,11 L14.5,12 L16,11 L17.5,12 L19,11" stroke="#1a3a0a" stroke-width="1" fill="none"/>
+  <!-- Arms: stride B (opposite of frame 1) -->
+  <ellipse cx="26" cy="15" rx="5" ry="3" fill="#2d5a1b" transform="rotate(30,26,15)"/>
+  <ellipse cx="6" cy="19" rx="5" ry="3" fill="#2d5a1b" transform="rotate(-20,6,19)"/>
+  <ellipse cx="28" cy="12" rx="3" ry="2" fill="#4aaa22" transform="rotate(30,28,12)"/>
+  <ellipse cx="4" cy="17" rx="3" ry="2" fill="#4aaa22" transform="rotate(-20,4,17)"/>
+  <!-- Legs: stride B -->
+  <rect x="18" y="24" width="4" height="7" rx="2" fill="#2d5a1b"/>
+  <rect x="9" y="26" width="4" height="5" rx="2" fill="#2d5a1b"/>
+</svg>
