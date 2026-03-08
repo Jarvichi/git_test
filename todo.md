@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08).
+Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08 [2]).
 
 ---
 
@@ -60,7 +60,8 @@ Issues sourced from GitHub. Last synced: 2026-03-08 (session update: 2026-03-08)
 
 ## 🔵 Enhancements — Medium
 
-- [ ] **#64 / #115 / #116** Tutorials: deck builder tutorial (#115); gameplay tutorial (#116); lock campaign until 30 cards collected (#117 — explain quick play)
+- [ ] **#64 / #115 / #116** Tutorials: deck builder tutorial (#115); gameplay tutorial (#116)
+- [ ] **#117** Lock campaign until 30 cards collected; explain quick play needed
 - [x] **#47** Buff/upgrade cards need icons/images (already implemented in CardTile.tsx UpgradeIcon)
 - [ ] **#66 / #118 / #119** Debugging: feedback/bug submission screen (#118); export/import localStorage to file behind `?debug` URL param (#119); access submissions when planning todos (#118)
 - [ ] **#60** Rare event — The Gambler: tap-to-guess modal, win all cards or lose everything; rubber chicken consolation; track rare event log
