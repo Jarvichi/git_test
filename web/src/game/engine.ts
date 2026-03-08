@@ -308,6 +308,7 @@ export function newGame(
     activeBattleEvent: null,
     bossAI: boss,
     terrain: generateTerrain(terrainSeed, environment),
+    environment,
   }
 }
 
