@@ -48,7 +48,7 @@ import {
 import { CardTile }           from './components/CardTile'
 import { DailyLoginModal }   from './components/DailyLoginModal'
 import { InventoryScreen }   from './components/InventoryScreen'
-import { hasDailyReward, claimDailyReward, addToInventory, DailyReward } from './game/dailyLogin'
+import { hasDailyReward, claimDailyReward, addToInventory, DailyReward, USELESS_ITEM_POOL } from './game/dailyLogin'
 import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import { isNoDamageMode } from './game/debug'
@@ -581,6 +581,9 @@ export default function App() {
         playCardFlip()
         return   // show card reveal before going to nodemap
       }
+    } else if (effect.type === 'gainItem') {
+      const item = USELESS_ITEM_POOL.find(i => i.id === effect.itemId)
+      if (item) addToInventory(item)
     }
 
     saveRun(updatedRun)
