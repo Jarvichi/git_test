@@ -6,6 +6,7 @@ import {
   loadCollection, saveCollection, loadCrystals, saveCrystals,
   recordCardPlayed, recordUnitDied, addCardsToCollection,
   getOwnedCount, DECK_MAX, CRYSTAL_PACK_COST, DeckEntry,
+  deckTotalCards, STARTER_DECK,
 } from './game/collection'
 import { getCardCatalog } from './game/cards'
 import {
@@ -408,8 +409,15 @@ export default function App() {
     prevOpponentUnitsRef.current = new Map()
     prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
-    const playerCards = buildDeckCards(loadDeck(), collection)
-    setGameState(newGame(playerCards, handicap))
+    const deckEntries = loadDeck()
+    const deckCount   = deckTotalCards(deckEntries)
+    // Fall back to starter deck if player has no cards built yet
+    const effectiveDeck = deckCount > 0 ? deckEntries : STARTER_DECK
+    const playerCards   = buildDeckCards(effectiveDeck, collection)
+    // Give a handicap boost scaled to deck size: fewer cards = easier opponent
+    // (maxes out at +10 for an empty deck, scales to 0 at DECK_MAX cards)
+    const deckBonus = Math.round(Math.max(0, DECK_MAX - deckCount) / DECK_MAX * 10)
+    setGameState(newGame(playerCards, Math.min(MAX_HANDICAP, handicap + deckBonus)))
     setScreen('playing')
     rollRareEvent()
   }, [handicap])
@@ -431,8 +439,12 @@ export default function App() {
     try { localStorage.setItem(HANDICAP_KEY, String(nextHandicap)) } catch { /* ignore */ }
     setHandicap(nextHandicap)
     const collection  = loadCollection()
-    const playerCards = buildDeckCards(loadDeck(), collection)
-    setGameState(newGame(playerCards, nextHandicap))
+    const deckEntries = loadDeck()
+    const deckCount   = deckTotalCards(deckEntries)
+    const effectiveDeck = deckCount > 0 ? deckEntries : STARTER_DECK
+    const playerCards   = buildDeckCards(effectiveDeck, collection)
+    const deckBonus = Math.round(Math.max(0, DECK_MAX - deckCount) / DECK_MAX * 10)
+    setGameState(newGame(playerCards, Math.min(MAX_HANDICAP, nextHandicap + deckBonus)))
     setScreen('playing')
     rollRareEvent()
   }, [gameState, handicap])
