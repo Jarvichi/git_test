@@ -46,6 +46,7 @@ export interface Unit extends UnitTemplate {
   upgradeLevel?: number      // 1 = base, 2+ = upgraded (structures only)
   spawnGrowTimer?: number    // ms remaining in grow-in animation (building spawns only)
   buffs?: BuffTag[]          // active buff tags for UI display
+  isHero?: boolean           // true for units deployed from hero cards
 }
 
 export interface Card {

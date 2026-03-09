@@ -391,6 +391,11 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
       }
     }
     const unit = spawnUnit(card.unit!, owner)
+    // Hero units use the card's display name and are flagged for visual distinction
+    if (card.isHero) {
+      unit.name = card.name
+      unit.isHero = true
+    }
     // Assign a stable lateral slot to non-wall structures so that units
     // spawned from them start at the same horizontal position.
     if (card.cardType === 'structure' && !card.unit!.isWall) {
@@ -657,6 +662,11 @@ function checkGameOver(s: GameState): boolean {
 
 // ─── Opponent AI ─────────────────────────────────────────
 
+/** Hero cards are locked for the first 30 s — same rule as the player. */
+function isPlayable(card: Card, gameTime: number): boolean {
+  return !(card.isHero && gameTime < 30000)
+}
+
 function opponentAI(s: GameState, log: string[]): void {
   const manaBonus = getManaBonus(s.field, 'opponent')
   let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
@@ -666,7 +676,7 @@ function opponentAI(s: GameState, log: string[]): void {
 
   let played = 0
   while (played < maxPlays) {
-    const affordable = s.opponentHand.filter(c => c.cost <= mana)
+    const affordable = s.opponentHand.filter(c => c.cost <= mana && isPlayable(c, s.gameTime))
     if (affordable.length === 0) break
 
     let preferred: Card[]
@@ -714,7 +724,7 @@ function thornlordAI(s: GameState, log: string[]): void {
   let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
   function tryPlay(): boolean {
-    const hand = s.opponentHand.filter(c => c.cost <= mana)
+    const hand = s.opponentHand.filter(c => c.cost <= mana && isPlayable(c, s.gameTime))
     if (hand.length === 0) return false
 
     // Priority 1: walls
@@ -754,7 +764,7 @@ function kraggAI(s: GameState, log: string[]): void {
   let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
   function tryPlay(): boolean {
-    const hand = s.opponentHand.filter(c => c.cost <= mana)
+    const hand = s.opponentHand.filter(c => c.cost <= mana && isPlayable(c, s.gameTime))
     if (hand.length === 0) return false
 
     // Priority 1: siege weapons (Catapult, Ballista, Siege Works)
@@ -794,7 +804,7 @@ function ashwalkerAI(s: GameState, log: string[]): void {
   let mana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
   function tryPlay(): boolean {
-    const hand = s.opponentHand.filter(c => c.cost <= mana)
+    const hand = s.opponentHand.filter(c => c.cost <= mana && isPlayable(c, s.gameTime))
     if (hand.length === 0) return false
 
     const oppUnits = s.field.filter(u => u.owner === 'opponent' && !u.isWall)

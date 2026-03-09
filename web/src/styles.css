@@ -477,6 +477,52 @@ body {
   filter: brightness(2.2) drop-shadow(0 0 5px currentColor);
 }
 
+/* ─── Hero units ──────────────────────────────────────── */
+
+@keyframes hero-glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px 3px rgba(255, 220, 60, 0.7), 0 0 22px 6px rgba(255, 180, 0, 0.35); }
+  50%       { box-shadow: 0 0 18px 6px rgba(255, 240, 100, 0.9), 0 0 36px 12px rgba(255, 200, 0, 0.55); }
+}
+
+.lane-unit--hero {
+  outline: 2px solid rgba(255, 220, 60, 0.9);
+  animation: hero-glow-pulse 1.6s ease-in-out infinite;
+  z-index: 5;
+}
+
+.lane-unit--hero .lane-unit-name::before {
+  content: '★ ';
+  color: #ffe066;
+}
+
+/* ─── Hero lightning bolt spawn effect ───────────────── */
+
+@keyframes hero-lightning-strike {
+  0%   { opacity: 0; transform: translateX(-50%) scaleY(0.2); }
+  15%  { opacity: 1; transform: translateX(-50%) scaleY(1); }
+  60%  { opacity: 1; transform: translateX(-50%) scaleY(1); }
+  100% { opacity: 0; transform: translateX(-50%) scaleY(1); }
+}
+
+.hero-lightning {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 100;
+  pointer-events: none;
+  animation: hero-lightning-strike 0.9s ease-out forwards;
+}
+
+.hero-lightning--player  { left: 6%; }
+.hero-lightning--opponent { right: 6%; left: auto; }
+
+.hero-lightning-bolt {
+  width: 60px;
+  height: 100%;
+  filter: drop-shadow(0 0 12px #ffe066) drop-shadow(0 0 24px #ffa500);
+}
+
 /* ─── Terrain Obstacles ──────────────────────────────── */
 
 .terrain-obstacle {
