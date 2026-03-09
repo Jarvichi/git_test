@@ -391,8 +391,9 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
       }
     }
     const unit = spawnUnit(card.unit!, owner)
-    // Hero units use the card's display name and are flagged for visual distinction
+    // Hero units use the card's display name but keep the base unit sprite
     if (card.isHero) {
+      unit.spriteName = unit.name   // preserve original name for sprite lookup
       unit.name = card.name
       unit.isHero = true
     }
