@@ -51,10 +51,12 @@ interface Props {
   canAfford?: boolean
   disabled?: boolean
   onClick?: () => void
+  lockedSecs?: number   // hero cards: seconds remaining until playable (0 = unlocked)
 }
 
-export function CardTile({ card, canAfford = true, disabled = false, onClick }: Props) {
-  const clickable = canAfford && !disabled
+export function CardTile({ card, canAfford = true, disabled = false, onClick, lockedSecs = 0 }: Props) {
+  const heroLocked = card.isHero && lockedSecs > 0
+  const clickable = canAfford && !disabled && !heroLocked
 
   let stats: string
   let tag: string | null = null
@@ -99,7 +101,7 @@ export function CardTile({ card, canAfford = true, disabled = false, onClick }: 
         clickable ? '' : 'card-tile--disabled',
       ].filter(Boolean).join(' ')}
       onClick={clickable ? onClick : undefined}
-      title={card.description}
+      title={heroLocked ? `Hero cards unlock after 30 seconds (${lockedSecs}s remaining)` : card.description}
     >
       <div className="card-cost">{card.cost}</div>
       <div className="card-title">{card.name}</div>
@@ -114,6 +116,12 @@ export function CardTile({ card, canAfford = true, disabled = false, onClick }: 
       <div className="card-stats">{stats}</div>
       {tag && <div className="card-tag">{tag}</div>}
       <div className="card-rarity">{rarityStars(card.rarity)}</div>
+      {heroLocked && (
+        <div className="card-hero-lock">
+          <span className="card-hero-lock-icon">⏳</span>
+          <span className="card-hero-lock-secs">{lockedSecs}s</span>
+        </div>
+      )}
     </div>
   )
 }

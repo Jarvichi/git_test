@@ -724,6 +724,28 @@ const STRATEGY_LABELS: Record<string, string> = {
   rush:   'RUSH',
 }
 
+// Maps bossAI or actTheme to an opponent portrait sprite slug.
+const OPPONENT_PORTRAIT: Record<string, string> = {
+  // Boss-specific
+  thornlord:  'thornlord',
+  kragg:      'barbarian',
+  ashwalker:  'ash-elemental',
+  archivist:  'wizard',
+  // Act fallbacks
+  act1: 'goblin',
+  act2: 'ironclad-guard',
+  act3: 'skeleton',
+  act4: 'fire-mage',
+}
+
+const BASE_SPRITE_PATH = '/jarvs-amazing-web-game/sprites/'
+
+function opponentPortraitSlug(bossAI: string | undefined, actTheme: string | undefined): string {
+  if (bossAI && OPPONENT_PORTRAIT[bossAI]) return OPPONENT_PORTRAIT[bossAI]
+  if (actTheme && OPPONENT_PORTRAIT[actTheme]) return OPPONENT_PORTRAIT[actTheme]
+  return 'bandit'
+}
+
 export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const gameTimeSec = Math.floor(state.gameTime / 1000)
@@ -778,7 +800,11 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
 
       {/* Opponent base */}
       <div className="base-bar base-bar--opponent">
-        <span className="base-bar-label">ENEMY</span>
+        <img
+          className="base-bar-portrait base-bar-portrait--opponent"
+          src={`${BASE_SPRITE_PATH}${opponentPortraitSlug(state.bossAI, actTheme)}.svg`}
+          alt="opponent"
+        />
         <HpBar current={state.opponentBase.hp} max={state.opponentBase.maxHp} color="#ff4444" />
         <span className="base-bar-info">
           {STRATEGY_LABELS[state.opponentStrategy] && (
@@ -804,7 +830,11 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
 
       {/* Player base */}
       <div className="base-bar base-bar--player">
-        <span className="base-bar-label">YOU</span>
+        <img
+          className="base-bar-portrait base-bar-portrait--player"
+          src={`${BASE_SPRITE_PATH}jarv.svg`}
+          alt="Jarv"
+        />
         <HpBar current={state.playerBase.hp} max={state.playerBase.maxHp} color="#33ff33" />
         <span className="base-bar-info">
           MANA {state.mana}/{state.maxMana}
@@ -822,19 +852,24 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
         <div className="hand-cards">
           {state.playerHand.length === 0
             ? <span className="field-empty">No cards</span>
-            : state.playerHand.map(card => (
+            : state.playerHand.map(card => {
+              const heroLockedSecs = card.isHero
+                ? Math.ceil(Math.max(0, 30000 - state.gameTime) / 1000)
+                : 0
+              return (
               <div key={card.id} className="hand-card-wrap">
                 <CardTile
                   card={card}
                   canAfford={state.mana >= card.cost}
                   onClick={() => onPlayCard(card.id)}
+                  lockedSecs={heroLockedSecs}
                 />
                 <button
                   className="hand-card-info-btn"
                   onClick={e => { e.stopPropagation(); setDetailCard(card) }}
                 >ⓘ</button>
               </div>
-            ))}
+            )})}
         </div>
       </div>
 
