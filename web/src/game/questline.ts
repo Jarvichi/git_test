@@ -3,6 +3,7 @@ import { getCardCatalog } from './cards'
 import act1Data from '../data/acts/act1.json'
 import act2Data from '../data/acts/act2.json'
 import act3Data from '../data/acts/act3.json'
+import act4Data from '../data/acts/act4.json'
 import eventsData from '../data/events.json'
 
 // ─── Node & Act types ─────────────────────────────────────
@@ -534,16 +535,18 @@ export function generateRewardChoices(nodeType: NodeType, actTags?: string[]): s
 export const ACT_1: Act = act1Data as Act
 export const ACT_2: Act = act2Data as Act
 export const ACT_3: Act = act3Data as Act
+export const ACT_4: Act = act4Data as Act
 
 export const ACTS: Record<string, Act> = {
   act1: ACT_1,
   act2: ACT_2,
   act3: ACT_3,
+  act4: ACT_4,
 }
 
 /** Returns the act that follows this one in the campaign, or null if it's the last. */
 export function getNextAct(actId: string): Act | null {
-  const order = ['act1', 'act2', 'act3']
+  const order = ['act1', 'act2', 'act3', 'act4']
   const idx = order.indexOf(actId)
   if (idx < 0 || idx === order.length - 1) return null
   return ACTS[order[idx + 1]] ?? null
