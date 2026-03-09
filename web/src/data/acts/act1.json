@@ -327,6 +327,7 @@
       "childIds": [
         "camp",
         "shrine",
+        "forest-path",
         "patrol"
       ],
       "handicap": 7,
@@ -357,7 +358,7 @@
       "description": "A sheltered clearing. Rest here and tend your wounds.",
       "row": 1,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "goblin-raid"
       ],
@@ -374,7 +375,7 @@
       "description": "A moss-covered shrine pulses with faint forest magic.",
       "row": 1,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "goblin-raid"
       ],
@@ -384,14 +385,44 @@
       "environment": "forest",
       "eventId": "shrine"
     },
+    "forest-path": {
+      "id": "forest-path",
+      "type": "battle",
+      "label": "Forest Path",
+      "description": "A narrow trail — someone has been using it. Someone unfriendly.",
+      "row": 1,
+      "col": 2,
+      "rowCols": 4,
+      "parentIds": [
+        "goblin-raid"
+      ],
+      "childIds": [
+        "ambush"
+      ],
+      "handicap": 4,
+      "opponentBaseHp": 100,
+      "environment": "forest",
+      "enemyDeck": [
+        "Goblin",
+        "Goblin",
+        "Bandit",
+        "Spore Bat",
+        "Pixie",
+        "Vine Golem",
+        "Thornwall",
+        "Build Wall",
+        "Rally",
+        "Haste"
+      ]
+    },
     "patrol": {
       "id": "patrol",
       "type": "battle",
       "label": "Forest Patrol",
       "description": "A disciplined warband is watching the deeper path.",
       "row": 1,
-      "col": 2,
-      "rowCols": 3,
+      "col": 3,
+      "rowCols": 4,
       "parentIds": [
         "goblin-raid"
       ],
@@ -428,12 +459,14 @@
       "parentIds": [
         "camp",
         "shrine",
+        "forest-path",
         "patrol"
       ],
       "childIds": [
         "ruins",
         "war-camp",
-        "market"
+        "market",
+        "overgrowth"
       ],
       "handicap": 1,
       "opponentBaseHp": 115,
@@ -462,7 +495,7 @@
       "description": "A crumbling garrison tower leans against the treeline.",
       "row": 3,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "ambush"
       ],
@@ -479,7 +512,7 @@
       "description": "A fortified enemy camp blocks the road ahead.",
       "row": 3,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "ambush"
       ],
@@ -511,7 +544,7 @@
       "description": "A merchant cart half-hidden in the underbrush. She waves you over.",
       "row": 3,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "ambush"
       ],
@@ -520,24 +553,63 @@
       ],
       "environment": "forest"
     },
+    "overgrowth": {
+      "id": "overgrowth",
+      "type": "battle",
+      "label": "Overgrowth",
+      "description": "The forest has reclaimed the road. The things living in it haven't welcomed travellers in a long time.",
+      "row": 3,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "ambush"
+      ],
+      "childIds": [
+        "captain"
+      ],
+      "handicap": 0,
+      "environment": "forest",
+      "enemyDeck": [
+        "Elder Treant",
+        "Vine Golem",
+        "Thornbeast",
+        "Thornbeast",
+        "Troll",
+        "Spore Bat",
+        "Spore Bat",
+        "Thornwall",
+        "Thornwall",
+        "Ancient Grove",
+        "Rally",
+        "Haste"
+      ]
+    },
     "captain": {
       "id": "captain",
       "type": "elite",
-      "label": "Siege Captain",
-      "description": "A hardened veteran with well-drilled siege troops.",
+      "label": "Forest Captain",
+      "description": "A hardened veteran with well-drilled siege troops — and something the forest has been teaching him about patience.",
       "row": 4,
       "col": 0,
       "rowCols": 1,
       "parentIds": [
         "ruins",
         "war-camp",
-        "market"
+        "market",
+        "overgrowth"
       ],
       "childIds": [
-        "thornlord"
+        "deep-woods",
+        "troll-bridge",
+        "old-shrine",
+        "thornwall-pass"
       ],
       "handicap": 1,
       "environment": "ruins",
+      "bossDialogue": [
+        "\"You've come a long way for a card player.\"",
+        "\"The Thornlord doesn't see visitors. That's why I'm here.\""
+      ],
       "enemyDeck": [
         "Knight",
         "Knight",
@@ -558,16 +630,118 @@
       "opponentIntervalMs": 6000,
       "opponentBaseHp": 92
     },
+    "deep-woods": {
+      "id": "deep-woods",
+      "type": "rest",
+      "label": "Deep Woods",
+      "description": "Far enough from the patrol routes to be safe. The forest is quieter here. Almost welcoming.",
+      "row": 5,
+      "col": 0,
+      "rowCols": 4,
+      "parentIds": [
+        "captain"
+      ],
+      "childIds": [
+        "thornlord"
+      ],
+      "environment": "camp",
+      "restHeal": 8
+    },
+    "troll-bridge": {
+      "id": "troll-bridge",
+      "type": "battle",
+      "label": "Troll Bridge",
+      "description": "Something large lives under the bridge. It has been living there since before the Fracture. It is not pleased about visitors.",
+      "row": 5,
+      "col": 1,
+      "rowCols": 4,
+      "parentIds": [
+        "captain"
+      ],
+      "childIds": [
+        "thornlord"
+      ],
+      "handicap": 0,
+      "opponentBaseHp": 95,
+      "environment": "forest",
+      "enemyDeck": [
+        "Troll",
+        "Troll",
+        "Troll",
+        "Vine Golem",
+        "Thornbeast",
+        "Troll Den",
+        "Thornwall",
+        "Thornwall",
+        "Barracks",
+        "Rally",
+        "Rally",
+        "Haste"
+      ]
+    },
+    "old-shrine": {
+      "id": "old-shrine",
+      "type": "event",
+      "label": "Old Shrine",
+      "description": "A second shrine, deeper in the forest — older than the first, and considerably less friendly about it.",
+      "row": 5,
+      "col": 2,
+      "rowCols": 4,
+      "parentIds": [
+        "captain"
+      ],
+      "childIds": [
+        "thornlord"
+      ],
+      "environment": "forest",
+      "eventId": "shrine"
+    },
+    "thornwall-pass": {
+      "id": "thornwall-pass",
+      "type": "battle",
+      "label": "Thornwall Pass",
+      "description": "The Thornlord's outer defences — living walls of thorn and root, older than any siege weapon.",
+      "row": 5,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "captain"
+      ],
+      "childIds": [
+        "thornlord"
+      ],
+      "handicap": 0,
+      "opponentBaseHp": 95,
+      "environment": "forest",
+      "enemyDeck": [
+        "Elder Treant",
+        "Elder Treant",
+        "Vine Golem",
+        "Thornbeast",
+        "Thornbeast",
+        "Thornwall",
+        "Thornwall",
+        "Thornwall",
+        "Ancient Grove",
+        "Ancient Grove",
+        "Rally",
+        "Haste",
+        "Iron Skin"
+      ]
+    },
     "thornlord": {
       "id": "thornlord",
       "type": "boss",
       "label": "The Thornlord",
       "description": "Ancient guardian of the Verdant Shard. Unbowed for centuries.",
-      "row": 5,
+      "row": 6,
       "col": 0,
       "rowCols": 1,
       "parentIds": [
-        "captain"
+        "deep-woods",
+        "troll-bridge",
+        "old-shrine",
+        "thornwall-pass"
       ],
       "childIds": [],
       "handicap": 0,

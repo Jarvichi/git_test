@@ -85,7 +85,8 @@ Issues sourced from GitHub. Last synced: 2026-03-09.
 
 - [x] Act 2 — The Iron Citadel: act2.json node map, boss Warlord Kragg, Iron Standard relic
 - [x] Act 3 — The Ashen Wastes: act3.json node map, boss The Ashwalker, Soulstone relic
-- [ ] Act 4 — The Crystal Spire: act4.json (4-wide, 9 rows), boss The Archivist (infinite mana at turn 8+), Prism Lens relic
+- [x] Act 4 — The Crystal Spire: act4.json (4-wide, 9 rows), boss The Archivist (infinite mana at turn 8+), Prism Lens relic
+- [x] Expand Acts 1–3 to be longer/wider (4 cols wide, more rows like act4)
 - [ ] Act 5 — The Fractured Core (future)
 
 ---
