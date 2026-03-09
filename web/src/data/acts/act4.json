@@ -11,7 +11,7 @@
   "intro": [
     {
       "title": "THE CRYSTAL SPIRE",
-      "text": "Before the Fracture, the Crystal Spire was the Dominion's arcane research division — a floating fortress of compressed ley-line energy, staffed by scholars who were very important and knew it.\n\nThe Fracture didn't destroy the Spire. It crystallised it. The entire shard froze mid-operation: experiments running, libraries mid-catalogue, staff mid-sentence. The crystal grew inward. The scholars who survived became part of the archive.\n\nThe Archivist survived better than most."
+      "text": "Before the Fracture, the Crystal Spire was the Dominion's arcane research division \u2014 a floating fortress of compressed ley-line energy, staffed by scholars who were very important and knew it.\n\nThe Fracture didn't destroy the Spire. It crystallised it. The entire shard froze mid-operation: experiments running, libraries mid-catalogue, staff mid-sentence. The crystal grew inward. The scholars who survived became part of the archive.\n\nThe Archivist survived better than most."
     },
     {
       "title": "THE WANDERER",
@@ -19,7 +19,7 @@
     },
     {
       "title": "THE CRYSTAL SPIRE",
-      "text": "The Spire is a labyrinth of crystallised corridors, arcane constructs, and rooms that echo with the voices of people who stopped speaking three years ago.\n\nAt its heart, the Archivist — scholar, archivist, and now something considerably more and considerably less than either — catalogues everything that enters. He has been cataloguing you since you entered the shard.\n\nHe has extensive notes."
+      "text": "The Spire is a labyrinth of crystallised corridors, arcane constructs, and rooms that echo with the voices of people who stopped speaking three years ago.\n\nAt its heart, the Archivist \u2014 scholar, archivist, and now something considerably more and considerably less than either \u2014 catalogues everything that enters. He has been cataloguing you since you entered the shard.\n\nHe has extensive notes."
     },
     {
       "title": "YOUR MISSION",
@@ -29,11 +29,11 @@
   "outro": [
     {
       "title": "THE ARCHIVE FALLS SILENT",
-      "text": "The Archivist's crystal matrix collapses. Not violently — methodically. Each facet dims in order, as though even his defeat is being filed.\n\nThe Spire holds its breath. Then, for the first time in three years, a window opens somewhere deep in the structure. Not because it was unlocked. Because whoever had been locking it is no longer in a position to care.\n\nLight comes through. Ordinary, unremarkable light. In the Crystal Spire, it looks like a miracle."
+      "text": "The Archivist's crystal matrix collapses. Not violently \u2014 methodically. Each facet dims in order, as though even his defeat is being filed.\n\nThe Spire holds its breath. Then, for the first time in three years, a window opens somewhere deep in the structure. Not because it was unlocked. Because whoever had been locking it is no longer in a position to care.\n\nLight comes through. Ordinary, unremarkable light. In the Crystal Spire, it looks like a miracle."
     },
     {
       "title": "PRISM LENS",
-      "text": "Among the Archivist's collection — catalogued, cross-referenced, annotated in a hand that had become increasingly less human — you find it.\n\nA lens ground from the Spire's heart crystal. It refracts mana the way a prism refracts light: input, multiplied, redirected.\n\nThe Archivist's note reads: *'Item 7,441: Prism Lens. Effect: mana amplification. Recommendation: do not give to wandering tactician.'\n\nYou take it."
+      "text": "Among the Archivist's collection \u2014 catalogued, cross-referenced, annotated in a hand that had become increasingly less human \u2014 you find it.\n\nA lens ground from the Spire's heart crystal. It refracts mana the way a prism refracts light: input, multiplied, redirected.\n\nThe Archivist's note reads: *'Item 7,441: Prism Lens. Effect: mana amplification. Recommendation: do not give to wandering tactician.'\n\nYou take it."
     }
   ],
   "variantPools": {
@@ -41,7 +41,7 @@
       "Currently, technically, trespassing in a building that has documented every trespasser since the Dominion era.",
       "Professionally speaking, now classified as a hostile anomaly in an active archive.",
       "In the scholarly sense, an unscheduled variable in someone else's extremely long experiment.",
-      "Now — by the Archivist's own notation — Specimen 7,441-B, Category: Recurring.",
+      "Now \u2014 by the Archivist's own notation \u2014 Specimen 7,441-B, Category: Recurring.",
       "Technically unenrolled, which puts you in a narrow category of people who have entered the Spire and stayed that way."
     ],
     "jarvIntros": [
@@ -53,15 +53,15 @@
     ],
     "spireDesc": [
       "The Crystal Spire floats above the shard floor on compressed ley lines, its corridors refracting light into colours that don't have names. The scholars called it the height of Dominion achievement. From the outside it looks like someone built a fortress out of a prism and forgot to add doors.",
-      "The Spire's outer lattice is a maze of crystallised arcane energy — walls that shift, corridors that echo with old spells still running, and constructs that patrol with the cheerful persistence of things that have never been told to stop.",
+      "The Spire's outer lattice is a maze of crystallised arcane energy \u2014 walls that shift, corridors that echo with old spells still running, and constructs that patrol with the cheerful persistence of things that have never been told to stop.",
       "Three years of isolation have given the Spire's internal systems time to optimise themselves. Every approach is monitored. Every intrusion is logged. The Archivist receives notification of your exact position in real time.",
       "The Crystal Spire hums. Constantly. A low, harmonic resonance that carries meaning if you listen long enough. You have been listening for forty minutes. The meaning is 'leave.'"
     ],
     "archivistDesc": [
-      "The Archivist was the Dominion's head of magical research before the Fracture — a precise, methodical scholar who believed that anything worth knowing was worth cataloguing and anything worth cataloguing was worth defending.\n\nThe Fracture gave him more to catalogue than he'd expected. He adapted.",
+      "The Archivist was the Dominion's head of magical research before the Fracture \u2014 a precise, methodical scholar who believed that anything worth knowing was worth cataloguing and anything worth cataloguing was worth defending.\n\nThe Fracture gave him more to catalogue than he'd expected. He adapted.",
       "No surviving record of the Archivist exists outside the Spire. This is because the Archivist controls all the surviving records.\n\nHe is, by his own notation, entry 1 in the archive. The entry runs to forty-seven pages and is still being updated.",
       "The Archivist doesn't fight. He categorises. He processes. He applies the appropriate countermeasures from the section labelled 'threats, external, category: persistent.'\n\nYou are in that section. You have been in that section since you crossed the shard boundary. You have a case number.",
-      "In the Spire's early catalogues, the Archivist noted that magic follows rules and rules can be mastered. His later entries — written after the Fracture, in a hand that grew steadily less human — simply note that mastery takes time.\n\nHe has had time."
+      "In the Spire's early catalogues, the Archivist noted that magic follows rules and rules can be mastered. His later entries \u2014 written after the Fracture, in a hand that grew steadily less human \u2014 simply note that mastery takes time.\n\nHe has had time."
     ],
     "priorRunSummaries": [
       "The outer lattice looked exactly as the recovered schematics described it. Which was suspicious, because the schematics were three years old and the lattice was known to rearrange itself.",
@@ -92,12 +92,12 @@
       "Fifty approaches. The crystal walls show you all your previous visits simultaneously. It looks like a gallery. The Archivist has curated it."
     ],
     "milestoneOpenings100": [
-      "The Archivist is at the entrance.\n\nNot in his chamber — at the entrance. Waiting.\n\n'One hundred visits,' he says. The crystal in his voice has grown, over the years, into something almost warm. 'Do you know what that means, in terms of the archive?'\n\nA pause. A soft chime, somewhere deep in the Spire.\n\n'You have generated more data than the Dominion's entire eastern campaign. I have seventeen volumes dedicated exclusively to your methodology. You are, empirically, the most significant external variable this archive has ever processed.'\n\nHe tilts his crystalline head.\n\n'I have decided to consider this a collaboration.'"
+      "The Archivist is at the entrance.\n\nNot in his chamber \u2014 at the entrance. Waiting.\n\n'One hundred visits,' he says. The crystal in his voice has grown, over the years, into something almost warm. 'Do you know what that means, in terms of the archive?'\n\nA pause. A soft chime, somewhere deep in the Spire.\n\n'You have generated more data than the Dominion's entire eastern campaign. I have seventeen volumes dedicated exclusively to your methodology. You are, empirically, the most significant external variable this archive has ever processed.'\n\nHe tilts his crystalline head.\n\n'I have decided to consider this a collaboration.'"
     ]
   },
   "midRunTemplates": [
     "The {ordinalLower} visit to the Crystal Spire. The archive has updated your file. It is now cross-referenced under seventeen categories.",
-    "Campaign {n}. The constructs recognise you on sight. The Archivist has stopped logging your entry time — he predicts it accurately enough to not bother.",
+    "Campaign {n}. The constructs recognise you on sight. The Archivist has stopped logging your entry time \u2014 he predicts it accurately enough to not bother.",
     "{n} campaigns through the lattice. The crystal corridors look the same. They always look the same. The Archivist prefers consistency.",
     "{n} times past the outer lattice. Your case number has gained a suffix: 'See also: the persistent one.'",
     "Run {n}. The Archivist's notes on you are now longer than his notes on the Fracture itself. He considers this an appropriate allocation of resources.",
@@ -106,100 +106,225 @@
   ],
   "introRules": [
     {
-      "condition": { "op": "gte", "value": 100 },
+      "condition": {
+        "op": "gte",
+        "value": 100
+      },
       "panels": [
-        { "title": "THE ARCHIVIST WAITS", "text": "{pool:milestoneOpenings100:0}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:3}\n\n{pool:archivistDesc:2}" }
+        {
+          "title": "THE ARCHIVIST WAITS",
+          "text": "{pool:milestoneOpenings100:0}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:3}\n\n{pool:archivistDesc:2}"
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 51, "max": 99 },
+      "condition": {
+        "op": "range",
+        "min": 51,
+        "max": 99
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME", "text": "{midRunTemplate}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:1}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:2}\n\n{pool:archivistDesc:1}" },
-        { "title": "YOUR MISSION", "text": "Breach the lattice. Reach the Archivist. Stop him cataloguing things.\n\nYou know the route. You always know the route." }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{midRunTemplate}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:1}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:2}\n\n{pool:archivistDesc:1}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Breach the lattice. Reach the Archivist. Stop him cataloguing things.\n\nYou know the route. You always know the route."
+        }
       ]
     },
     {
-      "condition": { "op": "eq", "value": 50 },
+      "condition": {
+        "op": "eq",
+        "value": 50
+      },
       "panels": [
-        { "title": "FIFTY CAMPAIGNS", "text": "{pool:milestoneOpenings50:0}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\nFifty visits. The archive has a dedicated wing now.\n\n{pool:jarvIntros:1}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:2}\n\n{pool:archivistDesc:1}" },
-        { "title": "YOUR MISSION", "text": "Breach the lattice. Reach the Archivist.\n\nYou know the route. You always know the route." }
+        {
+          "title": "FIFTY CAMPAIGNS",
+          "text": "{pool:milestoneOpenings50:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\nFifty visits. The archive has a dedicated wing now.\n\n{pool:jarvIntros:1}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:2}\n\n{pool:archivistDesc:1}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Breach the lattice. Reach the Archivist.\n\nYou know the route. You always know the route."
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 26, "max": 49 },
+      "condition": {
+        "op": "range",
+        "min": 26,
+        "max": 49
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME", "text": "{midRunTemplate}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:1}\n\n{pool:archivistDesc:0}" }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{midRunTemplate}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:1}\n\n{pool:archivistDesc:0}"
+        }
       ]
     },
     {
-      "condition": { "op": "eq", "value": 25 },
+      "condition": {
+        "op": "eq",
+        "value": 25
+      },
       "panels": [
-        { "title": "TWENTY-FIVE", "text": "{pool:milestoneOpenings25:0}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:1}\n\n{pool:archivistDesc:0}" }
+        {
+          "title": "TWENTY-FIVE",
+          "text": "{pool:milestoneOpenings25:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:2}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:1}\n\n{pool:archivistDesc:0}"
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 11, "max": 24 },
+      "condition": {
+        "op": "range",
+        "min": 11,
+        "max": 24
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME", "text": "{midRunTemplate}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}" },
-        { "title": "YOUR MISSION", "text": "Breach the lattice. Reach the Archivist.\n\nYou know how this goes. You've always known how this goes." }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{midRunTemplate}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Breach the lattice. Reach the Archivist.\n\nYou know how this goes. You've always known how this goes."
+        }
       ]
     },
     {
-      "condition": { "op": "eq", "value": 10 },
+      "condition": {
+        "op": "eq",
+        "value": 10
+      },
       "panels": [
-        { "title": "THE TENTH TIME", "text": "{pool:milestoneOpenings10:0}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}" },
-        { "title": "YOUR MISSION", "text": "Breach the lattice. Reach the Archivist.\n\nYou know how this goes. You've always known how this goes." }
+        {
+          "title": "THE TENTH TIME",
+          "text": "{pool:milestoneOpenings10:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:3}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}"
+        },
+        {
+          "title": "YOUR MISSION",
+          "text": "Breach the lattice. Reach the Archivist.\n\nYou know how this goes. You've always known how this goes."
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 5, "max": 9 },
+      "condition": {
+        "op": "range",
+        "min": 5,
+        "max": 9
+      },
       "panels": [
-        { "title": "THE {ORDINAL} TIME", "text": "{pool:milestoneOpenings5:0}" },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}" }
+        {
+          "title": "THE {ORDINAL} TIME",
+          "text": "{pool:milestoneOpenings5:0}"
+        },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}"
+        }
       ]
     },
     {
-      "condition": { "op": "range", "min": 2, "max": 4 },
+      "condition": {
+        "op": "range",
+        "min": 2,
+        "max": 4
+      },
       "panels": [
         {
           "title": "THE FRACTURE",
           "text": "Three years ago, the Grand Dominion shattered.\n\nIn the Crystal Spire, the shatter was documented in real time. The Archivist filed it under 'catastrophic events, external, category: significant.'\n\n{pool:priorRunSummaries:0}"
         },
-        { "title": "THE WANDERER", "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}" },
-        { "title": "THE CRYSTAL SPIRE", "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}" },
+        {
+          "title": "THE WANDERER",
+          "text": "You are Jarv. {pool:jarvMoods:0}\n\n{pool:jarvIntros:0}"
+        },
+        {
+          "title": "THE CRYSTAL SPIRE",
+          "text": "{pool:spireDesc:0}\n\n{pool:archivistDesc:0}"
+        },
         {
           "title": "A NOTIFICATION",
-          "text": "And yet — {pool:priorRunOpenings:0}\n\nYou push the feeling aside. The Spire is waiting.\n\nIt has always been waiting. It files everything."
+          "text": "And yet \u2014 {pool:priorRunOpenings:0}\n\nYou push the feeling aside. The Spire is waiting.\n\nIt has always been waiting. It files everything."
         }
       ]
     }
   ],
-  "startNodeIds": ["crystal-approach"],
+  "startNodeIds": [
+    "crystal-approach"
+  ],
   "nodes": {
     "crystal-approach": {
       "id": "crystal-approach",
       "type": "battle",
       "label": "Crystal Approach",
-      "description": "The Spire's outer lattice crackles with automated defences — constructs running on three-year-old orders.",
+      "description": "The Spire's outer lattice crackles with automated defences \u2014 constructs running on three-year-old orders.",
       "row": 0,
       "col": 0,
       "rowCols": 1,
       "parentIds": [],
-      "childIds": ["arcane-library", "spire-flank", "crystal-wellspring", "rift-lookout"],
+      "childIds": [
+        "arcane-library",
+        "spire-flank",
+        "crystal-wellspring"
+      ],
       "handicap": 7,
       "opponentBaseHp": 120,
       "environment": "citadel",
@@ -220,12 +345,16 @@
       "id": "arcane-library",
       "type": "event",
       "label": "Arcane Library",
-      "description": "A crystallised reading room — shelves frozen mid-reorganisation, books still open at the chapter the scholars were reading when the Fracture hit.",
+      "description": "A crystallised reading room \u2014 shelves frozen mid-reorganisation, books still open at the chapter the scholars were reading when the Fracture hit.",
       "row": 1,
       "col": 0,
-      "rowCols": 4,
-      "parentIds": ["crystal-approach"],
-      "childIds": ["crystal-bridge"],
+      "rowCols": 3,
+      "parentIds": [
+        "crystal-approach"
+      ],
+      "childIds": [
+        "crystal-bridge"
+      ],
       "environment": "ruins",
       "eventId": "ruins"
     },
@@ -233,12 +362,16 @@
       "id": "spire-flank",
       "type": "battle",
       "label": "Spire Flank",
-      "description": "The Spire's eastern rampart — aerial constructs patrol a corridor of crystalline towers.",
+      "description": "The Spire's eastern rampart \u2014 aerial constructs patrol a corridor of crystalline towers.",
       "row": 1,
       "col": 1,
-      "rowCols": 4,
-      "parentIds": ["crystal-approach"],
-      "childIds": ["crystal-bridge"],
+      "rowCols": 3,
+      "parentIds": [
+        "crystal-approach"
+      ],
+      "childIds": [
+        "crystal-bridge"
+      ],
       "handicap": 4,
       "opponentBaseHp": 130,
       "environment": "citadel",
@@ -259,12 +392,16 @@
       "id": "crystal-wellspring",
       "type": "rest",
       "label": "Crystal Wellspring",
-      "description": "A ley-line junction frozen mid-flow. The mana still seeps — enough to rest beside, enough to heal.",
+      "description": "A ley-line junction frozen mid-flow. The mana still seeps \u2014 enough to rest beside, enough to heal.",
       "row": 1,
       "col": 2,
-      "rowCols": 4,
-      "parentIds": ["crystal-approach"],
-      "childIds": ["crystal-bridge"],
+      "rowCols": 3,
+      "parentIds": [
+        "crystal-approach"
+      ],
+      "childIds": [
+        "crystal-bridge"
+      ],
       "environment": "citadel",
       "restHeal": 10
     },
@@ -272,12 +409,16 @@
       "id": "rift-lookout",
       "type": "battle",
       "label": "Rift Lookout",
-      "description": "A surveillance platform monitoring the shard boundary — automated constructs running continuous patrols.",
-      "row": 1,
-      "col": 3,
-      "rowCols": 4,
-      "parentIds": ["crystal-approach"],
-      "childIds": ["crystal-bridge"],
+      "description": "A surveillance platform monitoring the shard boundary \u2014 automated constructs running continuous patrols.",
+      "row": 5,
+      "col": 0,
+      "rowCols": 3,
+      "parentIds": [
+        "spire-crossing"
+      ],
+      "childIds": [
+        "spire-sanctum"
+      ],
       "handicap": 4,
       "opponentBaseHp": 125,
       "environment": "citadel",
@@ -298,12 +439,20 @@
       "id": "crystal-bridge",
       "type": "battle",
       "label": "Crystal Bridge",
-      "description": "The only crossing between the outer lattice and the inner sanctum — a kilometre of suspended crystal with something very large waiting on the other side.",
+      "description": "The only crossing between the outer lattice and the inner sanctum \u2014 a kilometre of suspended crystal with something very large waiting on the other side.",
       "row": 2,
       "col": 0,
       "rowCols": 1,
-      "parentIds": ["arcane-library", "spire-flank", "crystal-wellspring", "rift-lookout"],
-      "childIds": ["golem-works", "void-merchant", "echo-sentinel", "arcane-court"],
+      "parentIds": [
+        "arcane-library",
+        "spire-flank",
+        "crystal-wellspring"
+      ],
+      "childIds": [
+        "golem-works",
+        "void-merchant",
+        "echo-sentinel"
+      ],
       "handicap": 1,
       "opponentBaseHp": 135,
       "environment": "citadel",
@@ -326,12 +475,16 @@
       "id": "golem-works",
       "type": "battle",
       "label": "Golem Works",
-      "description": "The Spire's construct foundry — still running, still producing, with nobody left to give the golems new orders.",
+      "description": "The Spire's construct foundry \u2014 still running, still producing, with nobody left to give the golems new orders.",
       "row": 3,
       "col": 0,
-      "rowCols": 4,
-      "parentIds": ["crystal-bridge"],
-      "childIds": ["spire-sanctum"],
+      "rowCols": 3,
+      "parentIds": [
+        "crystal-bridge"
+      ],
+      "childIds": [
+        "spire-crossing"
+      ],
       "handicap": 0,
       "opponentBaseHp": 140,
       "environment": "citadel",
@@ -356,21 +509,29 @@
       "description": "A junior scholar who decided the Archivist's cataloguing priorities were misaligned and has been running a side operation in useful cards ever since.",
       "row": 3,
       "col": 1,
-      "rowCols": 4,
-      "parentIds": ["crystal-bridge"],
-      "childIds": ["spire-sanctum"],
+      "rowCols": 3,
+      "parentIds": [
+        "crystal-bridge"
+      ],
+      "childIds": [
+        "spire-crossing"
+      ],
       "environment": "citadel"
     },
     "echo-sentinel": {
       "id": "echo-sentinel",
       "type": "elite",
       "label": "Echo Sentinel",
-      "description": "A construct that absorbed enough ambient magic to develop something like strategy — and has been applying it to the same corridor for three years.",
+      "description": "A construct that absorbed enough ambient magic to develop something like strategy \u2014 and has been applying it to the same corridor for three years.",
       "row": 3,
       "col": 2,
-      "rowCols": 4,
-      "parentIds": ["crystal-bridge"],
-      "childIds": ["spire-sanctum"],
+      "rowCols": 3,
+      "parentIds": [
+        "crystal-bridge"
+      ],
+      "childIds": [
+        "spire-crossing"
+      ],
       "handicap": 1,
       "opponentBaseHp": 85,
       "opponentIntervalMs": 6000,
@@ -400,12 +561,16 @@
       "id": "arcane-court",
       "type": "battle",
       "label": "Arcane Court",
-      "description": "The Spire's inner deliberation chamber — once used for magical research reviews, now manned by constructs still running the review cycle.",
-      "row": 3,
-      "col": 3,
-      "rowCols": 4,
-      "parentIds": ["crystal-bridge"],
-      "childIds": ["spire-sanctum"],
+      "description": "The Spire's inner deliberation chamber \u2014 once used for magical research reviews, now manned by constructs still running the review cycle.",
+      "row": 5,
+      "col": 1,
+      "rowCols": 3,
+      "parentIds": [
+        "spire-crossing"
+      ],
+      "childIds": [
+        "spire-sanctum"
+      ],
       "handicap": 0,
       "opponentBaseHp": 140,
       "environment": "citadel",
@@ -428,12 +593,20 @@
       "id": "spire-sanctum",
       "type": "battle",
       "label": "Spire Sanctum",
-      "description": "The Archivist's administrative floor — where all reports converge and all threats are formally processed.",
-      "row": 4,
+      "description": "The Archivist's administrative floor \u2014 where all reports converge and all threats are formally processed.",
+      "row": 6,
       "col": 0,
       "rowCols": 1,
-      "parentIds": ["golem-works", "void-merchant", "echo-sentinel", "arcane-court"],
-      "childIds": ["mana-forge", "rift-herald", "prism-guardian", "arcane-vault"],
+      "parentIds": [
+        "rift-lookout",
+        "arcane-court",
+        "mana-forge"
+      ],
+      "childIds": [
+        "rift-herald",
+        "prism-guardian",
+        "arcane-vault"
+      ],
       "handicap": 0,
       "opponentBaseHp": 145,
       "environment": "citadel",
@@ -459,10 +632,14 @@
       "label": "Mana Forge",
       "description": "A decommissioned ley-line condenser. Still warm. Still functional enough to restore a wanderer who knows how to tap it.",
       "row": 5,
-      "col": 0,
-      "rowCols": 4,
-      "parentIds": ["spire-sanctum"],
-      "childIds": ["void-nexus"],
+      "col": 2,
+      "rowCols": 3,
+      "parentIds": [
+        "spire-crossing"
+      ],
+      "childIds": [
+        "spire-sanctum"
+      ],
       "environment": "citadel",
       "restHeal": 8
     },
@@ -470,12 +647,16 @@
       "id": "rift-herald",
       "type": "battle",
       "label": "Rift Herald",
-      "description": "The Spire's senior construct commander — upgraded after the Fracture with the excess magical energy that had nowhere else to go.",
-      "row": 5,
-      "col": 1,
-      "rowCols": 4,
-      "parentIds": ["spire-sanctum"],
-      "childIds": ["void-nexus"],
+      "description": "The Spire's senior construct commander \u2014 upgraded after the Fracture with the excess magical energy that had nowhere else to go.",
+      "row": 7,
+      "col": 0,
+      "rowCols": 3,
+      "parentIds": [
+        "spire-sanctum"
+      ],
+      "childIds": [
+        "void-nexus"
+      ],
       "handicap": 0,
       "opponentBaseHp": 150,
       "environment": "citadel",
@@ -498,12 +679,16 @@
       "id": "prism-guardian",
       "type": "elite",
       "label": "Prism Guardian",
-      "description": "A construct built around a shard of the Spire's heart crystal — its orders are old, its patience infinite, and its upgrade catalogue is very long.",
-      "row": 5,
-      "col": 2,
-      "rowCols": 4,
-      "parentIds": ["spire-sanctum"],
-      "childIds": ["void-nexus"],
+      "description": "A construct built around a shard of the Spire's heart crystal \u2014 its orders are old, its patience infinite, and its upgrade catalogue is very long.",
+      "row": 7,
+      "col": 1,
+      "rowCols": 3,
+      "parentIds": [
+        "spire-sanctum"
+      ],
+      "childIds": [
+        "void-nexus"
+      ],
       "handicap": 0,
       "opponentBaseHp": 90,
       "opponentIntervalMs": 5500,
@@ -534,12 +719,16 @@
       "id": "arcane-vault",
       "type": "event",
       "label": "Arcane Vault",
-      "description": "A sealed research chamber — the lock corroded three years ago, but nobody has been past to notice.",
-      "row": 5,
-      "col": 3,
-      "rowCols": 4,
-      "parentIds": ["spire-sanctum"],
-      "childIds": ["void-nexus"],
+      "description": "A sealed research chamber \u2014 the lock corroded three years ago, but nobody has been past to notice.",
+      "row": 7,
+      "col": 2,
+      "rowCols": 3,
+      "parentIds": [
+        "spire-sanctum"
+      ],
+      "childIds": [
+        "void-nexus"
+      ],
       "environment": "ruins",
       "eventId": "shrine"
     },
@@ -547,12 +736,20 @@
       "id": "void-nexus",
       "type": "battle",
       "label": "Void Nexus",
-      "description": "The Spire's central energy junction — where all ley-line feeds meet and something very old has been building pressure since the Fracture.",
-      "row": 6,
+      "description": "The Spire's central energy junction \u2014 where all ley-line feeds meet and something very old has been building pressure since the Fracture.",
+      "row": 8,
       "col": 0,
       "rowCols": 1,
-      "parentIds": ["mana-forge", "rift-herald", "prism-guardian", "arcane-vault"],
-      "childIds": ["null-chamber", "arcanist-champion", "mirror-ward", "crystal-descent"],
+      "parentIds": [
+        "rift-herald",
+        "prism-guardian",
+        "arcane-vault"
+      ],
+      "childIds": [
+        "null-chamber",
+        "arcanist-champion",
+        "mirror-ward"
+      ],
       "handicap": 0,
       "opponentBaseHp": 155,
       "environment": "citadel",
@@ -577,12 +774,16 @@
       "id": "null-chamber",
       "type": "rest",
       "label": "Null Chamber",
-      "description": "A room where the crystal goes dark — a pocket of arcane silence, unintentional and undocumented. Rest here. The archive doesn't know this room exists.",
-      "row": 7,
+      "description": "A room where the crystal goes dark \u2014 a pocket of arcane silence, unintentional and undocumented. Rest here. The archive doesn't know this room exists.",
+      "row": 9,
       "col": 0,
-      "rowCols": 4,
-      "parentIds": ["void-nexus"],
-      "childIds": ["archivist"],
+      "rowCols": 3,
+      "parentIds": [
+        "void-nexus"
+      ],
+      "childIds": [
+        "archivist"
+      ],
       "environment": "ruins",
       "restHeal": 8
     },
@@ -590,12 +791,16 @@
       "id": "arcanist-champion",
       "type": "elite",
       "label": "Arcanist Champion",
-      "description": "The Archivist's original research assistant — crystallised into a construct, but retaining enough memory to be methodical, dangerous, and extremely thorough.",
-      "row": 7,
+      "description": "The Archivist's original research assistant \u2014 crystallised into a construct, but retaining enough memory to be methodical, dangerous, and extremely thorough.",
+      "row": 9,
       "col": 1,
-      "rowCols": 4,
-      "parentIds": ["void-nexus"],
-      "childIds": ["archivist"],
+      "rowCols": 3,
+      "parentIds": [
+        "void-nexus"
+      ],
+      "childIds": [
+        "archivist"
+      ],
       "handicap": -1,
       "opponentBaseHp": 95,
       "opponentIntervalMs": 5000,
@@ -629,12 +834,16 @@
       "id": "mirror-ward",
       "type": "battle",
       "label": "Mirror Ward",
-      "description": "A corridor of reflective crystal panels — each one showing the same battle from a slightly different angle. The constructs use this to coordinate.",
-      "row": 7,
+      "description": "A corridor of reflective crystal panels \u2014 each one showing the same battle from a slightly different angle. The constructs use this to coordinate.",
+      "row": 9,
       "col": 2,
-      "rowCols": 4,
-      "parentIds": ["void-nexus"],
-      "childIds": ["archivist"],
+      "rowCols": 3,
+      "parentIds": [
+        "void-nexus"
+      ],
+      "childIds": [
+        "archivist"
+      ],
       "handicap": 0,
       "opponentBaseHp": 155,
       "environment": "citadel",
@@ -654,52 +863,26 @@
         "Haste"
       ]
     },
-    "crystal-descent": {
-      "id": "crystal-descent",
-      "type": "battle",
-      "label": "Crystal Descent",
-      "description": "The final approach to the Archivist's sanctum — the crystal here is oldest, densest, and the constructs have had three years to practice this exact engagement.",
-      "row": 7,
-      "col": 3,
-      "rowCols": 4,
-      "parentIds": ["void-nexus"],
-      "childIds": ["archivist"],
-      "handicap": 0,
-      "opponentBaseHp": 155,
-      "environment": "citadel",
-      "enemyDeck": [
-        "Wizard",
-        "Wizard",
-        "Golem",
-        "Fire Mage",
-        "Lich Apprentice",
-        "Necromancer",
-        "Arcane Tower",
-        "Arcane Tower",
-        "Shadow Academy",
-        "Shadow Academy",
-        "Iron Skin",
-        "Bloodlust",
-        "Haste",
-        "Eagle Eye"
-      ]
-    },
     "archivist": {
       "id": "archivist",
       "type": "boss",
       "label": "The Archivist",
       "description": "Three years of uninterrupted research. A mind merged with a fortress of compressed ley energy. Every spell in the Dominion archive, memorised, indexed, and ready to deploy.",
-      "row": 8,
+      "row": 10,
       "col": 0,
       "rowCols": 1,
-      "parentIds": ["null-chamber", "arcanist-champion", "mirror-ward", "crystal-descent"],
+      "parentIds": [
+        "null-chamber",
+        "arcanist-champion",
+        "mirror-ward"
+      ],
       "childIds": [],
       "handicap": 0,
       "environment": "citadel",
       "bossAI": "archivist",
       "bossDialogue": [
         "\"I have been expecting you. I have been expecting you since you crossed the shard boundary. I have a file.\"",
-        "\"You should know: after turn eight, I stop being patient. The archive opens. Everything I have collected — everything — becomes available simultaneously.\"",
+        "\"You should know: after turn eight, I stop being patient. The archive opens. Everything I have collected \u2014 everything \u2014 becomes available simultaneously.\"",
         "\"This is not a threat. It is a statement of methodology. I am, above all things, methodical.\""
       ],
       "opponentIntervalMs": 5000,
@@ -726,6 +909,42 @@
         "Eagle Eye",
         "Sharpen Blades",
         "Rally"
+      ]
+    },
+    "spire-crossing": {
+      "id": "spire-crossing",
+      "type": "battle",
+      "label": "Spire Crossing",
+      "description": "A crystal-lattice bridge suspended over a void rift. Arcane constructs patrol it endlessly.",
+      "row": 4,
+      "col": 0,
+      "rowCols": 1,
+      "parentIds": [
+        "golem-works",
+        "void-merchant",
+        "echo-sentinel"
+      ],
+      "childIds": [
+        "rift-lookout",
+        "arcane-court",
+        "mana-forge"
+      ],
+      "handicap": 0,
+      "opponentBaseHp": 115,
+      "environment": "arcane",
+      "enemyDeck": [
+        "Arcane Golem",
+        "Arcane Golem",
+        "Mana Wisp",
+        "Mana Wisp",
+        "Rune Knight",
+        "Spellblade",
+        "Crystal Hydra",
+        "Mana Tower",
+        "Crystal Wall",
+        "Leyline Node",
+        "Mana Surge",
+        "Arcane Efficiency"
       ]
     }
   }
