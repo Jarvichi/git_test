@@ -1,0 +1,154 @@
+import React, { useState, useCallback } from 'react'
+import {
+  ACHIEVEMENT_DEFS, AchievementDef, AchievementCategory,
+  loadAchievementSave, claimAchievementReward,
+} from '../game/achievements'
+import { addCardsToCollection, loadCrystals, saveCrystals } from '../game/collection'
+import { addToInventory } from '../game/dailyLogin'
+
+interface Props {
+  onBack: () => void
+  onCrystalsChanged: (n: number) => void
+}
+
+const CATEGORY_LABELS: Record<AchievementCategory, string> = {
+  kills:      '⚔  UNIT KILLS',
+  structures: '🏰  STRUCTURE DESTROYS',
+  events:     '🎲  RARE EVENTS',
+  campaign:   '🗺  CAMPAIGN',
+  misc:       '✨  MISC',
+}
+
+const CATEGORY_ORDER: AchievementCategory[] = ['campaign', 'misc', 'events', 'kills', 'structures']
+
+function formatReward(def: AchievementDef): string {
+  const r = def.reward
+  if (r.type === 'crystals') return `💎 ${r.crystals} crystals`
+  if (r.type === 'cards')    return `${r.count}× ${r.cardName}`
+  if (r.type === 'item')     return `${r.item!.icon} ${r.item!.name}`
+  return ''
+}
+
+function ProgressBar({ value, target }: { value: number; target: number }) {
+  const pct = Math.min(1, value / target)
+  const filled = Math.round(pct * 20)
+  const empty  = 20 - filled
+  return (
+    <span className="ach-bar">
+      {'█'.repeat(filled)}{'░'.repeat(empty)}
+      {' '}{value.toLocaleString()}/{target.toLocaleString()}
+    </span>
+  )
+}
+
+export function AchievementsScreen({ onBack, onCrystalsChanged }: Props) {
+  const [save, setSave] = useState(() => loadAchievementSave())
+  const [claimed, setJustClaimed] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState<AchievementCategory>('campaign')
+
+  const handleClaim = useCallback((def: AchievementDef) => {
+    const reward = claimAchievementReward(def.id)
+    if (!reward) return
+
+    if (reward.type === 'crystals' && reward.crystals) {
+      const next = loadCrystals() + reward.crystals
+      saveCrystals(next)
+      onCrystalsChanged(next)
+    } else if (reward.type === 'cards' && reward.cardName && reward.count) {
+      addCardsToCollection([{ cardName: reward.cardName, count: reward.count }])
+    } else if (reward.type === 'item' && reward.item) {
+      addToInventory(reward.item)
+    }
+
+    setSave(loadAchievementSave())
+    setJustClaimed(def.id)
+    setTimeout(() => setJustClaimed(null), 2000)
+  }, [onCrystalsChanged])
+
+  const defs = ACHIEVEMENT_DEFS.filter(d => d.category === activeCategory)
+
+  // Count claimable in each category for badge
+  function claimableCount(cat: AchievementCategory) {
+    return ACHIEVEMENT_DEFS.filter(d =>
+      d.category === cat && save.unlocked[d.id] && !save.claimed[d.id]
+    ).length
+  }
+
+  // Stats
+  const totalUnlocked = Object.values(save.unlocked).filter(Boolean).length
+  const totalClaimed  = Object.values(save.claimed).filter(Boolean).length
+  const total         = ACHIEVEMENT_DEFS.length
+
+  return (
+    <div className="overlay-screen">
+      <div className="overlay-header">
+        <button className="action-btn" onClick={onBack}>← BACK</button>
+        <span className="overlay-title">🏆 ACHIEVEMENTS</span>
+        <div className="ach-summary">
+          {totalUnlocked}/{total} · {totalClaimed} claimed
+        </div>
+      </div>
+
+      {/* Category tabs */}
+      <div className="ach-tabs">
+        {CATEGORY_ORDER.map(cat => {
+          const badge = claimableCount(cat)
+          return (
+            <button
+              key={cat}
+              className={`ach-tab${activeCategory === cat ? ' ach-tab--active' : ''}`}
+              onClick={() => setActiveCategory(cat)}
+            >
+              {CATEGORY_LABELS[cat].split('  ')[0]}
+              {badge > 0 && <span className="ach-badge">{badge}</span>}
+            </button>
+          )
+        })}
+      </div>
+
+      <div className="ach-category-label">{CATEGORY_LABELS[activeCategory]}</div>
+
+      <div className="ach-list">
+        {defs.map(def => {
+          const progress  = save.progress[def.progressKey] ?? 0
+          const unlocked  = !!save.unlocked[def.id]
+          const isClaimed = !!save.claimed[def.id]
+          const justDone  = claimed === def.id
+
+          return (
+            <div
+              key={def.id}
+              className={`ach-row${unlocked ? ' ach-row--unlocked' : ''}${isClaimed ? ' ach-row--claimed' : ''}`}
+            >
+              <div className="ach-row-left">
+                <div className="ach-tier">{def.tier === 2 ? '★★' : '★'}</div>
+                <div className="ach-text">
+                  <div className="ach-name">{unlocked ? '✓ ' : ''}{def.name}</div>
+                  <div className="ach-desc">{def.description}</div>
+                  {!isClaimed && (
+                    <ProgressBar value={Math.min(progress, def.target)} target={def.target} />
+                  )}
+                  <div className="ach-reward">Reward: {formatReward(def)}</div>
+                </div>
+              </div>
+              <div className="ach-row-right">
+                {isClaimed ? (
+                  <span className="ach-status-claimed">CLAIMED</span>
+                ) : unlocked ? (
+                  <button
+                    className={`action-btn ach-claim-btn${justDone ? ' ach-claim-btn--done' : ''}`}
+                    onClick={() => handleClaim(def)}
+                  >
+                    {justDone ? '✓ DONE' : 'CLAIM'}
+                  </button>
+                ) : (
+                  <span className="ach-status-locked">🔒</span>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}

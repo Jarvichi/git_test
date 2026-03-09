@@ -93,7 +93,7 @@ Issues sourced from GitHub. Last synced: 2026-03-09.
 ## 🟣 Enhancements — Pending
 
 - [ ] **#100** Unit behavioral traits: avoidance, fleeing, target priority (destroy walls, buildings, boss, protect base) — fall back to default if trait unfulfilled
-- [ ] **#102** Achievements system: per-unit/building kill milestones (1000/10000), witty names, rewards (cards/crystals/items), Gambler/rubber-chicken achievements, act-completion counts, dedicated achievements screen
+- [x] **#102** Achievements system: per-unit/building kill milestones (1000/10000), witty names, rewards (cards/crystals/items), Gambler/rubber-chicken achievements, act-completion counts, dedicated achievements screen
 
 ## ⚪ Features — Large / Long-term
 
