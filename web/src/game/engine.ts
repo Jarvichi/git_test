@@ -391,6 +391,11 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
       }
     }
     const unit = spawnUnit(card.unit!, owner)
+    // Hero units use the card's display name and are flagged for visual distinction
+    if (card.isHero) {
+      unit.name = card.name
+      unit.isHero = true
+    }
     // Assign a stable lateral slot to non-wall structures so that units
     // spawned from them start at the same horizontal position.
     if (card.cardType === 'structure' && !card.unit!.isWall) {

@@ -117,6 +117,7 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
         unit.flying ? 'lane-unit--flying' : '',
         isAttacking ? 'lane-unit--attacking' : '',
         isStructure && unit.upgradeLevel && unit.upgradeLevel >= 2 ? `lane-unit--upgraded-${Math.min(unit.upgradeLevel, 3)}` : '',
+        unit.isHero ? 'lane-unit--hero' : '',
       ].filter(Boolean).join(' ')}
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
@@ -748,6 +749,23 @@ function opponentPortraitSlug(bossAI: string | undefined, actTheme: string | und
 
 export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
+  const [heroLightning, setHeroLightning] = useState<{ owner: 'player' | 'opponent'; key: number } | null>(null)
+  const prevHeroIdsRef = useRef<Set<string>>(new Set())
+
+  // Detect when a new hero unit appears on the field and fire the lightning effect
+  useEffect(() => {
+    const heroIds = new Set(state.field.filter(u => u.isHero).map(u => u.id))
+    for (const id of heroIds) {
+      if (!prevHeroIdsRef.current.has(id)) {
+        const hero = state.field.find(u => u.id === id)!
+        setHeroLightning({ owner: hero.owner, key: Date.now() })
+        setTimeout(() => setHeroLightning(null), 900)
+        break
+      }
+    }
+    prevHeroIdsRef.current = heroIds
+  }, [state.field])
+
   const gameTimeSec = Math.floor(state.gameTime / 1000)
   const minutes = Math.floor(gameTimeSec / 60)
   const seconds = gameTimeSec % 60
@@ -760,6 +778,16 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
 
       {/* Dramatic battle event overlay (center-screen flash) */}
       <BattleEventOverlay event={event} />
+
+      {/* Hero spawn lightning bolt */}
+      {heroLightning && (
+        <div key={heroLightning.key} className={`hero-lightning hero-lightning--${heroLightning.owner}`}>
+          <svg viewBox="0 0 60 200" xmlns="http://www.w3.org/2000/svg" className="hero-lightning-bolt">
+            <polygon points="36,0 18,90 32,90 14,200 52,75 36,75 54,0" fill="#ffe066" opacity="0.95"/>
+            <polygon points="36,0 18,90 32,90 14,200 52,75 36,75 54,0" fill="white" opacity="0.4" transform="scale(0.6) translate(16,16)"/>
+          </svg>
+        </div>
+      )}
 
       {/* Sudden death banner */}
       {state.suddenDeath && (
