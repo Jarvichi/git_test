@@ -833,16 +833,17 @@ export default function App() {
   // ── Card plays ───────────────────────────────────────────
 
   const handlePlayCard = useCallback((cardId: string) => {
-    playCardPlay()
     setGameState(s => {
       if (!s) return s
       const card = s.playerHand.find(c => c.id === cardId)
-      if (card) {
-        recordCardPlayed(card.name)
-        if (isCampaignRef.current) {
-          campaignPlayCountsRef.current[card.name] =
-            (campaignPlayCountsRef.current[card.name] ?? 0) + 1
-        }
+      if (!card) return s
+      // Hero cards are locked for the first 30 seconds of a battle
+      if (card.isHero && s.gameTime < 30000) return s
+      playCardPlay()
+      recordCardPlayed(card.name)
+      if (isCampaignRef.current) {
+        campaignPlayCountsRef.current[card.name] =
+          (campaignPlayCountsRef.current[card.name] ?? 0) + 1
       }
       return playCard(s, cardId)
     })

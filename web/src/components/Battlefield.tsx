@@ -822,19 +822,24 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
         <div className="hand-cards">
           {state.playerHand.length === 0
             ? <span className="field-empty">No cards</span>
-            : state.playerHand.map(card => (
+            : state.playerHand.map(card => {
+              const heroLockedSecs = card.isHero
+                ? Math.ceil(Math.max(0, 30000 - state.gameTime) / 1000)
+                : 0
+              return (
               <div key={card.id} className="hand-card-wrap">
                 <CardTile
                   card={card}
                   canAfford={state.mana >= card.cost}
                   onClick={() => onPlayCard(card.id)}
+                  lockedSecs={heroLockedSecs}
                 />
                 <button
                   className="hand-card-info-btn"
                   onClick={e => { e.stopPropagation(); setDetailCard(card) }}
                 >ⓘ</button>
               </div>
-            ))}
+            )})}
         </div>
       </div>
 
