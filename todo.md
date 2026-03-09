@@ -83,9 +83,9 @@ Issues sourced from GitHub. Last synced: 2026-03-09.
 
 ## 🗺️ Campaign Acts
 
-- [ ] Act 2 — The Iron Citadel: act2.json node map, boss Warlord Kragg, Iron Standard relic
-- [ ] Act 3 — The Ashen Wastes: act3.json node map, boss The Ashwalker, Soulstone relic
-- [ ] Act 4 — The Crystal Spire (future)
+- [x] Act 2 — The Iron Citadel: act2.json node map, boss Warlord Kragg, Iron Standard relic
+- [x] Act 3 — The Ashen Wastes: act3.json node map, boss The Ashwalker, Soulstone relic
+- [ ] Act 4 — The Crystal Spire: act4.json (4-wide, 9 rows), boss The Archivist (infinite mana at turn 8+), Prism Lens relic
 - [ ] Act 5 — The Fractured Core (future)
 
 ---
