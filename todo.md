@@ -6,7 +6,7 @@ Issues sourced from GitHub. Last synced: 2026-03-09.
 
 ## 🟠 Active Work
 
-*(none)*
+- [ ] **#102** Achievements system: per-unit/building kill milestones (1000/10000), witty names, rewards (cards/crystals/items), Gambler/rubber-chicken achievements, act-completion counts, dedicated achievements screen
 
 ---
 
