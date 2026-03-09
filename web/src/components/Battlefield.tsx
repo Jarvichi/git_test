@@ -20,13 +20,16 @@ const SPAWN_GROW_MS = 1500
 // Rendered in-place of the sprite for wall units.  Full-width SVG showing
 // staggered stone blocks, battlements, and progressive damage cracks.
 
-function WallSvg({ hp, maxHp, owner }: { hp: number; maxHp: number; owner: 'player' | 'opponent' }) {
+function WallSvg({ hp, maxHp, owner, wallNames = [] }: { hp: number; maxHp: number; owner: 'player' | 'opponent'; wallNames?: string[] }) {
   const dmgPct = 1 - hp / maxHp
   // Player = cool grey-blue stone; opponent = warm tan stone
   const [stone, hiStone, merlon] = owner === 'player'
     ? ['#606878', '#70788a', '#707888'] as const
     : ['#7a5838', '#8a6848', '#906a40'] as const
   const op = 1 - dmgPct * 0.4   // fade slightly with damage
+
+  const hasThorn = wallNames.includes('Thornwall')
+  const hasBone  = wallNames.includes('Bone Wall')
 
   return (
     <svg
@@ -51,6 +54,45 @@ function WallSvg({ hp, maxHp, owner }: { hp: number; maxHp: number; owner: 'play
       {/* Base shadow strip */}
       <rect x="0" y="28" width="360" height="2" fill="#0a0500" opacity="0.4"/>
 
+      {/* ── Bone Wall overlay: skulls in mortar joints, bone segments in face ── */}
+      {hasBone && (
+        <g opacity={op * 0.88}>
+          {[45, 135, 225, 315].map((x, i) => (
+            <g key={`sk${i}`} transform={`translate(${x}, 20)`}>
+              <ellipse cx="0" cy="-3" rx="4" ry="3.5" fill="#d4c49a" stroke="#8a7a50" strokeWidth="0.5"/>
+              <circle cx="-1.5" cy="-3.5" r="1" fill="#3a2a10"/>
+              <circle cx="1.5"  cy="-3.5" r="1" fill="#3a2a10"/>
+              <rect x="-3" y="0.5" width="6" height="1.8" rx="0.8" fill="#c8b480" stroke="#8a7a50" strokeWidth="0.4"/>
+            </g>
+          ))}
+          {[75, 165, 255].map((x, i) => (
+            <g key={`bn${i}`}>
+              <line x1={x-7} y1={13} x2={x+7} y2={13} stroke="#d0c090" strokeWidth="2.5" strokeLinecap="round"/>
+              <circle cx={x-7} cy={13} r="2.2" fill="#c8b480" stroke="#9a8a60" strokeWidth="0.5"/>
+              <circle cx={x+7} cy={13} r="2.2" fill="#c8b480" stroke="#9a8a60" strokeWidth="0.5"/>
+            </g>
+          ))}
+        </g>
+      )}
+
+      {/* ── Thornwall overlay: vine along top, thorn spikes, small leaves ── */}
+      {hasThorn && (
+        <g opacity={op * 0.92}>
+          <path d="M0,13 Q45,7 90,12 Q135,17 180,10 Q225,5 270,11 Q315,16 360,10"
+            fill="none" stroke="#3a6a1a" strokeWidth="2.5" strokeLinecap="round"/>
+          {[18,52,88,122,158,192,228,262,298,332].map((x, i) => (
+            <path key={`th${i}`}
+              d={`M${x},11 L${x-3},5 M${x},11 L${x+3},4`}
+              stroke="#1e4008" strokeWidth="1.2" strokeLinecap="round"/>
+          ))}
+          {[35,105,180,255,325].map((x, i) => (
+            <ellipse key={`lf${i}`} cx={x} cy={9} rx="5" ry="2.8"
+              fill="#4a8a22" stroke="#2a5a10" strokeWidth="0.6"
+              transform={`rotate(${i % 2 === 0 ? -25 : 20}, ${x}, 9)`}/>
+          ))}
+        </g>
+      )}
+
       {/* Progressive damage cracks */}
       {dmgPct > 0.25 && <line x1="86"  y1="8"  x2="83"  y2="29" stroke="#050200" strokeWidth="1.5" opacity="0.7"/>}
       {dmgPct > 0.45 && <line x1="200" y1="1"  x2="197" y2="29" stroke="#050200" strokeWidth="2"   opacity="0.8"/>}
@@ -67,7 +109,7 @@ function WallSvg({ hp, maxHp, owner }: { hp: number; maxHp: number; owner: 'play
   )
 }
 
-function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number }) {
+function LaneUnit({ unit, stackIndex = 0, wallStack }: { unit: Unit; stackIndex?: number; wallStack?: Unit[] }) {
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
   const isStructure = unit.moveSpeed === 0
 
@@ -138,7 +180,7 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
         }} />
       )}
       {unit.isWall
-        ? <WallSvg hp={unit.hp} maxHp={unit.maxHp} owner={unit.owner} />
+        ? <WallSvg hp={unit.hp} maxHp={unit.maxHp} owner={unit.owner} wallNames={(wallStack ?? [unit]).map(w => w.name)} />
         : isStructure
           ? <SpriteImg name={unit.spriteName ?? unit.name} className="lane-unit-sprite" />
           : <AnimatedSpriteImg name={unit.spriteName ?? unit.name} frameCount={3} fps={6} className={`lane-unit-sprite${unit.isHero ? ' lane-unit-sprite--hero' : ''}`} />
@@ -848,12 +890,31 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
         <LaneBackground env={state.environment} />
         <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
-        {state.field.map((u, i) => {
-          const stackIndex = u.moveSpeed === 0 && !u.isWall
-            ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && !o.isWall && o.owner === u.owner).length
-            : 0
-          return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} />
-        })}
+        {(() => {
+          // Group walls by owner+x so stacked wall types can share a composite graphic
+          const wallGroups = new Map<string, Unit[]>()
+          for (const u of state.field) {
+            if (!u.isWall) continue
+            const key = `${u.owner}:${Math.round(u.x)}`
+            if (!wallGroups.has(key)) wallGroups.set(key, [])
+            wallGroups.get(key)!.push(u)
+          }
+          const renderedWallIds = new Set<string>()
+
+          return state.field.map((u, i) => {
+            if (u.isWall) {
+              const key = `${u.owner}:${Math.round(u.x)}`
+              const group = wallGroups.get(key)!
+              if (group[0].id !== u.id) return null  // only render the first in each group
+              renderedWallIds.add(u.id)
+              return <LaneUnit key={u.id} unit={u} wallStack={group} />
+            }
+            const stackIndex = u.moveSpeed === 0
+              ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && !o.isWall && o.owner === u.owner).length
+              : 0
+            return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} />
+          })
+        })()}
       </div>
 
       {/* Player base */}
