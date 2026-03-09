@@ -479,15 +479,17 @@ body {
 
 /* ─── Hero units ──────────────────────────────────────── */
 
-@keyframes hero-glow-pulse {
-  0%, 100% { box-shadow: 0 0 10px 3px rgba(255, 220, 60, 0.7), 0 0 22px 6px rgba(255, 180, 0, 0.35); }
-  50%       { box-shadow: 0 0 18px 6px rgba(255, 240, 100, 0.9), 0 0 36px 12px rgba(255, 200, 0, 0.55); }
+@keyframes hero-sprite-glow {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 215, 50, 0.7)) drop-shadow(0 0 10px rgba(255, 160, 0, 0.4)); }
+  50%       { filter: drop-shadow(0 0 9px rgba(255, 235, 90, 0.95)) drop-shadow(0 0 18px rgba(255, 190, 0, 0.6)); }
 }
 
 .lane-unit--hero {
-  outline: 2px solid rgba(255, 220, 60, 0.9);
-  animation: hero-glow-pulse 1.6s ease-in-out infinite;
   z-index: 5;
+}
+
+.lane-unit-sprite--hero {
+  animation: hero-sprite-glow 1.6s ease-in-out infinite;
 }
 
 .lane-unit--hero .lane-unit-name::before {

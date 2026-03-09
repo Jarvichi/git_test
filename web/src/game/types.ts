@@ -47,6 +47,7 @@ export interface Unit extends UnitTemplate {
   spawnGrowTimer?: number    // ms remaining in grow-in animation (building spawns only)
   buffs?: BuffTag[]          // active buff tags for UI display
   isHero?: boolean           // true for units deployed from hero cards
+  spriteName?: string        // sprite lookup override — hero units retain their base unit's sprite name
 }
 
 export interface Card {

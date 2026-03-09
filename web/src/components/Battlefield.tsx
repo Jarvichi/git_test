@@ -140,8 +140,8 @@ function LaneUnit({ unit, stackIndex = 0 }: { unit: Unit; stackIndex?: number })
       {unit.isWall
         ? <WallSvg hp={unit.hp} maxHp={unit.maxHp} owner={unit.owner} />
         : isStructure
-          ? <SpriteImg name={unit.name} className="lane-unit-sprite" />
-          : <AnimatedSpriteImg name={unit.name} frameCount={3} fps={6} className="lane-unit-sprite" />
+          ? <SpriteImg name={unit.spriteName ?? unit.name} className="lane-unit-sprite" />
+          : <AnimatedSpriteImg name={unit.spriteName ?? unit.name} frameCount={3} fps={6} className={`lane-unit-sprite${unit.isHero ? ' lane-unit-sprite--hero' : ''}`} />
       }
       {!unit.isWall && (
         <div className="lane-unit-name">
