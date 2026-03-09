@@ -53,6 +53,10 @@ import { hasDailyReward, claimDailyReward, addToInventory, DailyReward, USELESS_
 import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import { isNoDamageMode } from './game/debug'
+import {
+  incrementAchievementProgress, AchievementDef,
+} from './game/achievements'
+import { AchievementsScreen } from './components/AchievementsScreen'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -126,6 +130,7 @@ type Screen =
   | 'starterpack'
   | 'relicselect'
   | 'inventory'
+  | 'achievements'
 
 export default function App() {
   // ── Startup: auto-resume a pending campaign battle on page refresh ──────────
@@ -185,7 +190,23 @@ export default function App() {
   const campaignPlayCountsRef = useRef<Record<string, number>>({})  // per-battle play tracking
 
   // Unit death tracking
-  const prevPlayerUnitsRef = useRef<Map<string, string>>(new Map())
+  const prevPlayerUnitsRef   = useRef<Map<string, string>>(new Map())
+  const prevOpponentUnitsRef = useRef<Map<string, string>>(new Map())
+
+  // Achievement toast notifications
+  const [achievementToasts, setAchievementToasts] = useState<AchievementDef[]>([])
+
+  // Per-battle misc achievement flags
+  const battleFlawlessRef    = useRef(true)
+  const battleUsedStructure  = useRef(false)
+  const battleUsedMobileUnit = useRef(false)
+
+  // Auto-dismiss achievement toasts after 4 seconds
+  useEffect(() => {
+    if (achievementToasts.length === 0) return
+    const id = setTimeout(() => setAchievementToasts(prev => prev.slice(1)), 4000)
+    return () => clearTimeout(id)
+  }, [achievementToasts])
 
   // Daily login reward
   const [dailyReward, setDailyReward] = useState<DailyReward | null>(null)
@@ -300,6 +321,7 @@ export default function App() {
   }
 
   const handleRareEventDone = useCallback((effect?: RareEventEffect) => {
+    const completedEvent = activeRareEvent  // capture before clearing
     setActiveRareEvent(null)
     setRareEventScheduled(null)
     setIsGamePaused(false)
@@ -335,9 +357,17 @@ export default function App() {
     if (effect.grantAllCards) {
       const catalog = getCardCatalog()
       addCardsToCollection(catalog.map(c => ({ cardName: c.name, count: 1 })))
+      // Gambler win achievement
+      const gamblerUnlocked = incrementAchievementProgress('event:gambler_win')
+      if (gamblerUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...gamblerUnlocked])
     }
     if (effect.addInventoryItem) {
       addToInventory(effect.addInventoryItem)
+      // Rubber chicken achievement
+      if (effect.addInventoryItem.id === 'rubber_chicken') {
+        const chickenUnlocked = incrementAchievementProgress('event:rubber_chicken')
+        if (chickenUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...chickenUnlocked])
+      }
     }
     if (effect.resetGame) {
       const KEYS = [
@@ -346,14 +376,37 @@ export default function App() {
         'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
       ]
       KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
+      // Gambler bust achievement
+      const bustUnlocked = incrementAchievementProgress('event:gambler_bust')
+      if (bustUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...bustUnlocked])
       window.location.reload()
     }
-  }, [])
+    // Track per-event-type achievements based on which event ran
+    if (completedEvent) {
+      const eventKey: Record<string, string> = {
+        blackjack:   'event:blackjack_win',
+        liarsDice:   'event:liarsdice_win',
+        narrator:    'event:narrator_befriend',
+        wrongNumber: 'event:wrong_number',
+        fakeCrash:   'event:fake_crash',
+      }
+      const key = eventKey[completedEvent]
+      if (key) {
+        const evtUnlocked = incrementAchievementProgress(key)
+        if (evtUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...evtUnlocked])
+      }
+    }
+  }, [activeRareEvent])
 
   // ── Free play ────────────────────────────────────────────
 
   const handlePlay = useCallback(() => {
     isCampaignRef.current = false
+    battleFlawlessRef.current = true
+    battleUsedStructure.current = false
+    battleUsedMobileUnit.current = false
+    prevOpponentUnitsRef.current = new Map()
+    prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
     const playerCards = buildDeckCards(loadDeck(), collection)
     setGameState(newGame(playerCards, handicap))
@@ -364,6 +417,11 @@ export default function App() {
   const handlePlayAgain = useCallback(() => {
     if (!gameState || gameState.phase.type !== 'gameOver') return
     isCampaignRef.current = false
+    battleFlawlessRef.current = true
+    battleUsedStructure.current = false
+    battleUsedMobileUnit.current = false
+    prevOpponentUnitsRef.current = new Map()
+    prevPlayerUnitsRef.current = new Map()
     const winner = gameState.phase.winner
     const nextHandicap = winner === 'player'
       ? Math.max(0, handicap - 1)
@@ -445,6 +503,11 @@ export default function App() {
         // For battle nodes (including boss): go straight to battle
         campaignPlayCountsRef.current = {}
         isCampaignRef.current = true
+        battleFlawlessRef.current = true
+        battleUsedStructure.current = false
+        battleUsedMobileUnit.current = false
+        prevOpponentUnitsRef.current = new Map()
+        prevPlayerUnitsRef.current = new Map()
         const collection  = loadCollection()
         const fatigued    = loadFatigued()
         const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
@@ -524,6 +587,11 @@ export default function App() {
     // Start battle
     campaignPlayCountsRef.current = {}
     isCampaignRef.current = true
+    battleFlawlessRef.current = true
+    battleUsedStructure.current = false
+    battleUsedMobileUnit.current = false
+    prevOpponentUnitsRef.current = new Map()
+    prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
@@ -546,6 +614,11 @@ export default function App() {
     // Now actually start the battle
     campaignPlayCountsRef.current = {}
     isCampaignRef.current = true
+    battleFlawlessRef.current = true
+    battleUsedStructure.current = false
+    battleUsedMobileUnit.current = false
+    prevOpponentUnitsRef.current = new Map()
+    prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
@@ -657,6 +730,10 @@ export default function App() {
 
     // Check act complete
     if (isActComplete(act, updatedRun)) {
+      // Track act completion achievement
+      const actUnlocked = incrementAchievementProgress(`campaign:${currentRun.actId}`)
+      if (actUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...actUnlocked])
+
       if (act.outro && act.outro.length > 0) {
         setCutscenePanels(act.outro)
         cutsceneDoneRef.current = () => setScreen('actcomplete')
@@ -810,6 +887,11 @@ export default function App() {
     // Retry same node, but HP stays at what it was before this battle
     campaignPlayCountsRef.current = {}
     isCampaignRef.current = true
+    battleFlawlessRef.current = true
+    battleUsedStructure.current = false
+    battleUsedMobileUnit.current = false
+    prevOpponentUnitsRef.current = new Map()
+    prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
@@ -830,25 +912,6 @@ export default function App() {
     setScreen('title')
   }, [])
 
-  // ── Card plays ───────────────────────────────────────────
-
-  const handlePlayCard = useCallback((cardId: string) => {
-    setGameState(s => {
-      if (!s) return s
-      const card = s.playerHand.find(c => c.id === cardId)
-      if (!card) return s
-      // Hero cards are locked for the first 30 seconds of a battle
-      if (card.isHero && s.gameTime < 30000) return s
-      playCardPlay()
-      recordCardPlayed(card.name)
-      if (isCampaignRef.current) {
-        campaignPlayCountsRef.current[card.name] =
-          (campaignPlayCountsRef.current[card.name] ?? 0) + 1
-      }
-      return playCard(s, cardId)
-    })
-  }, [])
-
   // Detect player unit deaths each tick
   useEffect(() => {
     if (!gameState || screen !== 'playing') return
@@ -861,6 +924,102 @@ export default function App() {
     }
     prevPlayerUnitsRef.current = currentMap
   }, [gameState?.field])
+
+  // Detect enemy unit/structure kills each tick → achievement progress
+  useEffect(() => {
+    if (!gameState || screen !== 'playing') return
+    const currentMap = new Map<string, string>()
+    for (const u of gameState.field) {
+      if (u.owner === 'opponent') currentMap.set(u.id, u.name)
+    }
+    const newKills: string[] = []
+    for (const [id, name] of prevOpponentUnitsRef.current) {
+      if (!currentMap.has(id)) newKills.push(name)
+    }
+    prevOpponentUnitsRef.current = currentMap
+
+    if (newKills.length > 0) {
+      // Track per-unit kills
+      const newToasts: AchievementDef[] = []
+      for (const name of newKills) {
+        const unlocked = incrementAchievementProgress(`kill:${name}`)
+        newToasts.push(...unlocked)
+      }
+      // Track total kills
+      const totalUnlocked = incrementAchievementProgress('misc:total_kills', newKills.length)
+      newToasts.push(...totalUnlocked)
+      if (newToasts.length > 0) {
+        setAchievementToasts(prev => [...prev, ...newToasts])
+      }
+    }
+  }, [gameState?.field, screen])
+
+  // Track flawless battle flag
+  useEffect(() => {
+    if (!gameState || screen !== 'playing') return
+    if (gameState.playerBase.hp < gameState.playerBase.maxHp) {
+      battleFlawlessRef.current = false
+    }
+  }, [gameState?.playerBase.hp, screen])
+
+  // Track card play types for per-battle misc achievements
+  const handlePlayCard = useCallback((cardId: string) => {
+    setGameState(s => {
+      if (!s) return s
+      const card = s.playerHand.find(c => c.id === cardId)
+      if (!card) return s
+      if (card.isHero && s.gameTime < 30000) return s
+      playCardPlay()
+      recordCardPlayed(card.name)
+      // Track for misc achievements
+      const newToastsFromCards = incrementAchievementProgress('misc:cards_played')
+      if (newToastsFromCards.length > 0) {
+        setAchievementToasts(prev => [...prev, ...newToastsFromCards])
+      }
+      if (card.cardType === 'structure') battleUsedStructure.current = true
+      if (card.cardType === 'unit') battleUsedMobileUnit.current = true
+      if (isCampaignRef.current) {
+        campaignPlayCountsRef.current[card.name] =
+          (campaignPlayCountsRef.current[card.name] ?? 0) + 1
+      }
+      return playCard(s, cardId)
+    })
+  }, [])
+
+  // Track misc achievements at battle end
+  useEffect(() => {
+    if (!gameState || gameState.phase.type !== 'gameOver') return
+    if (gameState.phase.winner !== 'player') {
+      // Reset per-battle flags on next game start (done via handlePlay / handlePlayAgain)
+      return
+    }
+    const toasts: AchievementDef[] = []
+    // Quick battle win
+    if (!isCampaignRef.current) {
+      toasts.push(...incrementAchievementProgress('misc:quick_win'))
+    }
+    // Flawless
+    if (battleFlawlessRef.current) {
+      toasts.push(...incrementAchievementProgress('misc:flawless_win'))
+    }
+    // Underdog (1 HP)
+    if (gameState.playerBase.hp <= 1) {
+      toasts.push(...incrementAchievementProgress('misc:underdog_win'))
+    }
+    // No structure used
+    if (!battleUsedStructure.current) {
+      toasts.push(...incrementAchievementProgress('misc:no_structure_win'))
+    }
+    // Pacifist (no mobile unit used)
+    if (!battleUsedMobileUnit.current) {
+      toasts.push(...incrementAchievementProgress('misc:pacifist_win'))
+    }
+    // Sudden death win
+    if (gameState.suddenDeath) {
+      toasts.push(...incrementAchievementProgress('misc:sudden_death_win'))
+    }
+    if (toasts.length > 0) setAchievementToasts(prev => [...prev, ...toasts])
+  }, [gameState?.phase.type])
 
   // ── Pack ─────────────────────────────────────────────────
 
@@ -973,6 +1132,7 @@ export default function App() {
           onDeckBuilder={() => setScreen('deckbuilder')}
           onSettings={() => setScreen('settings')}
           onInventory={() => setScreen('inventory')}
+          onAchievements={() => setScreen('achievements')}
         />
       )}
 
@@ -1081,6 +1241,25 @@ export default function App() {
           onBack={() => setScreen('title')}
           onCrystalsChanged={handleCrystalsChanged}
         />
+      )}
+
+      {screen === 'achievements' && (
+        <AchievementsScreen
+          onBack={() => setScreen('title')}
+          onCrystalsChanged={handleCrystalsChanged}
+        />
+      )}
+
+      {/* Achievement unlock toast */}
+      {achievementToasts.length > 0 && (
+        <div className="ach-toast-stack">
+          {achievementToasts.slice(0, 3).map((def, i) => (
+            <div key={`${def.id}-${i}`} className="ach-toast" onClick={() => setAchievementToasts(prev => prev.filter((_, j) => j !== i))}>
+              🏆 <strong>{def.name}</strong>
+              <span className="ach-toast-sub">Achievement unlocked!</span>
+            </div>
+          ))}
+        </div>
       )}
 
       {screen === 'playing' && gameState && (() => {
