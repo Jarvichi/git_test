@@ -323,7 +323,8 @@
       "childIds": [
         "soul-shrine",
         "bone-fire",
-        "plague-front"
+        "plague-front",
+        "ash-grotto"
       ],
       "handicap": 7,
       "opponentIntervalMs": 5500,
@@ -351,7 +352,7 @@
       "description": "A shrine built from miners' tools, wrapped in old smoke. Something in it still listens.",
       "row": 1,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "ashfield-scouts"
       ],
@@ -368,7 +369,7 @@
       "description": "A fire that burns cold — but it burns, and in the Wastes that's enough. Rest here.",
       "row": 1,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "ashfield-scouts"
       ],
@@ -385,7 +386,7 @@
       "description": "A mass of risen dead, spreading through the ash without direction or pause.",
       "row": 1,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "ashfield-scouts"
       ],
@@ -410,6 +411,23 @@
         "Rally"
       ]
     },
+    "ash-grotto": {
+      "id": "ash-grotto",
+      "type": "rest",
+      "label": "Ash Grotto",
+      "description": "A hollow in the ash-field — sheltered from the wind, the dead, and whatever else the Wastes have decided to send today. Rest here.",
+      "row": 1,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "ashfield-scouts"
+      ],
+      "childIds": [
+        "risen-horde"
+      ],
+      "environment": "ruins",
+      "restHeal": 10
+    },
     "risen-horde": {
       "id": "risen-horde",
       "type": "battle",
@@ -421,12 +439,14 @@
       "parentIds": [
         "soul-shrine",
         "bone-fire",
-        "plague-front"
+        "plague-front",
+        "ash-grotto"
       ],
       "childIds": [
         "shadow-guard",
         "grave-merchant",
-        "revenant-witch"
+        "revenant-witch",
+        "cursed-altar"
       ],
       "handicap": 1,
       "opponentBaseHp": 130,
@@ -454,7 +474,7 @@
       "description": "Risen soldiers who remember their discipline — the most dangerous kind of dead.",
       "row": 3,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "risen-horde"
       ],
@@ -486,7 +506,7 @@
       "description": "A merchant who decided the Wastes were a business opportunity. Somehow still alive. Thriving, even.",
       "row": 3,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "risen-horde"
       ],
@@ -502,7 +522,7 @@
       "description": "She died in the Fracture and came back wrong. She came back with plans.",
       "row": 3,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "risen-horde"
       ],
@@ -535,6 +555,23 @@
       "opponentIntervalMs": 5000,
       "opponentBaseHp": 165
     },
+    "cursed-altar": {
+      "id": "cursed-altar",
+      "type": "event",
+      "label": "Cursed Altar",
+      "description": "A makeshift altar built from the bones of something large — whatever the Wastes worshipped before the Fracture gave it something better to do.",
+      "row": 3,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "risen-horde"
+      ],
+      "childIds": [
+        "necrotic-guard"
+      ],
+      "environment": "ashen",
+      "eventId": "shrine"
+    },
     "necrotic-guard": {
       "id": "necrotic-guard",
       "type": "battle",
@@ -546,12 +583,14 @@
       "parentIds": [
         "shadow-guard",
         "grave-merchant",
-        "revenant-witch"
+        "revenant-witch",
+        "cursed-altar"
       ],
       "childIds": [
         "dark-hollow",
         "bone-brigade",
-        "death-knight"
+        "death-knight",
+        "soul-pyre"
       ],
       "handicap": 0,
       "opponentBaseHp": 145,
@@ -581,7 +620,7 @@
       "description": "A collapsed mineshaft — safe, lightless, and blessedly quiet. Rest here.",
       "row": 5,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "necrotic-guard"
       ],
@@ -598,7 +637,7 @@
       "description": "The Ashwalker's vanguard — what remains of the miners who worked these shafts before the Fracture.",
       "row": 5,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "necrotic-guard"
       ],
@@ -634,7 +673,7 @@
       "description": "A Dominion officer who fell in the Fracture and rose again — armoured, organised, and entirely without mercy.",
       "row": 5,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "necrotic-guard"
       ],
@@ -668,6 +707,40 @@
       "opponentIntervalMs": 7000,
       "opponentBaseHp": 105
     },
+    "soul-pyre": {
+      "id": "soul-pyre",
+      "type": "battle",
+      "label": "Soul Pyre",
+      "description": "A convergence of the Wastes' necromantic energy — everything that has died here gathers at this point before the Ashwalker pulls it forward.",
+      "row": 5,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "necrotic-guard"
+      ],
+      "childIds": [
+        "ashwalker"
+      ],
+      "handicap": 0,
+      "opponentBaseHp": 150,
+      "environment": "ashen",
+      "enemyDeck": [
+        "Wight Knight",
+        "Wight Knight",
+        "Specter",
+        "Specter",
+        "Ash Elemental",
+        "Lich Apprentice",
+        "Necromancer",
+        "Soul Obelisk",
+        "Crypt",
+        "Dark Shrine",
+        "Dark Shrine",
+        "Bloodlust",
+        "Iron Skin",
+        "Rally"
+      ]
+    },
     "ashwalker": {
       "id": "ashwalker",
       "type": "boss",
@@ -679,7 +752,8 @@
       "parentIds": [
         "dark-hollow",
         "bone-brigade",
-        "death-knight"
+        "death-knight",
+        "soul-pyre"
       ],
       "childIds": [],
       "handicap": 0,

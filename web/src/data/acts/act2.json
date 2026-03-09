@@ -323,7 +323,8 @@
       "childIds": [
         "soldiers-camp",
         "supply-cache",
-        "outer-wall"
+        "outer-wall",
+        "canyon-flank"
       ],
       "handicap": 7,
       "opponentBaseHp": 100,
@@ -351,7 +352,7 @@
       "description": "An abandoned forward camp — rations still warm. Rest and recover.",
       "row": 1,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "iron-gate"
       ],
@@ -368,7 +369,7 @@
       "description": "A Citadel supply depot, hastily abandoned. The lock is already broken.",
       "row": 1,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "iron-gate"
       ],
@@ -385,7 +386,7 @@
       "description": "The first proper fortified position — archers on the ramparts and a gate that won't open.",
       "row": 1,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "iron-gate"
       ],
@@ -410,6 +411,37 @@
         "Sharpen Blades"
       ]
     },
+    "canyon-flank": {
+      "id": "canyon-flank",
+      "type": "battle",
+      "label": "Canyon Flank",
+      "description": "A secondary approach through the canyon walls — narrower than the main road, and guarded by skirmishers who have had nothing to do for three years.",
+      "row": 1,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "iron-gate"
+      ],
+      "childIds": [
+        "siege-trenches"
+      ],
+      "handicap": 4,
+      "environment": "ruins",
+      "enemyDeck": [
+        "Crossbow",
+        "Crossbow",
+        "Bandit",
+        "Shield Guard",
+        "Shield Guard",
+        "Archer",
+        "Archer",
+        "Build Wall",
+        "Build Wall",
+        "Garrison",
+        "Eagle Eye",
+        "Iron Skin"
+      ]
+    },
     "siege-trenches": {
       "id": "siege-trenches",
       "type": "battle",
@@ -421,12 +453,14 @@
       "parentIds": [
         "soldiers-camp",
         "supply-cache",
-        "outer-wall"
+        "outer-wall",
+        "canyon-flank"
       ],
       "childIds": [
         "iron-guard",
         "quartermaster",
-        "field-battery"
+        "field-battery",
+        "armory-vault"
       ],
       "handicap": 1,
       "environment": "ruins",
@@ -452,7 +486,7 @@
       "description": "Elite heavy infantry protecting the mid-canyon checkpoint.",
       "row": 3,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "siege-trenches"
       ],
@@ -484,7 +518,7 @@
       "description": "A disgruntled Citadel supply officer. Turns out loyalty has a price.",
       "row": 3,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "siege-trenches"
       ],
@@ -500,7 +534,7 @@
       "description": "A Citadel artillery position — catapults, crossbow banks, and the crew to run them.",
       "row": 3,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "siege-trenches"
       ],
@@ -524,6 +558,22 @@
         "Sharpen Blades"
       ]
     },
+    "armory-vault": {
+      "id": "armory-vault",
+      "type": "merchant",
+      "label": "Armory Vault",
+      "description": "The Citadel's central weapons depot — its keeper surrendered to pragmatism when he realised the siege wasn't going his way.",
+      "row": 3,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "siege-trenches"
+      ],
+      "childIds": [
+        "siege-captain"
+      ],
+      "environment": "citadel"
+    },
     "siege-captain": {
       "id": "siege-captain",
       "type": "elite",
@@ -535,12 +585,14 @@
       "parentIds": [
         "iron-guard",
         "quartermaster",
-        "field-battery"
+        "field-battery",
+        "armory-vault"
       ],
       "childIds": [
         "command-tent",
         "last-stand",
-        "battle-commander"
+        "battle-commander",
+        "war-council"
       ],
       "handicap": 1,
       "environment": "citadel",
@@ -572,7 +624,7 @@
       "description": "The Siege Captain's own quarters. Quiet now. Tends to wounds.",
       "row": 5,
       "col": 0,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "siege-captain"
       ],
@@ -589,7 +641,7 @@
       "description": "The remaining garrison makes a final push. Outnumbered. Disciplined.",
       "row": 5,
       "col": 1,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "siege-captain"
       ],
@@ -622,7 +674,7 @@
       "description": "Kragg's second-in-command. Fights like he has something to prove — he does.",
       "row": 5,
       "col": 2,
-      "rowCols": 3,
+      "rowCols": 4,
       "parentIds": [
         "siege-captain"
       ],
@@ -653,6 +705,23 @@
       "opponentIntervalMs": 6000,
       "opponentBaseHp": 82
     },
+    "war-council": {
+      "id": "war-council",
+      "type": "event",
+      "label": "War Council",
+      "description": "A sealed briefing room — the Citadel's last tactical maps still spread across the table, the officers' chairs still warm.",
+      "row": 5,
+      "col": 3,
+      "rowCols": 4,
+      "parentIds": [
+        "siege-captain"
+      ],
+      "childIds": [
+        "kragg"
+      ],
+      "environment": "citadel",
+      "eventId": "ruins"
+    },
     "kragg": {
       "id": "kragg",
       "type": "boss",
@@ -664,7 +733,8 @@
       "parentIds": [
         "command-tent",
         "last-stand",
-        "battle-commander"
+        "battle-commander",
+        "war-council"
       ],
       "childIds": [],
       "handicap": 0,
