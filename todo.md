@@ -6,7 +6,7 @@ Issues sourced from GitHub. Last synced: 2026-03-09.
 
 ## 🟠 Active Work
 
-- [ ] **#137** Caching: add service worker via vite-plugin-pwa to cache resources locally on user's device
+- [x] **#137** Caching: add service worker via vite-plugin-pwa to cache resources locally on user's device
 
 ---
 
