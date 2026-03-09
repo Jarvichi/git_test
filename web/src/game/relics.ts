@@ -31,6 +31,22 @@ const RELIC_CATALOG: RelicDef[] = [
       }
     },
   },
+  {
+    name: 'Soulstone',
+    icon: '💎',
+    desc: 'Once per battle, when one of your units is destroyed, it is immediately revived with half its original HP.',
+    applyToGame(state) {
+      state.soulstoneReviveAvailable = true
+    },
+  },
+  {
+    name: 'Prism Lens',
+    icon: '🔮',
+    desc: 'Your maximum mana is increased by 1.',
+    applyToGame(state) {
+      state.relicManaBonus = (state.relicManaBonus ?? 0) + 1
+    },
+  },
 ]
 
 export function getRelicDef(name: string): RelicDef | undefined {

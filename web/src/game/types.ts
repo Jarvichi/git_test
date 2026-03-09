@@ -131,4 +131,6 @@ export interface GameState {
   bossAI?: string            // 'thornlord' etc. — drives boss-specific opponent logic
   terrain: TerrainObstacle[]
   environment?: string       // battlefield background theme ('forest' | 'ruins' | 'camp' | 'citadel' | 'ashen')
+  soulstoneReviveAvailable?: boolean  // Soulstone relic: one unit auto-revives per battle
+  relicManaBonus?: number             // Prism Lens relic: +N to maxMana cap
 }
