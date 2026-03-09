@@ -274,9 +274,10 @@ export function newGame(
   const strategy      = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
   const maxRarity     = boss ? 'legendary' : maxRarityForHandicap(clamp)
   const oppIntervalMs = intervalOverride
-    ?? (boss === 'thornlord' ? 5000
-    :   boss === 'kragg'     ? 5000
-    :   boss === 'ashwalker' ? 4500
+    ?? (boss === 'thornlord'  ? 5000
+    :   boss === 'kragg'      ? 5000
+    :   boss === 'ashwalker'  ? 4500
+    :   boss === 'archivist'  ? 5000
     :   opponentIntervalForHandicap(clamp))
 
   const diffLabel =
@@ -289,6 +290,7 @@ export function newGame(
     boss === 'thornlord'  ? ['THE THORNLORD awakens! Ancient guardian of the Verdant Shard.', 'Walls of bark and root rise from the earth — prepare for a siege!']
     : boss === 'kragg'    ? ['WARLORD KRAGG takes the field! Iron discipline, iron walls, iron will.', 'The siege weapons are already loaded. The gate does not open for you.']
     : boss === 'ashwalker' ? ['THE ASHWALKER stirs. The ash rises. The dead remember.', 'An undying horde answers the call — destroy them before they overwhelm you!']
+    : boss === 'archivist' ? ['THE ARCHIVIST opens the archive. Every spell in the Dominion catalogue — ready.', 'Arcane constructs flood the field. At turn eight, his mana becomes limitless — act fast!']
     : [
         clamp > 0
           ? `Battle begins! (Enemy difficulty: ${diffLabel})`
@@ -884,6 +886,53 @@ function ashwalkerAI(s: GameState, log: string[]): void {
   if (played === 0) log.push('The ash stirs…')
 }
 
+// ─── Archivist AI ─────────────────────────────────────────
+// The Archivist: upgrade-heavy arcane scholar. Methodical until turn 8
+// (≈120s elapsed), then the archive opens — near-unlimited mana.
+// Prioritises Arcane Tower / Shadow Academy structures, then upgrades,
+// then mages. Plays up to 3 cards normally; after 120s plays up to 6.
+
+function archivistAI(s: GameState, log: string[]): void {
+  const manaBonus = getManaBonus(s.field, 'opponent')
+  const lateGame = s.gameTime >= 120000
+  // After 120s the archive is "open" — treat mana as effectively unlimited
+  let mana = lateGame ? 99 : Math.min(10, BASE_MAX_MANA + manaBonus)
+  const maxPlays = lateGame ? 6 : 3
+
+  if (lateGame && s.gameTime < 121000) {
+    log.push('THE ARCHIVE OPENS — The Archivist\'s mana becomes limitless!')
+  }
+
+  function tryPlay(): boolean {
+    const hand = s.opponentHand.filter(c => c.cost <= mana && isPlayable(c, s.gameTime))
+    if (hand.length === 0) return false
+
+    // Priority 1: mana structures (Shadow Academy) — flood units
+    const manaStructs = hand.filter(c => c.cardType === 'structure' && c.unit?.structureEffect?.type === 'spawn')
+    // Priority 2: ranged tower structures (Arcane Tower, Mage Tower)
+    const towers = hand.filter(c => c.cardType === 'structure' && !c.unit?.isWall && !c.unit?.structureEffect)
+    // Priority 3: upgrades (buff the whole field)
+    const upgrades = hand.filter(c => c.cardType === 'upgrade').sort((a, b) => b.cost - a.cost)
+    // Priority 4: mages / arcane units (most expensive first — flood with power)
+    const units = hand.filter(c => c.cardType === 'unit' && !c.unit?.isWall)
+      .sort((a, b) => b.cost - a.cost)
+
+    const pick = manaStructs[0] ?? towers[0] ?? upgrades[0] ?? units[0]
+    if (!pick) return false
+
+    s.opponentHand.splice(s.opponentHand.indexOf(pick), 1)
+    mana -= pick.cost
+    deployCard(s, pick, 'opponent', log)
+    drawCard(s.opponentDeck, s.opponentHand)
+    return true
+  }
+
+  let played = 0
+  while (played < maxPlays && tryPlay()) played++
+
+  if (played === 0) log.push('The Archivist catalogues…')
+}
+
 // ─── Battle Events ────────────────────────────────────────
 
 function triggerBattleEvent(s: GameState, log: string[]): void {
@@ -1007,6 +1056,8 @@ export function tick(state: GameState, deltaMs: number): GameState {
       kraggAI(s, log)
     } else if (s.bossAI === 'ashwalker') {
       ashwalkerAI(s, log)
+    } else if (s.bossAI === 'archivist') {
+      archivistAI(s, log)
     } else {
       opponentAI(s, log)
     }
