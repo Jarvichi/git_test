@@ -71,14 +71,34 @@
     { "name": "Dragon", "rarity": "legendary", "cost": 4, "cardType": "unit", "unitRef": "dragon", "description": "Unstoppable aerial might.", "deckCount": 1, "tags": ["forest"] },
 
     {
-      "name": "Build Wall", "rarity": "common", "cost": 1, "cardType": "structure",
+      "name": "Stone Wall", "rarity": "common", "cost": 1, "cardType": "structure",
       "unit": { "name": "Wall", "attack": 0, "maxHp": 40, "isWall": true, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0 },
       "description": "Blocks melee units.", "deckCount": 3
     },
     {
-      "name": "Build Farm", "rarity": "uncommon", "cost": 3, "cardType": "structure",
+      "name": "Farm", "rarity": "uncommon", "cost": 3, "cardType": "structure",
       "unit": { "name": "Farm", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "mana", "amount": 1 } },
       "description": "+1 max mana. Upgrade: +1 more mana.", "deckCount": 2
+    },
+    {
+      "name": "Mana Spring", "rarity": "uncommon", "cost": 3, "cardType": "structure",
+      "unit": { "name": "ManaSpring", "attack": 0, "maxHp": 15, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "manaSpeed", "speedMult": 0.5 } },
+      "description": "Mana regenerates 50% faster. Upgrade: another +50%.", "deckCount": 1
+    },
+    {
+      "name": "Healer's Hut", "rarity": "uncommon", "cost": 3, "cardType": "structure",
+      "unit": { "name": "Healer Hut", "attack": 0, "maxHp": 15, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "healAura", "amount": 3, "intervalMs": 8000 } },
+      "description": "Heals all friendly units 3 HP every 8s. Upgrade: heals every 4s.", "deckCount": 1
+    },
+    {
+      "name": "Stone Mason", "rarity": "rare", "cost": 4, "cardType": "structure",
+      "unit": { "name": "Stone Mason", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "repairAura", "amount": 8, "intervalMs": 10000 } },
+      "description": "Repairs all friendly walls & structures 8 HP every 10s. Upgrade: every 5s.", "deckCount": 1
+    },
+    {
+      "name": "Blacksmith", "rarity": "rare", "cost": 4, "cardType": "structure",
+      "unit": { "name": "Blacksmith", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "attackAura", "amount": 2 } },
+      "description": "All friendly units deal +2 damage. Upgrade: +2 more.", "deckCount": 1
     },
     {
       "name": "Barracks", "rarity": "uncommon", "cost": 3, "cardType": "structure", "tags": ["forest"],
@@ -426,8 +446,12 @@
     "Ash Elemental":        "Born from the Fracture's scorched aftermath. Still burning.",
     "Revenant":             "Kept returning until everyone stopped asking why.",
     "Lich Apprentice":      "Still learning. Still deadly. The tuition is paid in souls.",
-    "Build Wall":           "The first answer to every problem. Usually the second answer too.",
-    "Build Farm":           "Food is mana. Mana is power. This farmer has no idea what he's contributing to.",
+    "Stone Wall":           "The first answer to every problem. Usually the second answer too.",
+    "Farm":                 "Food is mana. Mana is power. This farmer has no idea what he's contributing to.",
+    "Mana Spring":          "Nobody can explain where the water comes from. Nobody is asking anymore.",
+    "Healer's Hut":         "\"Rest,\" she says. \"It'll hurt less tomorrow.\" She is usually right.",
+    "Stone Mason":          "Builds walls by day, repairs them by night. He's given up asking why they keep breaking.",
+    "Blacksmith":           "Hammer, anvil, fire. In that order. He has opinions about everything else.",
     "Barracks":             "Turns gold into goblins. Economists are still debating whether that's profitable.",
     "Arcane Tower":         "The archers it trains insist they learned everything naturally.",
     "Dragon Lair":          "Do not approach. Do not inquire. Absolutely do not ask about the rent.",

@@ -42,8 +42,8 @@ export const STARTER_COLLECTION: CollectionEntry[] = [
   { cardName: 'Barbarian',      count: 3 },
   { cardName: 'Knight',         count: 3 },
   { cardName: 'Wizard',         count: 1 },
-  { cardName: 'Build Wall',     count: 4 },
-  { cardName: 'Build Farm',     count: 2 },
+  { cardName: 'Stone Wall',     count: 4 },
+  { cardName: 'Farm',     count: 2 },
   { cardName: 'Barracks',       count: 1 },
   { cardName: 'Sharpen Blades', count: 2 },
   { cardName: 'Fortify',        count: 1 },
@@ -54,8 +54,8 @@ export const STARTER_DECK: DeckEntry[] = [
   { cardName: 'Archer',         count: 3 },
   { cardName: 'Barbarian',      count: 2 },
   { cardName: 'Knight',         count: 2 },
-  { cardName: 'Build Wall',     count: 2 },
-  { cardName: 'Build Farm',     count: 1 },
+  { cardName: 'Stone Wall',     count: 2 },
+  { cardName: 'Farm',     count: 1 },
   { cardName: 'Sharpen Blades', count: 1 },
 ]
 
@@ -88,8 +88,8 @@ export const STARTER_PACK_OPTIONS: StarterPackOption[] = [
       { cardName: 'Archer',         count: 3 },
       { cardName: 'Barbarian',      count: 2 },
       { cardName: 'Knight',         count: 2 },
-      { cardName: 'Build Wall',     count: 2 },
-      { cardName: 'Build Farm',     count: 1 },
+      { cardName: 'Stone Wall',     count: 2 },
+      { cardName: 'Farm',     count: 1 },
       { cardName: 'Sharpen Blades', count: 1 },
     ],
   },
@@ -100,8 +100,8 @@ export const STARTER_PACK_OPTIONS: StarterPackOption[] = [
     cards: [
       { cardName: 'Goblin',     count: 2 },
       { cardName: 'Knight',     count: 2 },
-      { cardName: 'Build Wall', count: 4 },
-      { cardName: 'Build Farm', count: 2 },
+      { cardName: 'Stone Wall', count: 4 },
+      { cardName: 'Farm', count: 2 },
     ],
   },
 ]

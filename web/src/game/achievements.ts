@@ -219,8 +219,8 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
 
   // ── Structure Destroys ───────────────────────────────────────────────────
 
-  ...structurePair('Wall',          'Wall',        'Stone Cold',          'The Great Wall Fell',       'Build Wall'),
-  ...structurePair('Farm',          'Farm',        'Farm Boy',            'Agricultural Armageddon',   'Build Farm'),
+  ...structurePair('Wall',          'Wall',        'Stone Cold',          'The Great Wall Fell',       'Stone Wall'),
+  ...structurePair('Farm',          'Farm',        'Farm Boy',            'Agricultural Armageddon',   'Farm'),
   ...structurePair('Barracks',      'Barracks',    'Boot Camp Closed',    'No More Recruits',          'Barracks'),
   ...structurePair('Arc.Tower',     'Arc.Tower',   'Power Outage',        'Tower of Rubble',           'Arcane Tower'),
   ...structurePair('DrgnLair',      'DrgnLair',    'Lair Cleared',        'Dragon Homeless',           'Dragon Lair', true),

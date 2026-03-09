@@ -3,6 +3,10 @@
 export type StructureEffect =
   | { type: 'mana'; amount: number }
   | { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
+  | { type: 'manaSpeed'; speedMult: number }
+  | { type: 'healAura'; amount: number; intervalMs: number }
+  | { type: 'repairAura'; amount: number; intervalMs: number }
+  | { type: 'attackAura'; amount: number }
 
 export type UpgradeEffect =
   | { type: 'buffAttack'; amount: number }
