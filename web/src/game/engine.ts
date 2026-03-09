@@ -49,8 +49,9 @@ function spawnUnit(template: UnitTemplate, owner: 'player' | 'opponent'): Unit {
     y: 0,
     attackTimer: 0,
   }
-  if (template.structureEffect?.type === 'spawn') {
-    unit.spawnTimer = template.structureEffect.intervalMs
+  const effect = template.structureEffect
+  if (effect?.type === 'spawn' || effect?.type === 'healAura' || effect?.type === 'repairAura') {
+    unit.spawnTimer = (effect as { intervalMs: number }).intervalMs
   }
   // Structures stay at base; walls are placed further out to form a defensive line
   if (template.moveSpeed === 0) {
@@ -71,6 +72,18 @@ function getManaBonus(field: Unit[], owner: 'player' | 'opponent'): number {
   return field
     .filter(u => u.owner === owner && u.structureEffect?.type === 'mana')
     .reduce((sum, u) => sum + (u.structureEffect as { type: 'mana'; amount: number }).amount, 0)
+}
+
+function getManaSpeedMult(field: Unit[], owner: 'player' | 'opponent'): number {
+  return field
+    .filter(u => u.owner === owner && u.structureEffect?.type === 'manaSpeed')
+    .reduce((mult, u) => mult + (u.structureEffect as { type: 'manaSpeed'; speedMult: number }).speedMult, 0)
+}
+
+function getAttackAura(field: Unit[], owner: 'player' | 'opponent'): number {
+  return field
+    .filter(u => u.owner === owner && u.structureEffect?.type === 'attackAura')
+    .reduce((sum, u) => sum + (u.structureEffect as { type: 'attackAura'; amount: number }).amount, 0)
 }
 
 // ─── New Game ────────────────────────────────────────────
@@ -385,6 +398,28 @@ function deployCard(s: GameState, card: Card, owner: 'player' | 'opponent', log:
           manaEffect.amount += 1
           note += ', mana+1'
         }
+        if (existing.structureEffect?.type === 'manaSpeed') {
+          const msEffect = existing.structureEffect as { type: 'manaSpeed'; speedMult: number }
+          msEffect.speedMult += 0.5
+          note += ', speed+50%'
+        }
+        if (existing.structureEffect?.type === 'healAura') {
+          const hEffect = existing.structureEffect as { type: 'healAura'; amount: number; intervalMs: number }
+          hEffect.intervalMs = Math.max(2000, Math.floor(hEffect.intervalMs / 2))
+          if (existing.spawnTimer != null) existing.spawnTimer = Math.min(existing.spawnTimer, hEffect.intervalMs)
+          note += ', heal×2'
+        }
+        if (existing.structureEffect?.type === 'repairAura') {
+          const rEffect = existing.structureEffect as { type: 'repairAura'; amount: number; intervalMs: number }
+          rEffect.intervalMs = Math.max(2000, Math.floor(rEffect.intervalMs / 2))
+          if (existing.spawnTimer != null) existing.spawnTimer = Math.min(existing.spawnTimer, rEffect.intervalMs)
+          note += ', repair×2'
+        }
+        if (existing.structureEffect?.type === 'attackAura') {
+          const aEffect = existing.structureEffect as { type: 'attackAura'; amount: number }
+          aEffect.amount += 2
+          note += ', atk+2'
+        }
         const who = owner === 'player' ? 'You' : 'Opponent'
         log.push(`${who} upgraded ${existing.name}! (${note})`)
         return
@@ -583,6 +618,9 @@ function moveUnits(s: GameState, deltaMs: number): void {
 // ─── Per-unit Combat ──────────────────────────────────────
 
 function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
+  const playerAtkAura = getAttackAura(s.field, 'player')
+  const opponentAtkAura = getAttackAura(s.field, 'opponent')
+
   for (const unit of s.field) {
     if (unit.attack === 0 || unit.hp <= 0) continue
 
@@ -593,11 +631,12 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
 
     const target = findAttackTarget(s.field, unit)
     const isPlayer = unit.owner === 'player'
+    const atkAura = isPlayer ? playerAtkAura : opponentAtkAura
 
     if (target) {
       const prevHp = target.hp
       const bloodMoonMult = s.activeBattleEvent?.type === 'bloodMoon' ? 2 : 1
-      const dmg = unit.attack * bloodMoonMult
+      const dmg = (unit.attack + atkAura) * bloodMoonMult
       // Respect developer no-damage mode for player-owned targets
       if (target.owner === 'player' && isNoDamageMode()) {
         log.push(`${unit.name} would damage ${target.name} (dev mode — no damage)`)
@@ -621,7 +660,7 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
 
       if (atEnemyBase) {
         const bloodMoonMult = s.activeBattleEvent?.type === 'bloodMoon' ? 2 : 1
-        const dmg = unit.attack * bloodMoonMult
+        const dmg = (unit.attack + atkAura) * bloodMoonMult
         if (isPlayer) {
           const prev = s.opponentBase.hp
           s.opponentBase.hp = Math.max(0, s.opponentBase.hp - dmg)
@@ -713,7 +752,7 @@ function opponentAI(s: GameState, log: string[]): void {
 // ─── Thornlord Boss AI ───────────────────────────────────
 //
 // Priority order each turn:
-//   1. Build Wall (walls every turn is the theme)
+//   1. Stone Wall (walls every turn is the theme)
 //   2. Spawn-structure (Barracks, Crypt, etc.)
 //   3. Mana structure (Farm)
 //   4. Cheapest available unit
@@ -898,7 +937,8 @@ export function tick(state: GameState, deltaMs: number): GameState {
   s.maxMana = Math.min(10, BASE_MAX_MANA + manaBonus)
 
   if (s.mana < s.maxMana) {
-    s.manaAccum += deltaMs / MANA_REGEN_MS
+    const speedMult = 1 + getManaSpeedMult(s.field, 'player')
+    s.manaAccum += (deltaMs / MANA_REGEN_MS) * speedMult
     while (s.manaAccum >= 1 && s.mana < s.maxMana) {
       s.mana++
       s.manaAccum -= 1
@@ -916,24 +956,45 @@ export function tick(state: GameState, deltaMs: number): GameState {
     return s
   }
 
-  // 5. Tick spawn-grow timers and spawner buildings
+  // 5. Tick spawn-grow timers and spawner/aura buildings
   for (const unit of s.field) {
     if (unit.spawnGrowTimer != null && unit.spawnGrowTimer > 0) {
       unit.spawnGrowTimer = Math.max(0, unit.spawnGrowTimer - deltaMs)
     }
-    if (unit.spawnTimer == null || unit.structureEffect?.type !== 'spawn') continue
+    const sEffect = unit.structureEffect
+    if (unit.spawnTimer == null || !sEffect) continue
+    if (sEffect.type !== 'spawn' && sEffect.type !== 'healAura' && sEffect.type !== 'repairAura') continue
     unit.spawnTimer -= deltaMs
     if (unit.spawnTimer <= 0) {
-      const effect = unit.structureEffect as { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
-      const spawned = spawnUnit(effect.unitTemplate, unit.owner)
-      // Spawn at building's position and animate growing in
-      spawned.x = unit.x
-      spawned.y = unit.y   // inherit the building's lateral lane slot
-      spawned.spawnGrowTimer = SPAWN_GROW_MS
-      s.field.push(spawned)
-      const who = unit.owner === 'player' ? 'Your' : 'Enemy'
-      log.push(`${who} ${unit.name} spawned a ${spawned.name}!`)
-      unit.spawnTimer = effect.intervalMs
+      if (sEffect.type === 'spawn') {
+        const effect = sEffect as { type: 'spawn'; unitTemplate: UnitTemplate; intervalMs: number }
+        const spawned = spawnUnit(effect.unitTemplate, unit.owner)
+        spawned.x = unit.x
+        spawned.y = unit.y
+        spawned.spawnGrowTimer = SPAWN_GROW_MS
+        s.field.push(spawned)
+        const who = unit.owner === 'player' ? 'Your' : 'Enemy'
+        log.push(`${who} ${unit.name} spawned a ${spawned.name}!`)
+        unit.spawnTimer = effect.intervalMs
+      } else if (sEffect.type === 'healAura') {
+        const { amount, intervalMs } = sEffect as { type: 'healAura'; amount: number; intervalMs: number }
+        const targets = s.field.filter(u => u.owner === unit.owner && u.moveSpeed > 0 && u.hp < u.maxHp)
+        for (const t of targets) t.hp = Math.min(t.maxHp, t.hp + amount)
+        if (targets.length > 0) {
+          const who = unit.owner === 'player' ? 'Your' : 'Enemy'
+          log.push(`${who} ${unit.name} healed ${targets.length} unit(s) for ${amount} HP.`)
+        }
+        unit.spawnTimer = intervalMs
+      } else if (sEffect.type === 'repairAura') {
+        const { amount, intervalMs } = sEffect as { type: 'repairAura'; amount: number; intervalMs: number }
+        const targets = s.field.filter(u => u.owner === unit.owner && u.moveSpeed === 0 && u !== unit && u.hp < u.maxHp)
+        for (const t of targets) t.hp = Math.min(t.maxHp, t.hp + amount)
+        if (targets.length > 0) {
+          const who = unit.owner === 'player' ? 'Your' : 'Enemy'
+          log.push(`${who} ${unit.name} repaired ${targets.length} structure(s) for ${amount} HP.`)
+        }
+        unit.spawnTimer = intervalMs
+      }
     }
   }
 

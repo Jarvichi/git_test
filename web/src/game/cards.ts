@@ -21,8 +21,9 @@ interface CardDef {
 // ─── JSON data types ──────────────────────────────────────
 
 interface RawStructureEffect {
-  type: 'mana' | 'spawn'
+  type: 'mana' | 'spawn' | 'manaSpeed' | 'healAura' | 'repairAura' | 'attackAura'
   amount?: number
+  speedMult?: number
   unitTemplateRef?: string
   intervalMs?: number
 }
@@ -80,6 +81,9 @@ function resolveUnit(raw: RawUnitDef): UnitTemplate {
     structureEffect: { type: 'spawn' as const, unitTemplate, intervalMs: intervalMs ?? 0 },
   }
 }
+
+// Resolve a manaSpeed effect from raw JSON to typed StructureEffect
+// (healAura, repairAura, attackAura also pass through resolveUnit as-is via the cast above)
 
 function resolveCardDef(raw: RawCardDef): CardDef {
   let unit: UnitTemplate | undefined
@@ -166,7 +170,7 @@ export function makeDeck(): Card[] {
 
 /**
  * The Thornlord boss deck — wall-heavy with spawner structures and sturdy defenders.
- * 6× Build Wall ensures walls go down every turn via thornlordAI priority routing.
+ * 6× Stone Wall ensures walls go down every turn via thornlordAI priority routing.
  */
 export function makeThorlordDeck(): Card[] {
   const make = (name: string, count: number): Card[] => {
@@ -185,9 +189,9 @@ export function makeThorlordDeck(): Card[] {
     }))
   }
   return [
-    ...make('Build Wall',   6),
+    ...make('Stone Wall',   6),
     ...make('Barracks',     3),
-    ...make('Build Farm',   2),
+    ...make('Farm',         2),
     ...make('Crypt',        2),
     ...make('Shield Guard', 2),
     ...make('Knight',       2),
@@ -232,7 +236,7 @@ export function makeKraggDeck(): Card[] {
     }))
   }
   return [
-    ...make('Build Wall',   4),
+    ...make('Stone Wall',   4),
     ...make('Catapult',     3),
     ...make('Knight',       3),
     ...make('Shield Guard', 2),

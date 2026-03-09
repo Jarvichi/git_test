@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ground -->
+  <ellipse cx="16" cy="30" rx="12" ry="2" fill="#3a2a1a"/>
+  <!-- Forge building body -->
+  <rect x="4" y="18" width="24" height="12" rx="1" fill="#5a4a3a"/>
+  <rect x="4" y="18" width="24" height="2.5" fill="#6a5a4a"/>
+  <!-- Stone block texture -->
+  <line x1="4" y1="22" x2="28" y2="22" stroke="#4a3a2a" stroke-width="0.7"/>
+  <line x1="4" y1="26" x2="28" y2="26" stroke="#4a3a2a" stroke-width="0.7"/>
+  <line x1="12" y1="18" x2="12" y2="22" stroke="#4a3a2a" stroke-width="0.7"/>
+  <line x1="20" y1="18" x2="20" y2="22" stroke="#4a3a2a" stroke-width="0.7"/>
+  <!-- Roof -->
+  <rect x="3" y="16" width="26" height="3" rx="0.5" fill="#4a3a2a"/>
+  <!-- Door -->
+  <rect x="13" y="24" width="6" height="6" fill="#1a0a00"/>
+  <!-- Forge glow inside door -->
+  <rect x="13.5" y="24.5" width="5" height="5" fill="#cc4400" opacity="0.6"/>
+  <rect x="14" y="25" width="4" height="4" fill="#ff6600" opacity="0.4"/>
+  <!-- Large chimney -->
+  <rect x="20" y="8" width="5" height="10" fill="#5a4a3a"/>
+  <rect x="19.5" y="7" width="6" height="1.5" rx="0.3" fill="#4a3a2a"/>
+  <!-- Fire/ember glow from chimney -->
+  <circle cx="22.5" cy="5" r="2" fill="#ff4400" opacity="0.6"/>
+  <circle cx="22.5" cy="4" r="1.2" fill="#ff8800" opacity="0.5"/>
+  <circle cx="21" cy="3" r="0.8" fill="#ffaa00" opacity="0.4"/>
+  <circle cx="24" cy="2.5" r="0.7" fill="#ff6600" opacity="0.4"/>
+  <!-- Sword/anvil symbol on wall -->
+  <line x1="8" y1="21" x2="8" y2="25" stroke="#cc9900" stroke-width="1.2"/>
+  <line x1="6.5" y1="22" x2="9.5" y2="22" stroke="#cc9900" stroke-width="1.2"/>
+  <rect x="7" y="25" width="2" height="1" rx="0.3" fill="#cc9900"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ground/base -->
+  <ellipse cx="16" cy="30" rx="12" ry="2" fill="#3a2a1a"/>
+  <!-- Stone basin rim -->
+  <ellipse cx="16" cy="24" rx="10" ry="3" fill="#5a5a6a"/>
+  <ellipse cx="16" cy="23" rx="9" ry="2.5" fill="#6a6a7a"/>
+  <!-- Water in basin -->
+  <ellipse cx="16" cy="22.5" rx="8" ry="2" fill="#1a4a8a"/>
+  <ellipse cx="16" cy="22" rx="6" ry="1.2" fill="#2266cc"/>
+  <!-- Pillar -->
+  <rect x="14" y="10" width="4" height="14" rx="1" fill="#5a5a6a"/>
+  <rect x="14.5" y="10" width="3" height="14" fill="#6a6a7a"/>
+  <!-- Mana orb atop pillar -->
+  <circle cx="16" cy="8" r="5" fill="#1a1a3a"/>
+  <circle cx="16" cy="8" r="4" fill="#2244aa" opacity="0.9"/>
+  <circle cx="16" cy="8" r="3" fill="#4488ff" opacity="0.8"/>
+  <circle cx="14.5" cy="6.5" r="1.2" fill="#aaccff" opacity="0.7"/>
+  <!-- Rising mana sparks -->
+  <circle cx="16" cy="3" r="1" fill="#66aaff" opacity="0.7"/>
+  <circle cx="13" cy="5" r="0.7" fill="#4488ff" opacity="0.6"/>
+  <circle cx="19" cy="4" r="0.7" fill="#88bbff" opacity="0.5"/>
+  <!-- Rune ring on basin -->
+  <circle cx="16" cy="23" r="7" fill="none" stroke="#4466cc" stroke-width="0.6" stroke-dasharray="2,2" opacity="0.7"/>
+</svg>

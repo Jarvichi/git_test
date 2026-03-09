@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Ground -->
+  <ellipse cx="16" cy="30" rx="12" ry="2" fill="#3a2a1a"/>
+  <!-- Workshop walls - sturdy stone look -->
+  <rect x="4" y="17" width="24" height="13" rx="1" fill="#7a7a7a"/>
+  <!-- Stone block texture on walls -->
+  <line x1="4" y1="21" x2="28" y2="21" stroke="#5a5a5a" stroke-width="0.7"/>
+  <line x1="4" y1="25" x2="28" y2="25" stroke="#5a5a5a" stroke-width="0.7"/>
+  <line x1="10" y1="17" x2="10" y2="21" stroke="#5a5a5a" stroke-width="0.7"/>
+  <line x1="19" y1="17" x2="19" y2="21" stroke="#5a5a5a" stroke-width="0.7"/>
+  <line x1="7" y1="21" x2="7" y2="25" stroke="#5a5a5a" stroke-width="0.7"/>
+  <line x1="16" y1="21" x2="16" y2="25" stroke="#5a5a5a" stroke-width="0.7"/>
+  <line x1="23" y1="21" x2="23" y2="25" stroke="#5a5a5a" stroke-width="0.7"/>
+  <!-- Roof overhang -->
+  <rect x="3" y="15" width="26" height="3" rx="0.5" fill="#5a5a5a"/>
+  <rect x="3" y="15" width="26" height="1.2" fill="#6a6a6a"/>
+  <!-- Door opening -->
+  <rect x="13" y="23" width="6" height="7" fill="#2a1a0a"/>
+  <!-- Hammer and chisel tools visible in doorway -->
+  <line x1="15" y1="24" x2="18" y2="27" stroke="#8a8a6a" stroke-width="1.5"/>
+  <rect x="14.5" y="23.5" width="2" height="1" rx="0.3" fill="#9a9a7a"/>
+  <!-- Chimney with sparks -->
+  <rect x="22" y="10" width="3" height="7" fill="#6a6a6a"/>
+  <rect x="21.5" y="9" width="4" height="1.5" rx="0.3" fill="#5a5a5a"/>
+  <!-- Smoke/sparks from chimney -->
+  <circle cx="23.5" cy="7" r="1.2" fill="#aaaaaa" opacity="0.5"/>
+  <circle cx="22" cy="5" r="0.9" fill="#cccccc" opacity="0.4"/>
+  <circle cx="25" cy="4" r="0.7" fill="#aaaaaa" opacity="0.3"/>
+  <!-- Stone blocks being worked on outside -->
+  <rect x="5" y="26" width="5" height="3" rx="0.3" fill="#8a8a8a"/>
+  <rect x="5" y="26" width="5" height="1" fill="#9a9a9a"/>
+</svg>
