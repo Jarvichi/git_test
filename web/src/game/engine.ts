@@ -683,6 +683,16 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
     }
   }
 
+  // Soulstone relic: auto-revive the first dead player unit once per battle
+  if (s.soulstoneReviveAvailable) {
+    const deadPlayerUnit = s.field.find(u => u.owner === 'player' && u.hp <= 0 && u.moveSpeed > 0)
+    if (deadPlayerUnit) {
+      deadPlayerUnit.hp = Math.ceil(deadPlayerUnit.maxHp / 2)
+      s.soulstoneReviveAvailable = false
+      log.push(`💎 Soulstone! ${deadPlayerUnit.name} rises from the dead!`)
+    }
+  }
+
   // Remove dead units
   s.field = s.field.filter(u => u.hp > 0)
 }
@@ -983,7 +993,7 @@ export function tick(state: GameState, deltaMs: number): GameState {
 
   // 1. Mana regen
   const manaBonus = getManaBonus(s.field, 'player')
-  s.maxMana = Math.min(10, BASE_MAX_MANA + manaBonus)
+  s.maxMana = Math.min(10, BASE_MAX_MANA + manaBonus + (s.relicManaBonus ?? 0))
 
   if (s.mana < s.maxMana) {
     const speedMult = 1 + getManaSpeedMult(s.field, 'player')

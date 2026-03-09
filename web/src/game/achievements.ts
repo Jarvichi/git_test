@@ -422,6 +422,52 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     reward: { type: 'crystals', crystals: 1000 },
     tier: 2,
   },
+  {
+    id: 'campaign:act3:100',
+    name: 'The Waste Is Your Home Now',
+    description: 'Complete Act 3 one hundred times',
+    category: 'campaign',
+    progressKey: 'campaign:act3',
+    target: 100,
+    reward: {
+      type: 'item',
+      item: { id: 'ashen_shroud', name: 'Ashen Shroud', icon: '💀', desc: 'The Ashen Wastes hold no fear for someone who has walked them a hundred times.' },
+    },
+    tier: 2,
+  },
+  {
+    id: 'campaign:act4:1',
+    name: 'The Archivist Closed',
+    description: 'Complete Act 4 — The Crystal Spire',
+    category: 'campaign',
+    progressKey: 'campaign:act4',
+    target: 1,
+    reward: { type: 'crystals', crystals: 250 },
+    tier: 1,
+  },
+  {
+    id: 'campaign:act4:10',
+    name: 'Shelved Under "Defeated"',
+    description: 'Complete Act 4 ten times',
+    category: 'campaign',
+    progressKey: 'campaign:act4',
+    target: 10,
+    reward: { type: 'crystals', crystals: 1250 },
+    tier: 2,
+  },
+  {
+    id: 'campaign:act4:100',
+    name: 'Infinite Mana, Infinite Patience',
+    description: 'Complete Act 4 one hundred times',
+    category: 'campaign',
+    progressKey: 'campaign:act4',
+    target: 100,
+    reward: {
+      type: 'item',
+      item: { id: 'prism_lens_badge', name: 'Prism Lens Badge', icon: '🔮', desc: 'The Crystal Spire has been catalogued, indexed, and beaten into submission.' },
+    },
+    tier: 2,
+  },
 
   // ── Misc ─────────────────────────────────────────────────────────────────
 
