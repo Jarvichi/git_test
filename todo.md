@@ -162,4 +162,4 @@ Items below are unimplemented features identified in issue #144. Reference `docs
 - [x] **#56** Campaign run-count ordinal text fixed (sixth/seventh/eighth/ninth)
 
 > Note: GitHub API issue closing requires auth token (`GITHUB_TOKEN`). Issues must be closed manually or token added to env.
-> Issues to close manually after merging: **#109**, **#117**, **#119**
+> Issues to close manually after merging: **#109**, **#117**, **#119**, **#144**
