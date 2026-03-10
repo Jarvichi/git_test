@@ -391,6 +391,28 @@
       "unit": { "name": "Werewolf", "attack": 14, "maxHp": 35, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 62, "attackRange": 5, "attackCooldownMs": 1400 },
       "heroEffect": { "type": "buffSpeed", "amount": 25 },
       "description": "HERO: Deploys a savage Werewolf & surges all units with +25 speed!"
+    },
+    {
+      "id": "hero-death-lord", "name": "Death Lord", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
+      "unit": { "name": "Lich Apprentice", "attack": 12, "maxHp": 30, "isWall": false, "bypassWall": true, "moveSpeed": 20, "attackRange": 40, "attackCooldownMs": 2500 },
+      "heroEffect": { "type": "buffAttackCooldown", "amount": -500 },
+      "description": "HERO: Deploys a sinister Lich Apprentice & hastens all units with -500ms attack cooldown!"
+    },
+    {
+      "id": "hero-forest-guardian", "name": "Forest Guardian", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
+      "unit": { "name": "Elder Treant", "attack": 16, "maxHp": 45, "isWall": false, "bypassWall": false, "moveSpeed": 12, "attackRange": 5, "attackCooldownMs": 2200 },
+      "heroEffect": { "type": "buffHeal", "amount": 4 },
+      "description": "HERO: Deploys a mighty Elder Treant & rejuvenates all units with +4 HP heal every 10s!"
+    },
+    {
+      "id": "hero-swarm-queen", "name": "Swarm Queen", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
+      "unit": { "name": "Pixie", "attack": 8, "maxHp": 25, "isWall": false, "bypassWall": true, "flying": true, "moveSpeed": 40, "attackRange": 30, "attackCooldownMs": 1500, "structureEffect": { "type": "spawn", "unitTemplateRef": "spore-bat", "intervalMs": 10000 } },
+      "description": "HERO: Deploys a mischievous Pixie & commands it to spawn a Spore Bat for you every 10s!"
+    },
+    {
+      "id": "hero-graham", "name": "Graham The All Seeing", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
+      "unit": { "name": "Graham", "attack": 10, "maxHp": 80, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 65, "attackRange": 120, "attackCooldownMs": 1000, "structureEffect": { "type": "spawn", "unitTemplateRef": "bone-archer", "intervalMs": 10000 } },
+      "description": "HERO: Deploys Skeleton Archers!"
     }
   ],
 
@@ -506,6 +528,10 @@
     "Dragon Lord":          "Commands dragons. Dragons pretend not to notice.",
     "Battle Queen":         "Won sixteen wars. Lost zero negotiations.",
     "Storm Caller":         "The sky does what she says. Eventually.",
-    "Shadow King":          "Feared in twelve kingdoms. Banned from two taverns specifically."
+    "Shadow King":          "Feared in twelve kingdoms. Banned from two taverns specifically.",
+    "Death Lord":           "Death is just a job. A very grim job, but somebody's got to do it.",
+    "Forest Guardian":      "The forest is alive. It has opinions on your strategy.",
+    "Swarm Queen":         "The swarm is a family. A very bitey family.",
+    "Graham The All Seeing": "Sees all. Knows all. Still can't find his keys. Play tested by Graham, who is indeed all seeing."
   }
 }
