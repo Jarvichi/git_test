@@ -319,6 +319,7 @@ export interface RunState {
   completedNodeIds: string[]
   skippedNodeIds: string[]     // nodes in branches the player didn't take
   pendingNodeId: string | null // node currently in battle
+  pendingActComplete?: boolean // true while waiting on the act-complete screen (survives page refresh)
   playerHp: number
   maxHp: number
   cardPlayCounts: Record<string, number>  // cumulative plays per card name this act
@@ -363,8 +364,10 @@ export function loadRun(): RunState | null {
       parsed.pendingNodeId = null
     }
 
-    // If act is already complete with no pendingNode, clear run so a fresh one starts
-    if (isActComplete(act, parsed) && !parsed.pendingNodeId) {
+    // If act is already complete with no pendingNode, clear run so a fresh one starts —
+    // unless pendingActComplete is set, which means the player is on the act-complete
+    // screen and hasn't clicked Continue yet (e.g. they refreshed the page mid-transition).
+    if (isActComplete(act, parsed) && !parsed.pendingNodeId && !parsed.pendingActComplete) {
       console.warn('[run] Act already complete — clearing stale run')
       localStorage.removeItem(RUN_KEY)
       return null

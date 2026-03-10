@@ -155,6 +155,10 @@ export default function App() {
         return { screen: 'playing' as Screen, gameState: state as GameState | null, run: savedRun, isCampaign: true }
       }
     }
+    // If the player refreshed while on the act-complete screen, restore it directly.
+    if (savedRun?.pendingActComplete) {
+      return { screen: 'actcomplete' as Screen, gameState: null as GameState | null, run: savedRun, isCampaign: false }
+    }
     return { screen: (loadSkipIntro() ? 'title' : 'intro') as Screen, gameState: null as GameState | null, run: savedRun as RunState | null, isCampaign: false }
   })
 
@@ -745,6 +749,12 @@ export default function App() {
       // Track act completion achievement
       const actUnlocked = incrementAchievementProgress(`campaign:${currentRun.actId}`)
       if (actUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...actUnlocked])
+
+      // Mark run as pending act-complete so a page refresh restores the actcomplete screen
+      // rather than wiping the run and sending the player back to the title screen.
+      const actCompleteRun = { ...updatedRun, pendingActComplete: true }
+      saveRun(actCompleteRun)
+      setRun(actCompleteRun)
 
       if (act.outro && act.outro.length > 0) {
         setCutscenePanels(act.outro)
