@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-09.
+Issues sourced from GitHub. Last synced: 2026-03-10.
 
 ---
 
@@ -112,6 +112,46 @@ Issues sourced from GitHub. Last synced: 2026-03-09.
 ## 🔵 Enhancements — Architecture
 
 - [x] **#78** External config files: move card definitions, campaign acts, events, and merchant data out of TypeScript into JSON config files with a generic loader
+
+---
+
+## 🗺️ Acts System — From Issue #144 (see docs/acts.md)
+
+Items below are unimplemented features identified in issue #144. Reference `docs/acts.md` for full specs.
+
+### Campaign Map
+- [ ] **#144** Mystery node: runtime replacement of a normal battle node; displayed as normal battle on map; on entry shows cleared battlefield + reward chest + lore text ("whoops, forgot to clean up")
+- [ ] **#144** Node peek modal: tapping a node shows a preview modal with reward summary, difficulty hint, "Enter Battle" + "Back" buttons; on previously-completed nodes also shows opponent deck + playstyle
+
+### Boss Mechanic
+- [ ] **#144** Boss card mechanic: boss node opponent gets a boss card instead of hero; when opponent base hits 0 HP, base restores to full and boss unit deploys; player must kill the boss unit to win — add `bossCard` field to QuestNode, `bossCardActive` flag to GameState, intercept game-over in engine.ts
+
+### Campaign Structure
+- [ ] **#144** Extend campaign to 25 acts (currently 4); plan and write acts 5–25 story, node maps, bosses, relics, hero cards, themed card sets
+- [ ] **#144** Second 25-act story arc: after act 25 completes, a new 25-act arc begins in the same world with a new plot
+
+### Replay System
+- [ ] **#144** Per-run modifiers: each replay of an act adds an escalating modifier (e.g. +X% enemy HP, faster opponent mana); configure modifier list in act JSON as `replayModifiers` array
+- [ ] **#144** Boss dialogue run-awareness: support substitution tags (`{n}`, `{ordinalLower}`) inside `bossDialogue` strings (currently plain text only)
+- [ ] **#144** Global word substitution config: a separate JSON file (`web/src/data/wordVariants.json`) holding single-word alternate arrays usable as `{word:key}` tags in any act text
+
+### Relics
+- [ ] **#144** Relic selection screen: at the start of each act, show all owned relics and let player pick 1 to equip (currently auto-equips last earned)
+- [ ] **#144** Relic breaking: on act-completion screen, 50% chance relic breaks and becomes unusable; broken relics shown greyed out in inventory; re-earn by completing the act again
+
+### Lives System
+- [ ] **#144** Add 3 lives to RunState (`livesRemaining`); on battle loss player loses 1 life and can retry (deck alterable between attempts); at 0 lives and a loss show Campaign Failed screen
+- [ ] **#144** Campaign Failed screen: small crystal reward, log the loss, reduce handicap for that node on next run
+
+### Cards
+- [ ] **#144** Add `lore` field to card schema (cards.json + TypeScript types) for per-card flavour text
+- [ ] **#144** Per-act themed card sets: at least 25 cards per act, tagged to that act's theme, earnable only in that act (except daily/crystal rewards)
+
+### Music
+- [ ] **#144** Per-act music: add `music` object to act JSON schema (`mapTrack`, `battleTrack`, `bossTrack`); wire into `sound.ts` when entering an act or battle
+
+### Merchant
+- [ ] **#144** Merchant rarely offers an inventory/relic item alongside cards (currently only cards)
 
 ---
 
