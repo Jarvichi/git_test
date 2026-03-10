@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-10.
+Issues sourced from GitHub. Last synced: 2026-03-10 (session 2).
 
 ---
 
@@ -20,6 +20,13 @@ Issues sourced from GitHub. Last synced: 2026-03-10.
 
 ---
 
+## 🟠 Gameplay Bugs (new)
+
+- [ ] **#148** Cheating: refreshing during a battle resets it — store serialised battle state to localStorage on each tick; reload resumes it; add hidden achievement for attempting it
+- [ ] **#149** Campaign events: events in acts 2/3 reuse Act 1 text — make a generic config-driven event handler reading name/lore/options/rewards from act JSON so each act has unique events
+
+---
+
 ## 🟠 Gameplay Bugs
 
 - [x] **#110** Points: winner could end up with fewer points than loser — fixed: winner gets +500 victory bonus in `checkGameOver` — needs manual close on GitHub
@@ -31,6 +38,13 @@ Issues sourced from GitHub. Last synced: 2026-03-10.
  - [x] **#62** Gameplay balance: Farm upgrade mana bug; structure cost vs unit cost balance (closed on GitHub)
 - [x] **#87** Inventory: item detail modal when tapping a card; relics appear in inventory with icon, name, desc
 - [x] **#88** Event rewards: shrines and watchtowers should occasionally give inventory/relic items (not just HP/crystals/cards)
+
+---
+
+## 🟡 UX / UI Bugs (new)
+
+- [ ] **#151** Title screen: "Deck: X cards" label is confusing — replace with a badge on Deck Builder button when unused cards exist; show "Collection X/Y" (unlocked/total) instead
+- [ ] **#143** Campaign map: visited nodes should render at full brightness with a solid fill and a ✓ tick overlay
 
 ---
 
@@ -55,6 +69,14 @@ Issues sourced from GitHub. Last synced: 2026-03-10.
 - [x] **#73** Campaign hack: page refresh now auto-resumes into the active battle (no title screen shown) — needs manual close
 - [x] **#50** Sound: better battle music; death cries; crash sound for buildings (already implemented — needs manual close)
 - [x] **#60** Rare event — The Gambler: tap-to-guess modal; win all cards or game reset; rubber chicken consolation; history tracking — needs manual close
+
+---
+
+## 🔵 Enhancements — Medium (new)
+
+- [ ] **#150** Handle updates: auto-reload the PWA when a new version is deployed; show build ID in Settings → About
+- [ ] **#146** Achievements: add "Campaign Failed" achievement; "100 Losses" and "1000 Losses" milestones
+- [ ] **#140** Act 4 achievements: no achievements currently fire for Act 4 completion — wire up the same hooks as Acts 1–3
 
 ---
 
@@ -95,6 +117,12 @@ Issues sourced from GitHub. Last synced: 2026-03-10.
 
 - [ ] **#100** Unit behavioral traits: avoidance, fleeing, target priority (destroy walls, buildings, boss, protect base) — fall back to default if trait unfulfilled
 - [x] **#102** Achievements system: per-unit/building kill milestones (1000/10000), witty names, rewards (cards/crystals/items), Gambler/rubber-chicken achievements, act-completion counts, dedicated achievements screen
+
+## ⚪ Features — Large / Long-term (new)
+
+- [ ] **#152** Endless mode: continuous waves — opponent dies, stronger one spawns; buildings limited to 3 rows; survive as long as possible; survival-time achievements
+
+---
 
 ## ⚪ Features — Large / Long-term
 
