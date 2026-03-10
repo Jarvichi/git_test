@@ -200,6 +200,42 @@ function stopTrack(track: MusicTrack): void {
   }
 }
 
+// ─── MusicTrackConfig — passable config for the music engine ─────────────────
+// Define a config object with id, bpm, vol, and a scheduler function, then pass
+// it to startMusicTrack() to begin playback.  stopMusicTrack(id) stops it.
+
+export type MusicSchedulerFn = (
+  track: MusicTrack, vol: number, beatSec: number, upTo: number
+) => void
+
+export interface MusicTrackConfig {
+  id:       string
+  bpm:      number
+  vol:      number
+  schedule: MusicSchedulerFn
+}
+
+const _tracks = new Map<string, MusicTrack>()
+
+function getOrCreateTrack(id: string): MusicTrack {
+  let t = _tracks.get(id)
+  if (!t) { t = makeTrack(); _tracks.set(id, t) }
+  return t
+}
+
+/** Start a music track from a config object. No-op if already playing. */
+export function startMusicTrack(config: MusicTrackConfig): void {
+  const track   = getOrCreateTrack(config.id)
+  const beatSec = 60 / config.bpm
+  startTrack(track, config.vol, beatSec, config.schedule, () => stopMusicTrack(config.id))
+}
+
+/** Stop a music track by its config id. */
+export function stopMusicTrack(id: string): void {
+  const track = _tracks.get(id)
+  if (track) stopTrack(track)
+}
+
 // ─── Battle Music (D Dorian, 115 BPM) ────────────────────────────────────────
 // Aggressive, driving tempo with kick, snare, bass, harmony, and lead melody.
 // 4 phrases × 8 beats = 32-beat cycle (~16.5 s).
@@ -236,8 +272,6 @@ const B_HARM: (number|null)[][] = [
   [null, 4, 3,    null, 4,    null, 3, 2   ],
   [3,    null, 4, 3,    null, 4, 3,    null],
 ]
-
-const bgTrack = makeTrack()
 
 function battlePhrase(absbeat: number): number {
   const raw = Math.floor(absbeat / 8)
@@ -311,10 +345,10 @@ function scheduleBattle(track: MusicTrack, vol: number, beatSec: number, upTo: n
   }
 }
 
-export function startBattleMusic(): void {
-  startTrack(bgTrack, BATTLE_VOL, BATTLE_BEAT_SEC, scheduleBattle, stopBattleMusic)
-}
-export function stopBattleMusic(): void { stopTrack(bgTrack) }
+export const BATTLE_MUSIC: MusicTrackConfig = { id: 'battle', bpm: BATTLE_BPM, vol: BATTLE_VOL, schedule: scheduleBattle }
+
+export function startBattleMusic(): void { startMusicTrack(BATTLE_MUSIC) }
+export function stopBattleMusic(): void  { stopMusicTrack('battle') }
 
 // ─── Title Music (C major, slow pads, 60 BPM) ────────────────────────────────
 // 3 phrases × 8 beats = 24-beat cycle (~24 s). Phrases shift harmonic centre.
@@ -339,8 +373,6 @@ const T_TOP: (number|null)[][] = [
   [null, 4, null, 6, null, 5,    null, 3],
   [null, 6, null, 4, null, 3,    null, 5],
 ]
-
-const titleTrack = makeTrack()
 
 function scheduleTitle(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
   while (track.nextBeatTime < upTo) {
@@ -370,16 +402,15 @@ function scheduleTitle(track: MusicTrack, vol: number, beatSec: number, upTo: nu
   }
 }
 
-export function startTitleMusic(): void {
-  startTrack(titleTrack, TITLE_VOL, TITLE_BEAT_SEC, scheduleTitle, stopTitleMusic)
-}
-export function stopTitleMusic(): void { stopTrack(titleTrack) }
+export const TITLE_MUSIC: MusicTrackConfig = { id: 'title', bpm: TITLE_BPM, vol: TITLE_VOL, schedule: scheduleTitle }
+
+export function startTitleMusic(): void { startMusicTrack(TITLE_MUSIC) }
+export function stopTitleMusic(): void  { stopMusicTrack('title') }
 
 // ─── Game Over Music ──────────────────────────────────────────────────────────
 // Victory: G major, 3 phrases — opener, build, triumphant climax, 80 BPM
 // Defeat:  D minor, 3 phrases — lament A, lament B, fading echo, 55 BPM
 
-const goTrack = makeTrack()
 let goIsVictory = false
 
 // G major pentatonic: G3, A3, B3, D4, E4, G4
@@ -431,13 +462,14 @@ function scheduleGameOver(track: MusicTrack, vol: number, beatSec: number, upTo:
   }
 }
 
+export const GAME_OVER_MUSIC_VICTORY: MusicTrackConfig = { id: 'gameover', bpm: 80, vol: 0.11, schedule: scheduleGameOver }
+export const GAME_OVER_MUSIC_DEFEAT:  MusicTrackConfig = { id: 'gameover', bpm: 55, vol: 0.11, schedule: scheduleGameOver }
+
 export function startGameOverMusic(winner: 'player' | 'opponent' | 'draw'): void {
   goIsVictory = winner === 'player'
-  const bpm     = goIsVictory ? 80 : 55
-  const beatSec = 60 / bpm
-  startTrack(goTrack, 0.11, beatSec, scheduleGameOver, stopGameOverMusic)
+  startMusicTrack(goIsVictory ? GAME_OVER_MUSIC_VICTORY : GAME_OVER_MUSIC_DEFEAT)
 }
-export function stopGameOverMusic(): void { stopTrack(goTrack) }
+export function stopGameOverMusic(): void { stopMusicTrack('gameover') }
 
 // ─── Node Map Music (E minor, mysterious, 70 BPM) ─────────────────────────────
 // 3 phrases × 8 beats. Phrase 0: sparse wander; 1: hopeful climb; 2: tense.
@@ -461,8 +493,6 @@ const M_TOP: (number|null)[][] = [
   [5,    4, null, 5,    null, 4,    3, null],
 ]
 const M_BASS = [[0,0], [1,1], [2,0]]  // bass root indices per phrase [beat0, beat4]
-
-const mapTrack = makeTrack()
 
 function scheduleMap(track: MusicTrack, vol: number, beatSec: number, upTo: number): void {
   while (track.nextBeatTime < upTo) {
@@ -489,10 +519,10 @@ function scheduleMap(track: MusicTrack, vol: number, beatSec: number, upTo: numb
   }
 }
 
-export function startMapMusic(): void {
-  startTrack(mapTrack, MAP_VOL, MAP_BEAT_SEC, scheduleMap, stopMapMusic)
-}
-export function stopMapMusic(): void { stopTrack(mapTrack) }
+export const MAP_MUSIC: MusicTrackConfig = { id: 'map', bpm: MAP_BPM, vol: MAP_VOL, schedule: scheduleMap }
+
+export function startMapMusic(): void { startMusicTrack(MAP_MUSIC) }
+export function stopMapMusic(): void  { stopMusicTrack('map') }
 
 // ─── Adaptive Battle Music ────────────────────────────────────────────────────
 // The battle track can be "instructed" to shift its intensity and phrase

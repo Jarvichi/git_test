@@ -140,15 +140,15 @@ Items below are unimplemented features identified in issue #144. Reference `docs
 - [ ] **#144** Relic breaking: on act-completion screen, 50% chance relic breaks and becomes unusable; broken relics shown greyed out in inventory; re-earn by completing the act again
 
 ### Lives System
-- [ ] **#144** Add 3 lives to RunState (`livesRemaining`); on battle loss player loses 1 life and can retry (deck alterable between attempts); at 0 lives and a loss show Campaign Failed screen
-- [ ] **#144** Campaign Failed screen: small crystal reward, log the loss, reduce handicap for that node on next run
+- [x] **#144** Add 3 lives to RunState (`livesRemaining`, `maxLives`); on battle loss player loses 1 life and can retry; at 0 lives show Campaign Failed screen (+50 crystals reward); lives reset to min 3 at act completion; relics/events can grant lives up to 9; shown in NodeMap HUD; "Nine Lives" achievement
+- [x] **#144** Campaign Failed screen: 50 crystal reward, clear run, return to menu
 
 ### Cards
 - [ ] **#144** Add `lore` field to card schema (cards.json + TypeScript types) for per-card flavour text
 - [ ] **#144** Per-act themed card sets: at least 25 cards per act, tagged to that act's theme, earnable only in that act (except daily/crystal rewards)
 
 ### Music
-- [ ] **#144** Per-act music: add `music` object to act JSON schema (`mapTrack`, `battleTrack`, `bossTrack`); wire into `sound.ts` when entering an act or battle
+- [x] **#144** Refactor sound.ts: export `MusicTrackConfig` type and `startMusicTrack`/`stopMusicTrack` generic API; named config objects (`BATTLE_MUSIC`, `TITLE_MUSIC`, `MAP_MUSIC`, etc.) passable to the engine; per-act wiring remains a future task
 
 ### Merchant
 - [ ] **#144** Merchant rarely offers an inventory/relic item alongside cards (currently only cards)

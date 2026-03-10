@@ -43,6 +43,7 @@ export type EventEffect =
   | { type: 'gainCrystals';    amount: number }
   | { type: 'gainCard';        rarity: CardRarity }
   | { type: 'gainItem';        itemId: string }
+  | { type: 'gainLife';        amount: number }
   | { type: 'nothing' }
 
 export interface EventChoice {
@@ -322,6 +323,8 @@ export interface RunState {
   pendingActComplete?: boolean // true while waiting on the act-complete screen (survives page refresh)
   playerHp: number
   maxHp: number
+  livesRemaining: number       // attempts left before run fails (3 at run start; resets to 3 at act end)
+  maxLives: number             // upper cap for livesRemaining (starts 3, relics/events can raise up to 9)
   cardPlayCounts: Record<string, number>  // cumulative plays per card name this act
   nodeFailCounts: Record<string, number>  // times each node has been lost
   earnedCards: string[]        // card names won as battle rewards this run (usable in subsequent battles)
@@ -347,6 +350,10 @@ export function loadRun(): RunState | null {
     if (typeof parsed.playerHp !== 'number' || isNaN(parsed.playerHp)) parsed.playerHp = 50
     if (typeof parsed.maxHp !== 'number' || isNaN(parsed.maxHp) || parsed.maxHp <= 0) parsed.maxHp = 50
     parsed.playerHp = Math.max(1, Math.min(parsed.maxHp, parsed.playerHp))
+    // Migrate: lives system (added later — default 3/3 for old saves)
+    if (typeof parsed.maxLives !== 'number' || parsed.maxLives < 1) parsed.maxLives = 3
+    if (typeof parsed.livesRemaining !== 'number') parsed.livesRemaining = parsed.maxLives
+    parsed.livesRemaining = Math.max(0, Math.min(parsed.maxLives, parsed.livesRemaining))
 
     // Ensure actId is valid
     const act = ACTS[parsed.actId]
@@ -389,6 +396,9 @@ export function clearRun(): void {
   localStorage.removeItem(RUN_KEY)
 }
 
+export const LIVES_START = 3
+export const LIVES_MAX   = 9
+
 export function newRun(actId: string): RunState {
   return {
     actId,
@@ -397,6 +407,8 @@ export function newRun(actId: string): RunState {
     pendingNodeId: null,
     playerHp: 50,
     maxHp: 50,
+    livesRemaining: LIVES_START,
+    maxLives: LIVES_START,
     cardPlayCounts: {},
     nodeFailCounts: {},
     earnedCards: [],

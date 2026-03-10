@@ -50,7 +50,8 @@
         { "label": "Leave an offering", "consequence": "The shrine is silent. Nothing happens.",                         "effect": { "type": "nothing" } },
         { "label": "Leave an offering", "consequence": "Something drains your offering — lose 5 HP",                    "effect": { "type": "damageHp",     "amount": 5  } },
         { "label": "Leave an offering", "consequence": "The shrine returns your kindness with a glass marble — added to inventory", "effect": { "type": "gainItem", "itemId": "marble" } },
-        { "label": "Leave an offering", "consequence": "A lucky charm appears at the altar's base — added to inventory",            "effect": { "type": "gainItem", "itemId": "charm"  } }
+        { "label": "Leave an offering", "consequence": "A lucky charm appears at the altar's base — added to inventory",            "effect": { "type": "gainItem", "itemId": "charm"  } },
+        { "label": "Leave an offering", "consequence": "The shrine blesses you with renewed fortune — +1 life",          "effect": { "type": "gainLife",     "amount": 1  } }
       ],
       "pray": [
         { "label": "Pray for strength", "consequence": "A card materialises from the glow — uncommon",                  "effect": { "type": "gainCard",     "rarity": "uncommon" } },
@@ -91,7 +92,8 @@
         { "label": "Climb the watchtower", "consequence": "The stairs collapse — lose 12 HP",                           "effect": { "type": "damageHp",     "amount": 12 } },
         { "label": "Climb the watchtower", "consequence": "Nothing up there. Wind. Old regrets.",                        "effect": { "type": "nothing" } },
         { "label": "Climb the watchtower", "consequence": "An old cassette tape is jammed in the bell — added to inventory",        "effect": { "type": "gainItem", "itemId": "tape" } },
-        { "label": "Climb the watchtower", "consequence": "A fridge magnet ('Visit [REDACTED]!') is stuck to the iron door — added to inventory", "effect": { "type": "gainItem", "itemId": "magnet" } }
+        { "label": "Climb the watchtower", "consequence": "A fridge magnet ('Visit [REDACTED]!') is stuck to the iron door — added to inventory", "effect": { "type": "gainItem", "itemId": "magnet" } },
+        { "label": "Climb the watchtower", "consequence": "You spot a hidden passage to a safe camp below — +1 life",   "effect": { "type": "gainLife",     "amount": 1  } }
       ]
     }
   }
