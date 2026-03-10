@@ -55,6 +55,19 @@ Row 1: [I] [J] [K]
 Row 0: [Start]
 ```
 
+**Example layout (9 rows):**
+```
+Row 8: [Boss]
+Row 7: [A] [B] [C]
+Row 6: [A] [B] [C] [D] [E]
+Row 5: [A] [B] [C]
+Row 4: [D]
+Row 3: [E] [F] [G]
+Row 2: [H]
+Row 1: [I] [J] [K]
+Row 0: [Start]
+```
+
 ### 1.2 Path Branching
 
 Branching is encoded in `parentIds` / `childIds` on each `QuestNode`. Any topology is supported — including the scenario where a 3-node row fans into a 5-node row:
