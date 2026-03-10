@@ -206,6 +206,7 @@ export default function App() {
   const battleFlawlessRef    = useRef(true)
   const battleUsedStructure  = useRef(false)
   const battleUsedMobileUnit = useRef(false)
+  const battleLossRecordedRef = useRef(false)  // prevents double-decrement if component re-renders at game-over
 
   // Auto-dismiss achievement toasts after 4 seconds
   useEffect(() => {
@@ -411,6 +412,7 @@ export default function App() {
     battleFlawlessRef.current = true
     battleUsedStructure.current = false
     battleUsedMobileUnit.current = false
+    battleLossRecordedRef.current = false
     prevOpponentUnitsRef.current = new Map()
     prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
@@ -433,6 +435,7 @@ export default function App() {
     battleFlawlessRef.current = true
     battleUsedStructure.current = false
     battleUsedMobileUnit.current = false
+    battleLossRecordedRef.current = false
     prevOpponentUnitsRef.current = new Map()
     prevPlayerUnitsRef.current = new Map()
     const winner = gameState.phase.winner
@@ -523,6 +526,7 @@ export default function App() {
         battleFlawlessRef.current = true
         battleUsedStructure.current = false
         battleUsedMobileUnit.current = false
+        battleLossRecordedRef.current = false
         prevOpponentUnitsRef.current = new Map()
         prevPlayerUnitsRef.current = new Map()
         const collection  = loadCollection()
@@ -607,6 +611,7 @@ export default function App() {
     battleFlawlessRef.current = true
     battleUsedStructure.current = false
     battleUsedMobileUnit.current = false
+    battleLossRecordedRef.current = false
     prevOpponentUnitsRef.current = new Map()
     prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
@@ -634,6 +639,7 @@ export default function App() {
     battleFlawlessRef.current = true
     battleUsedStructure.current = false
     battleUsedMobileUnit.current = false
+    battleLossRecordedRef.current = false
     prevOpponentUnitsRef.current = new Map()
     prevPlayerUnitsRef.current = new Map()
     const collection  = loadCollection()
@@ -910,19 +916,8 @@ export default function App() {
     if (!nodeId) { setScreen('nodemap'); return }
     const node = act.nodes[nodeId]
 
-    // Record the failure and decrement a life
-    const prevCount = currentRun.nodeFailCounts[nodeId] ?? 0
-    const newLives  = Math.max(0, currentRun.livesRemaining - 1)
-    const withFail: RunState = {
-      ...currentRun,
-      nodeFailCounts: { ...currentRun.nodeFailCounts, [nodeId]: prevCount + 1 },
-      livesRemaining: newLives,
-    }
-    saveRun(withFail)
-    setRun(withFail)
-
-    // No lives left — campaign failed
-    if (newLives === 0) {
+    // Life was already decremented by the game-over effect — check if campaign failed
+    if (currentRun.livesRemaining === 0) {
       stopBattleMusic()
       const crystalReward = 50
       const next = loadCrystals() + crystalReward
@@ -939,6 +934,7 @@ export default function App() {
     isCampaignRef.current = true
     battleFlawlessRef.current = true
     battleUsedStructure.current = false
+    battleLossRecordedRef.current = false
     battleUsedMobileUnit.current = false
     prevOpponentUnitsRef.current = new Map()
     prevPlayerUnitsRef.current = new Map()
@@ -946,11 +942,11 @@ export default function App() {
     const fatigued    = loadFatigued()
     const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
     const playerCards = buildDeckCards(deckEntries, collection)
-    const earnedEntries = (withFail.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
+    const earnedEntries = (currentRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
-    if (withFail.activeRelic) getRelicDef(withFail.activeRelic)?.applyToGame(state)
+    if (currentRun.activeRelic) getRelicDef(currentRun.activeRelic)?.applyToGame(state)
     setGameState(state)
     setScreen('playing')
     rollRareEvent()
@@ -1071,6 +1067,31 @@ export default function App() {
     if (toasts.length > 0) setAchievementToasts(prev => [...prev, ...toasts])
   }, [gameState?.phase.type])
 
+  // Decrement a campaign life as soon as a battle is lost (before any button is clicked)
+  useEffect(() => {
+    if (!gameState || gameState.phase.type !== 'gameOver') return
+    if (gameState.phase.winner === 'player') return
+    if (!isCampaignRef.current) return
+    if (battleLossRecordedRef.current) return   // already recorded for this battle
+    const currentRun = run
+    if (!currentRun) return
+
+    battleLossRecordedRef.current = true
+    const nodeId = currentRun.pendingNodeId
+    const prevCount = nodeId ? (currentRun.nodeFailCounts[nodeId] ?? 0) : 0
+    const newLives = Math.max(0, currentRun.livesRemaining - 1)
+    const withFail: RunState = {
+      ...currentRun,
+      nodeFailCounts: nodeId
+        ? { ...currentRun.nodeFailCounts, [nodeId]: prevCount + 1 }
+        : currentRun.nodeFailCounts,
+      livesRemaining: newLives,
+    }
+    saveRun(withFail)
+    setRun(withFail)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState?.phase.type])
+
   // ── Pack ─────────────────────────────────────────────────
 
   const handleOpenPack = useCallback(() => {
@@ -1100,42 +1121,23 @@ export default function App() {
     isCampaignRef.current = false
     const currentRun = run
 
-    // If we're leaving a campaign battle after a loss (game over, opponent won),
-    // decrement a life — same as clicking "Retry Node" and then abandoning.
+    // Life was already decremented by the game-over effect when the battle was lost.
+    // If lives hit 0, go to campaign-failed instead of title.
     const isLoss = gameState?.phase.type === 'gameOver' && gameState.phase.winner !== 'player'
-    if (currentRun && isLoss) {
-      const nodeId = currentRun.pendingNodeId
-      const prevCount = nodeId ? (currentRun.nodeFailCounts[nodeId] ?? 0) : 0
-      const newLives = Math.max(0, currentRun.livesRemaining - 1)
-      const withFail: typeof currentRun = {
-        ...currentRun,
-        nodeFailCounts: nodeId
-          ? { ...currentRun.nodeFailCounts, [nodeId]: prevCount + 1 }
-          : currentRun.nodeFailCounts,
-        livesRemaining: newLives,
-        pendingNodeId: null,
-      }
-      if (newLives === 0) {
-        // Campaign failed — clear run, award consolation crystals
-        const crystalReward = 50
-        const next = loadCrystals() + crystalReward
-        saveCrystals(next)
-        setCrystals(next)
-        clearRun()
-        setRun(null)
-        setGameState(null)
-        setScreen('campaignfailed')
-        return
-      }
-      saveRun(withFail)
-      setRun(withFail)
-      setScreen('title')
+    if (currentRun && isLoss && currentRun.livesRemaining === 0) {
+      const crystalReward = 50
+      const next = loadCrystals() + crystalReward
+      saveCrystals(next)
+      setCrystals(next)
+      clearRun()
+      setRun(null)
       setGameState(null)
+      setScreen('campaignfailed')
       return
     }
 
-    // If we're leaving mid-campaign battle (before game over), clear pendingNodeId
-    // so the node is selectable again when the player returns via "Continue Campaign".
+    // Clear pendingNodeId so the node is selectable again when the player returns
+    // via "Continue Campaign" (covers both mid-battle quit and post-loss main menu).
     if (currentRun?.pendingNodeId) {
       const cleared = { ...currentRun, pendingNodeId: null }
       saveRun(cleared)
