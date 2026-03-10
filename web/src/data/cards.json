@@ -411,7 +411,7 @@
     },
     {
       "id": "hero-graham", "name": "Graham The All Seeing", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Graham", "attack": 10, "maxHp": 80, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 25, "attackRange": 120, "attackCooldownMs": 1000, "structureEffect": { "type": "spawn", "unitTemplateRef": "bone-archer", "intervalMs": 5000 } },
+      "unit": { "name": "Graham", "attack": 10, "maxHp": 50, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 15, "attackRange": 70, "attackCooldownMs": 1000, "structureEffect": { "type": "spawn", "unitTemplateRef": "bone-archer", "intervalMs": 7500 } },
       "description": "HERO: Deploys Skeleton Archers!"
     }
   ],
