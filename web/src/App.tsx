@@ -1098,9 +1098,44 @@ export default function App() {
 
   const handleMainMenu = useCallback(() => {
     isCampaignRef.current = false
-    // If we're leaving mid-campaign battle, clear pendingNodeId so the node
-    // is selectable again when the player returns via "Continue Campaign".
     const currentRun = run
+
+    // If we're leaving a campaign battle after a loss (game over, opponent won),
+    // decrement a life — same as clicking "Retry Node" and then abandoning.
+    const isLoss = gameState?.phase.type === 'gameOver' && gameState.phase.winner !== 'player'
+    if (currentRun && isLoss) {
+      const nodeId = currentRun.pendingNodeId
+      const prevCount = nodeId ? (currentRun.nodeFailCounts[nodeId] ?? 0) : 0
+      const newLives = Math.max(0, currentRun.livesRemaining - 1)
+      const withFail: typeof currentRun = {
+        ...currentRun,
+        nodeFailCounts: nodeId
+          ? { ...currentRun.nodeFailCounts, [nodeId]: prevCount + 1 }
+          : currentRun.nodeFailCounts,
+        livesRemaining: newLives,
+        pendingNodeId: null,
+      }
+      if (newLives === 0) {
+        // Campaign failed — clear run, award consolation crystals
+        const crystalReward = 50
+        const next = loadCrystals() + crystalReward
+        saveCrystals(next)
+        setCrystals(next)
+        clearRun()
+        setRun(null)
+        setGameState(null)
+        setScreen('campaignfailed')
+        return
+      }
+      saveRun(withFail)
+      setRun(withFail)
+      setScreen('title')
+      setGameState(null)
+      return
+    }
+
+    // If we're leaving mid-campaign battle (before game over), clear pendingNodeId
+    // so the node is selectable again when the player returns via "Continue Campaign".
     if (currentRun?.pendingNodeId) {
       const cleared = { ...currentRun, pendingNodeId: null }
       saveRun(cleared)
@@ -1108,7 +1143,7 @@ export default function App() {
     }
     setScreen('title')
     setGameState(null)
-  }, [run])
+  }, [run, gameState])
 
   // ── Game over routing ────────────────────────────────────
 
