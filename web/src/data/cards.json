@@ -4,6 +4,7 @@
     "archer":              { "name": "Archer",          "attack": 3,  "maxHp": 8,  "isWall": false, "bypassWall": true,  "moveSpeed": 28, "attackRange": 80,  "attackCooldownMs": 1500 },
     "dragon":              { "name": "Dragon",          "attack": 10, "maxHp": 30, "isWall": false, "bypassWall": true,  "moveSpeed": 18, "attackRange": 50,  "attackCooldownMs": 3000, "flying": true },
     "skeleton":            { "name": "Skeleton",        "attack": 2,  "maxHp": 8,  "isWall": false, "bypassWall": false, "moveSpeed": 52, "attackRange": 5,   "attackCooldownMs": 800  },
+    "weak-skeleton":       { "name": "Weak Skeleton",        "attack": 2,  "maxHp": 4,  "isWall": false, "bypassWall": false, "moveSpeed": 20, "attackRange": 5,   "attackCooldownMs": 800  },
     "troll":               { "name": "Troll",           "attack": 10, "maxHp": 45, "isWall": false, "bypassWall": false, "moveSpeed": 12, "attackRange": 5,   "attackCooldownMs": 2200 },
     "crossbow":            { "name": "Crossbow",        "attack": 5,  "maxHp": 14, "isWall": false, "bypassWall": true,  "moveSpeed": 25, "attackRange": 65,  "attackCooldownMs": 2000 },
     "paladin":             { "name": "Paladin",         "attack": 7,  "maxHp": 40, "isWall": false, "bypassWall": false, "moveSpeed": 16, "attackRange": 5,   "attackCooldownMs": 1800 },
@@ -394,9 +395,9 @@
     },
     {
       "id": "hero-death-lord", "name": "Death Lord", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Lich Apprentice", "attack": 12, "maxHp": 30, "isWall": false, "bypassWall": true, "moveSpeed": 20, "attackRange": 40, "attackCooldownMs": 2500 },
+      "unit": { "name": "Lich Apprentice", "attack": 12, "maxHp": 30, "isWall": false, "bypassWall": true, "moveSpeed": 20, "attackRange": 40, "attackCooldownMs": 2500, "structureEffect": { "type": "spawn", "unitTemplateRef": "weak-skeleton", "intervalMs": 4000 } },
       "heroEffect": { "type": "buffAttackCooldown", "amount": -500 },
-      "description": "HERO: Deploys a sinister Lich Apprentice & hastens all units with -500ms attack cooldown!"
+      "description": "HERO: Deploys a sinister Lich Apprentice who summons a skeleton army & hastens all units with -500ms attack cooldown!"
     },
     {
       "id": "hero-forest-guardian", "name": "Forest Guardian", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
