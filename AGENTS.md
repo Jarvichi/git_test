@@ -88,6 +88,18 @@ At the start of every session (or when asked):
 
 This keeps both the todo list and CLAUDE.md accurate across sessions.
 
+## Acts — Design Rules
+
+All rules governing how acts, the campaign map, node types, relics, heroes, the lives system, music, and card authoring work are documented in **[`docs/acts.md`](docs/acts.md)**. Agents must read this file before:
+- Creating or modifying act JSON files (`web/src/data/acts/*.json`)
+- Adding new node types, relics, hero cards, or boss mechanics
+- Authoring campaign story text or replay variants
+- Implementing any of the features listed as ❌ not implemented in that doc
+
+The doc also contains the **Act Authoring Checklist** (§12) — run through it for every new act.
+
+---
+
 ## Campaign Event Checklist (for agents)
 
 When creating or modifying campaign act files (`web/src/data/acts/*.json`) ensure any new `eventId` values are present in the events catalog (`web/src/data/events.json`) or handled by the generator functions (`generateShrineEvent`, `generateRuinsEvent`). Follow this checklist:

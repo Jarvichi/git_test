@@ -2250,6 +2250,64 @@ body {
   text-align: right;
 }
 
+.nm-lives-area {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 10px;
+}
+
+.nm-life-pip {
+  font-size: 13px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.nm-life-pip--full  { color: #ff4466; }
+.nm-life-pip--empty { color: #333; }
+
+/* ── Campaign Failed screen ── */
+
+.campaign-failed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 32px 24px;
+  gap: 24px;
+  position: relative;
+  background: #0a0000;
+  text-align: center;
+}
+
+.cf-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(180,0,0,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cf-ascii {
+  color: #cc2222;
+  font-size: clamp(10px, 2.5vw, 14px);
+  line-height: 1.5;
+  margin: 0;
+  text-shadow: 0 0 12px rgba(200,0,0,0.6);
+}
+
+.cf-body {
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.8;
+  max-width: 320px;
+}
+
+.cf-reward {
+  color: #ffcc44;
+  margin-top: 8px;
+}
+
 /* ── Map area ── */
 
 .nm-map {

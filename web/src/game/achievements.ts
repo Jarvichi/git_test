@@ -594,4 +594,14 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     },
     tier: 2,
   },
+  {
+    id: 'misc:nine_lives',
+    name: 'Nine Lives',
+    description: 'Accumulate 9 lives at once through relics and events',
+    category: 'misc',
+    progressKey: 'misc:nine_lives',
+    target: 1,
+    reward: { type: 'crystals', crystals: 333 },
+    tier: 2,
+  },
 ]

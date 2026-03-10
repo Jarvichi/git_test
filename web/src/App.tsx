@@ -10,7 +10,7 @@ import {
 } from './game/collection'
 import { getCardCatalog } from './game/cards'
 import {
-  loadRun, saveRun, clearRun, newRun,
+  loadRun, saveRun, clearRun, newRun, LIVES_START, LIVES_MAX,
   getAvailableNodeIds, skipSiblings, isActComplete,
   generateRewardChoices, generateMerchantCards, MERCHANT_PRICES, ACTS, getNextAct,
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
@@ -132,6 +132,7 @@ type Screen =
   | 'relicselect'
   | 'inventory'
   | 'achievements'
+  | 'campaignfailed'
 
 export default function App() {
   // ── Startup: auto-resume a pending campaign battle on page refresh ──────────
@@ -689,6 +690,14 @@ export default function App() {
     } else if (effect.type === 'gainItem') {
       const item = USELESS_ITEM_POOL.find(i => i.id === effect.itemId)
       if (item) addToInventory(item)
+    } else if (effect.type === 'gainLife') {
+      const newMax   = Math.min(LIVES_MAX, updatedRun.maxLives + effect.amount)
+      const newLives = Math.min(newMax, updatedRun.livesRemaining + effect.amount)
+      updatedRun = { ...updatedRun, livesRemaining: newLives, maxLives: newMax }
+      if (newLives >= LIVES_MAX) {
+        const newlyUnlocked = incrementAchievementProgress('misc:nine_lives', 1)
+        if (newlyUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...newlyUnlocked])
+      }
     }
 
     saveRun(updatedRun)
@@ -809,6 +818,8 @@ export default function App() {
       const earnedRelics = loadEarnedRelics()
 
       const proceedToNextAct = (chosenRelic: string | null) => {
+        // Lives reset to at least LIVES_START (3) at the end of each act as a reward
+        const restoredLives = Math.max(LIVES_START, currentRun.livesRemaining)
         const nextRun: RunState = {
           actId: nextAct.id,
           completedNodeIds: [],
@@ -816,6 +827,8 @@ export default function App() {
           pendingNodeId: null,
           playerHp: currentRun.playerHp,
           maxHp: currentRun.maxHp,
+          livesRemaining: restoredLives,
+          maxLives: currentRun.maxLives,
           cardPlayCounts: {},
           nodeFailCounts: {},
           earnedCards: [],
@@ -897,14 +910,29 @@ export default function App() {
     if (!nodeId) { setScreen('nodemap'); return }
     const node = act.nodes[nodeId]
 
-    // Record the failure
+    // Record the failure and decrement a life
     const prevCount = currentRun.nodeFailCounts[nodeId] ?? 0
+    const newLives  = Math.max(0, currentRun.livesRemaining - 1)
     const withFail: RunState = {
       ...currentRun,
       nodeFailCounts: { ...currentRun.nodeFailCounts, [nodeId]: prevCount + 1 },
+      livesRemaining: newLives,
     }
     saveRun(withFail)
     setRun(withFail)
+
+    // No lives left — campaign failed
+    if (newLives === 0) {
+      stopBattleMusic()
+      const crystalReward = 50
+      const next = loadCrystals() + crystalReward
+      saveCrystals(next)
+      setCrystals(next)
+      clearRun()
+      setRun(null)
+      setScreen('campaignfailed')
+      return
+    }
 
     // Retry same node, but HP stays at what it was before this battle
     campaignPlayCountsRef.current = {}
@@ -1270,6 +1298,22 @@ export default function App() {
           onBack={() => setScreen('title')}
           onCrystalsChanged={handleCrystalsChanged}
         />
+      )}
+
+      {screen === 'campaignfailed' && (
+        <div className="campaign-failed">
+          <div className="cf-glow" />
+          <pre className="cf-ascii">{`  ╔══════════════════╗
+  ║ CAMPAIGN  FAILED ║
+  ╚══════════════════╝`}</pre>
+          <div className="cf-body">
+            <p>All lives lost. The Fracture claims another wanderer.</p>
+            <p className="cf-reward">You earned <strong>50 ◆</strong> for your effort.</p>
+          </div>
+          <button className="action-btn action-btn--large" onClick={() => { stopBattleMusic(); stopGameOverMusic(); setScreen('title') }}>
+            [ Return to Menu ]
+          </button>
+        </div>
       )}
 
       {/* Achievement unlock toast */}

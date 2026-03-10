@@ -156,6 +156,11 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
             {run.playerHp}/{run.maxHp}
           </span>
         </div>
+        <div className="nm-lives-area" title="Lives remaining — lose them all and the campaign ends">
+          {Array.from({ length: run.maxLives ?? 3 }).map((_, i) => (
+            <span key={i} className={`nm-life-pip ${i < (run.livesRemaining ?? 3) ? 'nm-life-pip--full' : 'nm-life-pip--empty'}`}>♥</span>
+          ))}
+        </div>
       </div>
 
       {/* Map */}
