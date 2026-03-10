@@ -406,12 +406,12 @@
     },
     {
       "id": "hero-swarm-queen", "name": "Swarm Queen", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Pixie", "attack": 8, "maxHp": 25, "isWall": false, "bypassWall": true, "flying": true, "moveSpeed": 40, "attackRange": 30, "attackCooldownMs": 1500, "structureEffect": { "type": "spawn", "unitTemplateRef": "spore-bat", "intervalMs": 10000 } },
+      "unit": { "name": "Pixie", "attack": 8, "maxHp": 25, "isWall": false, "bypassWall": true, "flying": true, "moveSpeed": 20, "attackRange": 30, "attackCooldownMs": 1500, "structureEffect": { "type": "spawn", "unitTemplateRef": "spore-bat", "intervalMs": 8000 } },
       "description": "HERO: Deploys a mischievous Pixie & commands it to spawn a Spore Bat for you every 10s!"
     },
     {
       "id": "hero-graham", "name": "Graham The All Seeing", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Graham", "attack": 10, "maxHp": 80, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 65, "attackRange": 120, "attackCooldownMs": 1000, "structureEffect": { "type": "spawn", "unitTemplateRef": "bone-archer", "intervalMs": 10000 } },
+      "unit": { "name": "Graham", "attack": 10, "maxHp": 80, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 25, "attackRange": 120, "attackCooldownMs": 1000, "structureEffect": { "type": "spawn", "unitTemplateRef": "bone-archer", "intervalMs": 5000 } },
       "description": "HERO: Deploys Skeleton Archers!"
     }
   ],
