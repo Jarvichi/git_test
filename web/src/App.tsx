@@ -18,6 +18,7 @@ import {
   loadRunCount, incrementRunCount, getAct1Intro,
   EVENT_CATALOG, generateShrineEvent, generateRuinsEvent, EventChoice,
   CutscenePanel, QuestNode, RunState,
+  recordNodeComplete,
 } from './game/questline'
 import { CardRestSelect }       from './components/CardRestSelect'
 import { EventScreen }          from './components/EventScreen'
@@ -572,6 +573,7 @@ export default function App() {
         completedNodeIds: [...updatedRun.completedNodeIds, node.id],
         pendingNodeId: null,
       }
+      recordNodeComplete(updatedRun.actId, node.id)
       saveRun(afterRest)
       setRun(afterRest)
       return
@@ -706,6 +708,7 @@ export default function App() {
       }
     }
 
+    recordNodeComplete(updatedRun.actId, nodeId)
     saveRun(updatedRun)
     setRun(updatedRun)
     setActiveEvent(null)
@@ -728,6 +731,7 @@ export default function App() {
       completedNodeIds: [...currentRun.completedNodeIds, nodeId],
       pendingNodeId: null,
     }
+    recordNodeComplete(updatedRun.actId, nodeId)
     saveRun(updatedRun)
     setRun(updatedRun)
     setMerchantItems([])
@@ -756,6 +760,7 @@ export default function App() {
       pendingNodeId: null,
       cardPlayCounts: mergedCounts,
     }
+    recordNodeComplete(updatedRun.actId, nodeId)
     saveRun(updatedRun)
     setRun(updatedRun)
 
