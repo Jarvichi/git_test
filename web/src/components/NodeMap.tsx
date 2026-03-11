@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { Act, QuestNode, RunState, getAvailableNodeIds } from '../game/questline'
+import React, { useMemo, useState } from 'react'
+import { Act, QuestNode, RunState, getAvailableNodeIds, loadNodeHistory } from '../game/questline'
 
 interface Props {
   act: Act
@@ -125,6 +125,131 @@ function SVGConnector({ prevRow, nextRow, maxCols, center }: ConnProps) {
   )
 }
 
+// ── Reward summary ───────────────────────────────────────────────────────────
+
+function rewardSummary(node: QuestNode): string {
+  switch (node.type) {
+    case 'battle':   return '1 card reward'
+    case 'elite':    return 'Pick 1 of 3 rare+ cards'
+    case 'boss':     return 'Relic + card pack + crystals'
+    case 'rest':     return `+${node.restHeal ?? 5} HP`
+    case 'event':    return 'Random event — choose wisely'
+    case 'merchant': return 'Spend crystals to buy cards'
+    default:         return ''
+  }
+}
+
+const DIFFICULTY_LABELS = ['Easy', 'Easy', 'Medium', 'Medium', 'Hard', 'Hard', 'Very Hard', 'Brutal']
+
+function difficultyLabel(handicap: number | undefined): string {
+  const h = handicap ?? 0
+  return DIFFICULTY_LABELS[Math.min(h, DIFFICULTY_LABELS.length - 1)]
+}
+
+function difficultyColor(handicap: number | undefined): string {
+  const h = handicap ?? 0
+  if (h <= 1) return '#33ff33'
+  if (h <= 3) return '#ffcc00'
+  if (h <= 5) return '#ff8844'
+  return '#ff4444'
+}
+
+const BOSS_AI_DESCRIPTIONS: Record<string, string> = {
+  thornlord: 'Builds walls every turn — floods the field with structures and outlasts you.',
+}
+
+function playstyleDescription(node: QuestNode): string {
+  if (node.bossAI && BOSS_AI_DESCRIPTIONS[node.bossAI]) {
+    return BOSS_AI_DESCRIPTIONS[node.bossAI]
+  }
+  if (node.enemyDeck && node.enemyDeck.length > 0) {
+    const preview = node.enemyDeck.slice(0, 3).join(', ')
+    const extra = node.enemyDeck.length > 3 ? ` +${node.enemyDeck.length - 3} more` : ''
+    return `Deck: ${preview}${extra}`
+  }
+  return 'Plays a standard shuffled deck.'
+}
+
+// ── Node Peek Modal ──────────────────────────────────────────────────────────
+
+interface PeekModalProps {
+  node: QuestNode
+  actId: string
+  nodeHistory: Set<string>
+  onEnter: () => void
+  onClose: () => void
+}
+
+function NodePeekModal({ node, actId, nodeHistory, onEnter, onClose }: PeekModalProps) {
+  const hasPreviouslyCompleted = nodeHistory.has(`${actId}:${node.id}`)
+  const isBattle = node.type === 'battle' || node.type === 'elite' || node.type === 'boss'
+
+  return (
+    <div className="nm-peek-backdrop" onClick={onClose}>
+      <div className="nm-peek-panel" onClick={e => e.stopPropagation()}>
+
+        {/* Header */}
+        <div className="nm-peek-header">
+          <span className={`nm-peek-type nm-node-type-badge--${node.type}`}>
+            {NODE_LABEL[node.type] ?? node.type.toUpperCase()}
+          </span>
+          <span className="nm-peek-icon">{NODE_ICON[node.type] ?? '?'}</span>
+          <span className="nm-peek-name">{node.label}</span>
+        </div>
+
+        {/* Description */}
+        {node.description && (
+          <div className="nm-peek-desc">{node.description}</div>
+        )}
+
+        {/* Reward */}
+        <div className="nm-peek-row">
+          <span className="nm-peek-row-label">REWARD</span>
+          <span className="nm-peek-row-value nm-peek-reward">{rewardSummary(node)}</span>
+        </div>
+
+        {/* Difficulty (battle nodes only) */}
+        {isBattle && (
+          <div className="nm-peek-row">
+            <span className="nm-peek-row-label">DIFFICULTY</span>
+            <span
+              className="nm-peek-row-value"
+              style={{ color: difficultyColor(node.handicap) }}
+            >
+              {difficultyLabel(node.handicap)}
+            </span>
+          </div>
+        )}
+
+        {/* Previously completed — reveal opponent deck */}
+        {hasPreviouslyCompleted && isBattle && (
+          <div className="nm-peek-history">
+            <div className="nm-peek-history-label">— INTEL (from previous run) —</div>
+            <div className="nm-peek-history-body">{playstyleDescription(node)}</div>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="nm-peek-actions">
+          {(isBattle || node.type === 'event' || node.type === 'merchant') ? (
+            <button className="action-btn nm-peek-enter-btn" onClick={onEnter}>
+              {node.type === 'rest' ? 'REST' : node.type === 'merchant' ? 'ENTER SHOP' : node.type === 'event' ? 'APPROACH' : 'ENTER BATTLE'}
+            </button>
+          ) : (
+            <button className="action-btn nm-peek-enter-btn" onClick={onEnter}>
+              {node.type === 'rest' ? 'REST HERE' : 'PROCEED'}
+            </button>
+          )}
+          <button className="action-btn nm-peek-back-btn" onClick={onClose}>
+            BACK
+          </button>
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
 // ── Main component ──────────────────────────────────────────────────────────
 
 export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
@@ -135,6 +260,20 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
   const center       = Math.floor(maxCols / 2)  // 0-indexed
 
   const gridCols = `repeat(${maxCols}, 1fr)`
+
+  // Node peek state
+  const [peekNode, setPeekNode] = useState<QuestNode | null>(null)
+  const nodeHistory = useMemo(() => loadNodeHistory(), [])
+
+  const handleNodeClick = (node: QuestNode) => {
+    setPeekNode(node)
+  }
+
+  const handlePeekEnter = () => {
+    if (!peekNode) return
+    setPeekNode(null)
+    onSelectNode(peekNode)
+  }
 
   return (
     <div className="nodemap">
@@ -198,7 +337,7 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
                             `nm-node--${node.type}`,
                             `nm-node--${status}`,
                           ].join(' ')}
-                          onClick={clickable ? () => onSelectNode(node) : undefined}
+                          onClick={clickable ? () => handleNodeClick(node) : undefined}
                           disabled={!clickable}
                           title={node.description}
                         >
@@ -213,7 +352,7 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
                             {status === 'skipped'   && '╳'}
                             {status === 'available' && node.type === 'rest'
                               ? `+${node.restHeal} HP`
-                              : status === 'available' ? 'ENTER' : ''}
+                              : status === 'available' ? 'PEEK' : ''}
                           </span>
                         </button>
                       </div>
@@ -229,6 +368,17 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
       <button className="action-btn nm-back-btn" onClick={onBack}>
         ← MAIN MENU
       </button>
+
+      {/* Node peek modal */}
+      {peekNode && (
+        <NodePeekModal
+          node={peekNode}
+          actId={act.id}
+          nodeHistory={nodeHistory}
+          onEnter={handlePeekEnter}
+          onClose={() => setPeekNode(null)}
+        />
+      )}
     </div>
   )
 }

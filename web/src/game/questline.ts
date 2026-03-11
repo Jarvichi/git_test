@@ -559,6 +559,34 @@ export const ACTS: Record<string, Act> = {
   act4: ACT_4,
 }
 
+// ─── Node history (persistent across runs) ───────────────
+
+const NODE_HISTORY_KEY = 'jarv_node_history'
+
+/**
+ * Returns the set of "{actId}:{nodeId}" strings for nodes the player has
+ * completed at least once across all runs.  Used by the node-peek modal to
+ * decide whether to reveal the opponent's deck.
+ */
+export function loadNodeHistory(): Set<string> {
+  try {
+    const raw = localStorage.getItem(NODE_HISTORY_KEY)
+    if (!raw) return new Set()
+    return new Set(JSON.parse(raw) as string[])
+  } catch { return new Set() }
+}
+
+/** Record that the player has finished this node (persists forever). */
+export function recordNodeComplete(actId: string, nodeId: string): void {
+  try {
+    const history = loadNodeHistory()
+    const key = `${actId}:${nodeId}`
+    if (history.has(key)) return   // already recorded — skip the write
+    history.add(key)
+    localStorage.setItem(NODE_HISTORY_KEY, JSON.stringify([...history]))
+  } catch { /* ignore */ }
+}
+
 /** Returns the act that follows this one in the campaign, or null if it's the last. */
 export function getNextAct(actId: string): Act | null {
   const order = ['act1', 'act2', 'act3', 'act4']
