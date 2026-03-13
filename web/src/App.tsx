@@ -928,6 +928,8 @@ export default function App() {
       const next = loadCrystals() + crystalReward
       saveCrystals(next)
       setCrystals(next)
+      const failUnlocked = incrementAchievementProgress('misc:campaign_failed')
+      if (failUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...failUnlocked])
       clearRun()
       setRun(null)
       setScreen('campaignfailed')
@@ -1134,6 +1136,8 @@ export default function App() {
       const next = loadCrystals() + crystalReward
       saveCrystals(next)
       setCrystals(next)
+      const failUnlocked = incrementAchievementProgress('misc:campaign_failed')
+      if (failUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...failUnlocked])
       clearRun()
       setRun(null)
       setGameState(null)

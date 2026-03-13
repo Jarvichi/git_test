@@ -2404,10 +2404,13 @@ body {
 
 /* Completed nodes */
 .nm-node--completed {
-  border-color: #1e3a1e;
-  opacity: 0.6;
+  border-color: #2a5a2a;
+  background: rgba(30, 58, 30, 0.55);
+  opacity: 1;
 }
-.nm-node--completed .nm-node-status { color: var(--game-text-color); }
+.nm-node--completed .nm-node-icon  { opacity: 0.5; }
+.nm-node--completed .nm-node-name  { opacity: 0.6; }
+.nm-node--completed .nm-node-status { color: #33ff33; font-size: 14px; }
 
 /* Locked nodes */
 .nm-node--locked {
