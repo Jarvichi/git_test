@@ -24,6 +24,8 @@ export interface QuestNode {
   restHeal?: number  // HP healed at rest nodes
   bossAI?: string        // 'thornlord' etc. — triggers a specific boss AI
   eventId?: string       // key into EVENT_CATALOG for event nodes
+  /** Per-node event config — overrides eventId when present. */
+  eventConfig?: NodeEventConfig
   bossDialogue?: string[]  // lines the boss speaks before the fight
   /** Preset enemy deck — card names in order. Makes each node deterministic and learnable. */
   enemyDeck?: string[]
@@ -57,6 +59,28 @@ export interface EventData {
   title: string
   description: string
   choices: EventChoice[]
+}
+
+/**
+ * Per-node event configuration embedded in the act JSON.
+ * When present, overrides any eventId lookup so that each node can have
+ * its own title, description, and choice pools.
+ */
+export interface NodeEventConfig {
+  title: string
+  description: string
+  /** One pool per choice slot; one entry is randomly picked from each pool. */
+  pools: EventChoice[][]
+}
+
+/** Builds an EventData from an inline NodeEventConfig. */
+export function generateEventFromConfig(id: string, config: NodeEventConfig): EventData {
+  return {
+    id,
+    title:       config.title,
+    description: config.description,
+    choices:     config.pools.map(pool => pickRandom(pool)),
+  }
 }
 
 // ─── Shrine randomisation ─────────────────────────────────

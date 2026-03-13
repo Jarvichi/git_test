@@ -17,7 +17,7 @@ import {
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
   hasSeenIntro, markIntroSeen,
   loadRunCount, incrementRunCount, getAct1Intro,
-  EVENT_CATALOG, generateShrineEvent, generateRuinsEvent, EventChoice,
+  EVENT_CATALOG, generateShrineEvent, generateRuinsEvent, generateEventFromConfig, EventChoice,
   CutscenePanel, QuestNode, RunState,
   recordNodeComplete,
 } from './game/questline'
@@ -515,8 +515,8 @@ export default function App() {
     if (activeRun.pendingNodeId) {
       const node = act.nodes[activeRun.pendingNodeId]
       if (node) {
-        if (node.type === 'event' && node.eventId) {
-          const eventData = node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId]
+        if (node.type === 'event' && (node.eventId || node.eventConfig)) {
+          const eventData = node.eventConfig ? generateEventFromConfig(node.id, node.eventConfig) : node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId!]
           if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
         }
         if (node.type === 'merchant') {
@@ -588,8 +588,8 @@ export default function App() {
       return
     }
 
-    if (node.type === 'event' && node.eventId) {
-      const eventData = node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId]
+    if (node.type === 'event' && (node.eventId || node.eventConfig)) {
+      const eventData = node.eventConfig ? generateEventFromConfig(node.id, node.eventConfig) : node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId!]
       if (eventData) {
         setActiveEvent(eventData)
         setScreen('event')

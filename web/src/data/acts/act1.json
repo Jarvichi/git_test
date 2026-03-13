@@ -689,7 +689,32 @@
         "thornlord"
       ],
       "environment": "forest",
-      "eventId": "shrine"
+      "eventId": "shrine",
+      "eventConfig": {
+        "title": "The Elder Shrine",
+        "description": "The second shrine sits darker and deeper than the first — the carvings worn to near illegibility, the offerings long rotted. Whatever power it holds, it has not faded. It has simply become unfamiliar with generosity.",
+        "pools": [
+          [
+            { "label": "Leave an offering", "consequence": "The shrine absorbs it in silence. Restored 10 HP.", "effect": { "type": "healHp", "amount": 10 } },
+            { "label": "Leave an offering", "consequence": "The glow shifts to amber. +18 crystals.", "effect": { "type": "gainCrystals", "amount": 18 } },
+            { "label": "Leave an offering", "consequence": "The shrine takes your offering. Nothing else happens.", "effect": { "type": "nothing" } },
+            { "label": "Leave an offering", "consequence": "Something hungry stirs — lose 8 HP.", "effect": { "type": "damageHp", "amount": 8 } },
+            { "label": "Leave an offering", "consequence": "The shrine blesses you with renewed fortune — +1 life.", "effect": { "type": "gainLife", "amount": 1 } }
+          ],
+          [
+            { "label": "Pray into the dark", "consequence": "A card emerges from the glow — uncommon.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
+            { "label": "Pray into the dark", "consequence": "The shrine drains something from you — lose 12 HP.", "effect": { "type": "damageHp", "amount": 12 } },
+            { "label": "Pray into the dark", "consequence": "A strange warmth answers. Restored 10 HP.", "effect": { "type": "healHp", "amount": 10 } },
+            { "label": "Pray into the dark", "consequence": "Coins appear at the base. +22 crystals.", "effect": { "type": "gainCrystals", "amount": 22 } }
+          ],
+          [
+            { "label": "Pry a glyph-stone free", "consequence": "You pull it loose and run — +20 crystals, lose 10 HP.", "effect": { "type": "damageHp", "amount": 10 } },
+            { "label": "Pry a glyph-stone free", "consequence": "The stone crumbles to ash. Nothing.", "effect": { "type": "nothing" } },
+            { "label": "Pry a glyph-stone free", "consequence": "A common card tumbles out with it.", "effect": { "type": "gainCard", "rarity": "common" } },
+            { "label": "Pry a glyph-stone free", "consequence": "The shrine curses you — lose 18 HP.", "effect": { "type": "damageHp", "amount": 18 } }
+          ]
+        ]
+      }
     },
     "thornwall-pass": {
       "id": "thornwall-pass",

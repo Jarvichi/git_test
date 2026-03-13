@@ -356,7 +356,32 @@
         "crystal-bridge"
       ],
       "environment": "ruins",
-      "eventId": "ruins"
+      "eventId": "ruins",
+      "eventConfig": {
+        "title": "The Arcane Library",
+        "description": "A crystallised reading room — shelves frozen mid-reorganisation, books still open at the chapter the scholars were reading when the Fracture hit. The pages are still turning.",
+        "pools": [
+          [
+            { "label": "Study the open books", "consequence": "A tactical insight crystallises — +18 crystals.", "effect": { "type": "gainCrystals", "amount": 18 } },
+            { "label": "Study the open books", "consequence": "You learn something useful. An uncommon card materialises.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
+            { "label": "Study the open books", "consequence": "The text rearranges itself before you can read it. Nothing.", "effect": { "type": "nothing" } },
+            { "label": "Study the open books", "consequence": "The knowledge overwhelms you — lose 8 HP.", "effect": { "type": "damageHp", "amount": 8 } }
+          ],
+          [
+            { "label": "Search the crystal shelves", "consequence": "A rare tome hidden behind a false spine.", "effect": { "type": "gainCard", "rarity": "rare" } },
+            { "label": "Search the crystal shelves", "consequence": "Gem dust spills from a cracked volume — +22 crystals.", "effect": { "type": "gainCrystals", "amount": 22 } },
+            { "label": "Search the crystal shelves", "consequence": "A shelf collapses. Lose 10 HP.", "effect": { "type": "damageHp", "amount": 10 } },
+            { "label": "Search the crystal shelves", "consequence": "You find a restoration scroll. Restored 14 HP.", "effect": { "type": "healHp", "amount": 14 } },
+            { "label": "Search the crystal shelves", "consequence": "+1 life — the last entry in the register reads your name.", "effect": { "type": "gainLife", "amount": 1 } }
+          ],
+          [
+            { "label": "Take the restricted volumes", "consequence": "The enchantment breaks. +26 crystals from the gem-binding.", "effect": { "type": "gainCrystals", "amount": 26 } },
+            { "label": "Take the restricted volumes", "consequence": "A legendary text falls open in your hands.", "effect": { "type": "gainCard", "rarity": "legendary" } },
+            { "label": "Take the restricted volumes", "consequence": "The warding spell triggers — lose 16 HP.", "effect": { "type": "damageHp", "amount": 16 } },
+            { "label": "Take the restricted volumes", "consequence": "The pages are blank. Pure potential, no content.", "effect": { "type": "nothing" } }
+          ]
+        ]
+      }
     },
     "spire-flank": {
       "id": "spire-flank",
@@ -730,7 +755,32 @@
         "void-nexus"
       ],
       "environment": "ruins",
-      "eventId": "shrine"
+      "eventId": "shrine",
+      "eventConfig": {
+        "title": "The Arcane Vault",
+        "description": "A sealed research chamber — the lock corroded three years ago, but nobody has been past to notice. Inside: containment circles drawn in silver, a humming obelisk, and a single chair facing it.",
+        "pools": [
+          [
+            { "label": "Examine the containment circles", "consequence": "The circles are intact. You borrow their protection. Restored 16 HP.", "effect": { "type": "healHp", "amount": 16 } },
+            { "label": "Examine the containment circles", "consequence": "A circle activates and discharges — lose 12 HP.", "effect": { "type": "damageHp", "amount": 12 } },
+            { "label": "Examine the containment circles", "consequence": "One circle is broken. You note the flaw. +20 crystals.", "effect": { "type": "gainCrystals", "amount": 20 } },
+            { "label": "Examine the containment circles", "consequence": "The circles tell you nothing. The obelisk disagrees.", "effect": { "type": "nothing" } }
+          ],
+          [
+            { "label": "Approach the obelisk", "consequence": "It responds to your presence. An uncommon card appears.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
+            { "label": "Approach the obelisk", "consequence": "The hum intensifies — restored 12 HP from ambient energy.", "effect": { "type": "healHp", "amount": 12 } },
+            { "label": "Approach the obelisk", "consequence": "A rare card crystallises from its surface.", "effect": { "type": "gainCard", "rarity": "rare" } },
+            { "label": "Approach the obelisk", "consequence": "It pulses and knocks you back — lose 14 HP.", "effect": { "type": "damageHp", "amount": 14 } },
+            { "label": "Approach the obelisk", "consequence": "+1 life — the obelisk was built to protect its visitor.", "effect": { "type": "gainLife", "amount": 1 } }
+          ],
+          [
+            { "label": "Sit in the lone chair", "consequence": "A vision floods you — a legendary card surfaces.", "effect": { "type": "gainCard", "rarity": "legendary" } },
+            { "label": "Sit in the lone chair", "consequence": "You see the Fracture. Briefly. Lose 18 HP but +30 crystals.", "effect": { "type": "gainCrystals", "amount": 30 } },
+            { "label": "Sit in the lone chair", "consequence": "You see nothing. You stand up. The chair is warm.", "effect": { "type": "nothing" } },
+            { "label": "Sit in the lone chair", "consequence": "The vision is catastrophic — lose 22 HP.", "effect": { "type": "damageHp", "amount": 22 } }
+          ]
+        ]
+      }
     },
     "void-nexus": {
       "id": "void-nexus",
