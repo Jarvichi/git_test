@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Collar/shoulder (raised 1px) -->
+  <ellipse cx="25.323" cy="17.506" rx="5.571" ry="1.948" fill="#000080"/>
+  <ellipse cx="7.207"  cy="17.447" rx="5.649" ry="2.357" fill="#000080"/>
+  <!-- Body + legs: mid-stride symmetric, body 1px up -->
+  <path d="M 11.967,13.892 L 0.745,30.482 H 9.866 l 3.508,-5.320 5.028,0.078 3.625,5.242 h 9.121 l -10.754,-16.551 Z" fill="#0021cc"/>
+  <!-- Head dome / hair (raised 1px) -->
+  <path d="M 3.785,4.003 C 2.265,1.355 8.346,-1.293 15.946,-0.410 23.547,-1.293 29.628,1.355 28.107,4.003 31.148,4.886 31.148,9.299 25.067,10.181 23.547,11.947 17.467,12.829 12.906,11.947 8.346,12.829 3.785,11.064 3.785,8.416 0.745,7.534 0.745,4.886 3.785,4.003 Z" fill="#aa1100"/>
+  <!-- Face (raised 1px) -->
+  <ellipse cx="15.946" cy="8.416" rx="9.881" ry="6.620" fill="#f4c07a"/>
+  <!-- Eyes (raised 1px) -->
+  <path d="m 11.386,7.975 q 1.520,-0.441 3.040,0" stroke="#333" stroke-width="0.8" fill="none"/>
+  <path d="m 17.467,7.975 q 1.520,-0.441 3.040,0" stroke="#333" stroke-width="0.8" fill="none"/>
+  <!-- Smile (raised 1px) -->
+  <path d="m 12.146,11.064 q 3.800,1.765 7.601,0" stroke="#333" stroke-width="0.8" fill="none"/>
+  <!-- Lapels (raised 1px) -->
+  <path d="M 12.906,21.655 9.866,17.242" stroke="#001a99" stroke-width="1" fill="none"/>
+  <path d="m 18.987,21.655 3.040,-4.413" stroke="#001a99" stroke-width="1" fill="none"/>
+  <!-- Boutonnière (raised 1px) -->
+  <path d="M 22.027,19.890 21.267,19.008" stroke="#550000" stroke-width="0.5" fill="none"/>
+  <path d="m 22.027,19.890 1.520,-0.883" stroke="#ff7400" stroke-width="0.5" fill="none"/>
+  <ellipse cx="22.027" cy="20.773" rx="1.520" ry="0.883" fill="#ff6600"/>
+</svg>
