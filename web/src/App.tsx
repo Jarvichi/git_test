@@ -141,7 +141,10 @@ type Screen =
 
 export default function App() {
   // ── PWA auto-update ───────────────────────────────────────────────────────────
-  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
+  const swRegRef = useRef<ServiceWorkerRegistration | null>(null)
+  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW({
+    onRegisteredSW(_url, r) { swRegRef.current = r ?? null },
+  })
   useEffect(() => {
     if (needRefresh) updateServiceWorker(true)
   }, [needRefresh, updateServiceWorker])
@@ -286,6 +289,11 @@ export default function App() {
   useEffect(() => {
     if (gameState?.phase.type === 'gameOver') clearBattleState()
   }, [gameState?.phase.type])
+
+  // Trigger SW update check whenever the title screen is shown
+  useEffect(() => {
+    if (screen === 'title') swRegRef.current?.update()
+  }, [screen])
 
   // ── Music router ─────────────────────────────────────────
   // Exactly one track plays at a time; switching screen stops all others.
