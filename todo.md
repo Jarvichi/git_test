@@ -4,6 +4,10 @@ Issues sourced from GitHub. Last synced: 2026-03-13 (session 3).
 
 ---
 
+When working an issue from this file, go and check the GitHub issue for additional detail and requirements before planning the solution, create a todo list based on the plan and execute it. If running in the cli you can usually use the "gh" cli commands to help, however if they are not available use a fallback method.
+
+---
+
 ## 🟠 Active Work
 
 - [x] **#137** Caching: add service worker via vite-plugin-pwa to cache resources locally on user's device
@@ -193,5 +197,5 @@ Items below are unimplemented features identified in issue #144. Reference `docs
 - [x] **#53** Campaign soft-lock fixed (pendingNodeId resume, run validation, actcomplete guard)
 - [x] **#56** Campaign run-count ordinal text fixed (sixth/seventh/eighth/ninth)
 
-> Note: GitHub API issue closing requires auth token (`GITHUB_TOKEN`). Issues must be closed manually or token added to env.
+> Note: GitHub API issue closing requires auth token (`GITHUB_TOKEN`). Issues must be closed manually or token added to env. Always check for a local .env file, if one doesn't exist update this file to note what has changed, and that the todo is complete.
 > Issues to close manually after merging: **#109**, **#117**, **#119**, **#144**

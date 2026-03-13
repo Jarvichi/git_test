@@ -56,6 +56,7 @@ import { hasDailyReward, claimDailyReward, addToInventory, DailyReward, USELESS_
 import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import { isNoDamageMode } from './game/debug'
+import { saveBattleState, loadBattleState, clearBattleState } from './game/battleState'
 import {
   incrementAchievementProgress, AchievementDef,
 } from './game/achievements'
@@ -154,6 +155,12 @@ export default function App() {
       const act  = ACTS[savedRun.actId]
       const node = act?.nodes[savedRun.pendingNodeId]
       if (node && (node.type === 'battle' || node.type === 'boss' || node.type === 'elite')) {
+        // If a mid-battle save exists, restore it exactly — no fresh start for cheaters
+        const savedBattle = loadBattleState()
+        if (savedBattle) {
+          incrementAchievementProgress('misc:refresh_cheat')
+          return { screen: 'playing' as Screen, gameState: savedBattle, run: savedRun, isCampaign: true }
+        }
         const collection  = loadCollection()
         const fatigued    = loadFatigued()
         const deckEntries = loadDeck().filter(e => !fatigued.includes(e.cardName))
@@ -274,6 +281,25 @@ export default function App() {
     }, TICK_MS)
     return () => clearInterval(id)
   }, [screen, gameState?.phase.type, isGamePaused, isTabHidden])
+
+  // ── Battle state persistence ──────────────────────────────
+  // Save every 3 s while in-battle so a refresh restores the same position.
+  const latestGameStateRef = useRef<GameState | null>(null)
+  useEffect(() => { latestGameStateRef.current = gameState }, [gameState])
+
+  useEffect(() => {
+    if (screen !== 'playing') return
+    const id = setInterval(() => {
+      const s = latestGameStateRef.current
+      if (s && s.phase.type !== 'gameOver') saveBattleState(s)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [screen])
+
+  // Clear the saved battle state as soon as the battle ends.
+  useEffect(() => {
+    if (gameState?.phase.type === 'gameOver') clearBattleState()
+  }, [gameState?.phase.type])
 
   // ── Music router ─────────────────────────────────────────
   // Exactly one track plays at a time; switching screen stops all others.
@@ -1161,6 +1187,7 @@ export default function App() {
       saveRun(cleared)
       setRun(cleared)
     }
+    clearBattleState()
     setScreen('title')
     setGameState(null)
   }, [run, gameState])
@@ -1188,7 +1215,7 @@ export default function App() {
     const KEYS = [
       'jarv_collection', 'jarv_deck', 'jarv_crystals',
       'jarv_run', 'jarv_card_stats', 'jarv_fatigued',
-      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count',
+      'jarv_seen_intros', 'jarvs_handicap', 'jarv_run_count', 'jarv_battle_state',
     ]
     KEYS.forEach(k => { try { localStorage.removeItem(k) } catch { /* ignore */ } })
     window.location.reload()

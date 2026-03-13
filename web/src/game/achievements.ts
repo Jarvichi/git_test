@@ -650,4 +650,14 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     reward: { type: 'crystals', crystals: 333 },
     tier: 2,
   },
+  {
+    id: 'misc:refresh_cheat',
+    name: 'Ctrl+R',
+    description: 'Refreshed the page mid-battle hoping for a better outcome. We restored your state anyway.',
+    category: 'misc',
+    progressKey: 'misc:refresh_cheat',
+    target: 1,
+    reward: { type: 'crystals', crystals: 0 },
+    tier: 1,
+  },
 ]
