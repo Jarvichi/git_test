@@ -356,7 +356,6 @@
         "crystal-bridge"
       ],
       "environment": "ruins",
-      "eventId": "ruins",
       "eventConfig": {
         "title": "The Arcane Library",
         "description": "A crystallised reading room — shelves frozen mid-reorganisation, books still open at the chapter the scholars were reading when the Fracture hit. The pages are still turning.",
@@ -755,7 +754,6 @@
         "void-nexus"
       ],
       "environment": "ruins",
-      "eventId": "shrine",
       "eventConfig": {
         "title": "The Arcane Vault",
         "description": "A sealed research chamber — the lock corroded three years ago, but nobody has been past to notice. Inside: containment circles drawn in silver, a humming obelisk, and a single chair facing it.",

@@ -359,7 +359,6 @@
         "risen-horde"
       ],
       "environment": "ruins",
-      "eventId": "shrine",
       "eventConfig": {
         "title": "The Soul Shrine",
         "description": "A shrine built from miners' tools — pickaxes crossed at the base, lanterns fused into its flanks with old soot. The flame inside is black. Whatever souls it was built to honour, they haven't left.",
@@ -592,7 +591,6 @@
         "necrotic-guard"
       ],
       "environment": "ashen",
-      "eventId": "shrine",
       "eventConfig": {
         "title": "The Cursed Altar",
         "description": "A makeshift altar built from the bones of something large — whatever the Wastes worshipped before the Fracture gave it something better to do. Dark ichor seeps between the joints. The altar hums.",
