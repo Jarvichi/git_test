@@ -1,139 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   viewBox="0 0 32 32"
-   version="1.1"
-   id="svg11"
-   sodipodi:docname="graham.svg"
-   width="32"
-   height="32"
-   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs11" />
-  <sodipodi:namedview
-     id="namedview11"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="25.667976"
-     inkscape:cx="42.893916"
-     inkscape:cy="23.920858"
-     inkscape:window-width="3840"
-     inkscape:window-height="2054"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg11" />
-  <!-- Hair -->
-  <ellipse
-     style="opacity:1;fill:#000080;fill-opacity:1"
-     id="path13"
-     cx="25.323383"
-     cy="18.505548"
-     rx="5.5711441"
-     ry="1.9479525" />
-  <ellipse
-     style="opacity:1;fill:#000080;fill-opacity:1"
-     id="path12"
-     cx="7.2074246"
-     cy="18.447111"
-     rx="5.6490626"
-     ry="2.3570225" />
-  <path
-     class="line"
-     d="M 11.966756,14.891877 0.74508725,31.481726 H 9.8658915 l 3.5077765,-5.319933 5.02864,0.07792 3.624654,5.242015 h 9.120804 l -10.75416,-16.55089"
-     fill="#cc1100"
-     id="path7"
-     style="display:inline;fill:#0021cc;fill-opacity:1;stroke-width:0.115832"
-     sodipodi:nodetypes="cccccccc" />
-  <path
-     class="line"
-     d="M 3.7853555,5.0029899 C 2.2652215,2.3551166 8.3457575,-0.29275691 15.946426,0.58986813 23.547096,-0.29275691 29.627632,2.3551166 28.107498,5.0029899 31.147766,5.885614 31.147766,10.298737 25.06723,11.18136 23.547096,12.94661 17.46656,13.829234 12.906159,12.94661 8.3457575,13.829234 3.7853555,12.063984 3.7853555,9.4161126 c -3.04026825,-0.8826251 -3.04026825,-3.5304986 0,-4.4131227"
-     fill="#aa1100"
-     id="path1"
-     style="stroke-width:0.115832" />
-  <!-- Face -->
-  <ellipse
-     class="line"
-     cx="15.94643"
-     cy="9.41611"
-     rx="9.8808699"
-     ry="6.6196833"
-     fill="#f4c07a"
-     id="ellipse1"
-     style="stroke-width:0.115832" />
-  <!-- Eyes -->
-  <path
-     class="line"
-     d="m 11.386025,8.9747996 q 1.520134,-0.4413121 3.040268,0"
-     id="path2"
-     style="stroke-width:0.115832" />
-  <path
-     class="line"
-     d="m 17.46656,8.9747996 q 1.520134,-0.4413121 3.040268,0"
-     id="path3"
-     style="stroke-width:0.115832" />
-  <!-- Smile -->
-  <path
-     class="line"
-     d="m 12.146092,12.063984 q 3.800334,1.76525 7.600669,0"
-     id="path4"
-     style="stroke-width:0.115832" />
-  <!-- Neck -->
-  <path
-     class="line"
-     d="m 12.906159,16.035795 v 2.20656"
-     fill="#f4c07a"
-     id="path5"
-     style="stroke-width:0.115832" />
-  <path
-     class="line"
-     d="m 18.986694,16.035795 v 2.20656"
-     fill="#f4c07a"
-     id="path6"
-     style="display:inline;stroke-width:0.115832" />
-  <!-- Jacket -->
-  <!-- Lapels -->
-  <path
-     class="line"
-     d="M 12.906159,22.655478 9.8658915,18.242355"
-     fill="#111111"
-     id="path8"
-     style="stroke-width:0.115832;opacity:1;fill:#081a0a;fill-opacity:1" />
-  <path
-     class="line"
-     d="m 18.986694,22.655478 3.040268,-4.413123"
-     fill="#111111"
-     id="path9"
-     style="stroke-width:0.115832" />
-  <path
-     class="line"
-     d="M 22.026962,20.890229 21.266895,20.007604"
-     fill="#ff6600"
-     id="path10"
-     style="stroke-width:0.115832;fill:#550000" />
-  <path
-     class="line"
-     d="m 22.026962,20.890229 1.520134,-0.882625"
-     fill="#ff6600"
-     id="path11"
-     style="stroke-width:0.115832;fill:#ff7400;fill-opacity:1" />
-  <!-- Flower boutonnière -->
-  <ellipse
-     class="line"
-     cx="22.026966"
-     cy="21.772858"
-     fill="#ff6600"
-     id="circle9"
-     rx="1.520134"
-     ry="0.88262439"
-     style="stroke-width:0.115832"
-     sodipodi:insensitive="true" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Collar/shoulder (raised 1px) -->
+  <ellipse cx="25.323" cy="17.506" rx="5.571" ry="1.948" fill="#000080"/>
+  <ellipse cx="7.207"  cy="17.447" rx="5.649" ry="2.357" fill="#000080"/>
+  <!-- Body + legs: mid-stride symmetric, body 1px up -->
+  <path d="M 11.967,13.892 L 0.745,30.482 H 9.866 l 3.508,-5.320 5.028,0.078 3.625,5.242 h 9.121 l -10.754,-16.551 Z" fill="#0021cc"/>
+  <!-- Head dome / hair (raised 1px) -->
+  <path d="M 3.785,4.003 C 2.265,1.355 8.346,-1.293 15.946,-0.410 23.547,-1.293 29.628,1.355 28.107,4.003 31.148,4.886 31.148,9.299 25.067,10.181 23.547,11.947 17.467,12.829 12.906,11.947 8.346,12.829 3.785,11.064 3.785,8.416 0.745,7.534 0.745,4.886 3.785,4.003 Z" fill="#aa1100"/>
+  <!-- Face (raised 1px) -->
+  <ellipse cx="15.946" cy="8.416" rx="9.881" ry="6.620" fill="#f4c07a"/>
+  <!-- Eyes (raised 1px) -->
+  <path d="m 11.386,7.975 q 1.520,-0.441 3.040,0" stroke="#333" stroke-width="0.8" fill="none"/>
+  <path d="m 17.467,7.975 q 1.520,-0.441 3.040,0" stroke="#333" stroke-width="0.8" fill="none"/>
+  <!-- Smile (raised 1px) -->
+  <path d="m 12.146,11.064 q 3.800,1.765 7.601,0" stroke="#333" stroke-width="0.8" fill="none"/>
+  <!-- Lapels (raised 1px) -->
+  <path d="M 12.906,21.655 9.866,17.242" stroke="#001a99" stroke-width="1" fill="none"/>
+  <path d="m 18.987,21.655 3.040,-4.413" stroke="#001a99" stroke-width="1" fill="none"/>
+  <!-- Boutonnière (raised 1px) -->
+  <path d="M 22.027,19.890 21.267,19.008" stroke="#550000" stroke-width="0.5" fill="none"/>
+  <path d="m 22.027,19.890 1.520,-0.883" stroke="#ff7400" stroke-width="0.5" fill="none"/>
+  <ellipse cx="22.027" cy="20.773" rx="1.520" ry="0.883" fill="#ff6600"/>
 </svg>
