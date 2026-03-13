@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { useRegisterSW } from 'virtual:pwa-register/react'
 import { GameState } from './game/types'
 import { newGame, NewGameOptions, playCard, tick, MAX_HANDICAP } from './game/engine'
 import {
@@ -138,6 +139,12 @@ type Screen =
   | 'heroCards'
 
 export default function App() {
+  // ── PWA auto-update ───────────────────────────────────────────────────────────
+  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
+  useEffect(() => {
+    if (needRefresh) updateServiceWorker(true)
+  }, [needRefresh, updateServiceWorker])
+
   // ── Startup: auto-resume a pending campaign battle on page refresh ──────────
   // If the player refreshed mid-battle, pendingNodeId is still set. We build the
   // game state immediately so they land straight back in the battle.
