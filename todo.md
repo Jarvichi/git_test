@@ -30,7 +30,7 @@ When working an issue from this file, go and check the GitHub issue for addition
 ## 🟠 Gameplay Bugs (new)
 
 - [x] **#148** Cheating: refreshing during a battle resets it — already fixed
-- [ ] **#149** Campaign events: events in acts 2/3 reuse Act 1 text — make a generic config-driven event handler reading name/lore/options/rewards from act JSON so each act has unique events
+- [x] **#149** Campaign events: events in acts 2/3 reuse Act 1 text — already fixed
 
 ---
 
