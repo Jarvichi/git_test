@@ -14,6 +14,53 @@ export interface DeckEntry {
   count: number
 }
 
+// ─── Card name migrations ─────────────────────────────────
+// Maps old/renamed card names → current names.
+// Applied on every load so saves that used old names are transparently upgraded.
+
+const CARD_RENAMES: Record<string, string> = {
+  'Build Wall':  'Stone Wall',
+  'Build Farm':  'Farm',
+  'Arc.Tower':   'Arcane Tower',
+  'DrgnLair':    'Dragon Lair',
+  'BallstaTwr':  'Ballista Tower',
+  'Vamp Coven':  'Vamp. Coven',
+  'Cntaur Stbl': 'Centaur Stable',
+  'Shadow Acad': 'Shadow Academy',
+  'Anc. Altar':  'Ancient Altar',
+  'Anc. Grove':  'Ancient Grove',
+  'Lizard Den':  'Lizard Warren',
+}
+
+function migrateCollectionNames(entries: CollectionEntry[]): CollectionEntry[] {
+  const merged: CollectionEntry[] = []
+  for (const entry of entries) {
+    const name = CARD_RENAMES[entry.cardName] ?? entry.cardName
+    const existing = merged.find(e => e.cardName === name)
+    if (existing) {
+      existing.count += entry.count
+      if (entry.masteryXp) existing.masteryXp = (existing.masteryXp ?? 0) + entry.masteryXp
+    } else {
+      merged.push(name === entry.cardName ? entry : { ...entry, cardName: name })
+    }
+  }
+  return merged
+}
+
+function migrateDeckNames(entries: DeckEntry[]): DeckEntry[] {
+  const merged: DeckEntry[] = []
+  for (const entry of entries) {
+    const name = CARD_RENAMES[entry.cardName] ?? entry.cardName
+    const existing = merged.find(e => e.cardName === name)
+    if (existing) {
+      existing.count += entry.count
+    } else {
+      merged.push(name === entry.cardName ? entry : { ...entry, cardName: name })
+    }
+  }
+  return merged
+}
+
 // ─── Constants ────────────────────────────────────────────
 
 const COLLECTION_KEY = 'jarv_collection'
@@ -285,7 +332,7 @@ function applyMasteryBonus(card: Card, lvl: number): Card {
 export function loadCollection(): CollectionEntry[] {
   try {
     const raw = localStorage.getItem(COLLECTION_KEY)
-    if (raw) return JSON.parse(raw) as CollectionEntry[]
+    if (raw) return migrateCollectionNames(JSON.parse(raw) as CollectionEntry[])
   } catch { /* ignore */ }
   saveCollection(STARTER_COLLECTION)
   return [...STARTER_COLLECTION.map(e => ({ ...e }))]
@@ -318,7 +365,7 @@ export function getOwnedCount(collection: CollectionEntry[], cardName: string): 
 export function loadDeck(): DeckEntry[] {
   try {
     const raw = localStorage.getItem(DECK_KEY)
-    if (raw) return JSON.parse(raw) as DeckEntry[]
+    if (raw) return migrateDeckNames(JSON.parse(raw) as DeckEntry[])
   } catch { /* ignore */ }
   saveDeck(STARTER_DECK)
   return [...STARTER_DECK.map(e => ({ ...e }))]

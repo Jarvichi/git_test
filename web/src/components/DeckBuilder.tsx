@@ -132,7 +132,9 @@ function buildAutoDeck(
 export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
   const catalog = getCardCatalog()
   const [collection] = useState<CollectionEntry[]>(loadCollection)
-  const [deck, setDeck] = useState<DeckEntry[]>(loadDeck)
+  const [deck, setDeck] = useState<DeckEntry[]>(() =>
+    loadDeck().filter(e => catalog.some(c => c.name === e.cardName))
+  )
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const [showAutoBuild, setShowAutoBuild] = useState(false)
   const [search, setSearch]         = useState('')
@@ -206,12 +208,14 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
       })
   }, [catalog, collection, search, typeFilter, rarityFilter, sortBy])
 
-  // Deck list sorted by cost then name
-  const deckList = [...deck].sort((a, b) => {
-    const ca = catalog.find(c => c.name === a.cardName)!
-    const cb = catalog.find(c => c.name === b.cardName)!
-    return ca.cost - cb.cost || a.cardName.localeCompare(b.cardName)
-  })
+  // Deck list sorted by cost then name (skip any cards not in catalog)
+  const deckList = deck
+    .filter(e => catalog.some(c => c.name === e.cardName))
+    .sort((a, b) => {
+      const ca = catalog.find(c => c.name === a.cardName)!
+      const cb = catalog.find(c => c.name === b.cardName)!
+      return ca.cost - cb.cost || a.cardName.localeCompare(b.cardName)
+    })
 
   return (
     <div className="overlay-screen">
