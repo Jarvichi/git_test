@@ -44,8 +44,8 @@ Issues sourced from GitHub. Last synced: 2026-03-13 (session 3).
 ## 🟡 UX / UI Bugs (new)
 
 - [ ] **#155** Inventory items: too many duplicate items granted — move item pool to JSON, weight-based `computeReward()` helper, no duplicates; 1000 items; achievement for full set; daily login + campaign events feed through same system
-- [ ] **#151** Title screen: "Deck: X cards" label is confusing — replace with a badge on Deck Builder button when unused cards exist; show "Collection X/Y" (unlocked/total) instead
-- [ ] **#143** Campaign map: visited nodes should render at full brightness with a solid fill and a ✓ tick overlay
+- [x] **#151** Title screen: "Deck: X cards" label is confusing — replace with a badge on Deck Builder button when unused cards exist; show "Collection X/Y" (unlocked/total) instead
+- [x] **#143** Campaign map: visited nodes should render at full brightness with a solid fill and a ✓ tick overlay
 
 ---
 
@@ -76,8 +76,8 @@ Issues sourced from GitHub. Last synced: 2026-03-13 (session 3).
 ## 🔵 Enhancements — Medium (new)
 
 - [ ] **#150** Handle updates: auto-reload the PWA when a new version is deployed; show build ID in Settings → About
-- [ ] **#146** Achievements: add "Campaign Failed" achievement; "100 Losses" and "1000 Losses" milestones
-- [ ] **#140** Act 4 achievements: no achievements currently fire for Act 4 completion — wire up the same hooks as Acts 1–3
+- [x] **#146** Achievements: add "Campaign Failed" achievement; "100 Losses" and "1000 Losses" milestones
+- [x] **#140** Act 4 achievements: no achievements currently fire for Act 4 completion — wire up the same hooks as Acts 1–3
 
 ---
 
