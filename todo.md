@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-10 (session 2).
+Issues sourced from GitHub. Last synced: 2026-03-13 (session 3).
 
 ---
 
@@ -43,6 +43,7 @@ Issues sourced from GitHub. Last synced: 2026-03-10 (session 2).
 
 ## 🟡 UX / UI Bugs (new)
 
+- [ ] **#155** Inventory items: too many duplicate items granted — move item pool to JSON, weight-based `computeReward()` helper, no duplicates; 1000 items; achievement for full set; daily login + campaign events feed through same system
 - [ ] **#151** Title screen: "Deck: X cards" label is confusing — replace with a badge on Deck Builder button when unused cards exist; show "Collection X/Y" (unlocked/total) instead
 - [ ] **#143** Campaign map: visited nodes should render at full brightness with a solid fill and a ✓ tick overlay
 
@@ -120,6 +121,9 @@ Issues sourced from GitHub. Last synced: 2026-03-10 (session 2).
 
 ## ⚪ Features — Large / Long-term (new)
 
+- [ ] **#156** Hero card preview: title screen button → page showing all Hero Cards; tap opens card detail modal with lore
+- [ ] **#158 / #157** Strengths & weaknesses: each unit gets 2 strengths and 2 weaknesses (e.g. Catapult weak to fire; Archer strong vs flying/slow, weak vs melee/fast); shown in card detail modal; applied as damage multipliers in engine (#157 is a duplicate of #158)
+- [ ] **#159** Affinity system: units near same-type or paired units gain a buff or special ability (e.g. Archers near Archers → "Archer's Tempo" faster fire rate; Dragon flies over Catapult to protect it; Skeletons rally to Necromancer); design affinities for all units
 - [ ] **#152** Endless mode: continuous waves — opponent dies, stronger one spawns; buildings limited to 3 rows; survive as long as possible; survival-time achievements
 
 ---

@@ -469,6 +469,52 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     tier: 2,
   },
 
+  // ── Campaign failures ────────────────────────────────────────────────────
+
+  {
+    id: 'misc:campaign_failed_1',
+    name: 'Valiantly Defeated',
+    description: 'Lose a campaign run with all lives exhausted',
+    category: 'misc',
+    progressKey: 'misc:campaign_failed',
+    target: 1,
+    reward: { type: 'crystals', crystals: 25 },
+    tier: 1,
+  },
+  {
+    id: 'misc:campaign_failed_10',
+    name: 'Never Give Up (Ironically)',
+    description: 'Lose 10 campaign runs',
+    category: 'misc',
+    progressKey: 'misc:campaign_failed',
+    target: 10,
+    reward: { type: 'crystals', crystals: 100 },
+    tier: 1,
+  },
+  {
+    id: 'misc:campaign_failed_100',
+    name: 'Hundred Heroic Defeats',
+    description: 'Lose 100 campaign runs',
+    category: 'misc',
+    progressKey: 'misc:campaign_failed',
+    target: 100,
+    reward: { type: 'crystals', crystals: 500 },
+    tier: 2,
+  },
+  {
+    id: 'misc:campaign_failed_1000',
+    name: 'Defeat Is My Middle Name',
+    description: 'Lose 1,000 campaign runs',
+    category: 'misc',
+    progressKey: 'misc:campaign_failed',
+    target: 1000,
+    reward: {
+      type: 'item',
+      item: { id: 'white_flag', name: 'White Flag', icon: '🏳️', desc: 'Earned after 1,000 campaign failures. Worn with perverse pride.' },
+    },
+    tier: 2,
+  },
+
   // ── Misc ─────────────────────────────────────────────────────────────────
 
   {
