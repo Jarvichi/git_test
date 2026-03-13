@@ -29,7 +29,7 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Gameplay Bugs (new)
 
-- [ ] **#148** Cheating: refreshing during a battle resets it — store serialised battle state to localStorage on each tick; reload resumes it; add hidden achievement for attempting it
+- [x] **#148** Cheating: refreshing during a battle resets it — already fixed
 - [ ] **#149** Campaign events: events in acts 2/3 reuse Act 1 text — make a generic config-driven event handler reading name/lore/options/rewards from act JSON so each act has unique events
 
 ---
@@ -82,7 +82,7 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🔵 Enhancements — Medium (new)
 
-- [ ] **#150** Handle updates: auto-reload the PWA when a new version is deployed; show build ID in Settings → About
+- [x] **#150** Handle updates: auto-reload the PWA when a new version is deployed; show build ID in Settings → About — already fixed
 - [x] **#146** Achievements: add "Campaign Failed" achievement; "100 Losses" and "1000 Losses" milestones
 - [x] **#140** Act 4 achievements: no achievements currently fire for Act 4 completion — wire up the same hooks as Acts 1–3
 
