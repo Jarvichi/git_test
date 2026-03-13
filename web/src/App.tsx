@@ -282,20 +282,6 @@ export default function App() {
     return () => clearInterval(id)
   }, [screen, gameState?.phase.type, isGamePaused, isTabHidden])
 
-  // ── Battle state persistence ──────────────────────────────
-  // Save every 3 s while in-battle so a refresh restores the same position.
-  const latestGameStateRef = useRef<GameState | null>(null)
-  useEffect(() => { latestGameStateRef.current = gameState }, [gameState])
-
-  useEffect(() => {
-    if (screen !== 'playing') return
-    const id = setInterval(() => {
-      const s = latestGameStateRef.current
-      if (s && s.phase.type !== 'gameOver') saveBattleState(s)
-    }, 3000)
-    return () => clearInterval(id)
-  }, [screen])
-
   // Clear the saved battle state as soon as the battle ends.
   useEffect(() => {
     if (gameState?.phase.type === 'gameOver') clearBattleState()
@@ -1070,7 +1056,9 @@ export default function App() {
         campaignPlayCountsRef.current[card.name] =
           (campaignPlayCountsRef.current[card.name] ?? 0) + 1
       }
-      return playCard(s, cardId)
+      const next = playCard(s, cardId)
+      saveBattleState(next)
+      return next
     })
   }, [])
 
