@@ -18,7 +18,7 @@ export function HeroCardsScreen({ onBack }: Props) {
         <span className="overlay-title">🦸 HERO CARDS</span> 
       </div>
       <div style={{ padding: '8px 12px', color: '#888', fontSize: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-        <span style={{ color: '#888', fontSize: '12px' }}>One hero appears in every battle</span>
+        One hero appears in every battle.<br>
         Hero cards are shuffled into your deck at the start of each battle. You cannot choose which hero appears — fate decides.
       </div>
       <div className="collection-grid" style={{ padding: '12px' }}>
