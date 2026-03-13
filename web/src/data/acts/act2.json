@@ -376,7 +376,15 @@
         "siege-trenches"
       ],
       "environment": "citadel",
-      "eventId": "supply-cache"
+      "eventConfig": {
+        "title": "Supply Cache",
+        "description": "A Citadel supply depot, hastily abandoned. Crates lie open and torn sacks spill their contents.",
+        "pools": [
+          [{ "label": "Search the crates", "consequence": "+12 crystals from scavenged supplies", "effect": { "type": "gainCrystals", "amount": 12 } }],
+          [{ "label": "Pocket something useful", "consequence": "You find an uncommon card among the spoils", "effect": { "type": "gainCard", "rarity": "uncommon" } }],
+          [{ "label": "Leave quickly", "consequence": "Nothing of use remains — you move on.", "effect": { "type": "nothing" } }]
+        ]
+      }
     },
     "outer-wall": {
       "id": "outer-wall",
@@ -715,7 +723,31 @@
         "kragg"
       ],
       "environment": "citadel",
-      "eventId": "ruins"
+      "eventConfig": {
+        "title": "The War Council Chamber",
+        "description": "The Citadel's last tactical briefing still covers the table — casualty projections, siege lines, contingency codes. No signature. No date. The officers left in a hurry and didn't come back.",
+        "pools": [
+          [
+            { "label": "Study the tactical maps", "consequence": "You spot an exploitable route ahead. +16 crystals.", "effect": { "type": "gainCrystals", "amount": 16 } },
+            { "label": "Study the tactical maps", "consequence": "The maps reveal a supply drop location. +20 crystals.", "effect": { "type": "gainCrystals", "amount": 20 } },
+            { "label": "Study the tactical maps", "consequence": "The strategies are outdated — they describe your own deck. Nothing useful.", "effect": { "type": "nothing" } },
+            { "label": "Study the tactical maps", "consequence": "The data is encoded. Hours wasted — lose 6 HP from exhaustion.", "effect": { "type": "damageHp", "amount": 6 } }
+          ],
+          [
+            { "label": "Search the officers' packs", "consequence": "Emergency rations. Restored 12 HP.", "effect": { "type": "healHp", "amount": 12 } },
+            { "label": "Search the officers' packs", "consequence": "A folded rare card tucked inside a dispatch pouch.", "effect": { "type": "gainCard", "rarity": "rare" } },
+            { "label": "Search the officers' packs", "consequence": "A booby-trap springs — lose 10 HP.", "effect": { "type": "damageHp", "amount": 10 } },
+            { "label": "Search the officers' packs", "consequence": "An uncommon card hidden under a false bottom.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
+            { "label": "Search the officers' packs", "consequence": "+1 life — someone left a spare compass. You needed that.", "effect": { "type": "gainLife", "amount": 1 } }
+          ],
+          [
+            { "label": "Take the classified orders", "consequence": "The enemy codes are yours. +24 crystals on the black market.", "effect": { "type": "gainCrystals", "amount": 24 } },
+            { "label": "Take the classified orders", "consequence": "The orders detail a hidden armoury. You find a rare card.", "effect": { "type": "gainCard", "rarity": "rare" } },
+            { "label": "Take the classified orders", "consequence": "The seal breaks and releases a gas. Lose 14 HP.", "effect": { "type": "damageHp", "amount": 14 } },
+            { "label": "Take the classified orders", "consequence": "They're blank. Psychological warfare, apparently.", "effect": { "type": "nothing" } }
+          ]
+        ]
+      }
     },
     "kragg": {
       "id": "kragg",

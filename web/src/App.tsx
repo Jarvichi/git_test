@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import { useRegisterSW } from 'virtual:pwa-register/react'
 import { GameState } from './game/types'
 import { newGame, NewGameOptions, playCard, tick, MAX_HANDICAP } from './game/engine'
 import {
@@ -16,7 +17,7 @@ import {
   loadFatigued, saveFatigued, clearFatigued, getTopPlayedCards,
   hasSeenIntro, markIntroSeen,
   loadRunCount, incrementRunCount, getAct1Intro,
-  EVENT_CATALOG, generateShrineEvent, generateRuinsEvent, EventChoice,
+  generateEventFromConfig, EventChoice, EventData,
   CutscenePanel, QuestNode, RunState,
   recordNodeComplete,
 } from './game/questline'
@@ -138,6 +139,12 @@ type Screen =
   | 'heroCards'
 
 export default function App() {
+  // ── PWA auto-update ───────────────────────────────────────────────────────────
+  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
+  useEffect(() => {
+    if (needRefresh) updateServiceWorker(true)
+  }, [needRefresh, updateServiceWorker])
+
   // ── Startup: auto-resume a pending campaign battle on page refresh ──────────
   // If the player refreshed mid-battle, pendingNodeId is still set. We build the
   // game state immediately so they land straight back in the battle.
@@ -185,7 +192,7 @@ export default function App() {
   const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
 
   // Active campaign event
-  const [activeEvent, setActiveEvent] = useState<typeof EVENT_CATALOG[string] | null>(null)
+  const [activeEvent, setActiveEvent] = useState<EventData | null>(null)
   // Card revealed after a gainCard event choice
   const [pendingEventCard, setPendingEventCard] = useState<string | null>(null)
 
@@ -508,8 +515,8 @@ export default function App() {
     if (activeRun.pendingNodeId) {
       const node = act.nodes[activeRun.pendingNodeId]
       if (node) {
-        if (node.type === 'event' && node.eventId) {
-          const eventData = node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId]
+        if (node.type === 'event' && node.eventConfig) {
+          const eventData = generateEventFromConfig(node.id, node.eventConfig)
           if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
         }
         if (node.type === 'merchant') {
@@ -581,8 +588,8 @@ export default function App() {
       return
     }
 
-    if (node.type === 'event' && node.eventId) {
-      const eventData = node.eventId === 'shrine' ? generateShrineEvent() : node.eventId === 'ruins' ? generateRuinsEvent() : EVENT_CATALOG[node.eventId]
+    if (node.type === 'event' && node.eventConfig) {
+      const eventData = generateEventFromConfig(node.id, node.eventConfig)
       if (eventData) {
         setActiveEvent(eventData)
         setScreen('event')

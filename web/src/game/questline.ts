@@ -4,7 +4,6 @@ import act1Data from '../data/acts/act1.json'
 import act2Data from '../data/acts/act2.json'
 import act3Data from '../data/acts/act3.json'
 import act4Data from '../data/acts/act4.json'
-import eventsData from '../data/events.json'
 
 // ─── Node & Act types ─────────────────────────────────────
 
@@ -23,7 +22,7 @@ export interface QuestNode {
   handicap?: number  // opponent handicap for battle/elite/boss
   restHeal?: number  // HP healed at rest nodes
   bossAI?: string        // 'thornlord' etc. — triggers a specific boss AI
-  eventId?: string       // key into EVENT_CATALOG for event nodes
+  eventConfig?: NodeEventConfig
   bossDialogue?: string[]  // lines the boss speaks before the fight
   /** Preset enemy deck — card names in order. Makes each node deterministic and learnable. */
   enemyDeck?: string[]
@@ -59,54 +58,29 @@ export interface EventData {
   choices: EventChoice[]
 }
 
-// ─── Shrine randomisation ─────────────────────────────────
+/**
+ * Per-node event configuration embedded in the act JSON.
+ * When present, overrides any eventId lookup so that each node can have
+ * its own title, description, and choice pools.
+ */
+export interface NodeEventConfig {
+  title: string
+  description: string
+  /** One pool per choice slot; one entry is randomly picked from each pool. */
+  pools: EventChoice[][]
+}
 
-/** Possible pools for each shrine action. One entry is picked at random each visit. */
-const SHRINE_OFFERING_EFFECTS = eventsData.pools.shrine.offering as EventChoice[]
-const SHRINE_PRAY_EFFECTS      = eventsData.pools.shrine.pray     as EventChoice[]
-const SHRINE_TAKE_EFFECTS      = eventsData.pools.shrine.take     as EventChoice[]
+/** Builds an EventData from an inline NodeEventConfig. */
+export function generateEventFromConfig(id: string, config: NodeEventConfig): EventData {
+  return {
+    id,
+    title:       config.title,
+    description: config.description,
+    choices:     config.pools.map(pool => pickRandom(pool)),
+  }
+}
 
 function pickRandom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)] }
-
-/** Returns a shrine EventData with randomly selected choice effects. */
-export function generateShrineEvent(): EventData {
-  return {
-    id: 'shrine',
-    title: 'A Forgotten Shrine',
-    description: 'Buried deep in moss and roots, an ancient shrine pulses with faint magic. Carved glyphs glow a dim green. Something still listens here.',
-    choices: [
-      pickRandom(SHRINE_OFFERING_EFFECTS),
-      pickRandom(SHRINE_PRAY_EFFECTS),
-      pickRandom(SHRINE_TAKE_EFFECTS),
-    ],
-  }
-}
-
-// ─── Ruins randomisation ──────────────────────────────────
-
-const RUINS_REST_EFFECTS   = eventsData.pools.ruins.rest   as EventChoice[]
-const RUINS_SEARCH_EFFECTS = eventsData.pools.ruins.search as EventChoice[]
-const RUINS_CLIMB_EFFECTS  = eventsData.pools.ruins.climb  as EventChoice[]
-
-/** Returns a ruins EventData with randomly selected choice effects. */
-export function generateRuinsEvent(): EventData {
-  return {
-    id: 'ruins',
-    title: 'Crumbling Watchtower',
-    description: 'A moss-eaten garrison tower leans against the treeline, abandoned mid-battle. A rusted sword stands upright in the earth beside it. The armory gate hangs open.',
-    choices: [
-      pickRandom(RUINS_REST_EFFECTS),
-      pickRandom(RUINS_SEARCH_EFFECTS),
-      pickRandom(RUINS_CLIMB_EFFECTS),
-    ],
-  }
-}
-
-export const EVENT_CATALOG: Record<string, EventData> = {
-  'shrine': generateShrineEvent(), // regenerated per-visit in App
-  'ruins':  generateRuinsEvent(),  // regenerated per-visit in App
-  ...(eventsData.catalog as Record<string, EventData>),
-}
 
 // ─── Merchant ─────────────────────────────────────────────
 

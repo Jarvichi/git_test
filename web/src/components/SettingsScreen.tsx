@@ -272,6 +272,12 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
               <div className="settings-sublabel">A browser-based strategy card game</div>
             </div>
           </div>
+          <div className="settings-row">
+            <div>
+              <div className="settings-label">Build</div>
+              <div className="settings-sublabel">{new Date(__BUILD_DATE__).toLocaleString()}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
