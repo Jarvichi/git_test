@@ -59,6 +59,7 @@ import {
   incrementAchievementProgress, AchievementDef,
 } from './game/achievements'
 import { AchievementsScreen } from './components/AchievementsScreen'
+import { HeroCardsScreen }   from './components/HeroCardsScreen'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -134,6 +135,7 @@ type Screen =
   | 'inventory'
   | 'achievements'
   | 'campaignfailed'
+  | 'heroCards'
 
 export default function App() {
   // ── Startup: auto-resume a pending campaign battle on page refresh ──────────
@@ -1229,6 +1231,7 @@ export default function App() {
           onSettings={() => setScreen('settings')}
           onInventory={() => setScreen('inventory')}
           onAchievements={() => setScreen('achievements')}
+          onHeroCards={() => setScreen('heroCards')}
         />
       )}
 
@@ -1344,6 +1347,10 @@ export default function App() {
           onBack={() => setScreen('title')}
           onCrystalsChanged={handleCrystalsChanged}
         />
+      )}
+
+      {screen === 'heroCards' && (
+        <HeroCardsScreen onBack={() => setScreen('title')} />
       )}
 
       {screen === 'campaignfailed' && (
