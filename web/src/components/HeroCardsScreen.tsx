@@ -26,7 +26,7 @@ export function HeroCardsScreen({ onBack }: Props) {
           <div key={card.id} className="collection-cell">
             <CardTile
               card={card}
-              canAfford={false}
+              canAfford={true}
               onClick={() => setDetailCard(card)}
             />
             <div className="cell-footer">
