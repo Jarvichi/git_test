@@ -27,8 +27,8 @@ When working an issue from this file, go and check the GitHub issue for addition
 ## 🟡 UX / UI Bugs (session 6 — new)
 
 - [ ] **#183** Intro Screen: fade between "Awesome Software" and "A Jarv Creation" shows the title screen behind it — ensure the fade does not reveal the title screen
-- [x] **#184** Settings: text size setting doesn't change anything — apply `zoom` to `.game-container` scaled by textSize/14; compensate height
-- [x] **#185** Settings: text colour setting doesn't change anything — fix circular CSS variable `--game-text-color: var(--game-text-color)` → `#33ff33`
+- [x] **#184** Settings: text size setting doesn't change anything — apply `zoom` to `.game-container` scaled by textSize/14; compensate height — needs manual close on GitHub
+- [x] **#185** Settings: text colour setting doesn't change anything — fix circular CSS variable `--game-text-color: var(--game-text-color)` → `#33ff33` — needs manual close on GitHub
 - [x] **#186** Achievements: add an indicator/badge on the achievements button on the title screen when there's an unclaimed reward — red `!` badge shown when any achievement is unlocked but unclaimed
 
 ---
