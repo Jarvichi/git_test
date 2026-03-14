@@ -10,6 +10,10 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+- [ ] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
+
+
+
 - [x] **#167** Settings Screen: overflow doesn't scroll on small devices — add `min-height: 0` to `.settings-body`
 - [x] **#143** Campaign map: visited nodes full brightness + ✓ tick — already fixed
 - [x] **#149** Campaign events: acts 2/3 reuse Act 1 text — already fixed
