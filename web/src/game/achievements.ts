@@ -76,6 +76,12 @@ export function getAchievementProgress(progressKey: string): number {
   return loadAchievementSave().progress[progressKey] ?? 0
 }
 
+/** Returns true if any achievement is unlocked but not yet claimed. */
+export function hasUnclaimedAchievements(): boolean {
+  const save = loadAchievementSave()
+  return ACHIEVEMENT_DEFS.some(d => save.unlocked[d.id] && !save.claimed[d.id])
+}
+
 /** Claim the reward for an achievement. Returns the reward if claimable, null otherwise. */
 export function claimAchievementReward(achievementId: string): AchievementReward | null {
   const save = loadAchievementSave()

@@ -2,6 +2,7 @@ import React from 'react'
 import { loadDeck, loadCollection, deckTotalCards, isDeckValid } from '../game/collection'
 import { loadRun } from '../game/questline'
 import { getCardCatalog } from '../game/cards'
+import { hasUnclaimedAchievements } from '../game/achievements'
 
 const CAMPAIGN_UNLOCK_CARDS = 30
 
@@ -25,9 +26,10 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
   const collection       = loadCollection()
   const totalOwned       = collection.reduce((s, e) => s + e.count, 0)
   const campaignUnlocked = savedRun !== null || totalOwned >= CAMPAIGN_UNLOCK_CARDS
-  const catalog          = getCardCatalog()
-  const distinctUnlocked = collection.filter(e => e.count > 0 && catalog.some(c => c.name === e.cardName)).length
-  const catalogTotal     = catalog.length
+  const catalog             = getCardCatalog()
+  const distinctUnlocked    = collection.filter(e => e.count > 0 && catalog.some(c => c.name === e.cardName)).length
+  const catalogTotal        = catalog.length
+  const achievementAlert    = hasUnclaimedAchievements()
 
   return (
     <div className="title-screen">
@@ -79,8 +81,8 @@ export function TitleScreen({ crystals, onPlay, onCampaign, onCollection, onDeck
           🎒 INVENTORY
         </button>
 
-        <button className="action-btn title-nav-btn" onClick={onAchievements}>
-          🏆 ACHIEVEMENTS
+        <button className="action-btn title-nav-btn" onClick={onAchievements} style={{ position: 'relative' }}>
+          🏆 ACHIEVEMENTS{achievementAlert && <span className="title-badge">!</span>}
         </button>
 
         <button className="action-btn title-nav-btn title-settings-btn" onClick={onSettings}>

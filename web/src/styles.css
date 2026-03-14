@@ -1041,6 +1041,23 @@ body {
   border-color: rgba(51, 255, 51, 0.5);
   color: #ccc;
 }
+.title-badge {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  background: #ff4444;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  pointer-events: none;
+}
 .title-nav-btn:hover {
   color: var(--game-text-color);
   border-color: var(--game-text-color);
