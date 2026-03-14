@@ -4,9 +4,18 @@ import { EventData, EventChoice } from '../game/questline'
 interface Props {
   event: EventData
   onChoice: (choice: EventChoice) => void
+  playerHp: number
+  maxHp: number
 }
 
-export function EventScreen({ event, onChoice }: Props) {
+function hpColor(hp: number, max: number): string {
+  const pct = hp / max
+  if (pct > 0.5) return '#33ff33'
+  if (pct > 0.25) return '#ffcc00'
+  return '#ff4444'
+}
+
+export function EventScreen({ event, onChoice, playerHp, maxHp }: Props) {
   const [picked, setPicked] = useState<EventChoice | null>(null)
 
   function handlePick(choice: EventChoice) {
@@ -14,10 +23,40 @@ export function EventScreen({ event, onChoice }: Props) {
     setPicked(choice)
   }
 
+  // Preview HP after applying the picked choice's effect
+  const previewHp: number = (() => {
+    if (!picked) return playerHp
+    const { effect } = picked
+    if (effect.type === 'healHp') return Math.min(maxHp, playerHp + effect.amount)
+    if (effect.type === 'damageHp') return Math.max(1, playerHp - effect.amount)
+    return playerHp
+  })()
+
+  const displayHp  = previewHp
+  const hpPct      = Math.max(0, displayHp / maxHp)
+  const hpChanged  = displayHp !== playerHp
+
   return (
     <div className="event-screen">
       <div className="event-type-tag">[EVENT]</div>
       <div className="event-title">{event.title}</div>
+
+      {/* HP bar */}
+      <div className="event-hp-area">
+        <span className="event-hp-label">HP</span>
+        <div className="event-hp-track">
+          <div
+            className="event-hp-fill"
+            style={{ width: `${hpPct * 100}%`, background: hpColor(displayHp, maxHp) }}
+          />
+        </div>
+        <span className="event-hp-text" style={{ color: hpColor(displayHp, maxHp) }}>
+          {hpChanged
+            ? <>{playerHp} <span className="event-hp-delta">→ {displayHp}</span></>
+            : <>{displayHp}/{maxHp}</>}
+        </span>
+      </div>
+
       <div className="event-description">{event.description}</div>
 
       <div className="event-choices">

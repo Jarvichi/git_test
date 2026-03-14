@@ -1317,8 +1317,13 @@ export default function App() {
         />
       )}
 
-      {screen === 'event' && activeEvent && (
-        <EventScreen event={activeEvent} onChoice={handleEventChoice} />
+      {screen === 'event' && activeEvent && run && (
+        <EventScreen
+          event={activeEvent}
+          onChoice={handleEventChoice}
+          playerHp={run.playerHp}
+          maxHp={run.maxHp}
+        />
       )}
 
       {screen === 'merchant' && merchantItems.length > 0 && (
