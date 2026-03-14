@@ -3232,6 +3232,45 @@ body {
   text-align: center;
 }
 
+.event-hp-area {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-end;
+  margin-bottom: 4px;
+}
+
+.event-hp-label {
+  font-size: 9px;
+  color: #888;
+  letter-spacing: 1px;
+}
+
+.event-hp-track {
+  width: 80px;
+  height: 6px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.event-hp-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.event-hp-text {
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 60px;
+}
+
+.event-hp-delta {
+  color: #ff4444;
+}
+
 .event-description {
   font-size: 12px;
   color: #bbb;
