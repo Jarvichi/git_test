@@ -891,10 +891,10 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
         <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {isDebugMode() && (state.terrain ?? []).map(obs => {
-          // Avoidance zone: units are repelled within (obs.radius + 22) game units.
+          // Avoidance zone: units are repelled within (obs.radius + 6) game units.
           // x-axis (forward/vertical on screen): 500 units → 100% field height → 0.2% per unit
           // y-axis (lateral/horizontal on screen): 160 units → 72% field width → 0.45% per unit
-          const avoidR   = obs.radius + 22
+          const avoidR   = obs.radius + 6
           const topPct   = (1 - obs.x / LANE_WIDTH) * 100
           const leftPct  = 50 + (obs.y / 80) * 36
           const wPct     = avoidR * 2 * (36 / 80)    // diameter in % of field width
