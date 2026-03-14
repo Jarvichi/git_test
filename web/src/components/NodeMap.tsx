@@ -163,9 +163,7 @@ function playstyleDescription(node: QuestNode): string {
     return BOSS_AI_DESCRIPTIONS[node.bossAI]
   }
   if (node.enemyDeck && node.enemyDeck.length > 0) {
-    const preview = node.enemyDeck.slice(0, 3).join(', ')
-    const extra = node.enemyDeck.length > 3 ? ` +${node.enemyDeck.length - 3} more` : ''
-    return `Deck: ${preview}${extra}`
+    return `Deck: ${node.enemyDeck.join(', ')}`
   }
   return 'Plays a standard shuffled deck.'
 }
