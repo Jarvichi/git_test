@@ -1,10 +1,10 @@
 import React from 'react'
-import { DailyReward } from '../game/dailyLogin'
+import { RewardDef } from '../game/dailyLogin'
 import { CardTile } from './CardTile'
 import { getCardCatalog } from '../game/cards'
 
 interface Props {
-  reward: DailyReward
+  reward: RewardDef
   onClose: () => void
 }
 
@@ -56,16 +56,17 @@ export function DailyLoginModal({ reward, onClose }: Props) {
               <div className="daily-modal-icon">🎁</div>
               <div className="daily-modal-value">Card Pack!</div>
               <div className="daily-modal-desc">
-                5 cards added to your collection.<br />
+                {reward.count ?? 5} cards added to your collection.<br />
                 Check your Collection to see them.
               </div>
             </>
           )}
-          {reward.type === 'uselessItem' && reward.item && (
+          {reward.type === 'item' && (
             <>
-              <div className="daily-modal-icon">{reward.item.icon}</div>
-              <div className="daily-modal-value">{reward.item.name}</div>
-              <div className="daily-modal-desc">{reward.item.desc}</div>
+              <div className="daily-modal-icon">{reward.icon}</div>
+              <div className="daily-modal-value">{reward.name}</div>
+              <div className="daily-modal-desc">{reward.desc}</div>
+              <div className="daily-modal-lore">{reward.lore}</div>
               <div className="daily-modal-useless-note">
                 (Added to your inventory. Completely useless.)
               </div>

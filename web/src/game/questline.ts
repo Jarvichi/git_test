@@ -41,7 +41,7 @@ export type EventEffect =
   | { type: 'damageHp';        amount: number }
   | { type: 'gainCrystals';    amount: number }
   | { type: 'gainCard';        rarity: CardRarity }
-  | { type: 'gainItem';        itemId: string }
+  | { type: 'gainItem';        itemId?: string }
   | { type: 'gainLife';        amount: number }
   | { type: 'nothing' }
 

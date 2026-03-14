@@ -380,7 +380,8 @@
             { "label": "Reach into the black flame", "consequence": "Cold, not hot. You pull out an uncommon card.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
             { "label": "Reach into the black flame", "consequence": "It burns after all — lose 16 HP.", "effect": { "type": "damageHp", "amount": 16 } },
             { "label": "Reach into the black flame", "consequence": "You find a rare card waiting inside.", "effect": { "type": "gainCard", "rarity": "rare" } },
-            { "label": "Reach into the black flame", "consequence": "+24 crystals fall from your hand when you pull it free.", "effect": { "type": "gainCrystals", "amount": 24 } }
+            { "label": "Reach into the black flame", "consequence": "+24 crystals fall from your hand when you pull it free.", "effect": { "type": "gainCrystals", "amount": 24 } },
+            { "label": "Reach into the black flame", "consequence": "Something small and cold falls into your palm — added to inventory", "effect": { "type": "gainItem" } }
           ]
         ]
       }
@@ -606,7 +607,8 @@
             { "label": "Pray to the bones", "consequence": "The bones rattle an answer. +22 crystals.", "effect": { "type": "gainCrystals", "amount": 22 } },
             { "label": "Pray to the bones", "consequence": "The bones are silent. The hum intensifies. Nothing.", "effect": { "type": "nothing" } },
             { "label": "Pray to the bones", "consequence": "An uncommon card rises from between the ribs.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
-            { "label": "Pray to the bones", "consequence": "The altar grants you one more chance — +1 life.", "effect": { "type": "gainLife", "amount": 1 } }
+            { "label": "Pray to the bones", "consequence": "The altar grants you one more chance — +1 life.", "effect": { "type": "gainLife", "amount": 1 } },
+            { "label": "Pray to the bones", "consequence": "A bone fragment shifts loose and lands in your hand — added to inventory", "effect": { "type": "gainItem" } }
           ],
           [
             { "label": "Desecrate the altar", "consequence": "The altar shatters — +28 crystals from the gem fragments.", "effect": { "type": "gainCrystals", "amount": 28 } },

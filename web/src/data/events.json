@@ -49,8 +49,8 @@
         { "label": "Leave an offering", "consequence": "The glow brightens — +15 crystals",                             "effect": { "type": "gainCrystals", "amount": 15 } },
         { "label": "Leave an offering", "consequence": "The shrine is silent. Nothing happens.",                         "effect": { "type": "nothing" } },
         { "label": "Leave an offering", "consequence": "Something drains your offering — lose 5 HP",                    "effect": { "type": "damageHp",     "amount": 5  } },
-        { "label": "Leave an offering", "consequence": "The shrine returns your kindness with a glass marble — added to inventory", "effect": { "type": "gainItem", "itemId": "marble" } },
-        { "label": "Leave an offering", "consequence": "A lucky charm appears at the altar's base — added to inventory",            "effect": { "type": "gainItem", "itemId": "charm"  } },
+        { "label": "Leave an offering", "consequence": "The shrine returns your kindness with a curious trinket — added to inventory", "effect": { "type": "gainItem" } },
+        { "label": "Leave an offering", "consequence": "Something small materialises at the altar's base — added to inventory",       "effect": { "type": "gainItem" } },
         { "label": "Leave an offering", "consequence": "The shrine blesses you with renewed fortune — +1 life",          "effect": { "type": "gainLife",     "amount": 1  } }
       ],
       "pray": [
@@ -58,15 +58,15 @@
         { "label": "Pray for strength", "consequence": "The magic guides your wounds — restored 8 HP",                  "effect": { "type": "healHp",       "amount": 8  } },
         { "label": "Pray for strength", "consequence": "The shrine tests you — lose 10 HP",                             "effect": { "type": "damageHp",     "amount": 10 } },
         { "label": "Pray for strength", "consequence": "You feel oddly lucky — +20 crystals",                           "effect": { "type": "gainCrystals", "amount": 20 } },
-        { "label": "Pray for strength", "consequence": "The shrine presses a mystery key into your palm — added to inventory", "effect": { "type": "gainItem", "itemId": "key"  } },
-        { "label": "Pray for strength", "consequence": "An ancient foreign coin materialises in your hand — added to inventory", "effect": { "type": "gainItem", "itemId": "coin" } }
+        { "label": "Pray for strength", "consequence": "Something small and inexplicable materialises in your palm — added to inventory", "effect": { "type": "gainItem" } },
+        { "label": "Pray for strength", "consequence": "A strange object appears in your hand from nowhere — added to inventory",           "effect": { "type": "gainItem" } }
       ],
       "take": [
         { "label": "Pocket the ritual stones", "consequence": "You grab them and run — +18 crystals, lose 8 HP",        "effect": { "type": "damageHp",  "amount": 8  } },
         { "label": "Pocket the ritual stones", "consequence": "A common card falls from the stones",                    "effect": { "type": "gainCard",  "rarity": "common" } },
         { "label": "Pocket the ritual stones", "consequence": "The stones crumble to dust. Nothing.",                   "effect": { "type": "nothing" } },
         { "label": "Pocket the ritual stones", "consequence": "The shrine curses you — lose 15 HP",                     "effect": { "type": "damageHp",  "amount": 15 } },
-        { "label": "Pocket the ritual stones", "consequence": "One of the stones is a smooth, satisfying rock — added to inventory", "effect": { "type": "gainItem", "itemId": "rock" } }
+        { "label": "Pocket the ritual stones", "consequence": "One of the stones turns out to be something stranger — added to inventory", "effect": { "type": "gainItem" } }
       ]
     },
     "ruins": {
@@ -75,24 +75,24 @@
         { "label": "Rest in the shelter", "consequence": "You sleep badly. Restored 8 HP",                              "effect": { "type": "healHp",       "amount": 8  } },
         { "label": "Rest in the shelter", "consequence": "Something bites you in the night — lose 6 HP",               "effect": { "type": "damageHp",     "amount": 6  } },
         { "label": "Rest in the shelter", "consequence": "You find a pouch under the floorboards — +14 crystals",      "effect": { "type": "gainCrystals", "amount": 14 } },
-        { "label": "Rest in the shelter", "consequence": "You wake to find a pretty leaf pressed against your face — added to inventory", "effect": { "type": "gainItem", "itemId": "leaf"   } },
-        { "label": "Rest in the shelter", "consequence": "Something small and magnetic rolls under your hand in the dark — added to inventory", "effect": { "type": "gainItem", "itemId": "magnet" } }
+        { "label": "Rest in the shelter", "consequence": "You wake to find a small curiosity beside you — added to inventory",          "effect": { "type": "gainItem" } },
+        { "label": "Rest in the shelter", "consequence": "Something rolls under your hand in the dark — added to inventory",             "effect": { "type": "gainItem" } }
       ],
       "search": [
         { "label": "Search the armory", "consequence": "An uncommon card hidden behind a loose brick",                  "effect": { "type": "gainCard",     "rarity": "uncommon" } },
         { "label": "Search the armory", "consequence": "A rare weapon contract — add a rare card",                      "effect": { "type": "gainCard",     "rarity": "rare" } },
         { "label": "Search the armory", "consequence": "Old coin cache — +20 crystals",                                 "effect": { "type": "gainCrystals", "amount": 20 } },
         { "label": "Search the armory", "consequence": "A rusted trap springs — lose 10 HP",                           "effect": { "type": "damageHp",     "amount": 10 } },
-        { "label": "Search the armory", "consequence": "You find an instruction manual for an appliance you don't own — added to inventory", "effect": { "type": "gainItem", "itemId": "manual"   } },
-        { "label": "Search the armory", "consequence": "A spare button rolls out of a helmet — added to inventory",    "effect": { "type": "gainItem", "itemId": "button"   } }
+        { "label": "Search the armory", "consequence": "You find a curious object among the debris — added to inventory",   "effect": { "type": "gainItem" } },
+        { "label": "Search the armory", "consequence": "Something rolls out of the rubble — added to inventory",           "effect": { "type": "gainItem" } }
       ],
       "climb": [
         { "label": "Climb the watchtower", "consequence": "Good vantage point — +12 crystals from spotted supply cache", "effect": { "type": "gainCrystals", "amount": 12 } },
         { "label": "Climb the watchtower", "consequence": "A common card is wedged in the battlements",                  "effect": { "type": "gainCard",     "rarity": "common" } },
         { "label": "Climb the watchtower", "consequence": "The stairs collapse — lose 12 HP",                           "effect": { "type": "damageHp",     "amount": 12 } },
         { "label": "Climb the watchtower", "consequence": "Nothing up there. Wind. Old regrets.",                        "effect": { "type": "nothing" } },
-        { "label": "Climb the watchtower", "consequence": "An old cassette tape is jammed in the bell — added to inventory",        "effect": { "type": "gainItem", "itemId": "tape" } },
-        { "label": "Climb the watchtower", "consequence": "A fridge magnet ('Visit [REDACTED]!') is stuck to the iron door — added to inventory", "effect": { "type": "gainItem", "itemId": "magnet" } },
+        { "label": "Climb the watchtower", "consequence": "Something is jammed in the bell — you pocket it — added to inventory",   "effect": { "type": "gainItem" } },
+        { "label": "Climb the watchtower", "consequence": "Something is stuck to the iron door — you take it — added to inventory", "effect": { "type": "gainItem" } },
         { "label": "Climb the watchtower", "consequence": "You spot a hidden passage to a safe camp below — +1 life",   "effect": { "type": "gainLife",     "amount": 1  } }
       ]
     }

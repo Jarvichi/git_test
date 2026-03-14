@@ -371,7 +371,8 @@
             { "label": "Search the crystal shelves", "consequence": "Gem dust spills from a cracked volume — +22 crystals.", "effect": { "type": "gainCrystals", "amount": 22 } },
             { "label": "Search the crystal shelves", "consequence": "A shelf collapses. Lose 10 HP.", "effect": { "type": "damageHp", "amount": 10 } },
             { "label": "Search the crystal shelves", "consequence": "You find a restoration scroll. Restored 14 HP.", "effect": { "type": "healHp", "amount": 14 } },
-            { "label": "Search the crystal shelves", "consequence": "+1 life — the last entry in the register reads your name.", "effect": { "type": "gainLife", "amount": 1 } }
+            { "label": "Search the crystal shelves", "consequence": "+1 life — the last entry in the register reads your name.", "effect": { "type": "gainLife", "amount": 1 } },
+            { "label": "Search the crystal shelves", "consequence": "A small crystal object falls from a shelf — added to inventory", "effect": { "type": "gainItem" } }
           ],
           [
             { "label": "Take the restricted volumes", "consequence": "The enchantment breaks. +26 crystals from the gem-binding.", "effect": { "type": "gainCrystals", "amount": 26 } },
@@ -769,7 +770,8 @@
             { "label": "Approach the obelisk", "consequence": "The hum intensifies — restored 12 HP from ambient energy.", "effect": { "type": "healHp", "amount": 12 } },
             { "label": "Approach the obelisk", "consequence": "A rare card crystallises from its surface.", "effect": { "type": "gainCard", "rarity": "rare" } },
             { "label": "Approach the obelisk", "consequence": "It pulses and knocks you back — lose 14 HP.", "effect": { "type": "damageHp", "amount": 14 } },
-            { "label": "Approach the obelisk", "consequence": "+1 life — the obelisk was built to protect its visitor.", "effect": { "type": "gainLife", "amount": 1 } }
+            { "label": "Approach the obelisk", "consequence": "+1 life — the obelisk was built to protect its visitor.", "effect": { "type": "gainLife", "amount": 1 } },
+            { "label": "Approach the obelisk", "consequence": "A crystallised fragment detaches from the base — added to inventory", "effect": { "type": "gainItem" } }
           ],
           [
             { "label": "Sit in the lone chair", "consequence": "A vision floods you — a legendary card surfaces.", "effect": { "type": "gainCard", "rarity": "legendary" } },
