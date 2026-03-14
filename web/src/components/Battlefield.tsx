@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { GameState, Unit, LANE_WIDTH, Card, TerrainObstacle, TerrainType, BuffTag } from '../game/types'
+import { GameState, Unit, LANE_WIDTH, Card, TerrainObstacle, TerrainType, BuffTag, TERRAIN_AVOID_SHAPE } from '../game/types'
 import { CardTile } from './CardTile'
 import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
@@ -891,14 +891,16 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
         <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
         {isDebugMode() && (state.terrain ?? []).map(obs => {
-          // Avoidance zone: units are repelled within (obs.radius + 22) game units.
+          // Avoidance ellipse matching TERRAIN_AVOID_SHAPE used by the engine.
           // x-axis (forward/vertical on screen): 500 units → 100% field height → 0.2% per unit
           // y-axis (lateral/horizontal on screen): 160 units → 72% field width → 0.45% per unit
-          const avoidR   = obs.radius + 22
+          const shape    = TERRAIN_AVOID_SHAPE[obs.type]
+          const ax       = obs.radius * shape.fx + 4  // forward half-extent (game units)
+          const ay       = obs.radius * shape.fy + 4  // lateral half-extent (game units)
           const topPct   = (1 - obs.x / LANE_WIDTH) * 100
           const leftPct  = 50 + (obs.y / 80) * 36
-          const wPct     = avoidR * 2 * (36 / 80)    // diameter in % of field width
-          const hPct     = avoidR * 2 * (100 / 500)  // diameter in % of field height
+          const wPct     = ay * 2 * (36 / 80)    // diameter in % of field width
+          const hPct     = ax * 2 * (100 / 500)  // diameter in % of field height
           return (
             <div
               key={`dbg-${obs.id}`}
@@ -916,7 +918,7 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
                 zIndex: 50,
                 boxSizing: 'border-box',
               }}
-              title={`Avoidance zone: r=${avoidR} (obs.radius=${obs.radius})`}
+              title={`Avoidance ellipse: ax=${ax.toFixed(1)} ay=${ay.toFixed(1)} (${obs.type} r=${obs.radius})`}
             />
           )
         })}

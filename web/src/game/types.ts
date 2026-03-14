@@ -82,12 +82,26 @@ export interface BattleEventState {
 
 export type TerrainType = 'rock' | 'tree' | 'water' | 'ruin'
 
+/**
+ * Per-type avoidance ellipse multipliers (applied to obs.radius).
+ * fx = forward axis (game x, maps to screen vertical).
+ * fy = lateral axis (game y, maps to screen horizontal).
+ * Derived from each SVG's width/height ratios so the avoidance shape
+ * matches the visual: pine trees are tall+narrow, water pools are wide, etc.
+ */
+export const TERRAIN_AVOID_SHAPE: Record<TerrainType, { fx: number; fy: number }> = {
+  rock:  { fx: 1.1, fy: 0.9 },  // mountain peaks: slightly taller than wide
+  tree:  { fx: 1.3, fy: 0.5 },  // pine/fruit/blob trees: tall, narrow trunk
+  water: { fx: 0.6, fy: 1.5 },  // pond: wide and flat
+  ruin:  { fx: 1.0, fy: 0.9 },  // ruins/farmhouse/watchtower: roughly square
+}
+
 export interface TerrainObstacle {
   id: string
   type: TerrainType
   x: number      // forward axis (same coords as units); kept 80–420
   y: number      // lateral axis; –75 to 75
-  radius: number // avoidance radius, 12–22 px
+  radius: number // base avoidance radius in game units, 12–22
 }
 
 // ─── Game ────────────────────────────────────────────────
