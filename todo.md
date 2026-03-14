@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-14 (session 5).
+Issues sourced from GitHub. Last synced: 2026-03-14 (session 6).
 
 ---
 
@@ -16,6 +16,15 @@ When working an issue from this file, go and check the GitHub issue for addition
 - [x] **#151** Title screen "Deck: X cards" label — already fixed
 - [x] **#155** Inventory item pool + random rewards across all act events (see UX section)
 - [x] **Event randomisation** — act2 supply-cache expanded from deterministic single-choice pools to full random-outcome pools; `gainItem` (random pool, no itemId) added to events in acts 2, 3, 4
+
+---
+
+## 🟡 UX / UI Bugs (session 6 — new)
+
+- [ ] **#183** Intro Screen: fade between "Awesome Software" and "A Jarv Creation" shows the title screen behind it — ensure the fade does not reveal the title screen
+- [ ] **#184** Settings: text size setting doesn't change anything — wire up the setting to actually apply font size
+- [ ] **#185** Settings: text colour setting doesn't change anything — wire up the setting to actually apply text colour
+- [ ] **#186** Achievements: add an indicator/badge on the achievements button on the title screen when there's an unclaimed reward
 
 ---
 
