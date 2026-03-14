@@ -10,7 +10,7 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
-- [ ] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
+- [x] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
 
 
 
