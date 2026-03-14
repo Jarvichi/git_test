@@ -1,4 +1,4 @@
-import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType, BuffTag } from './types'
+import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType, BuffTag, TERRAIN_AVOID_SHAPE } from './types'
 import { makeDeck, makeThorlordDeck, makeKraggDeck, makeAshwalkerDeck, makeNodeDeck, HERO_CARDS } from './cards'
 import { playUnitDeath, playBuildingDestroyed } from './sound'
 import { isNoDamageMode } from './debug'
@@ -584,16 +584,21 @@ function moveUnits(s: GameState, deltaMs: number): void {
     const speed = (inWallZone ? unit.moveSpeed * CLIMB_SPEED_FACTOR : unit.moveSpeed) * deltaSec * fogMult
 
     // Terrain avoidance: lateral repulsion from nearby obstacles.
+    // Uses a per-type ellipse (TERRAIN_AVOID_SHAPE) so tall narrow trees
+    // repel units along the forward axis while wide water repels laterally.
     // Flying units soar over terrain; structures are already skipped above.
     let avoidY = 0
     if (!unit.flying) {
       for (const obs of s.terrain) {
         const toObsX = obs.x - unit.x
         const toObsY = obs.y - unit.y
-        const dist   = Math.sqrt(toObsX * toObsX + toObsY * toObsY)
-        const pushDist = obs.radius + 6   // clearance just beyond the obstacle edge
-        if (dist < pushDist && dist > 0) {
-          const strength = (pushDist - dist) / pushDist  // 0..1, stronger when closer
+        const shape  = TERRAIN_AVOID_SHAPE[obs.type]
+        const ax     = obs.radius * shape.fx + 4  // forward half-extent
+        const ay     = obs.radius * shape.fy + 4  // lateral half-extent
+        // Normalised distance inside the avoidance ellipse (< 1 = inside)
+        const normDist = Math.sqrt((toObsX / ax) ** 2 + (toObsY / ay) ** 2)
+        if (normDist < 1 && normDist > 0) {
+          const strength = 1 - normDist  // 0..1, stronger when closer to centre
           // Determine lateral push direction. When a unit approaches nearly head-on
           // (toObsY ≈ 0), the normal formula gives zero push and units walk through
           // the obstacle. Break symmetry deterministically using the unit id.
@@ -603,7 +608,7 @@ function moveUnits(s: GameState, deltaMs: number): void {
             const idNum = parseInt(unit.id.replace(/\D/g, ''), 10) || 0
             lateralDir = (idNum % 2 === 0) ? -1 : 1
           } else {
-            lateralDir = -toObsY / dist
+            lateralDir = -Math.sign(toObsY)
           }
           avoidY += lateralDir * strength * unit.moveSpeed * 1.8
         }
