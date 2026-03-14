@@ -1,4 +1,14 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Bash(curl -s \"https://api.github.com/repos/Jarvichi/jarvs-amazing-web-game/issues?state=open&per_page=50\")",
+      "Bash(python -c \"import json,sys; issues=json.load\\(sys.stdin\\); [print\\(f''''#{i[\"\"number\"\"]}: {i[\"\"title\"\"]}''''\\) for i in issues]\")",
+      "Bash(gh auth:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh pr:*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -9,11 +19,6 @@
           }
         ]
       }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(python3 -c \":*)"
     ]
   }
 }
