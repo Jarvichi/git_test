@@ -36,31 +36,32 @@ export function IntroScreen({ onDone }: Props) {
       className="intro-screen"
       onClick={advance}
       title="Click to skip"
-      style={{ opacity: fading ? 0 : 1 }}
     >
-      {slide === 'awesome' && (
-        <div className="intro-slide intro-slide--awesome">
-          <img
-            src={`${import.meta.env.BASE_URL}awesome-software-logo.jpg`}
-            alt="Awesome Software"
-            className="intro-awesome-logo"
-          />
-          <div className="intro-presents">PRESENTS</div>
-        </div>
-      )}
+      <div className="intro-content" style={{ opacity: fading ? 0 : 1 }}>
+        {slide === 'awesome' && (
+          <div className="intro-slide intro-slide--awesome">
+            <img
+              src={`${import.meta.env.BASE_URL}awesome-software-logo.jpg`}
+              alt="Awesome Software"
+              className="intro-awesome-logo"
+            />
+            <div className="intro-presents">PRESENTS</div>
+          </div>
+        )}
 
-      {slide === 'jarv' && (
-        <div className="intro-slide intro-slide--jarv">
-          <img
-            src={`${import.meta.env.BASE_URL}jarv-logo.svg`}
-            alt="Jarv"
-            className="intro-jarv-logo"
-          />
-          <div className="intro-jarv-credit">A Jarv Creation</div>
-        </div>
-      )}
+        {slide === 'jarv' && (
+          <div className="intro-slide intro-slide--jarv">
+            <img
+              src={`${import.meta.env.BASE_URL}jarv-logo.svg`}
+              alt="Jarv"
+              className="intro-jarv-logo"
+            />
+            <div className="intro-jarv-credit">A Jarv Creation</div>
+          </div>
+        )}
 
-      <div className="intro-skip-hint">tap to skip</div>
+        <div className="intro-skip-hint">tap to skip</div>
+      </div>
     </div>
   )
 }
