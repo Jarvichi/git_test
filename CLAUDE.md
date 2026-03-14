@@ -3,6 +3,9 @@
 ## Development and Token Use
 Use tokens sparingly, remember that the user has limited tokens, ensure that all changes are carried out in small steps, commit and push between each small change (even if the change isn't complete yet). To aid this each task should have a clear plan created, with each step actionable.
 
+## Reading Issues From GitHub
+When reading an issue look at the full issues text, issues might contain several required features and bugs, we should break each of these out into a sub task, keep a log of the sub tasks either in the todo.md or by creating sub tasks in GitHub. Only close the parent issue once all component parts have been completed. 
+
 ## Project Overview
 A browser-based strategy card game. Deploy units, build structures, and cast upgrades to destroy the enemy base. The only platform is the web app (`web/`).
 
