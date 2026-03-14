@@ -4,7 +4,7 @@ import {
   loadAchievementSave, claimAchievementReward,
 } from '../game/achievements'
 import { addCardsToCollection, loadCrystals, saveCrystals } from '../game/collection'
-import { addToInventory } from '../game/dailyLogin'
+import { addToInventory, ALL_ITEMS } from '../game/dailyLogin'
 
 interface Props {
   onBack: () => void
@@ -57,7 +57,8 @@ export function AchievementsScreen({ onBack, onCrystalsChanged }: Props) {
     } else if (reward.type === 'cards' && reward.cardName && reward.count) {
       addCardsToCollection([{ cardName: reward.cardName, count: reward.count }])
     } else if (reward.type === 'item' && reward.item) {
-      addToInventory(reward.item)
+      const full = ALL_ITEMS.find(i => i.id === reward.item!.id) ?? { ...reward.item, lore: '', weight: 1 }
+      addToInventory(full)
     }
 
     setSave(loadAchievementSave())

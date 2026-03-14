@@ -660,4 +660,50 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     reward: { type: 'crystals', crystals: 0 },
     tier: 1,
   },
+
+  // ── Item collection ───────────────────────────────────────────────────────
+
+  {
+    id: 'misc:items_10',
+    name: 'Hoarder',
+    description: 'Collect 10 unique useless items',
+    category: 'misc',
+    progressKey: 'misc:unique_items',
+    target: 10,
+    reward: { type: 'crystals', crystals: 50 },
+    tier: 1,
+  },
+  {
+    id: 'misc:items_50',
+    name: 'Compulsive Collector',
+    description: 'Collect 50 unique useless items',
+    category: 'misc',
+    progressKey: 'misc:unique_items',
+    target: 50,
+    reward: { type: 'crystals', crystals: 200 },
+    tier: 1,
+  },
+  {
+    id: 'misc:items_100',
+    name: 'Professional Packrat',
+    description: 'Collect 100 unique useless items',
+    category: 'misc',
+    progressKey: 'misc:unique_items',
+    target: 100,
+    reward: { type: 'crystals', crystals: 500 },
+    tier: 2,
+  },
+  {
+    id: 'misc:items_full_set',
+    name: 'Full Set',
+    description: 'Collect every useless item in the game',
+    category: 'misc',
+    progressKey: 'misc:unique_items',
+    target: 423,
+    reward: {
+      type: 'item',
+      item: { id: 'category_error', name: 'Category Error', icon: '❓', desc: 'This item is not an item.' },
+    },
+    tier: 2,
+  },
 ]

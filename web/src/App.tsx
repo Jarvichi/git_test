@@ -52,7 +52,7 @@ import {
 import { CardTile }           from './components/CardTile'
 import { DailyLoginModal }   from './components/DailyLoginModal'
 import { InventoryScreen }   from './components/InventoryScreen'
-import { hasDailyReward, claimDailyReward, addToInventory, DailyReward, USELESS_ITEM_POOL } from './game/dailyLogin'
+import { hasDailyReward, claimDailyReward, addToInventory, computeReward, loadInventory, RewardDef, ALL_ITEMS } from './game/dailyLogin'
 import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import { isNoDamageMode } from './game/debug'
@@ -236,7 +236,7 @@ export default function App() {
   }, [achievementToasts])
 
   // Daily login reward
-  const [dailyReward, setDailyReward] = useState<DailyReward | null>(null)
+  const [dailyReward, setDailyReward] = useState<RewardDef | null>(null)
 
   // Rare events
   const [rareEventScheduled, setRareEventScheduled] = useState<{ kind: RareEventKind; triggerMs: number } | null>(null)
@@ -246,19 +246,23 @@ export default function App() {
   // ── Daily login reward ────────────────────────────────────
   useEffect(() => {
     if (hasDailyReward()) {
-      const reward = claimDailyReward()
+      let reward = claimDailyReward()
       const catalog = getCardCatalog()
       if (reward.type === 'card') {
-        // Resolve a random card name
-        const card = catalog[Math.floor(Math.random() * catalog.length)]
-        reward.cardName = card.name
+        // Resolve card: pick random by rarity if needed
+        const pool = reward.rarity
+          ? catalog.filter(c => c.rarity === reward.rarity)
+          : catalog
+        const src = pool.length > 0 ? pool : catalog
+        const card = src[Math.floor(Math.random() * src.length)]
+        reward = { ...reward, cardName: card.name }
         addCardsToCollection([{ cardName: card.name, count: 1 }])
       } else if (reward.type === 'pack') {
-        const names = Array.from({ length: 5 }, () => catalog[Math.floor(Math.random() * catalog.length)].name)
-        reward.packCards = names
-        addCardsToCollection(names.map(n => ({ cardName: n, count: 1 })))
-      } else if (reward.type === 'uselessItem' && reward.item) {
-        addToInventory(reward.item)
+        const n = reward.count ?? 5
+        const names = Array.from({ length: n }, () => catalog[Math.floor(Math.random() * catalog.length)].name)
+        addCardsToCollection(names.map(name => ({ cardName: name, count: 1 })))
+      } else if (reward.type === 'item') {
+        addToInventory(reward)
       }
       setDailyReward(reward)
     }
@@ -725,7 +729,9 @@ export default function App() {
         return   // show card reveal before going to nodemap
       }
     } else if (effect.type === 'gainItem') {
-      const item = USELESS_ITEM_POOL.find(i => i.id === effect.itemId)
+      const item = effect.itemId
+        ? ALL_ITEMS.find(i => i.id === effect.itemId)
+        : computeReward(loadInventory(), ALL_ITEMS)
       if (item) addToInventory(item)
     } else if (effect.type === 'gainLife') {
       const newMax   = Math.min(LIVES_MAX, updatedRun.maxLives + effect.amount)

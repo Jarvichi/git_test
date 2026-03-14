@@ -380,9 +380,27 @@
         "title": "Supply Cache",
         "description": "A Citadel supply depot, hastily abandoned. Crates lie open and torn sacks spill their contents.",
         "pools": [
-          [{ "label": "Search the crates", "consequence": "+12 crystals from scavenged supplies", "effect": { "type": "gainCrystals", "amount": 12 } }],
-          [{ "label": "Pocket something useful", "consequence": "You find an uncommon card among the spoils", "effect": { "type": "gainCard", "rarity": "uncommon" } }],
-          [{ "label": "Leave quickly", "consequence": "Nothing of use remains — you move on.", "effect": { "type": "nothing" } }]
+          [
+            { "label": "Search the crates", "consequence": "+15 crystals from scavenged supplies", "effect": { "type": "gainCrystals", "amount": 15 } },
+            { "label": "Search the crates", "consequence": "A trap springs — lose 8 HP", "effect": { "type": "damageHp", "amount": 8 } },
+            { "label": "Search the crates", "consequence": "A common card wedged under packing material", "effect": { "type": "gainCard", "rarity": "common" } },
+            { "label": "Search the crates", "consequence": "The crates are empty. Someone got here first.", "effect": { "type": "nothing" } },
+            { "label": "Search the crates", "consequence": "Restored 10 HP from emergency rations", "effect": { "type": "healHp", "amount": 10 } },
+            { "label": "Search the crates", "consequence": "Something rolls out of the straw packing — added to inventory", "effect": { "type": "gainItem" } }
+          ],
+          [
+            { "label": "Pocket something useful", "consequence": "You find an uncommon card folded in a dispatch pouch", "effect": { "type": "gainCard", "rarity": "uncommon" } },
+            { "label": "Pocket something useful", "consequence": "+20 crystals of scavenged pay-roll coin", "effect": { "type": "gainCrystals", "amount": 20 } },
+            { "label": "Pocket something useful", "consequence": "The case is booby-trapped — lose 12 HP", "effect": { "type": "damageHp", "amount": 12 } },
+            { "label": "Pocket something useful", "consequence": "A rare card sealed in wax inside an officer's pack", "effect": { "type": "gainCard", "rarity": "rare" } },
+            { "label": "Pocket something useful", "consequence": "Something personal and inexplicable — added to inventory", "effect": { "type": "gainItem" } }
+          ],
+          [
+            { "label": "Leave quickly", "consequence": "You're gone before the patrol returns. Nothing gained.", "effect": { "type": "nothing" } },
+            { "label": "Leave quickly", "consequence": "You trip an alarm on the way out — lose 6 HP", "effect": { "type": "damageHp", "amount": 6 } },
+            { "label": "Leave quickly", "consequence": "You spot a coin pouch by the door — +10 crystals", "effect": { "type": "gainCrystals", "amount": 10 } },
+            { "label": "Leave quickly", "consequence": "You grab something off a shelf reflexively — added to inventory", "effect": { "type": "gainItem" } }
+          ]
         ]
       }
     },
@@ -738,7 +756,8 @@
             { "label": "Search the officers' packs", "consequence": "A folded rare card tucked inside a dispatch pouch.", "effect": { "type": "gainCard", "rarity": "rare" } },
             { "label": "Search the officers' packs", "consequence": "A booby-trap springs — lose 10 HP.", "effect": { "type": "damageHp", "amount": 10 } },
             { "label": "Search the officers' packs", "consequence": "An uncommon card hidden under a false bottom.", "effect": { "type": "gainCard", "rarity": "uncommon" } },
-            { "label": "Search the officers' packs", "consequence": "+1 life — someone left a spare compass. You needed that.", "effect": { "type": "gainLife", "amount": 1 } }
+            { "label": "Search the officers' packs", "consequence": "+1 life — someone left a spare compass. You needed that.", "effect": { "type": "gainLife", "amount": 1 } },
+            { "label": "Search the officers' packs", "consequence": "Something personal left behind — added to inventory", "effect": { "type": "gainItem" } }
           ],
           [
             { "label": "Take the classified orders", "consequence": "The enemy codes are yours. +24 crystals on the black market.", "effect": { "type": "gainCrystals", "amount": 24 } },

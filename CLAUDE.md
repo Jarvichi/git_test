@@ -1,5 +1,8 @@
 # Jarv's Amazing Web Game — Claude Instructions
 
+## Development and Token Use
+Use tokens sparingly, remember that the user has limited tokens, ensure that all changes are carried out in small steps, commit and push between each small change (even if the change isn't complete yet). To aid this each task should have a clear plan created, with each step actionable.
+
 ## Project Overview
 A browser-based strategy card game. Deploy units, build structures, and cast upgrades to destroy the enemy base. The only platform is the web app (`web/`).
 

@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-13 (session 4).
+Issues sourced from GitHub. Last synced: 2026-03-14 (session 5).
 
 ---
 
@@ -14,6 +14,8 @@ When working an issue from this file, go and check the GitHub issue for addition
 - [x] **#143** Campaign map: visited nodes full brightness + ✓ tick — already fixed
 - [x] **#149** Campaign events: acts 2/3 reuse Act 1 text — already fixed
 - [x] **#151** Title screen "Deck: X cards" label — already fixed
+- [x] **#155** Inventory item pool + random rewards across all act events (see UX section)
+- [x] **Event randomisation** — act2 supply-cache expanded from deterministic single-choice pools to full random-outcome pools; `gainItem` (random pool, no itemId) added to events in acts 2, 3, 4
 
 ---
 
@@ -50,7 +52,7 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟡 UX / UI Bugs (new)
 
-- [ ] **#155** Inventory items: too many duplicate items granted — move item pool to JSON, weight-based `computeReward()` helper, no duplicates; 1000 items; achievement for full set; daily login + campaign events feed through same system
+- [x] **#155** Inventory items: too many duplicate items granted — 423 items in `items.json`, unified `rewards.json`, weight-based `computeReward()` with dupe-skipping, daily login + all campaign events feed through same system; `gainItem` entries in all act event nodes draw from random pool
 - [x] **#151** Title screen: "Deck: X cards" label is confusing — replace with a badge on Deck Builder button when unused cards exist; show "Collection X/Y" (unlocked/total) instead
 - [x] **#143** Campaign map: visited nodes should render at full brightness with a solid fill and a ✓ tick overlay
 

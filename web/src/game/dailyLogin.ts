@@ -1,7 +1,27 @@
 // ─── Daily Login Rewards ──────────────────────────────────────────────────────
 
+import itemsJson   from '../data/items.json'
+import rewardsJson from '../data/rewards.json'
+
 const DAILY_KEY     = 'jarv_daily_login'
 const INVENTORY_KEY = 'jarv_inventory'
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+export interface RewardDef {
+  id: string
+  name: string
+  icon: string
+  desc: string
+  lore: string
+  weight: number
+  type: 'crystals' | 'card' | 'pack' | 'item'
+  // type-specific
+  amount?:   number   // crystals: how many
+  cardName?: string   // card: specific card (resolved at grant time for rarity rewards)
+  rarity?:   string   // card: pick random card of this rarity
+  count?:    number   // pack: number of cards (default 5)
+}
 
 export interface UselessItem {
   id: string
@@ -11,36 +31,44 @@ export interface UselessItem {
   acquiredDate: string
 }
 
-export interface DailyReward {
-  type: 'crystals' | 'card' | 'pack' | 'uselessItem'
-  amount?: number           // crystals amount
-  cardName?: string         // single card reward
-  packCards?: string[]      // pack reward (App resolves these)
-  item?: Omit<UselessItem, 'acquiredDate'>
+// ── Reward pool ───────────────────────────────────────────────────────────────
+
+/** Items from items.json promoted to RewardDef with type:'item' */
+export const ALL_ITEMS: RewardDef[] = (itemsJson as Omit<RewardDef, 'type'>[]).map(
+  i => ({ ...i, type: 'item' as const }),
+)
+
+/** Non-item rewards (crystals, cards, packs) */
+const NON_ITEM_REWARDS: RewardDef[] = rewardsJson as RewardDef[]
+
+/** Full reward pool — everything a player might receive */
+export const ALL_REWARDS: RewardDef[] = [...NON_ITEM_REWARDS, ...ALL_ITEMS]
+
+// ── Core function ─────────────────────────────────────────────────────────────
+
+/**
+ * Pick a weighted-random reward.
+ * - If pool omitted, uses ALL_REWARDS (crystals + cards + packs + items).
+ * - Item rewards the player already owns are excluded; falls back to full pool
+ *   only if the player owns every item in the candidate set.
+ */
+export function computeReward(
+  inventory: UselessItem[],
+  pool: RewardDef[] = ALL_REWARDS,
+): RewardDef {
+  const ownedIds = new Set(inventory.map(i => i.id))
+  const available = pool.filter(r => r.type !== 'item' || !ownedIds.has(r.id))
+  const source = available.length > 0 ? available : pool
+
+  let rand = Math.random() * source.reduce((s, r) => s + r.weight, 0)
+  for (const r of source) {
+    rand -= r.weight
+    if (rand <= 0) return r
+  }
+  return source[source.length - 1]
 }
 
-export const USELESS_ITEM_POOL: Omit<UselessItem, 'acquiredDate'>[] = [
-  { id: 'slippers',  name: 'Virtual Slippers',    icon: '🥿', desc: 'Cozy, but digital. Left one only.' },
-  { id: 'lint',      name: 'Pocket Lint',          icon: '🧶', desc: 'Found in your other pants.' },
-  { id: 'receipt',   name: 'Old Receipt',          icon: '🧾', desc: 'Milk: £0.99. From 2019.' },
-  { id: 'key',       name: 'Mystery Key',          icon: '🗝', desc: 'You no longer remember which lock.' },
-  { id: 'map',       name: 'Incorrect Map',        icon: '🗺', desc: 'All roads lead to a swamp.' },
-  { id: 'manual',    name: 'Instruction Manual',   icon: '📖', desc: "For an appliance you don't own." },
-  { id: 'rock',      name: 'Favourite Rock',       icon: '🪨', desc: 'Smooth, satisfying, useless.' },
-  { id: 'leaf',      name: 'Pretty Leaf',          icon: '🍂', desc: 'From that really nice walk.' },
-  { id: 'button',    name: 'Spare Button',         icon: '🔵', desc: 'Never matched anything. Not even close.' },
-  { id: 'wrapper',   name: 'Candy Wrapper',        icon: '🍬', desc: 'The candy is long gone.' },
-  { id: 'sticker',   name: 'Gold Star Sticker',    icon: '⭐', desc: "For... existing? Sure, why not." },
-  { id: 'battery',   name: 'Dead Battery',         icon: '🔋', desc: 'Definitely recycling it tomorrow.' },
-  { id: 'coin',      name: 'Foreign Coin',         icon: '🪙', desc: 'From a country that no longer exists.' },
-  { id: 'magnet',    name: 'Fridge Magnet',        icon: '🧲', desc: '"Visit [REDACTED]!" says the magnet.' },
-  { id: 'crayon',    name: 'Broken Crayon',        icon: '🖍', desc: 'The best colour. Naturally.' },
-  { id: 'warranty',  name: 'Expired Warranty',     icon: '📄', desc: 'Expired 6 years ago.' },
-  { id: 'charm',     name: 'Lucky Charm',          icon: '🍀', desc: "It hasn't worked yet." },
-  { id: 'dial',      name: 'Random Dial',          icon: '📻', desc: 'No one knows what it controls.' },
-  { id: 'marble',    name: 'Glass Marble',         icon: '🔮', desc: "Sees the future. Won't say what it sees." },
-  { id: 'tape',      name: 'Cassette Tape',        icon: '📼', desc: 'No tape player. No problem.' },
-]
+// ── Daily login ───────────────────────────────────────────────────────────────
 
 export function hasDailyReward(): boolean {
   try {
@@ -53,33 +81,28 @@ export function hasDailyReward(): boolean {
   }
 }
 
-export function claimDailyReward(): DailyReward {
+/** Claim today's daily reward. Returns a RewardDef — App resolves rarity cards. */
+export function claimDailyReward(): RewardDef {
   const today = new Date().toISOString().slice(0, 10)
   try { localStorage.setItem(DAILY_KEY, JSON.stringify({ date: today })) } catch { /* ignore */ }
-
-  const roll = Math.random()
-  if (roll < 0.35) {
-    // Crystals — most common
-    return { type: 'crystals', amount: 5 + Math.floor(Math.random() * 26) }  // 5–30
-  } else if (roll < 0.58) {
-    // Single card (App resolves name)
-    return { type: 'card' }
-  } else if (roll < 0.75) {
-    // Card pack (App resolves names — generates 5 cards)
-    return { type: 'pack' }
-  } else {
-    // Useless item
-    const item = USELESS_ITEM_POOL[Math.floor(Math.random() * USELESS_ITEM_POOL.length)]
-    return { type: 'uselessItem', item }
-  }
+  return computeReward(loadInventory())
 }
+
+// ── Inventory ─────────────────────────────────────────────────────────────────
 
 export function addToInventory(item: Omit<UselessItem, 'acquiredDate'>): void {
   try {
     const raw = localStorage.getItem(INVENTORY_KEY)
     const inv: UselessItem[] = raw ? JSON.parse(raw) : []
+    const isNew = !inv.some(i => i.id === item.id)
     inv.push({ ...item, acquiredDate: new Date().toISOString().slice(0, 10) })
     localStorage.setItem(INVENTORY_KEY, JSON.stringify(inv))
+    if (isNew) {
+      // Lazy import to avoid circular dep at module load time
+      import('./achievements').then(({ incrementAchievementProgress }) => {
+        incrementAchievementProgress('misc:unique_items')
+      })
+    }
   } catch { /* ignore */ }
 }
 
