@@ -14,4 +14,17 @@ export function isNoDamageMode(): boolean {
   }
 }
 
+/**
+ * Debug mode is enabled via URL query parameter `?debug` (any value).
+ * Shows avoidance-area overlays on the battlefield to help investigate stuck units.
+ */
+export function isDebugMode(): boolean {
+  try {
+    if (typeof window === 'undefined') return false
+    return new URLSearchParams(window.location.search).has('debug')
+  } catch {
+    return false
+  }
+}
+
 export default null

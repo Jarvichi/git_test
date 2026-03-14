@@ -4,7 +4,7 @@ import { CardTile } from './CardTile'
 import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 import { BattleEventOverlay } from './BattleEventOverlay'
-import { isNoDamageMode } from '../game/debug'
+import { isNoDamageMode, isDebugMode } from '../game/debug'
 import { getRelicDef } from '../game/relics'
 
 interface Props {
@@ -890,6 +890,36 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
         <LaneBackground env={state.environment} />
         <ForestBorder theme={actTheme} />
         {(state.terrain ?? []).map(obs => <TerrainTile key={obs.id} obs={obs} />)}
+        {isDebugMode() && (state.terrain ?? []).map(obs => {
+          // Avoidance zone: units are repelled within (obs.radius + 22) game units.
+          // x-axis (forward/vertical on screen): 500 units → 100% field height → 0.2% per unit
+          // y-axis (lateral/horizontal on screen): 160 units → 72% field width → 0.45% per unit
+          const avoidR   = obs.radius + 22
+          const topPct   = (1 - obs.x / LANE_WIDTH) * 100
+          const leftPct  = 50 + (obs.y / 80) * 36
+          const wPct     = avoidR * 2 * (36 / 80)    // diameter in % of field width
+          const hPct     = avoidR * 2 * (100 / 500)  // diameter in % of field height
+          return (
+            <div
+              key={`dbg-${obs.id}`}
+              style={{
+                position: 'absolute',
+                top: `${topPct}%`,
+                left: `${leftPct}%`,
+                width: `${wPct}%`,
+                height: `${hPct}%`,
+                transform: 'translate(-50%, -50%)',
+                borderRadius: '50%',
+                background: 'rgba(255, 0, 0, 0.25)',
+                border: '1px solid rgba(255, 80, 80, 0.7)',
+                pointerEvents: 'none',
+                zIndex: 50,
+                boxSizing: 'border-box',
+              }}
+              title={`Avoidance zone: r=${avoidR} (obs.radius=${obs.radius})`}
+            />
+          )
+        })}
         {(() => {
           // Group walls by owner+x so stacked wall types can share a composite graphic
           const wallGroups = new Map<string, Unit[]>()
