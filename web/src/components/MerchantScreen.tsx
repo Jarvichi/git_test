@@ -67,6 +67,7 @@ export function MerchantScreen({ items, crystals, onBuy, onDone }: Props) {
                 key={key}
                 className={`merchant-item merchant-item--rare merchant-item--inv${bought ? ' merchant-item--bought' : ''}`}
               >
+                <div className="merchant-curiosity-label">✦ CURIOSITY</div>
                 <div className="merchant-inv-tile">
                   <div className="merchant-inv-icon">{inv.icon}</div>
                   <div className="merchant-inv-name">{inv.name}</div>

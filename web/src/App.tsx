@@ -137,7 +137,7 @@ function resolvedNodeOpts(
   }
 }
 
-/** Build merchant item list: 3 cards + 30% chance of 1 unowned inventory item at 8 crystals. */
+/** Build merchant item list: 3 cards + ~1-in-5 chance of 1 unowned inventory 'Curiosity' at 10–20 crystals. */
 function buildMerchantItems(): MerchantItem[] {
   const catalog   = getCardCatalog()
   const cardNames = generateMerchantCards()
@@ -145,12 +145,13 @@ function buildMerchantItems(): MerchantItem[] {
     const card = catalog.find(c => c.name === name)!
     return cardMerchantItem(card)
   })
-  if (Math.random() < 0.3) {
+  if (Math.random() < 0.2) {
     const owned = new Set(loadInventory().map(i => i.id))
     const available = ALL_ITEMS.filter(i => !owned.has(i.id))
     if (available.length > 0) {
-      const inv = available[Math.floor(Math.random() * available.length)]
-      items.push({ kind: 'item', inventoryItem: { id: inv.id, name: inv.name, icon: inv.icon, desc: inv.desc, acquiredDate: '' }, price: 8 })
+      const inv   = available[Math.floor(Math.random() * available.length)]
+      const price = 10 + Math.floor(Math.random() * 11)   // 10–20 crystals
+      items.push({ kind: 'item', inventoryItem: { id: inv.id, name: inv.name, icon: inv.icon, desc: inv.desc, acquiredDate: '' }, price })
     }
   }
   return items
