@@ -931,6 +931,7 @@
       "environment": "citadel",
       "bossAI": "archivist",
       "bossCard": "Giant",
+      "bossName": "The Archivist",
       "bossDialogue": [
         "\"I have been expecting you. I have been expecting you since you crossed the shard boundary. I have a file.\"",
         "\"You should know: after turn eight, I stop being patient. The archive opens. Everything I have collected \u2014 everything \u2014 becomes available simultaneously.\"",
