@@ -16,6 +16,21 @@ When working an issue from this file, go and check the GitHub issue for addition
 - [x] **#192** Campaign events: HP bar on EventScreen — implemented
 - [x] **#193** Stuck units: `?debug` terrain overlay — implemented
 
+### Boss Fight Splash + HP fix (no issue — user request)
+- [ ] Step 1: Add `bossHpMultiplier` field to `QuestNode` type in `questline.ts`; pass through `newGame()` into `GameState`; apply multiplier when spawning boss card in `engine.ts`; default boss nodes in acts 1–4 to `"bossHpMultiplier": 10`
+- [ ] Step 2: Detect phase-2 trigger in `App.tsx` (compare prev/current `bossCardActive` via `useRef`); set `showBossSplash` state; auto-dismiss after 2.5 s
+- [ ] Step 3: Render full-screen `BossSplash` overlay in `Battlefield.tsx` (or inline in App): `⚡ BOSS FIGHT ⚡` + boss name + flavour line; terminal retro style; CSS in `styles.css`
+
+### #171 — Mystery Node
+- [ ] Step 1: Add `'mystery'` to `QuestNodeType` in `questline.ts`; add `?` icon in `NodeMap.tsx`; peek modal shows "Unknown encounter"
+- [ ] Step 2: Add mystery nodes to act 1–4 JSON data (1–2 per act, replacing a mid-map battle)
+- [ ] Step 3: Create `MysteryScreen.tsx` — terminal-style scene, lore flavour text, `computeReward` reward, "Collect & Continue" button
+- [ ] Step 4: Wire in `App.tsx`: detect `node.type === 'mystery'`, set `screen = 'mystery'`; on continue apply reward and advance node
+
+### #179 — Merchant Inventory Item
+- [ ] Step 1: Extend `MerchantItem` interface to support `inventoryItem?: UselessItem`; update `MerchantScreen.tsx` to render inventory items (icon + name + desc)
+- [ ] Step 2: In `App.tsx` merchant generation, 30% chance to append 1 random unowned `UselessItem` priced at 8 crystals; on purchase call `addToInventory`
+
 
 
 - [x] **#167** Settings Screen: overflow doesn't scroll on small devices — add `min-height: 0` to `.settings-body`
