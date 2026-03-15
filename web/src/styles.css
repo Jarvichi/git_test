@@ -2730,6 +2730,28 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Relic selection screen ──────────────────────────────────── */
+.relic-broken-notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid #884444;
+  background: #1a0808;
+  color: #ff9999;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  max-width: 420px;
+  width: 100%;
+}
+.relic-broken-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  filter: grayscale(0.6);
+}
+.relic-broken-text strong {
+  color: #ffbbbb;
+}
+
 .relic-select-screen {
   display: flex;
   flex-direction: column;

@@ -233,6 +233,7 @@ export default function App() {
     playerScore: number
   } | null>(null)
   const relicSelectDoneRef  = useRef<(relicName: string | null) => void>(() => {})
+  const brokenRelicRef      = useRef<{ name: string; icon: string } | null>(null)
   const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
   const [showBossSplash, setShowBossSplash] = useState(false)
   const prevBossCardActiveRef = useRef(false)
@@ -910,6 +911,8 @@ export default function App() {
     if (equippedRelic && equippedRelic !== act?.rewardRelic && Math.random() < 0.5) {
       removeEarnedRelic(equippedRelic)
       const broken = BROKEN_RELIC_ITEMS[equippedRelic]
+      const relicDef = getRelicDef(equippedRelic)
+      brokenRelicRef.current = { name: relicDef?.name ?? equippedRelic, icon: relicDef?.icon ?? broken?.icon ?? '🪨' }
       addToInventory({
         id: `broken-relic-${equippedRelic.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
         name: broken?.name ?? `Cracked ${equippedRelic}`,
@@ -1416,7 +1419,8 @@ export default function App() {
         <RelicSelectScreen
           earnedRelics={loadEarnedRelics()}
           currentRelic={run?.activeRelic ?? null}
-          onSelect={relic => relicSelectDoneRef.current(relic)}
+          brokenRelic={brokenRelicRef.current}
+          onSelect={relic => { brokenRelicRef.current = null; relicSelectDoneRef.current(relic) }}
         />
       )}
 
