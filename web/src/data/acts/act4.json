@@ -8,6 +8,15 @@
   "rewardTags": [
     "crystal"
   ],
+  "replayModifiers": [
+    { "type": "enemyHpPercent",         "value": 30,   "label": "+30% enemy HP" },
+    { "type": "enemyIntervalReduction", "value": 1000, "label": "Enemies act faster" },
+    { "type": "enemyHandBonus",         "value": 2,    "label": "Enemies start +2 cards" },
+    { "type": "crystalBonus",           "value": 25,   "label": "+25 crystals per battle" },
+    { "type": "enemyHpPercent",         "value": 35,   "label": "+35% enemy HP" },
+    { "type": "enemyIntervalReduction", "value": 750,  "label": "Enemies act even faster" },
+    { "type": "enemyHandBonus",         "value": 1,    "label": "Enemies start +3 cards" }
+  ],
   "intro": [
     {
       "title": "THE CRYSTAL SPIRE",
