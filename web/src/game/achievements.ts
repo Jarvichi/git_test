@@ -656,6 +656,42 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     reward: { type: 'crystals', crystals: 333 },
     tier: 2,
   },
+  // ── Mystery Node ──────────────────────────────────────────────────────────
+
+  {
+    id: 'misc:mystery_1',
+    name: 'Wrong Turn',
+    description: 'You arrived. The battlefield was empty.',
+    category: 'misc',
+    progressKey: 'misc:mystery_encounter',
+    target: 1,
+    reward: { type: 'crystals', crystals: 50 },
+    tier: 1,
+  },
+  {
+    id: 'misc:mystery_100',
+    name: 'The Silence Feels Familiar',
+    description: 'Find 100 empty battlefields. A pattern. Or paranoia.',
+    category: 'misc',
+    progressKey: 'misc:mystery_encounter',
+    target: 100,
+    reward: { type: 'crystals', crystals: 300 },
+    tier: 1,
+  },
+  {
+    id: 'misc:mystery_1000',
+    name: 'Something Watches',
+    description: 'A thousand empty battlefields. You are not alone in noticing.',
+    category: 'misc',
+    progressKey: 'misc:mystery_encounter',
+    target: 1000,
+    reward: {
+      type: 'item',
+      item: { id: 'void_compass', name: 'Void Compass', icon: '🧭', desc: 'Points toward nothing. Has never been wrong.' },
+    },
+    tier: 2,
+  },
+
   {
     id: 'misc:refresh_cheat',
     name: 'Ctrl+R',
@@ -709,6 +745,42 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
     reward: {
       type: 'item',
       item: { id: 'category_error', name: 'Category Error', icon: '❓', desc: 'This item is not an item.' },
+    },
+    tier: 2,
+  },
+
+  // ── Merchant ──────────────────────────────────────────────────────────────
+
+  {
+    id: 'misc:merchant_sweep_1',
+    name: 'Big Spender',
+    description: 'Buy every item in a single merchant visit.',
+    category: 'misc',
+    progressKey: 'misc:merchant_sweep',
+    target: 1,
+    reward: { type: 'crystals', crystals: 100 },
+    tier: 1,
+  },
+  {
+    id: 'misc:merchant_sweep_10',
+    name: 'Merchant\'s Favourite',
+    description: 'Buy every item in a merchant visit 10 times.',
+    category: 'misc',
+    progressKey: 'misc:merchant_sweep',
+    target: 10,
+    reward: { type: 'crystals', crystals: 500 },
+    tier: 1,
+  },
+  {
+    id: 'misc:merchant_sweep_100',
+    name: 'The Merchant Fears You',
+    description: 'Buy every item in a merchant visit 100 times.',
+    category: 'misc',
+    progressKey: 'misc:merchant_sweep',
+    target: 100,
+    reward: {
+      type: 'item',
+      item: { id: 'merchants_ledger', name: "Merchant's Ledger", icon: '📒', desc: 'Every page is IOUs. All to you.' },
     },
     tier: 2,
   },
