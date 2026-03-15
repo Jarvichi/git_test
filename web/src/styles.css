@@ -387,10 +387,10 @@ body {
 }
 
 /* HP bar tinted by upgrade level — overrides player/opponent defaults */
-.lane-unit:has(.lane-unit-level--1) .lane-unit-hp-fill { background: #88cc88; }
-.lane-unit:has(.lane-unit-level--2) .lane-unit-hp-fill { background: #ffcc00; }
-.lane-unit:has(.lane-unit-level--3) .lane-unit-hp-fill { background: #cc88ff; }
-.lane-unit:has(.lane-unit-level--4) .lane-unit-hp-fill { background: #ff5533; }
+.lane-unit:has(.lane-unit-level--1) .lane-unit-hp-fill { background: #55cc55; }
+.lane-unit:has(.lane-unit-level--2) .lane-unit-hp-fill { background: #4499ff; }
+.lane-unit:has(.lane-unit-level--3) .lane-unit-hp-fill { background: #bb66ff; }
+.lane-unit:has(.lane-unit-level--4) .lane-unit-hp-fill { background: #ffcc00; }
 
 /* Structures anchored to base edges, no transition needed */
 .lane-unit--structure {
@@ -468,31 +468,31 @@ body {
   flex-shrink: 0;
 }
 .lane-unit-level--1 {
-  color: #88cc88;
-  text-shadow: 0 0 3px rgba(136, 204, 136, 0.5);
+  color: #55cc55;
+  text-shadow: 0 0 3px rgba(85, 204, 85, 0.6);
 }
 .lane-unit-level--2 {
-  color: #ffcc00;
-  text-shadow: 0 0 5px rgba(255, 204, 0, 0.8);
+  color: #4499ff;
+  text-shadow: 0 0 5px rgba(68, 153, 255, 0.8);
 }
 .lane-unit-level--3 {
-  color: #cc88ff;
-  text-shadow: 0 0 6px rgba(200, 100, 255, 0.9);
+  color: #bb66ff;
+  text-shadow: 0 0 6px rgba(187, 102, 255, 0.9);
 }
 .lane-unit-level--4 {
-  color: #ff5533;
-  text-shadow: 0 0 8px rgba(255, 80, 40, 1);
+  color: #ffcc00;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 1);
 }
 
 /* Upgraded building glow on the sprite only, not the whole unit div */
 .lane-unit--upgraded-2 .lane-unit-sprite {
-  filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.8));
+  filter: drop-shadow(0 0 4px rgba(68, 153, 255, 0.8));
 }
 .lane-unit--upgraded-3 .lane-unit-sprite {
-  filter: drop-shadow(0 0 5px rgba(200, 100, 255, 0.9));
+  filter: drop-shadow(0 0 5px rgba(187, 102, 255, 0.9));
 }
 .lane-unit--upgraded-4 .lane-unit-sprite {
-  filter: drop-shadow(0 0 7px rgba(255, 80, 40, 1));
+  filter: drop-shadow(0 0 7px rgba(255, 204, 0, 1));
 }
 
 /* Attack flash — brief brightness burst when a unit strikes */
