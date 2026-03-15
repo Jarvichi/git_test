@@ -219,7 +219,7 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 
 ### Music
 - [x] **#144** Refactor sound.ts: export `MusicTrackConfig` type and `startMusicTrack`/`stopMusicTrack` generic API; named config objects (`BATTLE_MUSIC`, `TITLE_MUSIC`, `MAP_MUSIC`, etc.) passable to the engine; per-act wiring remains a future task
-- [ ] **#176** Per-act music: add `mapMusic`, `battleMusic`, `bossMusic` fields to act JSON; wire to startMusicTrack calls — IN PROGRESS
+- [x] **#176** Per-act music: `mapMusicId`, `battleMusicId`, `bossMusicId` added to Act interface + act JSONs; music router uses act overrides with fallback to defaults; `MUSIC_TRACKS` registry exported from sound.ts
 
 ### Merchant
 - [x] **#179** Merchant rarely offers an inventory item alongside cards — implemented
