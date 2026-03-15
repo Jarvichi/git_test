@@ -1162,7 +1162,7 @@ body {
   padding: 3px 7px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all 0.1s;
+  transition: all 0.15s;
 }
 
 .filter-btn:hover {
@@ -1582,14 +1582,14 @@ body {
   padding: 2px 4px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all 0.1s;
+  transition: all 0.15s;
   white-space: nowrap;
 }
 .extra-btn--disenchant { border-color: rgba(136, 204, 255, 0.4); color: #88ccff; }
 .extra-btn--disenchant:hover:not(:disabled) { background: rgba(136, 204, 255, 0.12); border-color: #88ccff; }
 .extra-btn--master { border-color: rgba(255, 215, 0, 0.4); color: #ffd700; }
 .extra-btn--master:hover:not(:disabled) { background: rgba(255, 215, 0, 0.12); border-color: #ffd700; }
-.extra-btn--disabled, .extra-btn:disabled { opacity: 0.3; cursor: default; }
+.extra-btn--disabled, .extra-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .cdm-info-btn {
   border-color: #333;
   color: #555;
@@ -2059,7 +2059,7 @@ body {
   padding: 4px 12px;
   border-radius: 3px;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
 }
 .wn-btn:hover      { background: #444; color: #ddd; }
 .wn-btn--muted     { border-color: #333; color: #666; }
