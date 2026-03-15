@@ -291,10 +291,10 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 - [x] Post-battle card reward: pick 1 of 3
 
 **Phase 3 — Relics**
-- [ ] Relic data in `web/src/game/relics.ts`
-- [ ] Relic effects applied in engine.ts
-- [ ] Relic display on Battlefield HUD
-- [ ] Relic selection screen between acts
+- [x] Relic data in `web/src/game/relics.ts`
+- [x] Relic effects applied in engine.ts
+- [x] Relic display on Battlefield HUD
+- [x] Relic selection screen between acts
 
 **Phase 4 — Expansions**
 - [ ] Add Verdant Shard cards (80 cards) with sprites

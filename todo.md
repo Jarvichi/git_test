@@ -10,6 +10,8 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+- [ ] **Phase 7 / CLAUDE.md** Battle summary screen: stats popup after each campaign battle win — cards played, kills, damage dealt, duration — see `plan.md` for full implementation plan
+
 - [x] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
 - [x] **#193** Stuck units: add `?debug` overlay that renders terrain avoidance areas as semi-transparent red circles on the battlefield
 
