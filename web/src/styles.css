@@ -1050,9 +1050,6 @@ body {
   animation: none;
 }
 
-.title-play-btn {
-  /* size now from .title-buttons .action-btn */
-}
 
 .title-nav-btn {
   border-color: rgba(51, 255, 51, 0.5);
@@ -1549,7 +1546,8 @@ body {
   background: rgba(136, 204, 255, 0.12);
   box-shadow: 0 0 10px rgba(136, 204, 255, 0.3);
 }
-.collection-disenchant-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.collection-disenchant-btn:disabled,
+.collection-pack-btn:disabled,
 
 .collection-pack-btn {
   font-size: 12px;
@@ -1562,7 +1560,6 @@ body {
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 .collection-pack-btn--disabled,
-.collection-pack-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .collection-flash {
   font-size: 12px;
