@@ -4640,3 +4640,96 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Battle Summary Screen ─────────────────────────────── */
+
+.bsummary-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.bsummary-panel {
+  background: #0a0a0a;
+  border: 1px solid #2a4a2a;
+  max-width: 320px;
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 0 32px rgba(51, 255, 51, 0.1);
+}
+
+.bsummary-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #4a8a4a;
+  text-align: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #1e2e1e;
+}
+
+.bsummary-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bsummary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.bsummary-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #4a8a4a;
+}
+
+.bsummary-value {
+  font-size: 14px;
+  color: #33ff33;
+  font-weight: bold;
+}
+
+.bsummary-cards {
+  border-top: 1px solid #1e2e1e;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bsummary-cards-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #4a8a4a;
+  margin-bottom: 4px;
+}
+
+.bsummary-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bsummary-card-name {
+  font-size: 11px;
+  color: #88cc88;
+}
+
+.bsummary-card-count {
+  font-size: 11px;
+  color: #33ff33;
+}
+
+.bsummary-continue {
+  margin-top: 4px;
+}

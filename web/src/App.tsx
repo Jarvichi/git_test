@@ -62,6 +62,7 @@ import {
 } from './game/achievements'
 import { AchievementsScreen } from './components/AchievementsScreen'
 import { HeroCardsScreen }   from './components/HeroCardsScreen'
+import { BattleSummary }    from './components/BattleSummary'
 import './styles.css'
 
 // Apply saved display settings on load
@@ -138,6 +139,7 @@ type Screen =
   | 'achievements'
   | 'campaignfailed'
   | 'heroCards'
+  | 'battlesummary'
 
 export default function App() {
   // ── PWA auto-update ───────────────────────────────────────────────────────────
@@ -198,6 +200,12 @@ export default function App() {
   // Cutscenes & boss dialogue
   const [cutscenePanels, setCutscenePanels]   = useState<CutscenePanel[]>([])
   const cutsceneDoneRef     = useRef<() => void>(() => {})
+  const summaryDoneRef      = useRef<() => void>(() => {})
+  const [summaryStats, setSummaryStats] = useState<{
+    stats: import('./game/types').BattleStats
+    gameTime: number
+    playerScore: number
+  } | null>(null)
   const relicSelectDoneRef  = useRef<(relicName: string | null) => void>(() => {})
   const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
 
@@ -827,11 +835,19 @@ export default function App() {
     saveCrystals(newCrystals)
     setCrystals(newCrystals)
 
-    // Show card reward (pass act's reward tags so themed cards surface more often)
-    const choices = generateRewardChoices(node.type, act.rewardTags)
-    setRewardChoices(choices)
-    setRewardCrystals(crystalReward)
-    setScreen('reward')
+    // Capture stats snapshot then show summary; summary → reward
+    setSummaryStats({
+      stats: gameState.battleStats,
+      gameTime: gameState.gameTime,
+      playerScore: gameState.playerScore,
+    })
+    summaryDoneRef.current = () => {
+      const choices = generateRewardChoices(node.type, act.rewardTags)
+      setRewardChoices(choices)
+      setRewardCrystals(crystalReward)
+      setScreen('reward')
+    }
+    setScreen('battlesummary')
   }, [run, gameState])
 
   const handleRewardPick = useCallback((cardName: string) => {
@@ -1071,6 +1087,13 @@ export default function App() {
           (campaignPlayCountsRef.current[card.name] ?? 0) + 1
       }
       const next = playCard(s, cardId)
+      next.battleStats = {
+        ...next.battleStats,
+        cardsPlayed: {
+          ...next.battleStats.cardsPlayed,
+          [card.name]: (next.battleStats.cardsPlayed[card.name] ?? 0) + 1,
+        },
+      }
       saveBattleState(next)
       return next
     })
@@ -1281,6 +1304,15 @@ export default function App() {
           run={run}
           onSelectNode={handleSelectNode}
           onBack={handleMainMenu}
+        />
+      )}
+
+      {screen === 'battlesummary' && summaryStats && (
+        <BattleSummary
+          stats={summaryStats.stats}
+          gameTime={summaryStats.gameTime}
+          playerScore={summaryStats.playerScore}
+          onContinue={() => summaryDoneRef.current()}
         />
       )}
 
