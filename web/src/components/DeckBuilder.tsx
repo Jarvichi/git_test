@@ -367,7 +367,7 @@ export function DeckBuilder({ onBack, fatiguedCards = [] }: Props) {
             </div>
             <button
               className="action-btn"
-              style={{ fontSize: '11px', padding: '5px 10px', borderColor: 'rgba(51,255,51,0.4)', color: '#aaa' }}
+              style={{ fontSize: '11px', padding: '5px 10px', borderColor: 'rgba(51,255,51,0.4)', color: 'var(--game-text-color-dim)' }}
               onClick={() => setShowAutoBuild(true)}
             >
               ⚡ AUTO BUILD

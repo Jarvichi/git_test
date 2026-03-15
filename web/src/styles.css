@@ -8,8 +8,8 @@
 
 :root {
   --game-text-color: #33ff33;
-  --game-text-color-dim:   color-mix(in srgb, var(--game-text-color) 55%, transparent);
-  --game-text-color-muted: color-mix(in srgb, var(--game-text-color) 35%, transparent);
+  --game-text-color-dim:   color-mix(in srgb, var(--game-text-color) 65%, transparent);
+  --game-text-color-muted: color-mix(in srgb, var(--game-text-color) 50%, transparent);
   --game-font-size: 14px;
 }
 
@@ -125,7 +125,7 @@ body {
 }
 
 .score-player   { color: var(--game-text-color); }
-.score-sep      { color: #888; }
+.score-sep      { color: var(--game-text-color-dim); }
 .score-opponent { color: #ff4444; }
 
 .cooldown-label {
@@ -725,7 +725,7 @@ body {
   background: rgba(0, 0, 0, 0.75);
   border: 1px solid #555;
   border-radius: 50%;
-  color: #999;
+  color: var(--game-text-color-dim);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -738,7 +738,7 @@ body {
 
 .hand-card-info-btn:hover {
   color: var(--game-text-color-muted);
-  border-color: #888;
+  border-color: var(--game-text-color-muted);
 }
 
 /* ─── Game Over Screen ───────────────────────────────── */
@@ -781,7 +781,7 @@ body {
 .gameover--draw .gameover-message { color: #00ccff; }
 
 .gameover-stats {
-  color: #888;
+  color: var(--game-text-color-dim);
   text-align: center;
   line-height: 1.8;
 }
@@ -803,7 +803,7 @@ body {
 }
 
 .gameover-score .score-player   { color: var(--game-text-color); }
-.gameover-score .score-sep { color: #888; }
+.gameover-score .score-sep { color: var(--game-text-color-dim); }
 .gameover-score .score-opponent { color: #ff4444; }
 
 /* ─── Buttons ────────────────────────────────────────── */
@@ -931,7 +931,7 @@ body {
   font-family: 'Courier New', monospace;
   font-size: 18px;
   letter-spacing: 6px;
-  color: #888;
+  color: var(--game-text-color-dim);
   text-transform: uppercase;
 }
 
@@ -1081,7 +1081,7 @@ body {
 
 .title-deck-info {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   letter-spacing: 1px;
 }
 
@@ -1114,7 +1114,7 @@ body {
 
 .overlay-count {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
 }
 
 .overlay-count--valid   { color: var(--game-text-color); }
@@ -1137,7 +1137,7 @@ body {
 .filter-bar::-webkit-scrollbar { display: none; }
 
 .filter-sep {
-  color: #666;
+  color: var(--game-text-color-muted);
   font-size: 10px;
   padding: 0 2px;
   flex-shrink: 0;
@@ -1146,7 +1146,7 @@ body {
 .filter-owned {
   margin-left: auto;
   font-size: 10px;
-  color: #888;
+  color: var(--game-text-color-dim);
   white-space: nowrap;
   flex-shrink: 0;
   padding-left: 8px;
@@ -1154,7 +1154,7 @@ body {
 
 .filter-label {
   font-size: 10px;
-  color: #666;
+  color: var(--game-text-color-muted);
   letter-spacing: 1px;
 }
 
@@ -1165,7 +1165,7 @@ body {
 .filter-btn {
   background: none;
   border: 1px solid #444;
-  color: #888;
+  color: var(--game-text-color-dim);
   font-family: inherit;
   font-size: 10px;
   padding: 3px 7px;
@@ -1187,7 +1187,7 @@ body {
 
 .filter-group-label {
   font-size: 9px;
-  color: #666;
+  color: var(--game-text-color-muted);
   letter-spacing: 1px;
   white-space: nowrap;
 }
@@ -1342,14 +1342,14 @@ body {
 
 .deckbuilder-panel-title {
   font-size: 10px;
-  color: #999;
+  color: var(--game-text-color-dim);
   letter-spacing: 1px;
   margin-bottom: 6px;
   flex-shrink: 0;
 }
 
 .deck-empty {
-  color: #888;
+  color: var(--game-text-color-dim);
   font-size: 12px;
   padding: 8px 0;
 }
@@ -1509,7 +1509,7 @@ body {
 .pack-card-rarity--legendary { color: #ffd700; text-shadow: 0 0 6px rgba(255,215,0,0.6); }
 .pack-card-rarity--rare      { color: #00aaff; text-shadow: 0 0 6px rgba(0,170,255,0.5); }
 .pack-card-rarity--uncommon  { color: #00ff88; }
-.pack-card-rarity--common    { color: #888; }
+.pack-card-rarity--common    { color: var(--game-text-color-dim); }
 
 .pack-wait {
   font-size: 12px;
@@ -1604,12 +1604,12 @@ body {
   color: #555;
   margin-left: auto;
 }
-.cdm-info-btn:hover { border-color: #666; color: var(--game-text-color-muted); }
+.cdm-info-btn:hover { border-color: var(--game-text-color-muted); color: var(--game-text-color-muted); }
 
 .deck-list-info-btn {
   background: none;
   border: none;
-  color: #666;
+  color: var(--game-text-color-muted);
   font-size: 11px;
   cursor: pointer;
   padding: 0 2px;
@@ -1648,7 +1648,7 @@ body {
   border-radius: 1px;
   transition: width 0.3s ease-out;
 }
-.mastery-xp { font-size: 8px; color: #888; white-space: nowrap; }
+.mastery-xp { font-size: 8px; color: var(--game-text-color-dim); white-space: nowrap; }
 
 /* ─── Battle Event Banner ────────────────────────────── */
 
@@ -1783,7 +1783,7 @@ body {
 .cdm-close  {
   background: none;
   border: none;
-  color: #888;
+  color: var(--game-text-color-dim);
   font-size: 14px;
   cursor: pointer;
   padding: 0 0 0 8px;
@@ -1842,7 +1842,7 @@ body {
 .cdm-trait {
   font-size: 9px;
   border: 1px solid #444;
-  color: #999;
+  color: var(--game-text-color-dim);
   padding: 1px 5px;
   border-radius: 2px;
   text-transform: uppercase;
@@ -1982,7 +1982,7 @@ body {
   padding-bottom: 12px;
 }
 .bj-title { font-size: 16px; color: #ffd700; letter-spacing: 3px; display: block; margin-bottom: 6px; }
-.bj-sub   { font-size: 11px; color: #666; font-style: italic; }
+.bj-sub   { font-size: 11px; color: var(--game-text-color-muted); font-style: italic; }
 
 .bj-rows  { display: flex; flex-direction: column; gap: 12px; }
 
@@ -1999,7 +1999,7 @@ body {
 
 .bj-label { font-size: 9px; color: var(--game-text-color-muted); letter-spacing: 1px; min-width: 45px; }
 .bj-cards { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
-.bj-total { font-size: 10px; color: #888; white-space: nowrap; }
+.bj-total { font-size: 10px; color: var(--game-text-color-dim); white-space: nowrap; }
 
 .bj-card {
   display: inline-block;
@@ -2071,7 +2071,7 @@ body {
   transition: all 0.15s;
 }
 .wn-btn:hover      { background: #444; color: var(--game-text-color-dim); }
-.wn-btn--muted     { border-color: #333; color: #666; }
+.wn-btn--muted     { border-color: #333; color: var(--game-text-color-muted); }
 .wn-btn--muted:hover { color: var(--game-text-color-muted); }
 
 /* ─── Narrator ──────────────────────────────────────────── */
@@ -2099,7 +2099,7 @@ body {
 
 .narrator-label {
   font-size: 8px;
-  color: #888;
+  color: var(--game-text-color-dim);
   letter-spacing: 2px;
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -2188,7 +2188,7 @@ body {
 
 /* Dim settings button without changing its size */
 .title-settings-btn {
-  color: #888;
+  color: var(--game-text-color-dim);
   border-color: rgba(51, 255, 51, 0.25);
 }
 .title-settings-btn:hover {
@@ -2244,7 +2244,7 @@ body {
 
 .nm-act-sub {
   font-size: 10px;
-  color: #888;
+  color: var(--game-text-color-dim);
   letter-spacing: 1px;
 }
 
@@ -2257,7 +2257,7 @@ body {
 
 .nm-hp-label {
   font-size: 9px;
-  color: #888;
+  color: var(--game-text-color-dim);
   letter-spacing: 1px;
 }
 
@@ -2392,7 +2392,7 @@ body {
   opacity: 0.7;
   margin-bottom: 1px;
 }
-.nm-node-type-badge--battle   { color: #888; }
+.nm-node-type-badge--battle   { color: var(--game-text-color-dim); }
 .nm-node-type-badge--elite    { color: #c8a020; }
 .nm-node-type-badge--boss     { color: #c03030; }
 .nm-node-type-badge--rest     { color: #4090b0; }
@@ -2400,7 +2400,7 @@ body {
 .nm-node-type-badge--merchant { color: #a06020; }
 
 .nm-node-icon  { font-size: 22px; line-height: 1; }
-.nm-node-name  { font-size: 11px; color: #999; letter-spacing: 0.5px; text-align: center; line-height: 1.3; }
+.nm-node-name  { font-size: 11px; color: var(--game-text-color-dim); letter-spacing: 0.5px; text-align: center; line-height: 1.3; }
 .nm-node-status { font-size: 9px; letter-spacing: 1px; min-height: 12px; }
 
 /* Type-coloured top border (visible even when locked) */
@@ -2770,12 +2770,12 @@ body {
 
 .reward-skip-btn {
   font-size: 10px;
-  color: #888;
+  color: var(--game-text-color-dim);
   border-color: #444;
 }
 .reward-skip-btn:hover {
   color: var(--game-text-color-dim);
-  border-color: #666;
+  border-color: var(--game-text-color-muted);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2832,7 +2832,7 @@ body {
 .relic-select-subtitle {
   margin-top: 6px;
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   max-width: 320px;
 }
 
@@ -2861,7 +2861,7 @@ body {
 }
 
 .relic-select-card:hover {
-  border-color: #888;
+  border-color: var(--game-text-color-muted);
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -2877,7 +2877,7 @@ body {
 
 .relic-select-card--none.relic-select-card--chosen {
   opacity: 1;
-  border-color: #888;
+  border-color: var(--game-text-color-muted);
   background: rgba(255, 255, 255, 0.05);
   box-shadow: none;
 }
@@ -2898,7 +2898,7 @@ body {
 
 .relic-select-desc {
   font-size: 10px;
-  color: #999;
+  color: var(--game-text-color-dim);
   line-height: 1.4;
 }
 
@@ -2974,7 +2974,7 @@ body {
 
 .ac-act {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   letter-spacing: 2px;
 }
 
@@ -3017,7 +3017,7 @@ body {
 
 .ac-flavour {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   font-style: italic;
   line-height: 1.6;
   max-width: 320px;
@@ -3222,7 +3222,7 @@ body {
 
 .crc-rank {
   font-size: 10px;
-  color: #999;
+  color: var(--game-text-color-dim);
   margin-bottom: 4px;
 }
 
@@ -3234,7 +3234,7 @@ body {
 
 .crc-count {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
 }
 
 .card-rest-candidate--selected .crc-count {
@@ -3251,7 +3251,7 @@ body {
 
 .card-rest-note {
   font-size: 10px;
-  color: #888;
+  color: var(--game-text-color-dim);
   max-width: 400px;
   line-height: 1.6;
 }
@@ -3345,7 +3345,7 @@ body {
 
 .event-hp-label {
   font-size: 9px;
-  color: #888;
+  color: var(--game-text-color-dim);
   letter-spacing: 1px;
 }
 
@@ -3570,7 +3570,7 @@ body {
 .mystery-field-label {
   font-size: 0.65rem;
   letter-spacing: 0.25em;
-  color: #666;
+  color: var(--game-text-color-muted);
 }
 .mystery-lore {
   font-size: 0.8rem;
@@ -4230,7 +4230,7 @@ body {
 
 .settings-value {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   min-width: 28px;
   text-align: right;
 }
@@ -4289,7 +4289,7 @@ body {
 
 .autobuild-sub {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   margin-top: 4px;
   line-height: 1.5;
 }
@@ -4329,13 +4329,13 @@ body {
 
 .autobuild-strategy-desc {
   font-size: 10px;
-  color: #888;
+  color: var(--game-text-color-dim);
 }
 
 .autobuild-cancel {
   align-self: flex-start;
   font-size: 11px;
-  color: #666;
+  color: var(--game-text-color-muted);
   border-color: #2a2a2a;
 }
 
@@ -4381,7 +4381,7 @@ body {
 
 .event-card-reveal-sub {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   text-align: center;
   margin-top: -12px;
 }
@@ -4426,7 +4426,7 @@ body {
 
 .daily-modal-sub {
   font-size: 11px;
-  color: #888;
+  color: var(--game-text-color-dim);
   margin-top: -6px;
 }
 
@@ -4461,7 +4461,7 @@ body {
 
 .daily-modal-useless-note {
   font-size: 10px;
-  color: #666;
+  color: var(--game-text-color-muted);
   font-style: italic;
 }
 
@@ -4471,12 +4471,12 @@ body {
 
 .inventory-count {
   font-size: 11px;
-  color: #666;
+  color: var(--game-text-color-muted);
 }
 
 .inventory-intro {
   font-size: 12px;
-  color: #888;
+  color: var(--game-text-color-dim);
   text-align: center;
   padding: 6px 0 2px;
   line-height: 1.5;
@@ -4544,7 +4544,7 @@ body {
 
 .inventory-item-desc {
   font-size: 8px;
-  color: #666;
+  color: var(--game-text-color-muted);
   text-align: center;
   line-height: 1.3;
   font-style: italic;
@@ -4584,7 +4584,7 @@ body {
 
 .inventory-section-title {
   font-size: 10px;
-  color: #666;
+  color: var(--game-text-color-muted);
   letter-spacing: 2px;
   padding: 0 4px;
 }
@@ -4662,7 +4662,7 @@ body {
 
 .ach-summary {
   font-size: 10px;
-  color: #888;
+  color: var(--game-text-color-dim);
 }
 
 .ach-tabs {
@@ -4676,7 +4676,7 @@ body {
 .ach-tab {
   background: none;
   border: 1px solid #444;
-  color: #888;
+  color: var(--game-text-color-dim);
   font-family: inherit;
   font-size: 11px;
   padding: 4px 10px;
@@ -4707,7 +4707,7 @@ body {
 .ach-category-label {
   padding: 6px 12px 4px;
   font-size: 11px;
-  color: #666;
+  color: var(--game-text-color-muted);
   border-bottom: 1px solid #222;
 }
 
@@ -4760,7 +4760,7 @@ body {
 }
 
 .ach-row--unlocked .ach-tier {
-  color: #888;
+  color: var(--game-text-color-dim);
 }
 
 .ach-text {
@@ -4782,7 +4782,7 @@ body {
 
 .ach-desc {
   font-size: 10px;
-  color: #666;
+  color: var(--game-text-color-muted);
 }
 
 .ach-bar {

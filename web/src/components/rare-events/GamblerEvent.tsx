@@ -93,7 +93,7 @@ export function GamblerEvent({ onDone }: Props) {
         {/* Header */}
         <div className="ld-header">
           <span className="ld-title" style={{ color: '#ffd700' }}>🎰 THE GAMBLER</span>
-          <span className="ld-sub" style={{ fontStyle: 'italic', color: '#aaa' }}>
+          <span className="ld-sub" style={{ fontStyle: 'italic', color: 'var(--game-text-color-dim)' }}>
             {phase === 'intro'   ? 'A stranger strides onto the battlefield, grinning.' :
              phase === 'tapping' ? comment :
              phase === 'won'     ? '"...I cannot believe it. Well played, commander."' :
@@ -126,7 +126,7 @@ export function GamblerEvent({ onDone }: Props) {
         {phase === 'tapping' && (
           <div className="ld-bid-box" style={{ gap: 12 }}>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>TAPS SO FAR</div>
+              <div style={{ fontSize: 13, color: 'var(--game-text-color-dim)', marginBottom: 4 }}>TAPS SO FAR</div>
               <div style={{ fontSize: 52, fontWeight: 'bold', color: '#ffd700', lineHeight: 1 }}>
                 {taps}
               </div>
@@ -186,7 +186,7 @@ export function GamblerEvent({ onDone }: Props) {
               {chickenLine}
             </div>
             {taps > 0 && taps !== secret && (
-              <div style={{ textAlign: 'center', fontSize: 12, color: '#888' }}>
+              <div style={{ textAlign: 'center', fontSize: 12, color: 'var(--game-text-color-dim)' }}>
                 The number was <strong style={{ color: '#ffd700' }}>{secret}</strong>.
               </div>
             )}
