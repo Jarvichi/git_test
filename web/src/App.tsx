@@ -23,7 +23,7 @@ import {
 } from './game/questline'
 import { CardRestSelect }       from './components/CardRestSelect'
 import { EventScreen }          from './components/EventScreen'
-import { MerchantScreen, MerchantItem } from './components/MerchantScreen'
+import { MerchantScreen, MerchantItem, cardMerchantItem } from './components/MerchantScreen'
 import { CutsceneScreen }       from './components/CutsceneScreen'
 import { BossDialogueScreen }   from './components/BossDialogueScreen'
 import { Battlefield }        from './components/Battlefield'
@@ -107,12 +107,32 @@ function resolvedNodeOpts(
     opponentHandicap: adjustedHandicap,
     bossAI: node.bossAI,
     bossCard: node.bossCard,
+    bossHpMultiplier: node.bossHpMultiplier,
     enemyDeckNames: node.enemyDeck,
     terrainSeed: node.id,
     environment: node.environment ?? actEnv,
     opponentIntervalMs: node.opponentIntervalMs,
     opponentBaseHp: adjustedHp,
   }
+}
+
+/** Build merchant item list: 3 cards + 30% chance of 1 unowned inventory item at 8 crystals. */
+function buildMerchantItems(): MerchantItem[] {
+  const catalog   = getCardCatalog()
+  const cardNames = generateMerchantCards()
+  const items: MerchantItem[] = cardNames.map(name => {
+    const card = catalog.find(c => c.name === name)!
+    return cardMerchantItem(card)
+  })
+  if (Math.random() < 0.3) {
+    const owned = new Set(loadInventory().map(i => i.id))
+    const available = ALL_ITEMS.filter(i => !owned.has(i.id))
+    if (available.length > 0) {
+      const inv = available[Math.floor(Math.random() * available.length)]
+      items.push({ kind: 'item', inventoryItem: { id: inv.id, name: inv.name, icon: inv.icon, desc: inv.desc, acquiredDate: '' }, price: 8 })
+    }
+  }
+  return items
 }
 
 function loadHandicap(): number {
@@ -213,7 +233,10 @@ export default function App() {
     playerScore: number
   } | null>(null)
   const relicSelectDoneRef  = useRef<(relicName: string | null) => void>(() => {})
+  const brokenRelicRef      = useRef<{ name: string; icon: string } | null>(null)
   const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
+  const [showBossSplash, setShowBossSplash] = useState(false)
+  const prevBossCardActiveRef = useRef(false)
 
   // Active campaign event
   const [activeEvent, setActiveEvent] = useState<EventData | null>(null)
@@ -307,6 +330,16 @@ export default function App() {
   useEffect(() => {
     if (gameState?.phase.type === 'gameOver') clearBattleState()
   }, [gameState?.phase.type])
+
+  // Show boss fight splash when phase 2 triggers.
+  useEffect(() => {
+    const active = gameState?.bossCardActive ?? false
+    if (active && !prevBossCardActiveRef.current) {
+      setShowBossSplash(true)
+      setTimeout(() => setShowBossSplash(false), 2500)
+    }
+    prevBossCardActiveRef.current = active
+  }, [gameState?.bossCardActive])
 
   // Trigger SW update check whenever the title screen is shown
   useEffect(() => {
@@ -558,13 +591,7 @@ export default function App() {
           if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
         }
         if (node.type === 'merchant') {
-          const catalog = getCardCatalog()
-          const cardNames = generateMerchantCards()
-          const items: MerchantItem[] = cardNames.map(name => {
-            const card = catalog.find(c => c.name === name)!
-            return { card, price: MERCHANT_PRICES[card.rarity] }
-          })
-          setMerchantItems(items)
+          setMerchantItems(buildMerchantItems())
           setScreen('merchant')
           return
         }
@@ -636,13 +663,7 @@ export default function App() {
     }
 
     if (node.type === 'merchant') {
-      const catalog   = getCardCatalog()
-      const cardNames = generateMerchantCards()
-      const items: MerchantItem[] = cardNames.map(name => {
-        const card = catalog.find(c => c.name === name)!
-        return { card, price: MERCHANT_PRICES[card.rarity] }
-      })
-      setMerchantItems(items)
+      setMerchantItems(buildMerchantItems())
       setScreen('merchant')
       return
     }
@@ -670,7 +691,7 @@ export default function App() {
     // Include cards earned as rewards earlier this run
     const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     if (updatedRun.activeRelic) getRelicDef(updatedRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -698,7 +719,7 @@ export default function App() {
     const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const act = ACTS[run.actId]
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
     if (run.activeRelic) getRelicDef(run.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -764,9 +785,13 @@ export default function App() {
     setScreen('nodemap')
   }, [run])
 
-  const handleMerchantBuy = useCallback((cardName: string, price: number) => {
-    addCardsToCollection([{ cardName, count: 1 }])
-    const next = loadCrystals() - price
+  const handleMerchantBuy = useCallback((item: MerchantItem) => {
+    if (item.kind === 'card') {
+      addCardsToCollection([{ cardName: item.card.name, count: 1 }])
+    } else {
+      addToInventory(item.inventoryItem)
+    }
+    const next = loadCrystals() - item.price
     saveCrystals(Math.max(0, next))
     setCrystals(Math.max(0, next))
   }, [])
@@ -886,6 +911,8 @@ export default function App() {
     if (equippedRelic && equippedRelic !== act?.rewardRelic && Math.random() < 0.5) {
       removeEarnedRelic(equippedRelic)
       const broken = BROKEN_RELIC_ITEMS[equippedRelic]
+      const relicDef = getRelicDef(equippedRelic)
+      brokenRelicRef.current = { name: relicDef?.name ?? equippedRelic, icon: relicDef?.icon ?? broken?.icon ?? '🪨' }
       addToInventory({
         id: `broken-relic-${equippedRelic.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
         name: broken?.name ?? `Cracked ${equippedRelic}`,
@@ -1023,7 +1050,7 @@ export default function App() {
     const playerCards = buildDeckCards(deckEntries, collection)
     const earnedEntries = (currentRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     if (currentRun.activeRelic) getRelicDef(currentRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -1392,7 +1419,8 @@ export default function App() {
         <RelicSelectScreen
           earnedRelics={loadEarnedRelics()}
           currentRelic={run?.activeRelic ?? null}
-          onSelect={relic => relicSelectDoneRef.current(relic)}
+          brokenRelic={brokenRelicRef.current}
+          onSelect={relic => { brokenRelicRef.current = null; relicSelectDoneRef.current(relic) }}
         />
       )}
 
@@ -1498,7 +1526,7 @@ export default function App() {
           />
         ) : (
           <>
-            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} />
+            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} showBossSplash={showBossSplash} />
             {activeRareEvent === 'fakeCrash'   && <FakeCrashEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'blackjack'   && <BlackjackEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'wrongNumber' && <WrongNumberEvent onDone={handleRareEventDone} />}

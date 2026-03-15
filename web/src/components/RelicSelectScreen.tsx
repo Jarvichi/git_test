@@ -4,16 +4,27 @@ import { getRelicDef } from '../game/relics'
 interface Props {
   earnedRelics: string[]        // names of all relics the player has collected
   currentRelic: string | null   // currently equipped relic (if resuming)
+  brokenRelic?: { name: string; icon: string } | null  // relic that just broke this act
   onSelect: (relicName: string | null) => void
 }
 
-export function RelicSelectScreen({ earnedRelics, currentRelic, onSelect }: Props) {
+export function RelicSelectScreen({ earnedRelics, currentRelic, brokenRelic, onSelect }: Props) {
   const [picked, setPicked] = useState<string | null>(currentRelic ?? (earnedRelics[0] ?? null))
 
   const defs = earnedRelics.map(name => ({ name, def: getRelicDef(name) })).filter(r => r.def)
 
   return (
     <div className="relic-select-screen">
+      {brokenRelic && (
+        <div className="relic-broken-notice">
+          <span className="relic-broken-icon">{brokenRelic.icon}</span>
+          <div className="relic-broken-text">
+            <strong>{brokenRelic.name}</strong> shattered at the end of this act.
+            <br />It has been added to your inventory as a broken relic.
+          </div>
+        </div>
+      )}
+
       <div className="relic-select-header">
         <div className="relic-select-title">CHOOSE YOUR RELIC</div>
         <div className="relic-select-subtitle">

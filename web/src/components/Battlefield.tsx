@@ -12,6 +12,7 @@ interface Props {
   onPlayCard: (cardId: string) => void
   actTheme?: string       // e.g. 'act1' — applied as CSS modifier class
   activeRelic?: string | null  // relic name currently equipped, if any
+  showBossSplash?: boolean
 }
 
 const SPAWN_GROW_MS = 1500
@@ -789,7 +790,7 @@ function opponentPortraitSlug(bossAI: string | undefined, actTheme: string | und
   return 'bandit'
 }
 
-export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props) {
+export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBossSplash }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const [heroLightning, setHeroLightning] = useState<{ owner: 'player' | 'opponent'; key: number } | null>(null)
   const prevHeroIdsRef = useRef<Set<string>>(new Set())
@@ -1000,6 +1001,17 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic }: Props)
           collection={[]}
           onClose={() => setDetailCard(null)}
         />
+      )}
+
+      {showBossSplash && (
+        <div className="boss-splash-overlay">
+          <div className="boss-splash-content">
+            <div className="boss-splash-warning">⚡ WARNING ⚡</div>
+            <div className="boss-splash-title">BOSS FIGHT</div>
+            <div className="boss-splash-unit">{state.bossCard}</div>
+            <div className="boss-splash-sub">has entered the battlefield</div>
+          </div>
+        </div>
       )}
     </div>
   )

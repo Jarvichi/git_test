@@ -23,6 +23,7 @@ export interface QuestNode {
   restHeal?: number  // HP healed at rest nodes
   bossAI?: string        // 'thornlord' etc. — triggers a specific boss AI
   bossCard?: string      // card name to deploy when opponent base falls (phase 2)
+  bossHpMultiplier?: number  // multiplier applied to boss card unit's HP (default 10)
   eventConfig?: NodeEventConfig
   bossDialogue?: string[]  // lines the boss speaks before the fight
   /** Preset enemy deck — card names in order. Makes each node deterministic and learnable. */

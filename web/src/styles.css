@@ -2730,6 +2730,28 @@ body {
    ═══════════════════════════════════════════════════════════ */
 
 /* ── Relic selection screen ──────────────────────────────────── */
+.relic-broken-notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid #884444;
+  background: #1a0808;
+  color: #ff9999;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  max-width: 420px;
+  width: 100%;
+}
+.relic-broken-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  filter: grayscale(0.6);
+}
+.relic-broken-text strong {
+  color: #ffbbbb;
+}
+
 .relic-select-screen {
   display: flex;
   flex-direction: column;
@@ -3506,6 +3528,33 @@ body {
   opacity: 0.5;
 }
 
+.merchant-item--inv .merchant-inv-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border: 1px solid var(--accent);
+  background: #0a0a16;
+  min-width: 90px;
+  max-width: 110px;
+  text-align: center;
+}
+.merchant-inv-icon {
+  font-size: 2rem;
+}
+.merchant-inv-name {
+  font-size: 0.7rem;
+  color: var(--fg);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.merchant-inv-desc {
+  font-size: 0.62rem;
+  color: var(--fg-dim, #888);
+  line-height: 1.4;
+}
+
 .merchant-item-footer {
   min-height: 28px;
   display: flex;
@@ -3543,6 +3592,54 @@ body {
 }
 
 /* ── Boss Dialogue Screen ────────────────────────────────── */
+
+/* ── Boss Fight Splash ─────────────────────────────────────────────────────── */
+.boss-splash-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  animation: boss-splash-fade 2.5s ease forwards;
+}
+@keyframes boss-splash-fade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.boss-splash-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.boss-splash-warning {
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.3em;
+  animation: flicker 0.15s infinite alternate;
+}
+.boss-splash-title {
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  color: #ff4444;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 24px #ff2222, 0 0 48px #ff000088;
+  font-weight: 900;
+}
+.boss-splash-unit {
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  color: var(--fg);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.boss-splash-sub {
+  font-size: 0.75rem;
+  color: var(--fg-dim, #888);
+  letter-spacing: 0.2em;
+}
 
 .boss-dialogue-screen {
   display: flex;

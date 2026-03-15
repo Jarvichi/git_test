@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-14 (session 6).
+Issues sourced from GitHub. Last synced: 2026-03-15 (session 7).
 
 ---
 
@@ -10,10 +10,26 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
-- [x] **Phase 7 / CLAUDE.md** Battle summary screen: stats popup after each campaign battle win — cards played, kills, damage dealt, duration — implemented
+- [x] **Phase 7 / CLAUDE.md** Battle summary screen — implemented
+- [x] **#173** Boss card mechanic (phase 2 fight after base falls) — implemented
+- [x] **#174** Relic break chance + broken relic inventory items — implemented
+- [x] **#192** Campaign events: HP bar on EventScreen — implemented
+- [x] **#193** Stuck units: `?debug` terrain overlay — implemented
 
-- [x] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
-- [x] **#193** Stuck units: add `?debug` overlay that renders terrain avoidance areas as semi-transparent red circles on the battlefield
+### Boss Fight Splash + HP fix (no issue — user request)
+- [ ] Step 1: Add `bossHpMultiplier` field to `QuestNode` type in `questline.ts`; pass through `newGame()` into `GameState`; apply multiplier when spawning boss card in `engine.ts`; default boss nodes in acts 1–4 to `"bossHpMultiplier": 10`
+- [ ] Step 2: Detect phase-2 trigger in `App.tsx` (compare prev/current `bossCardActive` via `useRef`); set `showBossSplash` state; auto-dismiss after 2.5 s
+- [ ] Step 3: Render full-screen `BossSplash` overlay in `Battlefield.tsx` (or inline in App): `⚡ BOSS FIGHT ⚡` + boss name + flavour line; terminal retro style; CSS in `styles.css`
+
+### #171 — Mystery Node
+- [ ] Step 1: Add `'mystery'` to `QuestNodeType` in `questline.ts`; add `?` icon in `NodeMap.tsx`; peek modal shows "Unknown encounter"
+- [ ] Step 2: Add mystery nodes to act 1–4 JSON data (1–2 per act, replacing a mid-map battle)
+- [ ] Step 3: Create `MysteryScreen.tsx` — terminal-style scene, lore flavour text, `computeReward` reward, "Collect & Continue" button
+- [ ] Step 4: Wire in `App.tsx`: detect `node.type === 'mystery'`, set `screen = 'mystery'`; on continue apply reward and advance node
+
+### #179 — Merchant Inventory Item
+- [ ] Step 1: Extend `MerchantItem` interface to support `inventoryItem?: UselessItem`; update `MerchantScreen.tsx` to render inventory items (icon + name + desc)
+- [ ] Step 2: In `App.tsx` merchant generation, 30% chance to append 1 random unowned `UselessItem` priced at 8 crystals; on purchase call `addToInventory`
 
 
 
@@ -179,10 +195,10 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 
 ### Campaign Map
 - [ ] **#171** Mystery node: runtime replacement of a normal battle node; displayed as normal battle on map; on entry shows cleared battlefield + reward chest + lore text ("whoops, forgot to clean up")
-- [ ] **#172** Node peek modal: tapping a node shows a preview modal with reward summary, difficulty hint, "Enter Battle" + "Back" buttons; on previously-completed nodes also shows opponent deck + playstyle
+- [x] **#172** Node peek modal — implemented
 
 ### Boss Mechanic
-- [x] **#173** Boss card mechanic: boss node opponent gets a boss card instead of hero; when opponent base hits 0 HP, base restores to full and boss unit deploys; player must kill the boss unit to win — add `bossCard` field to QuestNode, `bossCardActive` flag to GameState, intercept game-over in engine.ts
+- [x] **#173** Boss card mechanic — implemented
 
 ### Campaign Structure
 - [ ] **#180** Extend campaign to 25 acts (currently 4); plan and write acts 5–25 story, node maps, bosses, relics, hero cards, themed card sets
