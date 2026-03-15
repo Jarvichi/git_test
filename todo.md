@@ -20,10 +20,12 @@ Most of the relic system is already built. The three missing pieces:
 - **`RelicSelectScreen.tsx`** — show broken relics greyed-out + unselectable at end of list
 
 Steps:
-- [ ] Step 1: Add broken relic storage to relics.ts
-- [ ] Step 2: Wire addBrokenRelic in App.tsx; pass brokenRelics to RelicSelectScreen
-- [ ] Step 3: Render greyed-out broken relics in RelicSelectScreen + CSS
-- [ ] Step 4: Mark #174 complete in CLAUDE.md
+- [x] Step 1: Add broken relic storage to relics.ts
+- [x] Step 2: Wire addBrokenRelic in App.tsx; pass brokenRelics to RelicSelectScreen
+- [x] Step 3: Render greyed-out broken relics in RelicSelectScreen + CSS
+- [x] Step 4: Mark #174 complete in CLAUDE.md (already checked in CLAUDE.md)
+
+**#174 complete.** Close manually on GitHub (no GITHUB_TOKEN in env).
 
 ### #175 Campaign replays: per-run escalating modifiers
 
