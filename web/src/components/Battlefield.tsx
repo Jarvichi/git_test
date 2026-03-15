@@ -114,7 +114,7 @@ function WallSvg({ hp, maxHp, owner, wallNames = [] }: { hp: number; maxHp: numb
   )
 }
 
-function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect }: { unit: Unit; stackIndex?: number; wallStack?: Unit[]; onInspect?: (u: Unit) => void }) {
+function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect, showName }: { unit: Unit; stackIndex?: number; wallStack?: Unit[]; onInspect?: (u: Unit) => void; showName?: boolean }) {
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
   const isStructure = unit.moveSpeed === 0
 
@@ -191,14 +191,14 @@ function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect }: { unit: Unit; 
           ? <SpriteImg name={unit.spriteName ?? unit.name} className="lane-unit-sprite" />
           : <AnimatedSpriteImg name={unit.spriteName ?? unit.name} frameCount={3} fps={6} className={`lane-unit-sprite${unit.isHero ? ' lane-unit-sprite--hero' : ''}`} />
       }
-      {!unit.isWall && (
+      {!unit.isWall && unit.upgradeLevel != null && unit.upgradeLevel >= 1 && (
+        <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, MAX_UPGRADE_LEVEL)}`}>
+          {'★'.repeat(unit.upgradeLevel)}
+        </span>
+      )}
+      {!unit.isWall && showName && (
         <div className="lane-unit-name">
           {unit.name}
-          {unit.upgradeLevel != null && unit.upgradeLevel >= 1 && (
-            <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, MAX_UPGRADE_LEVEL)}`}>
-              {'★'.repeat(unit.upgradeLevel)}
-            </span>
-          )}
         </div>
       )}
       {unit.buffs && unit.buffs.length > 0 && (
@@ -962,12 +962,12 @@ export function Battlefield({ state, onPlayCard, onGiveUp, onPause, actTheme, ac
               const group = wallGroups.get(key)!
               if (group[0].id !== u.id) return null  // only render the first in each group
               renderedWallIds.add(u.id)
-              return <LaneUnit key={u.id} unit={u} wallStack={group} onInspect={paused ? u => { setInspectedUnit(u) } : undefined} />
+              return <LaneUnit key={u.id} unit={u} wallStack={group} onInspect={paused ? u => { setInspectedUnit(u) } : undefined} showName={paused} />
             }
             const stackIndex = u.moveSpeed === 0
               ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && !o.isWall && o.owner === u.owner).length
               : 0
-            return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} onInspect={paused ? u => { setInspectedUnit(u) } : undefined} />
+            return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} onInspect={paused ? u => { setInspectedUnit(u) } : undefined} showName={paused} />
           })
         })()}
       </div>

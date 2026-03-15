@@ -381,9 +381,6 @@ body {
 
 .lane-unit--structure .lane-unit-name {
   font-size: 8px;
-  padding: 1px 3px;
-  border: 1px dashed currentColor;
-  border-radius: 2px;
   max-width: 40px;
   white-space: nowrap;
   overflow: hidden;
@@ -444,12 +441,16 @@ body {
   50%       { opacity: 0.5; }
 }
 
-/* Upgrade level badge shown next to building name */
+/* Upgrade level badge — absolute corner overlay on the sprite */
 .lane-unit-level {
-  margin-left: 3px;
+  position: absolute;
+  bottom: 18px;
+  right: -1px;
   font-size: 7px;
   font-weight: bold;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  line-height: 1;
+  pointer-events: none;
 }
 .lane-unit-level--1 {
   color: #88cc88;
