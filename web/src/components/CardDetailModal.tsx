@@ -18,10 +18,10 @@ interface Props {
 }
 
 const RARITY_COLOUR: Record<string, string> = {
-  // common intentionally omitted — inherits --game-text-color-dim via CSS class
-  uncommon:  '#33ff99',
-  rare:      '#4af',
-  legendary: '#ffd700',
+  common:    '#55cc55',
+  uncommon:  '#4499ff',
+  rare:      '#bb66ff',
+  legendary: '#ffcc00',
 }
 
 function statLine(label: string, value: string | number) {

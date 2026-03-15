@@ -369,8 +369,8 @@ body {
   flex-shrink: 0;
 }
 
-/* Shorten bar when level stars are shown beside it */
-.lane-unit-hp-row:has(.lane-unit-level) .lane-unit-hp-bar {
+/* Shorten bar when level stars are shown beside it (not walls — they use flex:1) */
+.lane-unit:not(.lane-unit--wall) .lane-unit-hp-row:has(.lane-unit-level) .lane-unit-hp-bar {
   width: 18px;
 }
 
@@ -385,6 +385,12 @@ body {
   background: #ff4444;
   transition: width 0.15s ease-out;
 }
+
+/* HP bar tinted by upgrade level — overrides player/opponent defaults */
+.lane-unit:has(.lane-unit-level--1) .lane-unit-hp-fill { background: #55cc55; }
+.lane-unit:has(.lane-unit-level--2) .lane-unit-hp-fill { background: #4499ff; }
+.lane-unit:has(.lane-unit-level--3) .lane-unit-hp-fill { background: #bb66ff; }
+.lane-unit:has(.lane-unit-level--4) .lane-unit-hp-fill { background: #ffcc00; }
 
 /* Structures anchored to base edges, no transition needed */
 .lane-unit--structure {
@@ -419,8 +425,8 @@ body {
 }
 
 .lane-unit--wall .lane-unit-hp-bar {
-  flex: none;
-  width: 100%;
+  flex: 1;
+  width: auto;
   max-width: none;
   height: 4px;
 }
@@ -455,38 +461,38 @@ body {
 
 /* Upgrade level badge — inline beside the HP bar */
 .lane-unit-level {
-  font-size: 7px;
+  font-size: 9px;
   font-weight: bold;
   letter-spacing: -1px;
   line-height: 1;
   flex-shrink: 0;
 }
 .lane-unit-level--1 {
-  color: #88cc88;
-  text-shadow: 0 0 3px rgba(136, 204, 136, 0.5);
+  color: #55cc55;
+  text-shadow: 0 0 3px rgba(85, 204, 85, 0.6);
 }
 .lane-unit-level--2 {
-  color: #ffcc00;
-  text-shadow: 0 0 5px rgba(255, 204, 0, 0.8);
+  color: #4499ff;
+  text-shadow: 0 0 5px rgba(68, 153, 255, 0.8);
 }
 .lane-unit-level--3 {
-  color: #cc88ff;
-  text-shadow: 0 0 6px rgba(200, 100, 255, 0.9);
+  color: #bb66ff;
+  text-shadow: 0 0 6px rgba(187, 102, 255, 0.9);
 }
 .lane-unit-level--4 {
-  color: #ff5533;
-  text-shadow: 0 0 8px rgba(255, 80, 40, 1);
+  color: #ffcc00;
+  text-shadow: 0 0 8px rgba(255, 204, 0, 1);
 }
 
 /* Upgraded building glow on the sprite only, not the whole unit div */
 .lane-unit--upgraded-2 .lane-unit-sprite {
-  filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.8));
+  filter: drop-shadow(0 0 4px rgba(68, 153, 255, 0.8));
 }
 .lane-unit--upgraded-3 .lane-unit-sprite {
-  filter: drop-shadow(0 0 5px rgba(200, 100, 255, 0.9));
+  filter: drop-shadow(0 0 5px rgba(187, 102, 255, 0.9));
 }
 .lane-unit--upgraded-4 .lane-unit-sprite {
-  filter: drop-shadow(0 0 7px rgba(255, 80, 40, 1));
+  filter: drop-shadow(0 0 7px rgba(255, 204, 0, 1));
 }
 
 /* Attack flash — brief brightness burst when a unit strikes */
@@ -658,9 +664,10 @@ body {
   background: rgba(51, 255, 51, 0.03);
 }
 
-.card-tile--legendary { border-color: rgba(255, 215, 0, 0.6); background: rgba(255, 215, 0, 0.04); }
-.card-tile--rare      { border-color: rgba(0, 170, 255, 0.5); background: rgba(0, 170, 255, 0.04); }
-.card-tile--uncommon  { border-color: rgba(0, 255, 136, 0.45); }
+.card-tile--common    { border-color: rgba(85, 204, 85, 0.45); }
+.card-tile--uncommon  { border-color: rgba(68, 153, 255, 0.5);  background: rgba(68, 153, 255, 0.04); }
+.card-tile--rare      { border-color: rgba(187, 102, 255, 0.55); background: rgba(187, 102, 255, 0.05); }
+.card-tile--legendary { border-color: rgba(255, 204, 0, 0.6);   background: rgba(255, 204, 0, 0.04); }
 
 .card-cost {
   position: absolute;
@@ -1521,10 +1528,10 @@ body {
   font-size: 12px;
 }
 
-.pack-card-rarity--legendary { color: #ffd700; text-shadow: 0 0 6px rgba(255,215,0,0.6); }
-.pack-card-rarity--rare      { color: #00aaff; text-shadow: 0 0 6px rgba(0,170,255,0.5); }
-.pack-card-rarity--uncommon  { color: #00ff88; }
-.pack-card-rarity--common    { color: var(--game-text-color-dim); }
+.pack-card-rarity--legendary { color: #ffcc00; text-shadow: 0 0 6px rgba(255,204,0,0.7); }
+.pack-card-rarity--rare      { color: #bb66ff; text-shadow: 0 0 6px rgba(187,102,255,0.7); }
+.pack-card-rarity--uncommon  { color: #4499ff; text-shadow: 0 0 4px rgba(68,153,255,0.6); }
+.pack-card-rarity--common    { color: #55cc55; }
 
 .pack-wait {
   font-size: 12px;
