@@ -24,6 +24,7 @@ import {
 import { CardRestSelect }       from './components/CardRestSelect'
 import { EventScreen }          from './components/EventScreen'
 import { MerchantScreen, MerchantItem, cardMerchantItem } from './components/MerchantScreen'
+import { MysteryScreen } from './components/MysteryScreen'
 import { CutsceneScreen }       from './components/CutsceneScreen'
 import { BossDialogueScreen }   from './components/BossDialogueScreen'
 import { Battlefield }        from './components/Battlefield'
@@ -156,6 +157,7 @@ type Screen =
   | 'bossdialogue'
   | 'event'
   | 'merchant'
+  | 'mystery'
   | 'reward'
   | 'actcomplete'
   | 'cardrest'
@@ -245,6 +247,7 @@ export default function App() {
 
   // Active merchant
   const [merchantItems, setMerchantItems] = useState<MerchantItem[]>([])
+  const [mysteryReward, setMysteryReward] = useState<RewardDef | null>(null)
 
   // Card fatigue
   const [fatiguedCards, setFatiguedCards]       = useState<string[]>(loadFatigued)
@@ -595,6 +598,12 @@ export default function App() {
           setScreen('merchant')
           return
         }
+        // 10% chance: normal battle node becomes a mystery encounter
+        if (node.type === 'battle' && Math.random() < 0.10) {
+          setMysteryReward(computeReward(loadInventory()))
+          setScreen('mystery')
+          return
+        }
         // For battle nodes (including boss): go straight to battle
         campaignPlayCountsRef.current = {}
         isCampaignRef.current = true
@@ -665,6 +674,13 @@ export default function App() {
     if (node.type === 'merchant') {
       setMerchantItems(buildMerchantItems())
       setScreen('merchant')
+      return
+    }
+
+    // 10% chance: normal battle node becomes a mystery encounter
+    if (node.type === 'battle' && Math.random() < 0.10) {
+      setMysteryReward(computeReward(loadInventory()))
+      setScreen('mystery')
       return
     }
 
@@ -811,6 +827,33 @@ export default function App() {
     setMerchantItems([])
     setScreen('nodemap')
   }, [run])
+
+  const handleMysteryCollect = useCallback(() => {
+    const currentRun = run
+    if (!currentRun || !mysteryReward) { setScreen('nodemap'); return }
+    // Apply reward
+    if (mysteryReward.type === 'crystals') {
+      const next = loadCrystals() + (mysteryReward.amount ?? 0)
+      saveCrystals(next)
+      setCrystals(next)
+    } else if (mysteryReward.type === 'item') {
+      addToInventory({ id: mysteryReward.id, name: mysteryReward.name, icon: mysteryReward.icon, desc: mysteryReward.desc ?? '' })
+    } else if (mysteryReward.type === 'card' || mysteryReward.type === 'pack') {
+      addCardsToCollection([{ cardName: mysteryReward.name, count: 1 }])
+    }
+    // Complete node
+    const nodeId = currentRun.pendingNodeId!
+    const updatedRun: RunState = {
+      ...currentRun,
+      completedNodeIds: [...currentRun.completedNodeIds, nodeId],
+      pendingNodeId: null,
+    }
+    recordNodeComplete(updatedRun.actId, nodeId)
+    saveRun(updatedRun)
+    setRun(updatedRun)
+    setMysteryReward(null)
+    setScreen('nodemap')
+  }, [run, mysteryReward])
 
   const handleCampaignWin = useCallback(() => {
     const currentRun = run
@@ -1412,6 +1455,13 @@ export default function App() {
           crystals={crystals}
           onBuy={handleMerchantBuy}
           onDone={handleMerchantDone}
+        />
+      )}
+
+      {screen === 'mystery' && mysteryReward && (
+        <MysteryScreen
+          reward={mysteryReward}
+          onCollect={handleMysteryCollect}
         />
       )}
 
