@@ -366,7 +366,7 @@ function applyUpgrade(s: GameState, effect: UpgradeEffect, owner: 'player' | 'op
     for (const u of units) if (u.moveSpeed > 0) { u.moveSpeed += effect.amount; addBuff(u, 'spd') }
     log.push(`${label} units surge +${effect.amount} speed!`)
   } else if (effect.type === 'buffMaxHp') {
-    for (const u of units) { u.maxHp += effect.amount; u.hp = Math.min(u.hp + effect.amount, u.maxHp); addBuff(u, 'hp') }
+    for (const u of units) if (u.moveSpeed > 0) { u.maxHp += effect.amount; u.hp = Math.min(u.hp + effect.amount, u.maxHp); addBuff(u, 'hp') }
     log.push(`${label} units gain +${effect.amount} max HP!`)
   } else if (effect.type === 'buffRange') {
     for (const u of units) if (u.attackRange > 0) { u.attackRange += effect.amount; addBuff(u, 'range') }
@@ -512,7 +512,9 @@ function findEnemyBehind(field: Unit[], unit: Unit): Unit | null {
   return nearest
 }
 
-// Nearest enemy within attack range (2-D). bypassWall/climber units skip walls.
+// Nearest enemy within attack range (2-D).
+// bypassWall/climber units prefer mobile targets; if none in range they fall
+// back to attacking the wall (except flying units which truly soar over walls).
 function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
   let nearest: Unit | null = null
   let nearestDist = Infinity
@@ -525,6 +527,19 @@ function findAttackTarget(field: Unit[], unit: Unit): Unit | null {
     if (d > unit.attackRange) continue
     if (d < nearestDist) { nearestDist = d; nearest = other }
   }
+
+  // Ranged (bypassWall) non-flying units: attack walls as a last resort when
+  // nothing else is in range, so they aren't stuck idle next to a wall.
+  if (nearest === null && unit.bypassWall && !unit.flying) {
+    for (const other of field) {
+      if (other.owner === unit.owner || other.hp <= 0) continue
+      if (!other.isWall) continue
+      const d = unitDist(unit, other)
+      if (d > unit.attackRange) continue
+      if (d < nearestDist) { nearestDist = d; nearest = other }
+    }
+  }
+
   return nearest
 }
 
