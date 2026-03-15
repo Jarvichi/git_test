@@ -664,9 +664,10 @@ body {
   background: rgba(51, 255, 51, 0.03);
 }
 
-.card-tile--legendary { border-color: rgba(255, 215, 0, 0.6); background: rgba(255, 215, 0, 0.04); }
-.card-tile--rare      { border-color: rgba(0, 170, 255, 0.5); background: rgba(0, 170, 255, 0.04); }
-.card-tile--uncommon  { border-color: rgba(0, 255, 136, 0.45); }
+.card-tile--common    { border-color: rgba(85, 204, 85, 0.45); }
+.card-tile--uncommon  { border-color: rgba(68, 153, 255, 0.5);  background: rgba(68, 153, 255, 0.04); }
+.card-tile--rare      { border-color: rgba(187, 102, 255, 0.55); background: rgba(187, 102, 255, 0.05); }
+.card-tile--legendary { border-color: rgba(255, 204, 0, 0.6);   background: rgba(255, 204, 0, 0.04); }
 
 .card-cost {
   position: absolute;
@@ -1527,10 +1528,10 @@ body {
   font-size: 12px;
 }
 
-.pack-card-rarity--legendary { color: #ffd700; text-shadow: 0 0 6px rgba(255,215,0,0.6); }
-.pack-card-rarity--rare      { color: #00aaff; text-shadow: 0 0 6px rgba(0,170,255,0.5); }
-.pack-card-rarity--uncommon  { color: #00ff88; }
-.pack-card-rarity--common    { color: var(--game-text-color-dim); }
+.pack-card-rarity--legendary { color: #ffcc00; text-shadow: 0 0 6px rgba(255,204,0,0.7); }
+.pack-card-rarity--rare      { color: #bb66ff; text-shadow: 0 0 6px rgba(187,102,255,0.7); }
+.pack-card-rarity--uncommon  { color: #4499ff; text-shadow: 0 0 4px rgba(68,153,255,0.6); }
+.pack-card-rarity--common    { color: #55cc55; }
 
 .pack-wait {
   font-size: 12px;
