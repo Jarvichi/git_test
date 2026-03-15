@@ -1,538 +1,2738 @@
 {
   "templates": {
-    "goblin":              { "name": "Goblin",          "attack": 3,  "maxHp": 10, "isWall": false, "bypassWall": false, "moveSpeed": 45, "attackRange": 5,   "attackCooldownMs": 1000 },
-    "archer":              { "name": "Archer",          "attack": 3,  "maxHp": 8,  "isWall": false, "bypassWall": true,  "moveSpeed": 28, "attackRange": 80,  "attackCooldownMs": 1500 },
-    "dragon":              { "name": "Dragon",          "attack": 10, "maxHp": 30, "isWall": false, "bypassWall": true,  "moveSpeed": 18, "attackRange": 50,  "attackCooldownMs": 3000, "flying": true },
-    "skeleton":            { "name": "Skeleton",        "attack": 2,  "maxHp": 8,  "isWall": false, "bypassWall": false, "moveSpeed": 52, "attackRange": 5,   "attackCooldownMs": 800  },
-    "weak-skeleton":       { "name": "Weak Skeleton",        "attack": 2,  "maxHp": 4,  "isWall": false, "bypassWall": false, "moveSpeed": 20, "attackRange": 5,   "attackCooldownMs": 800  },
-    "troll":               { "name": "Troll",           "attack": 10, "maxHp": 45, "isWall": false, "bypassWall": false, "moveSpeed": 12, "attackRange": 5,   "attackCooldownMs": 2200 },
-    "crossbow":            { "name": "Crossbow",        "attack": 5,  "maxHp": 14, "isWall": false, "bypassWall": true,  "moveSpeed": 25, "attackRange": 65,  "attackCooldownMs": 2000 },
-    "paladin":             { "name": "Paladin",         "attack": 7,  "maxHp": 40, "isWall": false, "bypassWall": false, "moveSpeed": 16, "attackRange": 5,   "attackCooldownMs": 1800 },
-    "rogue":               { "name": "Rogue",           "attack": 8,  "maxHp": 11, "isWall": false, "bypassWall": false, "moveSpeed": 58, "attackRange": 5,   "attackCooldownMs": 1200, "climber": true },
-    "catapult":            { "name": "Catapult",        "attack": 15, "maxHp": 12, "isWall": false, "bypassWall": true,  "moveSpeed": 10, "attackRange": 110, "attackCooldownMs": 4000 },
-    "werewolf":            { "name": "Werewolf",        "attack": 9,  "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 62, "attackRange": 5,   "attackCooldownMs": 1400, "climber": true },
-    "golem":               { "name": "Golem",           "attack": 14, "maxHp": 70, "isWall": false, "bypassWall": false, "moveSpeed": 8,  "attackRange": 5,   "attackCooldownMs": 2500 },
-    "pixie":               { "name": "Pixie",           "attack": 2,  "maxHp": 6,  "isWall": false, "bypassWall": true,  "moveSpeed": 42, "attackRange": 75,  "attackCooldownMs": 1000, "flying": true },
-    "ogre":                { "name": "Ogre",            "attack": 11, "maxHp": 32, "isWall": false, "bypassWall": false, "moveSpeed": 18, "attackRange": 5,   "attackCooldownMs": 2000 },
-    "plague-rat":          { "name": "Plague Rat",      "attack": 2,  "maxHp": 6,  "isWall": false, "bypassWall": false, "moveSpeed": 75, "attackRange": 5,   "attackCooldownMs": 500  },
-    "bandit":              { "name": "Bandit",          "attack": 4,  "maxHp": 9,  "isWall": false, "bypassWall": false, "moveSpeed": 55, "attackRange": 5,   "attackCooldownMs": 1100, "climber": true },
-    "bat":                 { "name": "Bat",             "attack": 2,  "maxHp": 5,  "isWall": false, "bypassWall": false, "moveSpeed": 65, "attackRange": 5,   "attackCooldownMs": 700,  "flying": true },
-    "scorpion":            { "name": "Scorpion",        "attack": 5,  "maxHp": 14, "isWall": false, "bypassWall": false, "moveSpeed": 35, "attackRange": 5,   "attackCooldownMs": 1300 },
-    "shield-guard":        { "name": "Shield Guard",    "attack": 3,  "maxHp": 40, "isWall": false, "bypassWall": false, "moveSpeed": 15, "attackRange": 5,   "attackCooldownMs": 2200 },
-    "centaur":             { "name": "Centaur",         "attack": 4,  "maxHp": 18, "isWall": false, "bypassWall": true,  "moveSpeed": 42, "attackRange": 70,  "attackCooldownMs": 1800 },
-    "harpy":               { "name": "Harpy",           "attack": 4,  "maxHp": 14, "isWall": false, "bypassWall": true,  "moveSpeed": 40, "attackRange": 65,  "attackCooldownMs": 1500, "flying": true },
-    "specter":             { "name": "Specter",         "attack": 5,  "maxHp": 10, "isWall": false, "bypassWall": false, "moveSpeed": 50, "attackRange": 5,   "attackCooldownMs": 1000, "flying": true },
-    "lizardman":           { "name": "Lizardman",       "attack": 6,  "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 32, "attackRange": 5,   "attackCooldownMs": 1600, "climber": true },
-    "ballista":            { "name": "Ballista",        "attack": 8,  "maxHp": 10, "isWall": false, "bypassWall": true,  "moveSpeed": 12, "attackRange": 100, "attackCooldownMs": 3000 },
-    "vampire":             { "name": "Vampire",         "attack": 7,  "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 50, "attackRange": 5,   "attackCooldownMs": 1400, "flying": true },
-    "griffin":             { "name": "Griffin",         "attack": 9,  "maxHp": 25, "isWall": false, "bypassWall": true,  "moveSpeed": 32, "attackRange": 60,  "attackCooldownMs": 2200, "flying": true },
-    "fire-mage":           { "name": "Fire Mage",       "attack": 11, "maxHp": 12, "isWall": false, "bypassWall": true,  "moveSpeed": 18, "attackRange": 75,  "attackCooldownMs": 2500 },
-    "executioner":         { "name": "Executioner",     "attack": 13, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 14, "attackRange": 5,   "attackCooldownMs": 2000 },
-    "mammoth":             { "name": "Mammoth",         "attack": 12, "maxHp": 55, "isWall": false, "bypassWall": false, "moveSpeed": 11, "attackRange": 5,   "attackCooldownMs": 2600 },
-    "dark-elf":            { "name": "Dark Elf",        "attack": 5,  "maxHp": 14, "isWall": false, "bypassWall": true,  "moveSpeed": 45, "attackRange": 70,  "attackCooldownMs": 1600, "climber": true },
-    "necromancer":         { "name": "Necromancer",     "attack": 7,  "maxHp": 10, "isWall": false, "bypassWall": true,  "moveSpeed": 16, "attackRange": 80,  "attackCooldownMs": 2200 },
-    "giant":               { "name": "Giant",           "attack": 18, "maxHp": 65, "isWall": false, "bypassWall": false, "moveSpeed": 9,  "attackRange": 5,   "attackCooldownMs": 3000 },
-    "wyvern":              { "name": "Wyvern",          "attack": 12, "maxHp": 28, "isWall": false, "bypassWall": true,  "moveSpeed": 38, "attackRange": 55,  "attackCooldownMs": 2000, "flying": true },
-    "behemoth":            { "name": "Behemoth",        "attack": 22, "maxHp": 90, "isWall": false, "bypassWall": false, "moveSpeed": 7,  "attackRange": 5,   "attackCooldownMs": 3500 },
-    "vine-golem":          { "name": "Vine Golem",      "attack": 8,  "maxHp": 35, "isWall": false, "bypassWall": false, "moveSpeed": 12, "attackRange": 5,   "attackCooldownMs": 2200 },
-    "spore-bat":           { "name": "Spore Bat",       "attack": 3,  "maxHp": 8,  "isWall": false, "bypassWall": false, "moveSpeed": 55, "attackRange": 5,   "attackCooldownMs": 800,  "flying": true },
-    "thornbeast":          { "name": "Thornbeast",      "attack": 11, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 45, "attackRange": 5,   "attackCooldownMs": 1600, "climber": true },
-    "elder-treant":        { "name": "Elder Treant",    "attack": 16, "maxHp": 80, "isWall": false, "bypassWall": false, "moveSpeed": 6,  "attackRange": 5,   "attackCooldownMs": 3200 },
-    "frog-knight":         { "name": "Frog Knight",     "attack": 6,  "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 38, "attackRange": 5,   "attackCooldownMs": 1400, "climber": true },
-    "ironclad-guard":      { "name": "Ironclad Guard",  "attack": 5,  "maxHp": 50, "isWall": false, "bypassWall": false, "moveSpeed": 12, "attackRange": 5,   "attackCooldownMs": 2000 },
-    "war-drummer":         { "name": "War Drummer",     "attack": 6,  "maxHp": 16, "isWall": false, "bypassWall": false, "moveSpeed": 28, "attackRange": 5,   "attackCooldownMs": 1600 },
-    "siege-engineer":      { "name": "Siege Engineer",  "attack": 9,  "maxHp": 12, "isWall": false, "bypassWall": true,  "moveSpeed": 14, "attackRange": 90,  "attackCooldownMs": 2800 },
-    "shield-wall-soldier": { "name": "Shield Wall",     "attack": 2,  "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 15, "attackRange": 5,   "attackCooldownMs": 2000 },
-    "grizzled-veteran":    { "name": "Grizzled Vet.",   "attack": 10, "maxHp": 28, "isWall": false, "bypassWall": false, "moveSpeed": 20, "attackRange": 5,   "attackCooldownMs": 1800 },
-    "bone-archer":         { "name": "Bone Archer",     "attack": 4,  "maxHp": 9,  "isWall": false, "bypassWall": true,  "moveSpeed": 25, "attackRange": 75,  "attackCooldownMs": 1500 },
-    "wight-knight":        { "name": "Wight Knight",    "attack": 8,  "maxHp": 30, "isWall": false, "bypassWall": false, "moveSpeed": 18, "attackRange": 5,   "attackCooldownMs": 2000 },
-    "ash-elemental":       { "name": "Ash Elemental",   "attack": 9,  "maxHp": 15, "isWall": false, "bypassWall": true,  "moveSpeed": 35, "attackRange": 60,  "attackCooldownMs": 2000, "flying": true },
-    "revenant":            { "name": "Revenant",        "attack": 6,  "maxHp": 12, "isWall": false, "bypassWall": false, "moveSpeed": 55, "attackRange": 5,   "attackCooldownMs": 1200, "flying": true },
-    "lich-apprentice":     { "name": "Lich Apprentice", "attack": 5,  "maxHp": 8,  "isWall": false, "bypassWall": true,  "moveSpeed": 18, "attackRange": 70,  "attackCooldownMs": 1800 }
+    "goblin": {
+      "name": "Goblin",
+      "attack": 3,
+      "maxHp": 10,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 45,
+      "attackRange": 5,
+      "attackCooldownMs": 1000
+    },
+    "archer": {
+      "name": "Archer",
+      "attack": 3,
+      "maxHp": 8,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 28,
+      "attackRange": 80,
+      "attackCooldownMs": 1500
+    },
+    "dragon": {
+      "name": "Dragon",
+      "attack": 10,
+      "maxHp": 30,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 18,
+      "attackRange": 50,
+      "attackCooldownMs": 3000,
+      "flying": true
+    },
+    "skeleton": {
+      "name": "Skeleton",
+      "attack": 2,
+      "maxHp": 8,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 52,
+      "attackRange": 5,
+      "attackCooldownMs": 800
+    },
+    "weak-skeleton": {
+      "name": "Weak Skeleton",
+      "attack": 2,
+      "maxHp": 4,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 20,
+      "attackRange": 5,
+      "attackCooldownMs": 800
+    },
+    "troll": {
+      "name": "Troll",
+      "attack": 10,
+      "maxHp": 45,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 12,
+      "attackRange": 5,
+      "attackCooldownMs": 2200
+    },
+    "crossbow": {
+      "name": "Crossbow",
+      "attack": 5,
+      "maxHp": 14,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 25,
+      "attackRange": 65,
+      "attackCooldownMs": 2000
+    },
+    "paladin": {
+      "name": "Paladin",
+      "attack": 7,
+      "maxHp": 40,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 16,
+      "attackRange": 5,
+      "attackCooldownMs": 1800
+    },
+    "rogue": {
+      "name": "Rogue",
+      "attack": 8,
+      "maxHp": 11,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 58,
+      "attackRange": 5,
+      "attackCooldownMs": 1200,
+      "climber": true
+    },
+    "catapult": {
+      "name": "Catapult",
+      "attack": 15,
+      "maxHp": 12,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 10,
+      "attackRange": 110,
+      "attackCooldownMs": 4000
+    },
+    "werewolf": {
+      "name": "Werewolf",
+      "attack": 9,
+      "maxHp": 22,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 62,
+      "attackRange": 5,
+      "attackCooldownMs": 1400,
+      "climber": true
+    },
+    "golem": {
+      "name": "Golem",
+      "attack": 14,
+      "maxHp": 70,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 8,
+      "attackRange": 5,
+      "attackCooldownMs": 2500
+    },
+    "pixie": {
+      "name": "Pixie",
+      "attack": 2,
+      "maxHp": 6,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 42,
+      "attackRange": 75,
+      "attackCooldownMs": 1000,
+      "flying": true
+    },
+    "ogre": {
+      "name": "Ogre",
+      "attack": 11,
+      "maxHp": 32,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 18,
+      "attackRange": 5,
+      "attackCooldownMs": 2000
+    },
+    "plague-rat": {
+      "name": "Plague Rat",
+      "attack": 2,
+      "maxHp": 6,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 75,
+      "attackRange": 5,
+      "attackCooldownMs": 500
+    },
+    "bandit": {
+      "name": "Bandit",
+      "attack": 4,
+      "maxHp": 9,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 55,
+      "attackRange": 5,
+      "attackCooldownMs": 1100,
+      "climber": true
+    },
+    "bat": {
+      "name": "Bat",
+      "attack": 2,
+      "maxHp": 5,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 65,
+      "attackRange": 5,
+      "attackCooldownMs": 700,
+      "flying": true
+    },
+    "scorpion": {
+      "name": "Scorpion",
+      "attack": 5,
+      "maxHp": 14,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 35,
+      "attackRange": 5,
+      "attackCooldownMs": 1300
+    },
+    "shield-guard": {
+      "name": "Shield Guard",
+      "attack": 3,
+      "maxHp": 40,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 15,
+      "attackRange": 5,
+      "attackCooldownMs": 2200
+    },
+    "centaur": {
+      "name": "Centaur",
+      "attack": 4,
+      "maxHp": 18,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 42,
+      "attackRange": 70,
+      "attackCooldownMs": 1800
+    },
+    "harpy": {
+      "name": "Harpy",
+      "attack": 4,
+      "maxHp": 14,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 40,
+      "attackRange": 65,
+      "attackCooldownMs": 1500,
+      "flying": true
+    },
+    "specter": {
+      "name": "Specter",
+      "attack": 5,
+      "maxHp": 10,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 50,
+      "attackRange": 5,
+      "attackCooldownMs": 1000,
+      "flying": true
+    },
+    "lizardman": {
+      "name": "Lizardman",
+      "attack": 6,
+      "maxHp": 18,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 32,
+      "attackRange": 5,
+      "attackCooldownMs": 1600,
+      "climber": true
+    },
+    "ballista": {
+      "name": "Ballista",
+      "attack": 8,
+      "maxHp": 10,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 12,
+      "attackRange": 100,
+      "attackCooldownMs": 3000
+    },
+    "vampire": {
+      "name": "Vampire",
+      "attack": 7,
+      "maxHp": 18,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 50,
+      "attackRange": 5,
+      "attackCooldownMs": 1400,
+      "flying": true
+    },
+    "griffin": {
+      "name": "Griffin",
+      "attack": 9,
+      "maxHp": 25,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 32,
+      "attackRange": 60,
+      "attackCooldownMs": 2200,
+      "flying": true
+    },
+    "fire-mage": {
+      "name": "Fire Mage",
+      "attack": 11,
+      "maxHp": 12,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 18,
+      "attackRange": 75,
+      "attackCooldownMs": 2500
+    },
+    "executioner": {
+      "name": "Executioner",
+      "attack": 13,
+      "maxHp": 18,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 14,
+      "attackRange": 5,
+      "attackCooldownMs": 2000
+    },
+    "mammoth": {
+      "name": "Mammoth",
+      "attack": 12,
+      "maxHp": 55,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 11,
+      "attackRange": 5,
+      "attackCooldownMs": 2600
+    },
+    "dark-elf": {
+      "name": "Dark Elf",
+      "attack": 5,
+      "maxHp": 14,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 45,
+      "attackRange": 70,
+      "attackCooldownMs": 1600,
+      "climber": true
+    },
+    "necromancer": {
+      "name": "Necromancer",
+      "attack": 7,
+      "maxHp": 10,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 16,
+      "attackRange": 80,
+      "attackCooldownMs": 2200
+    },
+    "giant": {
+      "name": "Giant",
+      "attack": 18,
+      "maxHp": 65,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 9,
+      "attackRange": 5,
+      "attackCooldownMs": 3000
+    },
+    "wyvern": {
+      "name": "Wyvern",
+      "attack": 12,
+      "maxHp": 28,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 38,
+      "attackRange": 55,
+      "attackCooldownMs": 2000,
+      "flying": true
+    },
+    "behemoth": {
+      "name": "Behemoth",
+      "attack": 22,
+      "maxHp": 90,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 7,
+      "attackRange": 5,
+      "attackCooldownMs": 3500
+    },
+    "vine-golem": {
+      "name": "Vine Golem",
+      "attack": 8,
+      "maxHp": 35,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 12,
+      "attackRange": 5,
+      "attackCooldownMs": 2200
+    },
+    "spore-bat": {
+      "name": "Spore Bat",
+      "attack": 3,
+      "maxHp": 8,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 55,
+      "attackRange": 5,
+      "attackCooldownMs": 800,
+      "flying": true
+    },
+    "thornbeast": {
+      "name": "Thornbeast",
+      "attack": 11,
+      "maxHp": 20,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 45,
+      "attackRange": 5,
+      "attackCooldownMs": 1600,
+      "climber": true
+    },
+    "elder-treant": {
+      "name": "Elder Treant",
+      "attack": 16,
+      "maxHp": 80,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 6,
+      "attackRange": 5,
+      "attackCooldownMs": 3200
+    },
+    "frog-knight": {
+      "name": "Frog Knight",
+      "attack": 6,
+      "maxHp": 22,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 38,
+      "attackRange": 5,
+      "attackCooldownMs": 1400,
+      "climber": true
+    },
+    "ironclad-guard": {
+      "name": "Ironclad Guard",
+      "attack": 5,
+      "maxHp": 50,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 12,
+      "attackRange": 5,
+      "attackCooldownMs": 2000
+    },
+    "war-drummer": {
+      "name": "War Drummer",
+      "attack": 6,
+      "maxHp": 16,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 28,
+      "attackRange": 5,
+      "attackCooldownMs": 1600
+    },
+    "siege-engineer": {
+      "name": "Siege Engineer",
+      "attack": 9,
+      "maxHp": 12,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 14,
+      "attackRange": 90,
+      "attackCooldownMs": 2800
+    },
+    "shield-wall-soldier": {
+      "name": "Shield Wall",
+      "attack": 2,
+      "maxHp": 25,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 15,
+      "attackRange": 5,
+      "attackCooldownMs": 2000
+    },
+    "grizzled-veteran": {
+      "name": "Grizzled Vet.",
+      "attack": 10,
+      "maxHp": 28,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 20,
+      "attackRange": 5,
+      "attackCooldownMs": 1800
+    },
+    "bone-archer": {
+      "name": "Bone Archer",
+      "attack": 4,
+      "maxHp": 9,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 25,
+      "attackRange": 75,
+      "attackCooldownMs": 1500
+    },
+    "wight-knight": {
+      "name": "Wight Knight",
+      "attack": 8,
+      "maxHp": 30,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 18,
+      "attackRange": 5,
+      "attackCooldownMs": 2000
+    },
+    "ash-elemental": {
+      "name": "Ash Elemental",
+      "attack": 9,
+      "maxHp": 15,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 35,
+      "attackRange": 60,
+      "attackCooldownMs": 2000,
+      "flying": true
+    },
+    "revenant": {
+      "name": "Revenant",
+      "attack": 6,
+      "maxHp": 12,
+      "isWall": false,
+      "bypassWall": false,
+      "moveSpeed": 55,
+      "attackRange": 5,
+      "attackCooldownMs": 1200,
+      "flying": true
+    },
+    "lich-apprentice": {
+      "name": "Lich Apprentice",
+      "attack": 5,
+      "maxHp": 8,
+      "isWall": false,
+      "bypassWall": true,
+      "moveSpeed": 18,
+      "attackRange": 70,
+      "attackCooldownMs": 1800
+    }
   },
-
   "cards": [
-    { "name": "Goblin",       "rarity": "common",    "cost": 1, "cardType": "unit",      "unitRef": "goblin",   "description": "Fast melee fighter.",               "deckCount": 3, "tags": ["forest"] },
-    { "name": "Archer",       "rarity": "common",    "cost": 1, "cardType": "unit",      "unitRef": "archer",   "description": "Ranged — fires over walls.",         "deckCount": 3, "tags": ["forest"] },
     {
-      "name": "Barbarian", "rarity": "uncommon", "cost": 2, "cardType": "unit", "tags": ["forest"],
-      "unit": { "name": "Barbarian", "attack": 7, "maxHp": 15, "isWall": false, "bypassWall": false, "moveSpeed": 35, "attackRange": 5, "attackCooldownMs": 1800 },
-      "description": "Hard-hitting melee fighter.", "deckCount": 3
+      "name": "Goblin",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "goblin",
+      "description": "Fast melee fighter.",
+      "deckCount": 3,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Once the cannon fodder of orc warbands, goblins discovered they actually enjoy being first through the door."
     },
     {
-      "name": "Knight", "rarity": "uncommon", "cost": 2, "cardType": "unit", "tags": ["citadel"],
-      "unit": { "name": "Knight", "attack": 4, "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 22, "attackRange": 5, "attackCooldownMs": 1500 },
-      "description": "Armored frontline tank.", "deckCount": 3
+      "name": "Archer",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "archer",
+      "description": "Ranged \u2014 fires over walls.",
+      "deckCount": 3,
+      "tags": [
+        "forest"
+      ],
+      "lore": "\"I don't miss.\" \u2014 Every archer, right before missing."
     },
     {
-      "name": "Wizard", "rarity": "rare", "cost": 3, "cardType": "unit",
-      "unit": { "name": "Wizard", "attack": 6, "maxHp": 10, "isWall": false, "bypassWall": true, "moveSpeed": 22, "attackRange": 70, "attackCooldownMs": 2000 },
-      "description": "Magic bypasses walls.", "deckCount": 2
-    },
-    { "name": "Dragon", "rarity": "legendary", "cost": 4, "cardType": "unit", "unitRef": "dragon", "description": "Unstoppable aerial might.", "deckCount": 1, "tags": ["forest"] },
-
-    {
-      "name": "Stone Wall", "rarity": "common", "cost": 1, "cardType": "structure",
-      "unit": { "name": "Wall", "attack": 0, "maxHp": 40, "isWall": true, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0 },
-      "description": "Blocks melee units.", "deckCount": 3
-    },
-    {
-      "name": "Farm", "rarity": "uncommon", "cost": 3, "cardType": "structure",
-      "unit": { "name": "Farm", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "mana", "amount": 1 } },
-      "description": "+1 max mana. Upgrade: +1 more mana.", "deckCount": 2
-    },
-    {
-      "name": "Mana Spring", "rarity": "uncommon", "cost": 3, "cardType": "structure",
-      "unit": { "name": "ManaSpring", "attack": 0, "maxHp": 15, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "manaSpeed", "speedMult": 0.5 } },
-      "description": "Mana regenerates 50% faster. Upgrade: another +50%.", "deckCount": 1
-    },
-    {
-      "name": "Healer's Hut", "rarity": "uncommon", "cost": 3, "cardType": "structure",
-      "unit": { "name": "Healer Hut", "attack": 0, "maxHp": 15, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "healAura", "amount": 3, "intervalMs": 8000 } },
-      "description": "Heals all friendly units 3 HP every 8s. Upgrade: heals every 4s.", "deckCount": 1
+      "name": "Barbarian",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Barbarian",
+        "attack": 7,
+        "maxHp": 15,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 35,
+        "attackRange": 5,
+        "attackCooldownMs": 1800
+      },
+      "description": "Hard-hitting melee fighter.",
+      "deckCount": 3,
+      "lore": "Trained by no one, feared by everyone. Mostly feared because of the screaming."
     },
     {
-      "name": "Stone Mason", "rarity": "rare", "cost": 4, "cardType": "structure",
-      "unit": { "name": "Stone Mason", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "repairAura", "amount": 8, "intervalMs": 10000 } },
-      "description": "Repairs all friendly walls & structures 8 HP every 10s. Upgrade: every 5s.", "deckCount": 1
+      "name": "Knight",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Knight",
+        "attack": 4,
+        "maxHp": 25,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 22,
+        "attackRange": 5,
+        "attackCooldownMs": 1500
+      },
+      "description": "Armored frontline tank.",
+      "deckCount": 3,
+      "lore": "The kingdom's finest. Polished armour hides a spectacular collection of bruises."
     },
     {
-      "name": "Blacksmith", "rarity": "rare", "cost": 4, "cardType": "structure",
-      "unit": { "name": "Blacksmith", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "attackAura", "amount": 2 } },
-      "description": "All friendly units deal +2 damage. Upgrade: +2 more.", "deckCount": 1
+      "name": "Wizard",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unit": {
+        "name": "Wizard",
+        "attack": 6,
+        "maxHp": 10,
+        "isWall": false,
+        "bypassWall": true,
+        "moveSpeed": 22,
+        "attackRange": 70,
+        "attackCooldownMs": 2000
+      },
+      "description": "Magic bypasses walls.",
+      "deckCount": 2,
+      "lore": "Years of magical study. Thousands of gold in reagents. Wages still less than a goblin."
     },
     {
-      "name": "Barracks", "rarity": "uncommon", "cost": 3, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Barracks", "attack": 0, "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "goblin", "intervalMs": 7000 } },
-      "description": "Spawns a Goblin every 7s.", "deckCount": 2
+      "name": "Dragon",
+      "rarity": "legendary",
+      "cost": 4,
+      "cardType": "unit",
+      "unitRef": "dragon",
+      "description": "Unstoppable aerial might.",
+      "deckCount": 1,
+      "tags": [
+        "forest"
+      ],
+      "lore": "When it speaks, kingdoms listen. When it breathes, kingdoms burn."
     },
     {
-      "name": "Arcane Tower", "rarity": "rare", "cost": 4, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Arc.Tower", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "archer", "intervalMs": 12000 } },
-      "description": "Spawns an Archer every 12s.", "deckCount": 1
+      "name": "Stone Wall",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "structure",
+      "unit": {
+        "name": "Wall",
+        "attack": 0,
+        "maxHp": 40,
+        "isWall": true,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0
+      },
+      "description": "Blocks melee units.",
+      "deckCount": 3,
+      "lore": "The first answer to every problem. Usually the second answer too."
     },
     {
-      "name": "Dragon Lair", "rarity": "legendary", "cost": 5, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "DrgnLair", "attack": 0, "maxHp": 30, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "dragon", "intervalMs": 25000 } },
-      "description": "Spawns a Dragon every 25s.", "deckCount": 1
-    },
-
-    { "name": "Sharpen Blades", "rarity": "uncommon", "cost": 2, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "buffAttack", "amount": 2 }, "description": "All your units gain +2 attack.", "deckCount": 2 },
-    { "name": "Fortify",        "rarity": "rare",     "cost": 2, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "healUnits",  "amount": 8 }, "description": "Heal all your units for 8 HP.",   "deckCount": 1 },
-
-    { "name": "Skeleton",     "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "skeleton",    "description": "Frail but lightning-fast melee.",       "deckCount": 0, "tags": ["ashen"] },
-    { "name": "Troll",        "rarity": "uncommon",  "cost": 3, "cardType": "unit", "unitRef": "troll",       "description": "Massive melee brute. Very slow.",       "deckCount": 0, "tags": ["forest"] },
-    { "name": "Crossbow",     "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "crossbow",    "description": "Ranged soldier — fires over walls.",    "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Paladin",      "rarity": "rare",      "cost": 4, "cardType": "unit", "unitRef": "paladin",     "description": "Holy knight — armored and mighty.",     "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Rogue",        "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "rogue",       "description": "Climbs over walls at 25 % speed.",     "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Catapult",     "rarity": "rare",      "cost": 4, "cardType": "unit", "unitRef": "catapult",    "description": "Extreme range. Fires over everything.", "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Werewolf",     "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "werewolf",    "description": "Climbs over walls. Ferocious speed.",  "deckCount": 0, "tags": ["forest"] },
-    { "name": "Golem",        "rarity": "legendary", "cost": 5, "cardType": "unit", "unitRef": "golem",       "description": "Stone titan — massive HP and damage.", "deckCount": 0 },
-    { "name": "Pixie",        "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "pixie",       "description": "Tiny and flying — bypasses all walls.", "deckCount": 0, "tags": ["forest"] },
-    { "name": "Ogre",         "rarity": "uncommon",  "cost": 3, "cardType": "unit", "unitRef": "ogre",        "description": "Hulking melee powerhouse.",             "deckCount": 0 },
-
-    {
-      "name": "Crypt", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Crypt", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "skeleton", "intervalMs": 7000 } },
-      "description": "Spawns a Skeleton every 7s.", "deckCount": 0
+      "name": "Farm",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "unit": {
+        "name": "Farm",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "mana",
+          "amount": 1
+        }
+      },
+      "description": "+1 max mana. Upgrade: +1 more mana.",
+      "deckCount": 2,
+      "lore": "Food is mana. Mana is power. This farmer has no idea what he's contributing to."
     },
     {
-      "name": "Troll Den", "rarity": "legendary", "cost": 5, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Troll Den", "attack": 0, "maxHp": 35, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "troll", "intervalMs": 20000 } },
-      "description": "Spawns a Troll every 20s.", "deckCount": 0
+      "name": "Mana Spring",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "unit": {
+        "name": "ManaSpring",
+        "attack": 0,
+        "maxHp": 15,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "manaSpeed",
+          "speedMult": 0.5
+        }
+      },
+      "description": "Mana regenerates 50% faster. Upgrade: another +50%.",
+      "deckCount": 1,
+      "lore": "Nobody can explain where the water comes from. Nobody is asking anymore."
     },
     {
-      "name": "Garrison", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Garrison", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "crossbow", "intervalMs": 10000 } },
-      "description": "Spawns a Crossbow every 10s.", "deckCount": 0
+      "name": "Healer's Hut",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "unit": {
+        "name": "Healer Hut",
+        "attack": 0,
+        "maxHp": 15,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "healAura",
+          "amount": 3,
+          "intervalMs": 8000
+        }
+      },
+      "description": "Heals all friendly units 3 HP every 8s. Upgrade: heals every 4s.",
+      "deckCount": 1,
+      "lore": "\"Rest,\" she says. \"It'll hurt less tomorrow.\" She is usually right."
     },
     {
-      "name": "Cathedral", "rarity": "legendary", "cost": 6, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Cathedral", "attack": 0, "maxHp": 40, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "paladin", "intervalMs": 25000 } },
-      "description": "Spawns a Paladin every 25s.", "deckCount": 0
+      "name": "Stone Mason",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "unit": {
+        "name": "Stone Mason",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "repairAura",
+          "amount": 8,
+          "intervalMs": 10000
+        }
+      },
+      "description": "Repairs all friendly walls & structures 8 HP every 10s. Upgrade: every 5s.",
+      "deckCount": 1,
+      "lore": "Builds walls by day, repairs them by night. He's given up asking why they keep breaking."
     },
     {
-      "name": "Rogue Den", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Rogue Den", "attack": 0, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "rogue", "intervalMs": 9000 } },
-      "description": "Spawns a Rogue every 9s.", "deckCount": 0
+      "name": "Blacksmith",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "unit": {
+        "name": "Blacksmith",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "attackAura",
+          "amount": 2
+        }
+      },
+      "description": "All friendly units deal +2 damage. Upgrade: +2 more.",
+      "deckCount": 1,
+      "lore": "Hammer, anvil, fire. In that order. He has opinions about everything else."
     },
     {
-      "name": "Siege Works", "rarity": "legendary", "cost": 5, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Siege Works", "attack": 0, "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "catapult", "intervalMs": 28000 } },
-      "description": "Spawns a Catapult every 28s.", "deckCount": 0
+      "name": "Barracks",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Barracks",
+        "attack": 0,
+        "maxHp": 25,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "goblin",
+          "intervalMs": 7000
+        }
+      },
+      "description": "Spawns a Goblin every 7s.",
+      "deckCount": 2,
+      "lore": "Turns gold into goblins. Economists are still debating whether that's profitable."
     },
     {
-      "name": "Dark Shrine", "rarity": "rare", "cost": 4, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Dark Shrine", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "werewolf", "intervalMs": 14000 } },
-      "description": "Spawns a Werewolf every 14s.", "deckCount": 0
+      "name": "Arcane Tower",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Arc.Tower",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "archer",
+          "intervalMs": 12000
+        }
+      },
+      "description": "Spawns an Archer every 12s.",
+      "deckCount": 1,
+      "lore": "The archers it trains insist they learned everything naturally."
     },
     {
-      "name": "Iron Forge", "rarity": "legendary", "cost": 6, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Iron Forge", "attack": 0, "maxHp": 45, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "golem", "intervalMs": 35000 } },
-      "description": "Spawns a Golem every 35s.", "deckCount": 0
+      "name": "Dragon Lair",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "DrgnLair",
+        "attack": 0,
+        "maxHp": 30,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "dragon",
+          "intervalMs": 25000
+        }
+      },
+      "description": "Spawns a Dragon every 25s.",
+      "deckCount": 1,
+      "lore": "Do not approach. Do not inquire. Absolutely do not ask about the rent."
     },
     {
-      "name": "Fairy Ring", "rarity": "uncommon", "cost": 2, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Fairy Ring", "attack": 0, "maxHp": 15, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "pixie", "intervalMs": 7000 } },
-      "description": "Spawns a Pixie every 7s.", "deckCount": 0
+      "name": "Sharpen Blades",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "buffAttack",
+        "amount": 2
+      },
+      "description": "All your units gain +2 attack.",
+      "deckCount": 2,
+      "lore": "The whetstone whine echoes across camp. Everyone quietly checks their grip."
     },
     {
-      "name": "Ogre Den", "rarity": "rare", "cost": 3, "cardType": "structure",
-      "unit": { "name": "Ogre Den", "attack": 0, "maxHp": 28, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "ogre", "intervalMs": 16000 } },
-      "description": "Spawns an Ogre every 16s.", "deckCount": 0
-    },
-
-    { "name": "Rally",      "rarity": "common",    "cost": 1, "cardType": "upgrade", "tags": ["forest"],  "upgradeEffect": { "type": "healUnits",  "amount": 4  }, "description": "Heal all your units for 4 HP.",            "deckCount": 0 },
-    { "name": "Haste",      "rarity": "uncommon",  "cost": 2, "cardType": "upgrade", "tags": ["forest"],  "upgradeEffect": { "type": "buffSpeed",  "amount": 12 }, "description": "All your units gain +12 speed.",           "deckCount": 0 },
-    { "name": "Iron Skin",  "rarity": "uncommon",  "cost": 2, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "buffMaxHp",  "amount": 15 }, "description": "All your units gain +15 max HP.",          "deckCount": 0 },
-    { "name": "Eagle Eye",  "rarity": "uncommon",  "cost": 2, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "buffRange",  "amount": 25 }, "description": "All your units gain +25 attack range.",    "deckCount": 0 },
-    { "name": "War Drums",  "rarity": "rare",      "cost": 4, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "buffAttack", "amount": 5  }, "description": "All your units gain +5 attack.",           "deckCount": 0 },
-    { "name": "Bloodlust",  "rarity": "rare",      "cost": 3, "cardType": "upgrade", "tags": ["ashen"],   "upgradeEffect": { "type": "buffSpeed",  "amount": 25 }, "description": "All your units surge with furious speed.", "deckCount": 0 },
-
-    { "name": "Plague Rat",  "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "plague-rat",   "description": "Swarm melee. Incredibly fast attack speed.", "deckCount": 2, "tags": ["ashen"] },
-    { "name": "Bandit",      "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "bandit",       "description": "Fast climber — scales over walls.",         "deckCount": 2, "tags": ["citadel"] },
-    { "name": "Bat",         "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "bat",          "description": "Tiny flier — ignores walls entirely.",       "deckCount": 2, "tags": ["forest"] },
-    { "name": "Scorpion",    "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "scorpion",     "description": "Sturdy melee with decent punch.",            "deckCount": 2, "tags": ["forest"] },
-    { "name": "Shield Guard","rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "shield-guard", "description": "Immovable melee wall — extreme HP.",         "deckCount": 2, "tags": ["citadel"] },
-    { "name": "Centaur",     "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "centaur",      "description": "Fast ranged — fires over walls.",            "deckCount": 2, "tags": ["forest"] },
-    { "name": "Harpy",       "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "harpy",        "description": "Flying ranged — swoops over walls and shoots.", "deckCount": 2, "tags": ["forest"] },
-    { "name": "Specter",     "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "specter",      "description": "Flying melee — phases through walls.",       "deckCount": 2, "tags": ["ashen"] },
-    { "name": "Lizardman",   "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "lizardman",    "description": "Climbing melee brawler.",                   "deckCount": 2, "tags": ["ashen"] },
-    { "name": "Ballista",    "rarity": "uncommon",  "cost": 3, "cardType": "unit", "unitRef": "ballista",     "description": "Siege bolt — extreme range, fires over walls.", "deckCount": 1, "tags": ["citadel"] },
-    { "name": "Vampire",     "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "vampire",      "description": "Flying melee predator — ignores walls.",     "deckCount": 1, "tags": ["ashen"] },
-    { "name": "Griffin",     "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "griffin",      "description": "Flying ranged — powerful aerial attacker.", "deckCount": 1, "tags": ["forest"] },
-    { "name": "Fire Mage",   "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "fire-mage",    "description": "Glass cannon — scorches enemies through walls.", "deckCount": 1 },
-    { "name": "Executioner", "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "executioner",  "description": "Devastating melee blow — one hit, one kill.", "deckCount": 1, "tags": ["citadel"] },
-    { "name": "Mammoth",     "rarity": "rare",      "cost": 4, "cardType": "unit", "unitRef": "mammoth",      "description": "Armored beast — crushes through melee lines.", "deckCount": 1 },
-    { "name": "Dark Elf",    "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "dark-elf",     "description": "Ranged climber — scales walls then snipes.", "deckCount": 1, "tags": ["ashen"] },
-    { "name": "Necromancer", "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "necromancer",  "description": "Long-range magic — bypasses walls.",         "deckCount": 1, "tags": ["ashen"] },
-    { "name": "Giant",       "rarity": "legendary", "cost": 5, "cardType": "unit", "unitRef": "giant",        "description": "Towering brute — enormous HP and damage.",   "deckCount": 1 },
-    { "name": "Wyvern",      "rarity": "legendary", "cost": 4, "cardType": "unit", "unitRef": "wyvern",       "description": "Fast flying ranged — dominates from the air.", "deckCount": 1 },
-    { "name": "Behemoth",    "rarity": "legendary", "cost": 6, "cardType": "unit", "unitRef": "behemoth",     "description": "Ultimate melee titan — nearly unstoppable.", "deckCount": 1 },
-
-    {
-      "name": "Rat Burrow", "rarity": "common", "cost": 1, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Rat Burrow", "attack": 0, "maxHp": 14, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "plague-rat", "intervalMs": 5000 } },
-      "description": "Spawns a Plague Rat every 5s.", "deckCount": 2
+      "name": "Fortify",
+      "rarity": "rare",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "healUnits",
+        "amount": 8
+      },
+      "description": "Heal all your units for 8 HP.",
+      "deckCount": 1,
+      "lore": "\"Walk it off.\" \u2014 Official battle doctrine."
     },
     {
-      "name": "Bandit Camp", "rarity": "common", "cost": 2, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Bandit Camp", "attack": 0, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "bandit", "intervalMs": 8000 } },
-      "description": "Spawns a Bandit every 8s.", "deckCount": 2
+      "name": "Skeleton",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "skeleton",
+      "description": "Frail but lightning-fast melee.",
+      "deckCount": 0,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Died once, but keeps showing up. Very dedicated."
     },
     {
-      "name": "Bat Cave", "rarity": "common", "cost": 1, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Bat Cave", "attack": 0, "maxHp": 14, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "bat", "intervalMs": 6000 } },
-      "description": "Spawns a Bat every 6s.", "deckCount": 2
+      "name": "Troll",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "troll",
+      "description": "Massive melee brute. Very slow.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "You'll know it's coming. You'll have plenty of time to not do anything about it."
     },
     {
-      "name": "Scorpion Pit", "rarity": "uncommon", "cost": 2, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Scorpion Pit", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "scorpion", "intervalMs": 9000 } },
-      "description": "Spawns a Scorpion every 9s.", "deckCount": 1
+      "name": "Crossbow",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "crossbow",
+      "description": "Ranged soldier \u2014 fires over walls.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "A technically superior weapon. The operators will tell you at every opportunity."
     },
     {
-      "name": "Guard Post", "rarity": "uncommon", "cost": 2, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Guard Post", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "shield-guard", "intervalMs": 16000 } },
-      "description": "Spawns a Shield Guard every 16s.", "deckCount": 1
+      "name": "Paladin",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "unit",
+      "unitRef": "paladin",
+      "description": "Holy knight \u2014 armored and mighty.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Righteous, armoured, and absolutely insufferable at dinner."
     },
     {
-      "name": "Centaur Stable", "rarity": "uncommon", "cost": 3, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Cntaur Stbl", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "centaur", "intervalMs": 12000 } },
-      "description": "Spawns a Centaur every 12s.", "deckCount": 1
+      "name": "Rogue",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "rogue",
+      "description": "Climbs over walls at 25 % speed.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "\"What wall?\" \u2014 The Rogue, from the other side of the wall."
     },
     {
-      "name": "Harpy Roost", "rarity": "uncommon", "cost": 3, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Harpy Roost", "attack": 0, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "harpy", "intervalMs": 12000 } },
-      "description": "Spawns a Harpy every 12s.", "deckCount": 1
+      "name": "Catapult",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "unit",
+      "unitRef": "catapult",
+      "description": "Extreme range. Fires over everything.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Technically pacifist. It's the rocks that do the violence."
     },
     {
-      "name": "Spirit Well", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Spirit Well", "attack": 0, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "specter", "intervalMs": 10000 } },
-      "description": "Spawns a Specter every 10s.", "deckCount": 1
+      "name": "Werewolf",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "werewolf",
+      "description": "Climbs over walls. Ferocious speed.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Formerly a reasonable accountant."
     },
     {
-      "name": "Lizard Warren", "rarity": "uncommon", "cost": 2, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Lizard Den", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "lizardman", "intervalMs": 11000 } },
-      "description": "Spawns a Lizardman every 11s.", "deckCount": 1
+      "name": "Golem",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "unitRef": "golem",
+      "description": "Stone titan \u2014 massive HP and damage.",
+      "deckCount": 0,
+      "lore": "Was told to hold the line. Has been holding it for two hundred years."
     },
     {
-      "name": "Ballista Tower", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "BallstaTwr", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "ballista", "intervalMs": 15000 } },
-      "description": "Spawns a Ballista every 15s.", "deckCount": 1
+      "name": "Pixie",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "pixie",
+      "description": "Tiny and flying \u2014 bypasses all walls.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Shoots first, asks never."
     },
     {
-      "name": "Vamp. Coven", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Vamp Coven", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "vampire", "intervalMs": 14000 } },
-      "description": "Spawns a Vampire every 14s.", "deckCount": 1
+      "name": "Ogre",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "ogre",
+      "description": "Hulking melee powerhouse.",
+      "deckCount": 0,
+      "lore": "Large. Loud. Effective. Not necessarily in that order."
     },
     {
-      "name": "Aerie", "rarity": "rare", "cost": 4, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Aerie", "attack": 0, "maxHp": 28, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "griffin", "intervalMs": 20000 } },
-      "description": "Spawns a Griffin every 20s.", "deckCount": 1
+      "name": "Crypt",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Crypt",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "skeleton",
+          "intervalMs": 7000
+        }
+      },
+      "description": "Spawns a Skeleton every 7s.",
+      "deckCount": 0,
+      "lore": "Nobody asked what's in there. Everyone agrees not to."
     },
     {
-      "name": "Mage Tower", "rarity": "rare", "cost": 4, "cardType": "structure",
-      "unit": { "name": "Mage Tower", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "fire-mage", "intervalMs": 18000 } },
-      "description": "Spawns a Fire Mage every 18s.", "deckCount": 1
+      "name": "Troll Den",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Troll Den",
+        "attack": 0,
+        "maxHp": 35,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "troll",
+          "intervalMs": 20000
+        }
+      },
+      "description": "Spawns a Troll every 20s.",
+      "deckCount": 0,
+      "lore": "Smells terrible. Keeps the neighbours away."
     },
     {
-      "name": "Gallows", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Gallows", "attack": 0, "maxHp": 18, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "executioner", "intervalMs": 20000 } },
-      "description": "Spawns an Executioner every 20s.", "deckCount": 1
+      "name": "Garrison",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Garrison",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "crossbow",
+          "intervalMs": 10000
+        }
+      },
+      "description": "Spawns a Crossbow every 10s.",
+      "deckCount": 0,
+      "lore": "A crossbow and a grudge, supplied on rotation."
     },
     {
-      "name": "Mammoth Pen", "rarity": "legendary", "cost": 5, "cardType": "structure",
-      "unit": { "name": "Mammoth Pen", "attack": 0, "maxHp": 35, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "mammoth", "intervalMs": 25000 } },
-      "description": "Spawns a Mammoth every 25s.", "deckCount": 1
+      "name": "Cathedral",
+      "rarity": "legendary",
+      "cost": 6,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Cathedral",
+        "attack": 0,
+        "maxHp": 40,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "paladin",
+          "intervalMs": 25000
+        }
+      },
+      "description": "Spawns a Paladin every 25s.",
+      "deckCount": 0,
+      "lore": "Blessed walls. Blessed warriors. Blessed inconvenient for the enemy."
     },
     {
-      "name": "Shadow Academy", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Shadow Acad", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "dark-elf", "intervalMs": 15000 } },
-      "description": "Spawns a Dark Elf every 15s.", "deckCount": 1
+      "name": "Rogue Den",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Rogue Den",
+        "attack": 0,
+        "maxHp": 18,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "rogue",
+          "intervalMs": 9000
+        }
+      },
+      "description": "Spawns a Rogue every 9s.",
+      "deckCount": 0,
+      "lore": "No sign. No address. Impossible to miss."
     },
     {
-      "name": "Death Tower", "rarity": "rare", "cost": 4, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Death Tower", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "necromancer", "intervalMs": 18000 } },
-      "description": "Spawns a Necromancer every 18s.", "deckCount": 1
+      "name": "Siege Works",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Siege Works",
+        "attack": 0,
+        "maxHp": 25,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "catapult",
+          "intervalMs": 28000
+        }
+      },
+      "description": "Spawns a Catapult every 28s.",
+      "deckCount": 0,
+      "lore": "The engineers here have never met a wall they didn't want to destroy."
     },
     {
-      "name": "Giant's Hall", "rarity": "legendary", "cost": 5, "cardType": "structure",
-      "unit": { "name": "Giant's Hall", "attack": 0, "maxHp": 40, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "giant", "intervalMs": 45000 } },
-      "description": "Spawns a Giant every 45s.", "deckCount": 1
+      "name": "Dark Shrine",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Dark Shrine",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "werewolf",
+          "intervalMs": 14000
+        }
+      },
+      "description": "Spawns a Werewolf every 14s.",
+      "deckCount": 0,
+      "lore": "Full moon schedule posted on the door."
     },
     {
-      "name": "Wyvern Roost", "rarity": "legendary", "cost": 5, "cardType": "structure",
-      "unit": { "name": "Wyvern Roost", "attack": 0, "maxHp": 35, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "wyvern", "intervalMs": 28000 } },
-      "description": "Spawns a Wyvern every 28s.", "deckCount": 1
+      "name": "Iron Forge",
+      "rarity": "legendary",
+      "cost": 6,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Iron Forge",
+        "attack": 0,
+        "maxHp": 45,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "golem",
+          "intervalMs": 35000
+        }
+      },
+      "description": "Spawns a Golem every 35s.",
+      "deckCount": 0,
+      "lore": "Hammers day and night. Nobody sleeps within a mile."
     },
     {
-      "name": "Ancient Altar", "rarity": "legendary", "cost": 6, "cardType": "structure",
-      "unit": { "name": "Anc. Altar", "attack": 0, "maxHp": 50, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "behemoth", "intervalMs": 70000 } },
-      "description": "Spawns a Behemoth every 70s.", "deckCount": 1
-    },
-
-    { "name": "Field Medic",  "rarity": "common",   "cost": 1, "cardType": "upgrade", "tags": ["forest"],  "upgradeEffect": { "type": "healUnits",  "amount": 6  }, "description": "Heal all your units for 6 HP.",        "deckCount": 2 },
-    { "name": "Titan Blood",  "rarity": "rare",     "cost": 3, "cardType": "upgrade", "tags": ["ashen"],   "upgradeEffect": { "type": "buffMaxHp",  "amount": 20 }, "description": "All your units gain +20 max HP.",      "deckCount": 1 },
-    { "name": "Sniper Scope", "rarity": "uncommon", "cost": 2, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "buffRange",  "amount": 30 }, "description": "All your units gain +30 attack range.", "deckCount": 1 },
-    { "name": "Battle Cry",   "rarity": "uncommon", "cost": 2, "cardType": "upgrade", "tags": ["citadel"], "upgradeEffect": { "type": "buffAttack", "amount": 3  }, "description": "All your units gain +3 attack.",       "deckCount": 2 },
-
-    { "name": "Vine Golem",    "rarity": "uncommon",  "cost": 3, "cardType": "unit", "unitRef": "vine-golem",          "description": "Slow forest brute — twisted vines for fists.",     "deckCount": 0, "tags": ["forest"] },
-    { "name": "Spore Bat",     "rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "spore-bat",           "description": "Fast flying swarm — ignores walls.",               "deckCount": 0, "tags": ["forest"] },
-    { "name": "Thornbeast",    "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "thornbeast",          "description": "Climbing beast covered in razor thorns.",          "deckCount": 0, "tags": ["forest"] },
-    { "name": "Elder Treant",  "rarity": "legendary", "cost": 5, "cardType": "unit", "unitRef": "elder-treant",        "description": "Ancient forest titan — near-unstoppable.",         "deckCount": 0, "tags": ["forest"] },
-    { "name": "Frog Knight",   "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "frog-knight",         "description": "Leaps over walls. Surprisingly armored.",          "deckCount": 0, "tags": ["forest"] },
-
-    {
-      "name": "Thornwall", "rarity": "uncommon", "cost": 2, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Thornwall", "attack": 0, "maxHp": 60, "isWall": true, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0 },
-      "description": "Reinforced thorn barrier — tougher than stone.", "deckCount": 0
-    },
-    {
-      "name": "Ancient Grove", "rarity": "rare", "cost": 4, "cardType": "structure", "tags": ["forest"],
-      "unit": { "name": "Anc. Grove", "attack": 0, "maxHp": 30, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "vine-golem", "intervalMs": 18000 } },
-      "description": "Spawns a Vine Golem every 18s.", "deckCount": 0
-    },
-
-    { "name": "Ironclad Guard",     "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "ironclad-guard",      "description": "Heavily armored — barely moves, never falls.",     "deckCount": 0, "tags": ["citadel"] },
-    { "name": "War Drummer",        "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "war-drummer",         "description": "Rallies the march — steady melee brawler.",        "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Siege Engineer",     "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "siege-engineer",      "description": "Ranged expert — fires over walls from distance.",   "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Shield Wall Soldier","rarity": "common",    "cost": 1, "cardType": "unit", "unitRef": "shield-wall-soldier", "description": "Cheap tanky frontliner — absorbs punishment.",     "deckCount": 0, "tags": ["citadel"] },
-    { "name": "Grizzled Veteran",   "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "grizzled-veteran",    "description": "Battle-hardened warrior — reliable and deadly.",   "deckCount": 0, "tags": ["citadel"] },
-
-    {
-      "name": "Armory", "rarity": "rare", "cost": 3, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Armory", "attack": 0, "maxHp": 25, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "ironclad-guard", "intervalMs": 14000 } },
-      "description": "Spawns an Ironclad Guard every 14s.", "deckCount": 0
+      "name": "Fairy Ring",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Fairy Ring",
+        "attack": 0,
+        "maxHp": 15,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "pixie",
+          "intervalMs": 7000
+        }
+      },
+      "description": "Spawns a Pixie every 7s.",
+      "deckCount": 0,
+      "lore": "\"Step inside the ring,\" they said. \"It'll be fun,\" they said."
     },
     {
-      "name": "Command Tent", "rarity": "uncommon", "cost": 3, "cardType": "structure", "tags": ["citadel"],
-      "unit": { "name": "Cmd. Tent", "attack": 0, "maxHp": 20, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "mana", "amount": 1 } },
-      "description": "+1 max mana. The iron citadel runs on logistics.", "deckCount": 0
+      "name": "Ogre Den",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "unit": {
+        "name": "Ogre Den",
+        "attack": 0,
+        "maxHp": 28,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "ogre",
+          "intervalMs": 16000
+        }
+      },
+      "description": "Spawns an Ogre every 16s.",
+      "deckCount": 0,
+      "lore": "Listed as \"residential\" in the tax records."
     },
-
-    { "name": "Bone Archer",     "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "bone-archer",     "description": "Undead ranged — fires through walls.",               "deckCount": 0, "tags": ["ashen"] },
-    { "name": "Wight Knight",    "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "wight-knight",    "description": "Armored undead — relentless and hard to kill.",      "deckCount": 0, "tags": ["ashen"] },
-    { "name": "Ash Elemental",   "rarity": "rare",      "cost": 3, "cardType": "unit", "unitRef": "ash-elemental",   "description": "Flying scorched spirit — burns through all defenses.", "deckCount": 0, "tags": ["ashen"] },
-    { "name": "Revenant",        "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "revenant",        "description": "Fast flying ghost — refuses to stay dead.",          "deckCount": 0, "tags": ["ashen"] },
-    { "name": "Lich Apprentice", "rarity": "uncommon",  "cost": 2, "cardType": "unit", "unitRef": "lich-apprentice", "description": "Ranged dark magic — bypasses walls.",                "deckCount": 0, "tags": ["ashen"] },
-
     {
-      "name": "Bone Wall", "rarity": "uncommon", "cost": 2, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Bone Wall", "attack": 0, "maxHp": 50, "isWall": true, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0 },
-      "description": "Skeletal barrier — sturdier than it looks.", "deckCount": 0
+      "name": "Rally",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "upgrade",
+      "tags": [
+        "forest"
+      ],
+      "upgradeEffect": {
+        "type": "healUnits",
+        "amount": 4
+      },
+      "description": "Heal all your units for 4 HP.",
+      "deckCount": 0,
+      "lore": "A rousing speech, a quick bandage \u2014 good as new."
     },
     {
-      "name": "Soul Obelisk", "rarity": "rare", "cost": 4, "cardType": "structure", "tags": ["ashen"],
-      "unit": { "name": "Soul Obelisk", "attack": 0, "maxHp": 22, "isWall": false, "bypassWall": false, "moveSpeed": 0, "attackRange": 0, "attackCooldownMs": 0, "structureEffect": { "type": "spawn", "unitTemplateRef": "revenant", "intervalMs": 11000 } },
-      "description": "Spawns a Revenant every 11s.", "deckCount": 0
+      "name": "Haste",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "forest"
+      ],
+      "upgradeEffect": {
+        "type": "buffSpeed",
+        "amount": 12
+      },
+      "description": "All your units gain +12 speed.",
+      "deckCount": 0,
+      "lore": "Legs moved so fast they filed a formal complaint."
+    },
+    {
+      "name": "Iron Skin",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "buffMaxHp",
+        "amount": 15
+      },
+      "description": "All your units gain +15 max HP.",
+      "deckCount": 0,
+      "lore": "Toughen up. Literally."
+    },
+    {
+      "name": "Eagle Eye",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "buffRange",
+        "amount": 25
+      },
+      "description": "All your units gain +25 attack range.",
+      "deckCount": 0,
+      "lore": "See further. Regret it only slightly more often."
+    },
+    {
+      "name": "War Drums",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "buffAttack",
+        "amount": 5
+      },
+      "description": "All your units gain +5 attack.",
+      "deckCount": 0,
+      "lore": "The rhythm of violence."
+    },
+    {
+      "name": "Bloodlust",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "upgrade",
+      "tags": [
+        "ashen"
+      ],
+      "upgradeEffect": {
+        "type": "buffSpeed",
+        "amount": 25
+      },
+      "description": "All your units surge with furious speed.",
+      "deckCount": 0,
+      "lore": "Faster. Angrier. Marginally more coordinated."
+    },
+    {
+      "name": "Plague Rat",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "plague-rat",
+      "description": "Swarm melee. Incredibly fast attack speed.",
+      "deckCount": 2,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "One is an annoyance. A hundred is a catastrophe."
+    },
+    {
+      "name": "Bandit",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "bandit",
+      "description": "Fast climber \u2014 scales over walls.",
+      "deckCount": 2,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Honest work never paid this well."
+    },
+    {
+      "name": "Bat",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "bat",
+      "description": "Tiny flier \u2014 ignores walls entirely.",
+      "deckCount": 2,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Hung upside down until called upon \u2014 a skill with surprising tactical applications."
+    },
+    {
+      "name": "Scorpion",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "scorpion",
+      "description": "Sturdy melee with decent punch.",
+      "deckCount": 2,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Armoured, venomous, grumpy. Triple threat."
+    },
+    {
+      "name": "Shield Guard",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "shield-guard",
+      "description": "Immovable melee wall \u2014 extreme HP.",
+      "deckCount": 2,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Move? Why would I move?"
+    },
+    {
+      "name": "Centaur",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "centaur",
+      "description": "Fast ranged \u2014 fires over walls.",
+      "deckCount": 2,
+      "tags": [
+        "forest"
+      ],
+      "lore": "The upper half writes poetry. The lower half doesn't know."
+    },
+    {
+      "name": "Harpy",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "harpy",
+      "description": "Flying ranged \u2014 swoops over walls and shoots.",
+      "deckCount": 2,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Sings beautifully. Fights savagely. Never at the same time."
+    },
+    {
+      "name": "Specter",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "specter",
+      "description": "Flying melee \u2014 phases through walls.",
+      "deckCount": 2,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Died defending the post. Still defending it."
+    },
+    {
+      "name": "Lizardman",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "lizardman",
+      "description": "Climbing melee brawler.",
+      "deckCount": 2,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Cold-blooded. Professionally and personally."
+    },
+    {
+      "name": "Ballista",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "ballista",
+      "description": "Siege bolt \u2014 extreme range, fires over walls.",
+      "deckCount": 1,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "\"Fire the ballista!\" \u2014 said with far too much enthusiasm every time."
+    },
+    {
+      "name": "Vampire",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "vampire",
+      "description": "Flying melee predator \u2014 ignores walls.",
+      "deckCount": 1,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Charming until the biting starts. Sometimes also during the biting."
+    },
+    {
+      "name": "Griffin",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "griffin",
+      "description": "Flying ranged \u2014 powerful aerial attacker.",
+      "deckCount": 1,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Half eagle, half lion, all opinion."
+    },
+    {
+      "name": "Fire Mage",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "fire-mage",
+      "description": "Glass cannon \u2014 scorches enemies through walls.",
+      "deckCount": 1,
+      "lore": "Extremely dangerous. Mostly to itself."
+    },
+    {
+      "name": "Executioner",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "executioner",
+      "description": "Devastating melee blow \u2014 one hit, one kill.",
+      "deckCount": 1,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Does not like being told there is more than one swing allowed."
+    },
+    {
+      "name": "Mammoth",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "unit",
+      "unitRef": "mammoth",
+      "description": "Armored beast \u2014 crushes through melee lines.",
+      "deckCount": 1,
+      "lore": "Once a peaceful grazer. Someone put armour on it."
+    },
+    {
+      "name": "Dark Elf",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "dark-elf",
+      "description": "Ranged climber \u2014 scales walls then snipes.",
+      "deckCount": 1,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Watches from the shadows. Shoots from the shadows. Lives in the shadows. Hates dentist appointments."
+    },
+    {
+      "name": "Necromancer",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "necromancer",
+      "description": "Long-range magic \u2014 bypasses walls.",
+      "deckCount": 1,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Death is just unemployment with extra steps."
+    },
+    {
+      "name": "Giant",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "unitRef": "giant",
+      "description": "Towering brute \u2014 enormous HP and damage.",
+      "deckCount": 1,
+      "lore": "Slow. Inevitable. Cannot open doors, but rarely needs to."
+    },
+    {
+      "name": "Wyvern",
+      "rarity": "legendary",
+      "cost": 4,
+      "cardType": "unit",
+      "unitRef": "wyvern",
+      "description": "Fast flying ranged \u2014 dominates from the air.",
+      "deckCount": 1,
+      "lore": "The dragon's practical cousin. Less fire, more punctuality."
+    },
+    {
+      "name": "Behemoth",
+      "rarity": "legendary",
+      "cost": 6,
+      "cardType": "unit",
+      "unitRef": "behemoth",
+      "description": "Ultimate melee titan \u2014 nearly unstoppable.",
+      "deckCount": 1,
+      "lore": "There is no plan B for a Behemoth. There is often no plan A left either."
+    },
+    {
+      "name": "Rat Burrow",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Rat Burrow",
+        "attack": 0,
+        "maxHp": 14,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "plague-rat",
+          "intervalMs": 5000
+        }
+      },
+      "description": "Spawns a Plague Rat every 5s.",
+      "deckCount": 2,
+      "lore": "The smell announces them long before they arrive."
+    },
+    {
+      "name": "Bandit Camp",
+      "rarity": "common",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Bandit Camp",
+        "attack": 0,
+        "maxHp": 18,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "bandit",
+          "intervalMs": 8000
+        }
+      },
+      "description": "Spawns a Bandit every 8s.",
+      "deckCount": 2,
+      "lore": "Technically a business."
+    },
+    {
+      "name": "Bat Cave",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Bat Cave",
+        "attack": 0,
+        "maxHp": 14,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "bat",
+          "intervalMs": 6000
+        }
+      },
+      "description": "Spawns a Bat every 6s.",
+      "deckCount": 2,
+      "lore": "Dark inside. Dark outside. Mostly just dark."
+    },
+    {
+      "name": "Scorpion Pit",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Scorpion Pit",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "scorpion",
+          "intervalMs": 9000
+        }
+      },
+      "description": "Spawns a Scorpion every 9s.",
+      "deckCount": 1,
+      "lore": "HR has filed fourteen complaints about working conditions."
+    },
+    {
+      "name": "Guard Post",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Guard Post",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "shield-guard",
+          "intervalMs": 16000
+        }
+      },
+      "description": "Spawns a Shield Guard every 16s.",
+      "deckCount": 1,
+      "lore": "Stand and deliver. Mostly stand."
+    },
+    {
+      "name": "Centaur Stable",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Cntaur Stbl",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "centaur",
+          "intervalMs": 12000
+        }
+      },
+      "description": "Spawns a Centaur every 12s.",
+      "deckCount": 1,
+      "lore": "It's not a stable, they keep insisting."
+    },
+    {
+      "name": "Harpy Roost",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Harpy Roost",
+        "attack": 0,
+        "maxHp": 18,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "harpy",
+          "intervalMs": 12000
+        }
+      },
+      "description": "Spawns a Harpy every 12s.",
+      "deckCount": 1,
+      "lore": "Do not look up."
+    },
+    {
+      "name": "Spirit Well",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Spirit Well",
+        "attack": 0,
+        "maxHp": 18,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "specter",
+          "intervalMs": 10000
+        }
+      },
+      "description": "Spawns a Specter every 10s.",
+      "deckCount": 1,
+      "lore": "The water is fine. The spirits are not."
+    },
+    {
+      "name": "Lizard Warren",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Lizard Den",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "lizardman",
+          "intervalMs": 11000
+        }
+      },
+      "description": "Spawns a Lizardman every 11s.",
+      "deckCount": 1,
+      "lore": "Warm, underground, and excellent acoustics."
+    },
+    {
+      "name": "Ballista Tower",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "BallstaTwr",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "ballista",
+          "intervalMs": 15000
+        }
+      },
+      "description": "Spawns a Ballista every 15s.",
+      "deckCount": 1,
+      "lore": "The elevator is broken. Engineers don't care."
+    },
+    {
+      "name": "Vamp. Coven",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Vamp Coven",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "vampire",
+          "intervalMs": 14000
+        }
+      },
+      "description": "Spawns a Vampire every 14s.",
+      "deckCount": 1,
+      "lore": "Meets at midnight. Dress code: dramatic."
+    },
+    {
+      "name": "Aerie",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Aerie",
+        "attack": 0,
+        "maxHp": 28,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "griffin",
+          "intervalMs": 20000
+        }
+      },
+      "description": "Spawns a Griffin every 20s.",
+      "deckCount": 1,
+      "lore": "Spectacular view. Treacherous access. Worth it."
+    },
+    {
+      "name": "Mage Tower",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "unit": {
+        "name": "Mage Tower",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "fire-mage",
+          "intervalMs": 18000
+        }
+      },
+      "description": "Spawns a Fire Mage every 18s.",
+      "deckCount": 1,
+      "lore": "Full of books, experiments, and extremely anxious junior mages."
+    },
+    {
+      "name": "Gallows",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Gallows",
+        "attack": 0,
+        "maxHp": 18,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "executioner",
+          "intervalMs": 20000
+        }
+      },
+      "description": "Spawns an Executioner every 20s.",
+      "deckCount": 1,
+      "lore": "Structural integrity questionable. Attendance mandatory."
+    },
+    {
+      "name": "Mammoth Pen",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "structure",
+      "unit": {
+        "name": "Mammoth Pen",
+        "attack": 0,
+        "maxHp": 35,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "mammoth",
+          "intervalMs": 25000
+        }
+      },
+      "description": "Spawns a Mammoth every 25s.",
+      "deckCount": 1,
+      "lore": "Do not feed after dark. Do not feed before dark either."
+    },
+    {
+      "name": "Shadow Academy",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Shadow Acad",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "dark-elf",
+          "intervalMs": 15000
+        }
+      },
+      "description": "Spawns a Dark Elf every 15s.",
+      "deckCount": 1,
+      "lore": "Curriculum: archery, shadows, and sighing at lesser beings."
+    },
+    {
+      "name": "Death Tower",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Death Tower",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "necromancer",
+          "intervalMs": 18000
+        }
+      },
+      "description": "Spawns a Necromancer every 18s.",
+      "deckCount": 1,
+      "lore": "The door is unlocked. Nobody goes in uninvited."
+    },
+    {
+      "name": "Giant's Hall",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "structure",
+      "unit": {
+        "name": "Giant's Hall",
+        "attack": 0,
+        "maxHp": 40,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "giant",
+          "intervalMs": 45000
+        }
+      },
+      "description": "Spawns a Giant every 45s.",
+      "deckCount": 1,
+      "lore": "The ceiling keeps getting raised."
+    },
+    {
+      "name": "Wyvern Roost",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "structure",
+      "unit": {
+        "name": "Wyvern Roost",
+        "attack": 0,
+        "maxHp": 35,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "wyvern",
+          "intervalMs": 28000
+        }
+      },
+      "description": "Spawns a Wyvern every 28s.",
+      "deckCount": 1,
+      "lore": "Perched atop the cliff where nothing else dares to live."
+    },
+    {
+      "name": "Ancient Altar",
+      "rarity": "legendary",
+      "cost": 6,
+      "cardType": "structure",
+      "unit": {
+        "name": "Anc. Altar",
+        "attack": 0,
+        "maxHp": 50,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "behemoth",
+          "intervalMs": 70000
+        }
+      },
+      "description": "Spawns a Behemoth every 70s.",
+      "deckCount": 1,
+      "lore": "Old beyond memory. Hungry beyond measure."
+    },
+    {
+      "name": "Field Medic",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "upgrade",
+      "tags": [
+        "forest"
+      ],
+      "upgradeEffect": {
+        "type": "healUnits",
+        "amount": 6
+      },
+      "description": "Heal all your units for 6 HP.",
+      "deckCount": 2,
+      "lore": "Not a real medic. Effective anyway."
+    },
+    {
+      "name": "Titan Blood",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "upgrade",
+      "tags": [
+        "ashen"
+      ],
+      "upgradeEffect": {
+        "type": "buffMaxHp",
+        "amount": 20
+      },
+      "description": "All your units gain +20 max HP.",
+      "deckCount": 1,
+      "lore": "Thick. Extremely thick."
+    },
+    {
+      "name": "Sniper Scope",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "buffRange",
+        "amount": 30
+      },
+      "description": "All your units gain +30 attack range.",
+      "deckCount": 1,
+      "lore": "For those who believe range is the solution to all problems."
+    },
+    {
+      "name": "Battle Cry",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "upgrade",
+      "tags": [
+        "citadel"
+      ],
+      "upgradeEffect": {
+        "type": "buffAttack",
+        "amount": 3
+      },
+      "description": "All your units gain +3 attack.",
+      "deckCount": 2,
+      "lore": "Loud. Effective. No subtlety whatsoever."
+    },
+    {
+      "name": "Vine Golem",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "vine-golem",
+      "description": "Slow forest brute \u2014 twisted vines for fists.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "The forest did not build it. The forest became it."
+    },
+    {
+      "name": "Spore Bat",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "spore-bat",
+      "description": "Fast flying swarm \u2014 ignores walls.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Releases a cloud of confusion before the claws arrive."
+    },
+    {
+      "name": "Thornbeast",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "thornbeast",
+      "description": "Climbing beast covered in razor thorns.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Whatever it used to be, the forest has claimed it fully."
+    },
+    {
+      "name": "Elder Treant",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "unitRef": "elder-treant",
+      "description": "Ancient forest titan \u2014 near-unstoppable.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "It has been here since before the Fracture. It plans to be here after."
+    },
+    {
+      "name": "Frog Knight",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "frog-knight",
+      "description": "Leaps over walls. Surprisingly armored.",
+      "deckCount": 0,
+      "tags": [
+        "forest"
+      ],
+      "lore": "Somehow obtained full plate armour. Nobody asked where."
+    },
+    {
+      "name": "Thornwall",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Thornwall",
+        "attack": 0,
+        "maxHp": 60,
+        "isWall": true,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0
+      },
+      "description": "Reinforced thorn barrier \u2014 tougher than stone.",
+      "deckCount": 0,
+      "lore": "The thorns grow back faster than you can cut them."
+    },
+    {
+      "name": "Ancient Grove",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "tags": [
+        "forest"
+      ],
+      "unit": {
+        "name": "Anc. Grove",
+        "attack": 0,
+        "maxHp": 30,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "vine-golem",
+          "intervalMs": 18000
+        }
+      },
+      "description": "Spawns a Vine Golem every 18s.",
+      "deckCount": 0,
+      "lore": "Old enough to remember when the forest covered everything."
+    },
+    {
+      "name": "Ironclad Guard",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "ironclad-guard",
+      "description": "Heavily armored \u2014 barely moves, never falls.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Has never retreated. Has never needed to."
+    },
+    {
+      "name": "War Drummer",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "war-drummer",
+      "description": "Rallies the march \u2014 steady melee brawler.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "The beat sets the pace. The pace sets the outcome."
+    },
+    {
+      "name": "Siege Engineer",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "siege-engineer",
+      "description": "Ranged expert \u2014 fires over walls from distance.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Turns distance into an advantage. Turns walls into a suggestion."
+    },
+    {
+      "name": "Shield Wall Soldier",
+      "rarity": "common",
+      "cost": 1,
+      "cardType": "unit",
+      "unitRef": "shield-wall-soldier",
+      "description": "Cheap tanky frontliner \u2014 absorbs punishment.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "The first to arrive. The last to fall. Usually the first to fall."
+    },
+    {
+      "name": "Grizzled Veteran",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "grizzled-veteran",
+      "description": "Battle-hardened warrior \u2014 reliable and deadly.",
+      "deckCount": 0,
+      "tags": [
+        "citadel"
+      ],
+      "lore": "Has survived things that should not be survivable. Very annoyed about it."
+    },
+    {
+      "name": "Armory",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Armory",
+        "attack": 0,
+        "maxHp": 25,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "ironclad-guard",
+          "intervalMs": 14000
+        }
+      },
+      "description": "Spawns an Ironclad Guard every 14s.",
+      "deckCount": 0,
+      "lore": "Every soldier who leaves here is better armed. Most come back."
+    },
+    {
+      "name": "Command Tent",
+      "rarity": "uncommon",
+      "cost": 3,
+      "cardType": "structure",
+      "tags": [
+        "citadel"
+      ],
+      "unit": {
+        "name": "Cmd. Tent",
+        "attack": 0,
+        "maxHp": 20,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "mana",
+          "amount": 1
+        }
+      },
+      "description": "+1 max mana. The iron citadel runs on logistics.",
+      "deckCount": 0,
+      "lore": "Where strategy happens. Mostly arguing, but strategy."
+    },
+    {
+      "name": "Bone Archer",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "bone-archer",
+      "description": "Undead ranged \u2014 fires through walls.",
+      "deckCount": 0,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Accuracy improves significantly without the burden of a heartbeat."
+    },
+    {
+      "name": "Wight Knight",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "wight-knight",
+      "description": "Armored undead \u2014 relentless and hard to kill.",
+      "deckCount": 0,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "The armour corrodes. The knight does not."
+    },
+    {
+      "name": "Ash Elemental",
+      "rarity": "rare",
+      "cost": 3,
+      "cardType": "unit",
+      "unitRef": "ash-elemental",
+      "description": "Flying scorched spirit \u2014 burns through all defenses.",
+      "deckCount": 0,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Born from the Fracture's scorched aftermath. Still burning."
+    },
+    {
+      "name": "Revenant",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "revenant",
+      "description": "Fast flying ghost \u2014 refuses to stay dead.",
+      "deckCount": 0,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Kept returning until everyone stopped asking why."
+    },
+    {
+      "name": "Lich Apprentice",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "unit",
+      "unitRef": "lich-apprentice",
+      "description": "Ranged dark magic \u2014 bypasses walls.",
+      "deckCount": 0,
+      "tags": [
+        "ashen"
+      ],
+      "lore": "Still learning. Still deadly. The tuition is paid in souls."
+    },
+    {
+      "name": "Bone Wall",
+      "rarity": "uncommon",
+      "cost": 2,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Bone Wall",
+        "attack": 0,
+        "maxHp": 50,
+        "isWall": true,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0
+      },
+      "description": "Skeletal barrier \u2014 sturdier than it looks.",
+      "deckCount": 0,
+      "lore": "Unpleasant to look at. Effective to hide behind."
+    },
+    {
+      "name": "Soul Obelisk",
+      "rarity": "rare",
+      "cost": 4,
+      "cardType": "structure",
+      "tags": [
+        "ashen"
+      ],
+      "unit": {
+        "name": "Soul Obelisk",
+        "attack": 0,
+        "maxHp": 22,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 0,
+        "attackRange": 0,
+        "attackCooldownMs": 0,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "revenant",
+          "intervalMs": 11000
+        }
+      },
+      "description": "Spawns a Revenant every 11s.",
+      "deckCount": 0,
+      "lore": "Whispers things. Nobody agrees on what."
     }
   ],
-
   "heroCards": [
     {
-      "id": "hero-dragon-lord", "name": "Dragon Lord", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Dragon", "attack": 15, "maxHp": 50, "isWall": false, "bypassWall": true, "flying": true, "moveSpeed": 18, "attackRange": 50, "attackCooldownMs": 3000 },
-      "heroEffect": { "type": "buffAttack", "amount": 6 },
-      "description": "HERO: Deploys a mighty Dragon & grants all units +6 attack!"
+      "id": "hero-dragon-lord",
+      "name": "Dragon Lord",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Dragon",
+        "attack": 15,
+        "maxHp": 50,
+        "isWall": false,
+        "bypassWall": true,
+        "flying": true,
+        "moveSpeed": 18,
+        "attackRange": 50,
+        "attackCooldownMs": 3000
+      },
+      "heroEffect": {
+        "type": "buffAttack",
+        "amount": 6
+      },
+      "description": "HERO: Deploys a mighty Dragon & grants all units +6 attack!",
+      "lore": "Commands dragons. Dragons pretend not to notice."
     },
     {
-      "id": "hero-battle-queen", "name": "Battle Queen", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Paladin", "attack": 10, "maxHp": 60, "isWall": false, "bypassWall": false, "moveSpeed": 16, "attackRange": 5, "attackCooldownMs": 1800 },
-      "heroEffect": { "type": "buffMaxHp", "amount": 20 },
-      "description": "HERO: Deploys an armored Paladin & fortifies all units with +20 max HP!"
+      "id": "hero-battle-queen",
+      "name": "Battle Queen",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Paladin",
+        "attack": 10,
+        "maxHp": 60,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 16,
+        "attackRange": 5,
+        "attackCooldownMs": 1800
+      },
+      "heroEffect": {
+        "type": "buffMaxHp",
+        "amount": 20
+      },
+      "description": "HERO: Deploys an armored Paladin & fortifies all units with +20 max HP!",
+      "lore": "Won sixteen wars. Lost zero negotiations."
     },
     {
-      "id": "hero-storm-caller", "name": "Storm Caller", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Wyvern", "attack": 18, "maxHp": 40, "isWall": false, "bypassWall": true, "flying": true, "moveSpeed": 38, "attackRange": 55, "attackCooldownMs": 2000 },
-      "heroEffect": { "type": "buffRange", "amount": 40 },
-      "description": "HERO: Deploys a fearsome Wyvern & blesses all units with +40 attack range!"
+      "id": "hero-storm-caller",
+      "name": "Storm Caller",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Wyvern",
+        "attack": 18,
+        "maxHp": 40,
+        "isWall": false,
+        "bypassWall": true,
+        "flying": true,
+        "moveSpeed": 38,
+        "attackRange": 55,
+        "attackCooldownMs": 2000
+      },
+      "heroEffect": {
+        "type": "buffRange",
+        "amount": 40
+      },
+      "description": "HERO: Deploys a fearsome Wyvern & blesses all units with +40 attack range!",
+      "lore": "The sky does what she says. Eventually."
     },
     {
-      "id": "hero-shadow-king", "name": "Shadow King", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Werewolf", "attack": 14, "maxHp": 35, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 62, "attackRange": 5, "attackCooldownMs": 1400 },
-      "heroEffect": { "type": "buffSpeed", "amount": 25 },
-      "description": "HERO: Deploys a savage Werewolf & surges all units with +25 speed!"
+      "id": "hero-shadow-king",
+      "name": "Shadow King",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Werewolf",
+        "attack": 14,
+        "maxHp": 35,
+        "isWall": false,
+        "bypassWall": false,
+        "climber": true,
+        "moveSpeed": 62,
+        "attackRange": 5,
+        "attackCooldownMs": 1400
+      },
+      "heroEffect": {
+        "type": "buffSpeed",
+        "amount": 25
+      },
+      "description": "HERO: Deploys a savage Werewolf & surges all units with +25 speed!",
+      "lore": "Feared in twelve kingdoms. Banned from two taverns specifically."
     },
     {
-      "id": "hero-death-lord", "name": "Death Lord", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Lich Apprentice", "attack": 12, "maxHp": 30, "isWall": false, "bypassWall": true, "moveSpeed": 20, "attackRange": 40, "attackCooldownMs": 2500, "structureEffect": { "type": "spawn", "unitTemplateRef": "weak-skeleton", "intervalMs": 4000 } },
-      "heroEffect": { "type": "buffAttackCooldown", "amount": -500 },
-      "description": "HERO: Deploys a sinister Lich Apprentice who summons a skeleton army & hastens all units with -500ms attack cooldown!"
+      "id": "hero-death-lord",
+      "name": "Death Lord",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Lich Apprentice",
+        "attack": 12,
+        "maxHp": 30,
+        "isWall": false,
+        "bypassWall": true,
+        "moveSpeed": 20,
+        "attackRange": 40,
+        "attackCooldownMs": 2500,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "weak-skeleton",
+          "intervalMs": 4000
+        }
+      },
+      "heroEffect": {
+        "type": "buffAttackCooldown",
+        "amount": -500
+      },
+      "description": "HERO: Deploys a sinister Lich Apprentice who summons a skeleton army & hastens all units with -500ms attack cooldown!",
+      "lore": "Death is just a job. A very grim job, but somebody's got to do it."
     },
     {
-      "id": "hero-forest-guardian", "name": "Forest Guardian", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Elder Treant", "attack": 16, "maxHp": 45, "isWall": false, "bypassWall": false, "moveSpeed": 12, "attackRange": 5, "attackCooldownMs": 2200 },
-      "heroEffect": { "type": "buffHeal", "amount": 4 },
-      "description": "HERO: Deploys a mighty Elder Treant & rejuvenates all units with +4 HP heal every 10s!"
+      "id": "hero-forest-guardian",
+      "name": "Forest Guardian",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Elder Treant",
+        "attack": 16,
+        "maxHp": 45,
+        "isWall": false,
+        "bypassWall": false,
+        "moveSpeed": 12,
+        "attackRange": 5,
+        "attackCooldownMs": 2200
+      },
+      "heroEffect": {
+        "type": "buffHeal",
+        "amount": 4
+      },
+      "description": "HERO: Deploys a mighty Elder Treant & rejuvenates all units with +4 HP heal every 10s!",
+      "lore": "The forest is alive. It has opinions on your strategy."
     },
     {
-      "id": "hero-swarm-queen", "name": "Swarm Queen", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Pixie", "attack": 8, "maxHp": 25, "isWall": false, "bypassWall": true, "flying": true, "moveSpeed": 20, "attackRange": 30, "attackCooldownMs": 1500, "structureEffect": { "type": "spawn", "unitTemplateRef": "spore-bat", "intervalMs": 8000 } },
-      "description": "HERO: Deploys a mischievous Pixie & commands it to spawn a Spore Bat for you every 10s!"
+      "id": "hero-swarm-queen",
+      "name": "Swarm Queen",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Pixie",
+        "attack": 8,
+        "maxHp": 25,
+        "isWall": false,
+        "bypassWall": true,
+        "flying": true,
+        "moveSpeed": 20,
+        "attackRange": 30,
+        "attackCooldownMs": 1500,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "spore-bat",
+          "intervalMs": 8000
+        }
+      },
+      "description": "HERO: Deploys a mischievous Pixie & commands it to spawn a Spore Bat for you every 10s!",
+      "lore": "The swarm is a family. A very bitey family."
     },
     {
-      "id": "hero-graham", "name": "Graham The All Seeing", "rarity": "legendary", "cost": 5, "cardType": "unit", "isHero": true,
-      "unit": { "name": "Graham", "attack": 1, "maxHp": 50, "isWall": false, "bypassWall": false, "climber": true, "moveSpeed": 15, "attackRange": 70, "attackCooldownMs": 5000, "structureEffect": { "type": "spawn", "unitTemplateRef": "bone-archer", "intervalMs": 7500 } },
-      "description": "HERO: Deploys Skeleton Archers!"
+      "id": "hero-graham",
+      "name": "Graham The All Seeing",
+      "rarity": "legendary",
+      "cost": 5,
+      "cardType": "unit",
+      "isHero": true,
+      "unit": {
+        "name": "Graham",
+        "attack": 1,
+        "maxHp": 50,
+        "isWall": false,
+        "bypassWall": false,
+        "climber": true,
+        "moveSpeed": 15,
+        "attackRange": 70,
+        "attackCooldownMs": 5000,
+        "structureEffect": {
+          "type": "spawn",
+          "unitTemplateRef": "bone-archer",
+          "intervalMs": 7500
+        }
+      },
+      "description": "HERO: Deploys Skeleton Archers!",
+      "lore": "Sees all. Knows all. Still can't find his keys. Play tested by Graham, who is indeed all seeing."
     }
-  ],
-
-  "lore": {
-    "Goblin":               "Once the cannon fodder of orc warbands, goblins discovered they actually enjoy being first through the door.",
-    "Archer":               "\"I don't miss.\" — Every archer, right before missing.",
-    "Barbarian":            "Trained by no one, feared by everyone. Mostly feared because of the screaming.",
-    "Knight":               "The kingdom's finest. Polished armour hides a spectacular collection of bruises.",
-    "Wizard":               "Years of magical study. Thousands of gold in reagents. Wages still less than a goblin.",
-    "Dragon":               "When it speaks, kingdoms listen. When it breathes, kingdoms burn.",
-    "Skeleton":             "Died once, but keeps showing up. Very dedicated.",
-    "Troll":                "You'll know it's coming. You'll have plenty of time to not do anything about it.",
-    "Crossbow":             "A technically superior weapon. The operators will tell you at every opportunity.",
-    "Paladin":              "Righteous, armoured, and absolutely insufferable at dinner.",
-    "Rogue":                "\"What wall?\" — The Rogue, from the other side of the wall.",
-    "Catapult":             "Technically pacifist. It's the rocks that do the violence.",
-    "Werewolf":             "Formerly a reasonable accountant.",
-    "Golem":                "Was told to hold the line. Has been holding it for two hundred years.",
-    "Pixie":                "Shoots first, asks never.",
-    "Ogre":                 "Large. Loud. Effective. Not necessarily in that order.",
-    "Plague Rat":           "One is an annoyance. A hundred is a catastrophe.",
-    "Bandit":               "Honest work never paid this well.",
-    "Bat":                  "Hung upside down until called upon — a skill with surprising tactical applications.",
-    "Scorpion":             "Armoured, venomous, grumpy. Triple threat.",
-    "Shield Guard":         "Move? Why would I move?",
-    "Centaur":              "The upper half writes poetry. The lower half doesn't know.",
-    "Harpy":                "Sings beautifully. Fights savagely. Never at the same time.",
-    "Specter":              "Died defending the post. Still defending it.",
-    "Lizardman":            "Cold-blooded. Professionally and personally.",
-    "Ballista":             "\"Fire the ballista!\" — said with far too much enthusiasm every time.",
-    "Vampire":              "Charming until the biting starts. Sometimes also during the biting.",
-    "Griffin":              "Half eagle, half lion, all opinion.",
-    "Fire Mage":            "Extremely dangerous. Mostly to itself.",
-    "Executioner":          "Does not like being told there is more than one swing allowed.",
-    "Mammoth":              "Once a peaceful grazer. Someone put armour on it.",
-    "Dark Elf":             "Watches from the shadows. Shoots from the shadows. Lives in the shadows. Hates dentist appointments.",
-    "Necromancer":          "Death is just unemployment with extra steps.",
-    "Giant":                "Slow. Inevitable. Cannot open doors, but rarely needs to.",
-    "Wyvern":               "The dragon's practical cousin. Less fire, more punctuality.",
-    "Behemoth":             "There is no plan B for a Behemoth. There is often no plan A left either.",
-    "Vine Golem":           "The forest did not build it. The forest became it.",
-    "Spore Bat":            "Releases a cloud of confusion before the claws arrive.",
-    "Thornbeast":           "Whatever it used to be, the forest has claimed it fully.",
-    "Elder Treant":         "It has been here since before the Fracture. It plans to be here after.",
-    "Frog Knight":          "Somehow obtained full plate armour. Nobody asked where.",
-    "Ironclad Guard":       "Has never retreated. Has never needed to.",
-    "War Drummer":          "The beat sets the pace. The pace sets the outcome.",
-    "Siege Engineer":       "Turns distance into an advantage. Turns walls into a suggestion.",
-    "Shield Wall Soldier":  "The first to arrive. The last to fall. Usually the first to fall.",
-    "Grizzled Veteran":     "Has survived things that should not be survivable. Very annoyed about it.",
-    "Bone Archer":          "Accuracy improves significantly without the burden of a heartbeat.",
-    "Wight Knight":         "The armour corrodes. The knight does not.",
-    "Ash Elemental":        "Born from the Fracture's scorched aftermath. Still burning.",
-    "Revenant":             "Kept returning until everyone stopped asking why.",
-    "Lich Apprentice":      "Still learning. Still deadly. The tuition is paid in souls.",
-    "Stone Wall":           "The first answer to every problem. Usually the second answer too.",
-    "Farm":                 "Food is mana. Mana is power. This farmer has no idea what he's contributing to.",
-    "Mana Spring":          "Nobody can explain where the water comes from. Nobody is asking anymore.",
-    "Healer's Hut":         "\"Rest,\" she says. \"It'll hurt less tomorrow.\" She is usually right.",
-    "Stone Mason":          "Builds walls by day, repairs them by night. He's given up asking why they keep breaking.",
-    "Blacksmith":           "Hammer, anvil, fire. In that order. He has opinions about everything else.",
-    "Barracks":             "Turns gold into goblins. Economists are still debating whether that's profitable.",
-    "Arcane Tower":         "The archers it trains insist they learned everything naturally.",
-    "Dragon Lair":          "Do not approach. Do not inquire. Absolutely do not ask about the rent.",
-    "Crypt":                "Nobody asked what's in there. Everyone agrees not to.",
-    "Troll Den":            "Smells terrible. Keeps the neighbours away.",
-    "Garrison":             "A crossbow and a grudge, supplied on rotation.",
-    "Cathedral":            "Blessed walls. Blessed warriors. Blessed inconvenient for the enemy.",
-    "Rogue Den":            "No sign. No address. Impossible to miss.",
-    "Siege Works":          "The engineers here have never met a wall they didn't want to destroy.",
-    "Dark Shrine":          "Full moon schedule posted on the door.",
-    "Iron Forge":           "Hammers day and night. Nobody sleeps within a mile.",
-    "Fairy Ring":           "\"Step inside the ring,\" they said. \"It'll be fun,\" they said.",
-    "Ogre Den":             "Listed as \"residential\" in the tax records.",
-    "Rat Burrow":           "The smell announces them long before they arrive.",
-    "Bandit Camp":          "Technically a business.",
-    "Bat Cave":             "Dark inside. Dark outside. Mostly just dark.",
-    "Scorpion Pit":         "HR has filed fourteen complaints about working conditions.",
-    "Guard Post":           "Stand and deliver. Mostly stand.",
-    "Centaur Stable":       "It's not a stable, they keep insisting.",
-    "Harpy Roost":          "Do not look up.",
-    "Spirit Well":          "The water is fine. The spirits are not.",
-    "Lizard Warren":        "Warm, underground, and excellent acoustics.",
-    "Ballista Tower":       "The elevator is broken. Engineers don't care.",
-    "Vamp. Coven":          "Meets at midnight. Dress code: dramatic.",
-    "Aerie":                "Spectacular view. Treacherous access. Worth it.",
-    "Mage Tower":           "Full of books, experiments, and extremely anxious junior mages.",
-    "Gallows":              "Structural integrity questionable. Attendance mandatory.",
-    "Mammoth Pen":          "Do not feed after dark. Do not feed before dark either.",
-    "Shadow Academy":       "Curriculum: archery, shadows, and sighing at lesser beings.",
-    "Death Tower":          "The door is unlocked. Nobody goes in uninvited.",
-    "Giant's Hall":         "The ceiling keeps getting raised.",
-    "Wyvern Roost":         "Perched atop the cliff where nothing else dares to live.",
-    "Ancient Altar":        "Old beyond memory. Hungry beyond measure.",
-    "Thornwall":            "The thorns grow back faster than you can cut them.",
-    "Ancient Grove":        "Old enough to remember when the forest covered everything.",
-    "Armory":               "Every soldier who leaves here is better armed. Most come back.",
-    "Command Tent":         "Where strategy happens. Mostly arguing, but strategy.",
-    "Bone Wall":            "Unpleasant to look at. Effective to hide behind.",
-    "Soul Obelisk":         "Whispers things. Nobody agrees on what.",
-    "Sharpen Blades":       "The whetstone whine echoes across camp. Everyone quietly checks their grip.",
-    "Fortify":              "\"Walk it off.\" — Official battle doctrine.",
-    "Rally":                "A rousing speech, a quick bandage — good as new.",
-    "Haste":                "Legs moved so fast they filed a formal complaint.",
-    "Iron Skin":            "Toughen up. Literally.",
-    "Eagle Eye":            "See further. Regret it only slightly more often.",
-    "War Drums":            "The rhythm of violence.",
-    "Bloodlust":            "Faster. Angrier. Marginally more coordinated.",
-    "Field Medic":          "Not a real medic. Effective anyway.",
-    "Titan Blood":          "Thick. Extremely thick.",
-    "Sniper Scope":         "For those who believe range is the solution to all problems.",
-    "Battle Cry":           "Loud. Effective. No subtlety whatsoever.",
-    "Dragon Lord":          "Commands dragons. Dragons pretend not to notice.",
-    "Battle Queen":         "Won sixteen wars. Lost zero negotiations.",
-    "Storm Caller":         "The sky does what she says. Eventually.",
-    "Shadow King":          "Feared in twelve kingdoms. Banned from two taverns specifically.",
-    "Death Lord":           "Death is just a job. A very grim job, but somebody's got to do it.",
-    "Forest Guardian":      "The forest is alive. It has opinions on your strategy.",
-    "Swarm Queen":         "The swarm is a family. A very bitey family.",
-    "Graham The All Seeing": "Sees all. Knows all. Still can't find his keys. Play tested by Graham, who is indeed all seeing."
-  }
+  ]
 }
