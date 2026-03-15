@@ -968,6 +968,16 @@ body {
   text-shadow: 0 0 6px rgba(255, 204, 0, 0.7);
 }
 
+.action-btn--danger {
+  border-color: rgba(255, 68, 68, 0.4);
+  color: #ff6666;
+}
+.action-btn--danger:hover {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #ff4444;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+}
+
 /* ─── Game Over: action row ──────────────────────────── */
 
 .gameover-actions {
@@ -3136,14 +3146,9 @@ body {
   text-align: center;
 }
 
+/* Uses action-btn--danger; font-size override only */
 .gameover-abandon-btn {
-  border-color: rgba(255, 68, 68, 0.3);
-  color: #ff6666;
   font-size: 11px;
-}
-.gameover-abandon-btn:hover {
-  border-color: #ff4444;
-  background: rgba(255, 68, 68, 0.08);
 }
 
 
@@ -4222,16 +4227,10 @@ body {
   text-align: right;
 }
 
+/* Uses action-btn--danger; size overrides only */
 .settings-danger-btn {
-  border-color: rgba(255, 68, 68, 0.4);
-  color: #ff6666;
   font-size: 12px;
   padding: 6px 16px;
-}
-.settings-danger-btn:hover {
-  background: rgba(255, 68, 68, 0.1);
-  border-color: #ff4444;
-  box-shadow: 0 0 10px rgba(255,68,68,0.2);
 }
 
 .settings-confirm-row {

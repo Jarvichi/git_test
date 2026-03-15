@@ -220,11 +220,11 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
             {confirmReset ? (
               <div className="settings-confirm-row">
                 <span className="settings-confirm-msg">Are you sure? This cannot be undone.</span>
-                <button className="action-btn settings-danger-btn" onClick={handleReset}>CONFIRM RESET</button>
+                <button className="action-btn action-btn--danger settings-danger-btn" onClick={handleReset}>CONFIRM RESET</button>
                 <button className="action-btn" onClick={() => setConfirmReset(false)} style={{ fontSize: '11px', padding: '6px 12px' }}>CANCEL</button>
               </div>
             ) : (
-              <button className="action-btn settings-danger-btn" onClick={handleReset}>
+              <button className="action-btn action-btn--danger settings-danger-btn" onClick={handleReset}>
                 RESET GAME
               </button>
             )}
