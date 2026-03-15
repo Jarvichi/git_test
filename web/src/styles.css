@@ -3765,26 +3765,26 @@ body {
 .bf-pause-btn:hover { color: var(--game-text-color); border-color: var(--game-text-color); }
 
 /* ─── Pause overlay ─────────────────────────────────────────────── */
-.bf-pause-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 300;
-  background: rgba(0,0,0,0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* ─── Pause panel — floats above battlefield, no backdrop ───────── */
+.battlefield--paused { cursor: pointer; }
+.battlefield--paused .lane-unit { cursor: crosshair; }
 .bf-pause-panel {
-  background: #111;
+  position: absolute;
+  bottom: 120px; /* above the hand area */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+  background: rgba(0,0,0,0.92);
   border: 1px solid var(--game-text-color);
   border-radius: 4px;
-  padding: 24px 32px;
-  min-width: 220px;
+  padding: 18px 28px;
+  min-width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   text-align: center;
+  pointer-events: auto;
 }
 .bf-pause-title {
   font-size: 20px;
