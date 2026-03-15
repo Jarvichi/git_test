@@ -666,7 +666,9 @@ export default function App() {
 
     // Mark siblings as skipped (branch choice)
     const afterSkip = skipSiblings(act, node.id, currentRun)
-    const updatedRun: RunState = { ...afterSkip, pendingNodeId: node.id }
+    const activeMods = act ? getActiveModifiers(act, loadActCount(currentRun.actId)) : []
+    const bonusCrystals = activeMods.filter(m => m.type === 'crystalBonus').reduce((s, m) => s + m.value, 0)
+    const updatedRun: RunState = { ...afterSkip, pendingNodeId: node.id, crystalBonus: bonusCrystals }
     saveRun(updatedRun)
     setRun(updatedRun)
 
@@ -730,7 +732,8 @@ export default function App() {
     // Include cards earned as rewards earlier this run
     const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossName: node.bossName, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const mods733 = act ? getActiveModifiers(act, loadActCount(updatedRun.actId)) : []
+    const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), mods733) })
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     if (updatedRun.activeRelic) getRelicDef(updatedRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -758,7 +761,8 @@ export default function App() {
     const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const act = ACTS[run.actId]
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossName: node.bossName, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const mods761 = act ? getActiveModifiers(act, loadActCount(run.actId)) : []
+    const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), mods761) })
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
     if (run.activeRelic) getRelicDef(run.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -915,7 +919,8 @@ export default function App() {
 
     // Check act complete
     if (isActComplete(act, updatedRun)) {
-      // Track act completion achievement
+      // Track act completion achievement + per-act replay count
+      incrementActCount(currentRun.actId)
       const actUnlocked = incrementAchievementProgress(`campaign:${currentRun.actId}`)
       if (actUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...actUnlocked])
 
@@ -1126,7 +1131,8 @@ export default function App() {
     const playerCards = buildDeckCards(deckEntries, collection)
     const earnedEntries = (currentRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossName: node.bossName, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const modsRetry = act ? getActiveModifiers(act, loadActCount(currentRun.actId)) : []
+    const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), modsRetry) })
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     if (currentRun.activeRelic) getRelicDef(currentRun.activeRelic)?.applyToGame(state)
     setGameState(state)
