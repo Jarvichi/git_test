@@ -11,6 +11,7 @@ import { getRelicDef } from '../game/relics'
 interface Props {
   state: GameState
   onPlayCard: (cardId: string) => void
+  onGiveUp?: () => void
   actTheme?: string       // e.g. 'act1' — applied as CSS modifier class
   activeRelic?: string | null  // relic name currently equipped, if any
   showBossSplash?: boolean
@@ -112,7 +113,7 @@ function WallSvg({ hp, maxHp, owner, wallNames = [] }: { hp: number; maxHp: numb
   )
 }
 
-function LaneUnit({ unit, stackIndex = 0, wallStack }: { unit: Unit; stackIndex?: number; wallStack?: Unit[] }) {
+function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect }: { unit: Unit; stackIndex?: number; wallStack?: Unit[]; onInspect?: (u: Unit) => void }) {
   const hpPct = Math.max(0, (unit.hp / unit.maxHp) * 100)
   const isStructure = unit.moveSpeed === 0
 
@@ -161,11 +162,12 @@ function LaneUnit({ unit, stackIndex = 0, wallStack }: { unit: Unit; stackIndex?
         unit.isWall ? 'lane-unit--wall' : '',
         unit.flying ? 'lane-unit--flying' : '',
         isAttacking ? 'lane-unit--attacking' : '',
-        isStructure && unit.upgradeLevel && unit.upgradeLevel >= 2 ? `lane-unit--upgraded-${Math.min(unit.upgradeLevel, 3)}` : '',
+        isStructure && unit.upgradeLevel && unit.upgradeLevel >= 2 ? `lane-unit--upgraded-${Math.min(unit.upgradeLevel, MAX_UPGRADE_LEVEL)}` : '',
         unit.isHero ? 'lane-unit--hero' : '',
       ].filter(Boolean).join(' ')}
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
+      onClick={onInspect ? () => onInspect(unit) : undefined}
     >
       {/* Ground shadow cast by flying units */}
       {unit.flying && (
@@ -192,7 +194,7 @@ function LaneUnit({ unit, stackIndex = 0, wallStack }: { unit: Unit; stackIndex?
         <div className="lane-unit-name">
           {unit.name}
           {unit.upgradeLevel != null && unit.upgradeLevel >= 1 && (
-            <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, 3)}`}>
+            <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, MAX_UPGRADE_LEVEL)}`}>
               {'★'.repeat(unit.upgradeLevel)}
             </span>
           )}
@@ -792,9 +794,11 @@ function opponentPortraitSlug(bossAI: string | undefined, actTheme: string | und
   return 'bandit'
 }
 
-export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBossSplash, activeModifiers }: Props) {
+export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic, showBossSplash, activeModifiers }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const [heroLightning, setHeroLightning] = useState<{ owner: 'player' | 'opponent'; key: number } | null>(null)
+  const [paused, setPaused] = useState(false)
+  const [inspectedUnit, setInspectedUnit] = useState<Unit | null>(null)
   const prevHeroIdsRef = useRef<Set<string>>(new Set())
 
   // Detect when a new hero unit appears on the field and fire the lightning effect
@@ -844,6 +848,7 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBoss
 
       {/* Top bar: clock, scores */}
       <div className={`top-bar${state.suddenDeath ? ' top-bar--sudden-death' : ''}`}>
+        <button className="bf-pause-btn" onClick={() => { setPaused(true); setInspectedUnit(null) }} title="Pause">⏸</button>
         <span className="game-clock">{timeStr}</span>
         <span className="score-display">
           <span className="score-player">{state.playerScore}</span>
@@ -951,12 +956,12 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBoss
               const group = wallGroups.get(key)!
               if (group[0].id !== u.id) return null  // only render the first in each group
               renderedWallIds.add(u.id)
-              return <LaneUnit key={u.id} unit={u} wallStack={group} />
+              return <LaneUnit key={u.id} unit={u} wallStack={group} onInspect={paused ? u => { setInspectedUnit(u) } : undefined} />
             }
             const stackIndex = u.moveSpeed === 0
               ? state.field.slice(0, i).filter(o => o.moveSpeed === 0 && !o.isWall && o.owner === u.owner).length
               : 0
-            return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} />
+            return <LaneUnit key={u.id} unit={u} stackIndex={stackIndex} onInspect={paused ? u => { setInspectedUnit(u) } : undefined} />
           })
         })()}
       </div>
@@ -1023,6 +1028,52 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBoss
             <div className="boss-splash-title">BOSS FIGHT</div>
             <div className="boss-splash-unit">{state.bossName ?? state.bossCard}</div>
             <div className="boss-splash-sub">has entered the battlefield</div>
+          </div>
+        </div>
+      )}
+
+      {/* Pause overlay */}
+      {paused && (
+        <div className="bf-pause-overlay" onClick={() => { setPaused(false); setInspectedUnit(null) }}>
+          <div className="bf-pause-panel" onClick={e => e.stopPropagation()}>
+            <div className="bf-pause-title">⏸ PAUSED</div>
+            {inspectedUnit ? (
+              <div className="bf-inspect-panel">
+                <div className="bf-inspect-name">
+                  {inspectedUnit.name}
+                  {inspectedUnit.upgradeLevel != null && inspectedUnit.upgradeLevel >= 2 && (
+                    <span className={`lane-unit-level lane-unit-level--${Math.min(inspectedUnit.upgradeLevel, MAX_UPGRADE_LEVEL)}`}>
+                      {' '}{'★'.repeat(inspectedUnit.upgradeLevel)}
+                    </span>
+                  )}
+                </div>
+                <div className="bf-inspect-row"><span>HP</span><span>{inspectedUnit.hp} / {inspectedUnit.maxHp}</span></div>
+                {inspectedUnit.attack > 0 && (
+                  <div className="bf-inspect-row"><span>ATK</span><span>{inspectedUnit.attack}</span></div>
+                )}
+                {inspectedUnit.upgradeLevel != null && inspectedUnit.upgradeLevel >= 2 && (
+                  <div className="bf-inspect-row"><span>Level</span><span>{inspectedUnit.upgradeLevel}</span></div>
+                )}
+                <div className="bf-inspect-row"><span>Type</span><span>{inspectedUnit.moveSpeed === 0 ? 'Structure' : inspectedUnit.isWall ? 'Wall' : 'Unit'}</span></div>
+                {inspectedUnit.bypassWall && (
+                  <div className="bf-inspect-row"><span>Ranged</span><span>✓</span></div>
+                )}
+                {inspectedUnit.flying && (
+                  <div className="bf-inspect-row"><span>Flying</span><span>✓</span></div>
+                )}
+                <button className="action-btn" style={{ marginTop: 12 }} onClick={() => setInspectedUnit(null)}>← Back</button>
+              </div>
+            ) : (
+              <>
+                <div className="bf-pause-hint">Tap a unit or building on the field to inspect it</div>
+                <div className="bf-pause-actions">
+                  <button className="action-btn action-btn--large" onClick={() => { setPaused(false); setInspectedUnit(null) }}>▶ Resume</button>
+                  {onGiveUp && (
+                    <button className="action-btn action-btn--danger" onClick={onGiveUp}>✕ Give Up</button>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -343,7 +343,7 @@ export function newGame(
 
 // ─── Play Card (immediate deploy + cooldown) ─────────────
 
-export const MAX_UPGRADE_LEVEL = 3
+export const MAX_UPGRADE_LEVEL = 4
 
 export function playCard(state: GameState, cardId: string): GameState {
   if (state.phase.type !== 'playing') return state
