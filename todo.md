@@ -10,6 +10,14 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+### #187 CSS optimisation — complete
+- [x] CLAUDE.md CSS reuse rule added
+- [x] Standardised button transitions to 0.15s; disabled cursor to not-allowed
+- [x] Added action-btn--danger shared class; reduced duplicate red button definitions
+- [x] Consolidated 3 identical disabled states; removed empty title-play-btn rule
+
+Close #187 manually (no GITHUB_TOKEN).
+
 ### #174 Relics: broken relic tracking + greyed-out history on selection screen
 
 **Plan (session 8, 2026-03-15):**
