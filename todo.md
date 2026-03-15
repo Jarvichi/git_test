@@ -10,6 +10,31 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+### #187 CSS optimisation — complete
+- [x] CLAUDE.md CSS reuse rule added
+- [x] Standardised button transitions to 0.15s; disabled cursor to not-allowed
+- [x] Added action-btn--danger shared class; reduced duplicate red button definitions
+- [x] Consolidated 3 identical disabled states; removed empty title-play-btn rule
+
+Close #187 manually (no GITHUB_TOKEN).
+
+### #174 Relics: broken relic tracking + greyed-out history on selection screen
+
+**Plan (session 8, 2026-03-15):**
+
+Most of the relic system is already built. The three missing pieces:
+- **`relics.ts`** — `loadBrokenRelics()`, `addBrokenRelic()`, `removeBrokenRelic()`; auto-clear broken state when re-earned
+- **`App.tsx`** — call `addBrokenRelic` when a relic breaks
+- **`RelicSelectScreen.tsx`** — show broken relics greyed-out + unselectable at end of list
+
+Steps:
+- [x] Step 1: Add broken relic storage to relics.ts
+- [x] Step 2: Wire addBrokenRelic in App.tsx; pass brokenRelics to RelicSelectScreen
+- [x] Step 3: Render greyed-out broken relics in RelicSelectScreen + CSS
+- [x] Step 4: Mark #174 complete in CLAUDE.md (already checked in CLAUDE.md)
+
+**#174 complete.** Close manually on GitHub (no GITHUB_TOKEN in env).
+
 ### #175 Campaign replays: per-run escalating modifiers
 
 **Plan (session 8, 2026-03-15):**

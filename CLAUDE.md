@@ -60,6 +60,16 @@ npm run preview  # Preview production build locally
 - **Opponent AI:** Plays 1–2 affordable cards per turn from its own shuffled deck
 - **Win:** Destroy the enemy base (20 HP). **Lose:** Your base reaches 0 HP.
 
+## CSS Styling Rules
+Always reuse existing CSS classes rather than writing new ones unless the required functionality is genuinely different. Before adding a new button style, check whether an existing class (e.g. `action-btn`, `action-btn--gold`, `action-btn--danger`) can be used or extended with a small modifier. Duplicate CSS leads to visual inconsistency and maintenance burden.
+
+Key shared button classes:
+- `action-btn` — primary green action button (the default)
+- `action-btn--large` — larger variant with pulse animation
+- `action-btn--gold` — gold/yellow variant for rewards and economy actions
+- `action-btn--danger` — red variant for destructive/abandon actions
+- `filter-btn` — compact filter/toggle button
+
 ## Constants VS JSON Config
 Whenever we add a constant that is more complex than a primitive type we should consider whether that would be better suited as a JSON configuration item. If the entity is likely to be extended (supporting multiplicity) then we should opt to create a JSON file, or add to an existing JSON file if it makes sense to colocate the data.
 

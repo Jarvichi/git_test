@@ -105,7 +105,7 @@ export function GameOver({ state, winner, handicap, onOpenPack, onPlayAgain, onM
           {campaignAbandon ? (won ? '[ Claim Reward ]' : '[ Retry Node ]') : '[ Play Again ]'}
         </button>
         {campaignAbandon && (
-          <button className="action-btn gameover-abandon-btn" onClick={campaignAbandon}>
+          <button className="action-btn action-btn--danger gameover-abandon-btn" onClick={campaignAbandon}>
             [ Abandon Run ]
           </button>
         )}

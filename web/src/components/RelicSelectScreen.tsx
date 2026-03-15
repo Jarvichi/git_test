@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { getRelicDef } from '../game/relics'
 
 interface Props {
-  earnedRelics: string[]        // names of all relics the player has collected
+  earnedRelics: string[]        // names of all usable relics the player has collected
   currentRelic: string | null   // currently equipped relic (if resuming)
   brokenRelic?: { name: string; icon: string } | null  // relic that just broke this act
   onSelect: (relicName: string | null) => void

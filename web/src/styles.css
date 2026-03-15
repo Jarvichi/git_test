@@ -8,6 +8,8 @@
 
 :root {
   --game-text-color: #33ff33;
+  --game-text-color-dim:   color-mix(in srgb, var(--game-text-color) 55%, transparent);
+  --game-text-color-muted: color-mix(in srgb, var(--game-text-color) 35%, transparent);
   --game-font-size: 14px;
 }
 
@@ -78,7 +80,7 @@ body {
 
 .game-clock {
   font-size: 14px;
-  color: #ddd;
+  color: var(--game-text-color-dim);
   font-weight: bold;
   letter-spacing: 2px;
 }
@@ -658,7 +660,7 @@ body {
 .card-title {
   font-size: 11px;
   font-weight: bold;
-  color: #eee;
+  color: var(--game-text-color);
   letter-spacing: 0.5px;
   padding-right: 16px;
   overflow: hidden;
@@ -669,7 +671,7 @@ body {
 
 .card-stats {
   font-size: 10px;
-  color: #ccc;
+  color: var(--game-text-color-dim);
 }
 
 .card-tag {
@@ -681,7 +683,7 @@ body {
 
 .card-rarity {
   font-size: 8px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
 }
 
 .card-art {
@@ -735,7 +737,7 @@ body {
 }
 
 .hand-card-info-btn:hover {
-  color: #bbb;
+  color: var(--game-text-color-muted);
   border-color: #888;
 }
 
@@ -787,7 +789,7 @@ body {
 .gameover-handicap {
   margin-top: 8px;
   font-size: 11px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   text-align: center;
   font-style: italic;
   border-top: 1px dashed #444;
@@ -943,7 +945,7 @@ body {
   font-family: 'Courier New', monospace;
   font-size: 15px;
   letter-spacing: 4px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   text-transform: uppercase;
 }
 
@@ -966,6 +968,16 @@ body {
   background: rgba(255, 204, 0, 0.15);
   box-shadow: 0 0 14px rgba(255, 204, 0, 0.5);
   text-shadow: 0 0 6px rgba(255, 204, 0, 0.7);
+}
+
+.action-btn--danger {
+  border-color: rgba(255, 68, 68, 0.4);
+  color: #ff6666;
+}
+.action-btn--danger:hover {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #ff4444;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
 }
 
 /* ─── Game Over: action row ──────────────────────────── */
@@ -1013,7 +1025,7 @@ body {
 
 .title-subtitle {
   font-size: 11px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   letter-spacing: 4px;
   margin-top: -6px;
 }
@@ -1040,13 +1052,10 @@ body {
   animation: none;
 }
 
-.title-play-btn {
-  /* size now from .title-buttons .action-btn */
-}
 
 .title-nav-btn {
   border-color: rgba(51, 255, 51, 0.5);
-  color: #ccc;
+  color: var(--game-text-color-dim);
 }
 .title-badge {
   position: absolute;
@@ -1162,11 +1171,11 @@ body {
   padding: 3px 7px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all 0.1s;
+  transition: all 0.15s;
 }
 
 .filter-btn:hover {
-  color: #ddd;
+  color: var(--game-text-color-dim);
   border-color: #777;
 }
 
@@ -1385,7 +1394,7 @@ body {
 
 .deck-list-name {
   flex: 1;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1452,7 +1461,7 @@ body {
 
 .pack-subtitle {
   font-size: 11px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
 }
 
 .pack-cards {
@@ -1539,7 +1548,8 @@ body {
   background: rgba(136, 204, 255, 0.12);
   box-shadow: 0 0 10px rgba(136, 204, 255, 0.3);
 }
-.collection-disenchant-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.collection-disenchant-btn:disabled,
+.collection-pack-btn:disabled,
 
 .collection-pack-btn {
   font-size: 12px;
@@ -1552,7 +1562,6 @@ body {
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
 }
 .collection-pack-btn--disabled,
-.collection-pack-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .collection-flash {
   font-size: 12px;
@@ -1582,20 +1591,20 @@ body {
   padding: 2px 4px;
   cursor: pointer;
   border-radius: 2px;
-  transition: all 0.1s;
+  transition: all 0.15s;
   white-space: nowrap;
 }
 .extra-btn--disenchant { border-color: rgba(136, 204, 255, 0.4); color: #88ccff; }
 .extra-btn--disenchant:hover:not(:disabled) { background: rgba(136, 204, 255, 0.12); border-color: #88ccff; }
 .extra-btn--master { border-color: rgba(255, 215, 0, 0.4); color: #ffd700; }
 .extra-btn--master:hover:not(:disabled) { background: rgba(255, 215, 0, 0.12); border-color: #ffd700; }
-.extra-btn--disabled, .extra-btn:disabled { opacity: 0.3; cursor: default; }
+.extra-btn--disabled, .extra-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .cdm-info-btn {
   border-color: #333;
   color: #555;
   margin-left: auto;
 }
-.cdm-info-btn:hover { border-color: #666; color: #aaa; }
+.cdm-info-btn:hover { border-color: #666; color: var(--game-text-color-muted); }
 
 .deck-list-info-btn {
   background: none;
@@ -1608,7 +1617,7 @@ body {
   line-height: 1;
   flex-shrink: 0;
 }
-.deck-list-info-btn:hover { color: #ccc; }
+.deck-list-info-btn:hover { color: var(--game-text-color-dim); }
 
 /* ─── Mastery Bar ────────────────────────────────────── */
 
@@ -1781,7 +1790,7 @@ body {
   font-family: inherit;
   line-height: 1;
 }
-.cdm-close:hover { color: #ccc; }
+.cdm-close:hover { color: var(--game-text-color-dim); }
 
 .cdm-body {
   display: flex;
@@ -1812,7 +1821,7 @@ body {
 
 .cdm-desc {
   font-size: 11px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   line-height: 1.4;
 }
 
@@ -1822,8 +1831,8 @@ body {
   gap: 2px 10px;
 }
 .cdm-stat-row   { display: flex; gap: 4px; align-items: baseline; }
-.cdm-stat-label { font-size: 9px; color: #bbb; letter-spacing: 1px; }
-.cdm-stat-value { font-size: 11px; color: #eee; font-weight: bold; }
+.cdm-stat-label { font-size: 9px; color: var(--game-text-color-muted); letter-spacing: 1px; }
+.cdm-stat-value { font-size: 11px; color: var(--game-text-color); font-weight: bold; }
 
 .cdm-traits {
   display: flex;
@@ -1852,7 +1861,7 @@ body {
   margin-bottom: 2px;
 }
 .cdm-mastery-xp     { font-size: 9px; color: #777; }
-.cdm-mastery-bonus  { font-size: 9px; color: #aaa; margin-top: 3px; }
+.cdm-mastery-bonus  { font-size: 9px; color: var(--game-text-color-muted); margin-top: 3px; }
 
 .cdm-battle-stats {
   border-top: 1px solid #1a1a1a;
@@ -1864,7 +1873,7 @@ body {
 
 .cdm-lore {
   font-size: 10px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   font-style: italic;
   line-height: 1.5;
   padding: 10px 12px;
@@ -1988,7 +1997,7 @@ body {
 }
 .bj-row--player { border-color: #2a4a2a; background: rgba(0,60,0,0.3); }
 
-.bj-label { font-size: 9px; color: #aaa; letter-spacing: 1px; min-width: 45px; }
+.bj-label { font-size: 9px; color: var(--game-text-color-muted); letter-spacing: 1px; min-width: 45px; }
 .bj-cards { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
 .bj-total { font-size: 10px; color: #888; white-space: nowrap; }
 
@@ -2046,24 +2055,24 @@ body {
 .wn-app-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
 
 .wn-content { flex: 1; min-width: 0; }
-.wn-sender  { font-size: 11px; color: #aaa; letter-spacing: 1px; margin-bottom: 4px; }
-.wn-message { font-size: 13px; color: #ddd; line-height: 1.4; margin-bottom: 10px; }
+.wn-sender  { font-size: 11px; color: var(--game-text-color-muted); letter-spacing: 1px; margin-bottom: 4px; }
+.wn-message { font-size: 13px; color: var(--game-text-color-dim); line-height: 1.4; margin-bottom: 10px; }
 
 .wn-actions { display: flex; gap: 8px; }
 .wn-btn {
   background: #333;
   border: 1px solid #555;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   font-family: inherit;
   font-size: 11px;
   padding: 4px 12px;
   border-radius: 3px;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.15s;
 }
-.wn-btn:hover      { background: #444; color: #ddd; }
+.wn-btn:hover      { background: #444; color: var(--game-text-color-dim); }
 .wn-btn--muted     { border-color: #333; color: #666; }
-.wn-btn--muted:hover { color: #aaa; }
+.wn-btn--muted:hover { color: var(--game-text-color-muted); }
 
 /* ─── Narrator ──────────────────────────────────────────── */
 
@@ -2098,7 +2107,7 @@ body {
 
 .narrator-text {
   font-size: 12px;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   font-style: italic;
   line-height: 1.6;
 }
@@ -2142,7 +2151,7 @@ body {
   justify-content: center;
 }
 .ld-dice-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.ld-dice-label { font-size: 9px; color: #aaa; letter-spacing: 1px; }
+.ld-dice-label { font-size: 9px; color: var(--game-text-color-muted); letter-spacing: 1px; }
 
 .ld-dice { display: flex; gap: 6px; }
 .ld-die  { font-size: 26px; line-height: 1; }
@@ -2158,7 +2167,7 @@ body {
   background: rgba(40,40,80,0.15);
 }
 
-.ld-bid-text  { font-size: 12px; color: #aaa; text-align: center; line-height: 1.5; }
+.ld-bid-text  { font-size: 12px; color: var(--game-text-color-muted); text-align: center; line-height: 1.5; }
 .ld-bid-text strong { color: #88aaff; }
 
 .ld-bid-actions { display: flex; gap: 10px; }
@@ -2183,7 +2192,7 @@ body {
   border-color: rgba(51, 255, 51, 0.25);
 }
 .title-settings-btn:hover {
-  color: #aaa;
+  color: var(--game-text-color-muted);
   border-color: rgba(51, 255, 51, 0.5);
 }
 .title-campaign-btn:hover:not(:disabled) {
@@ -2321,7 +2330,7 @@ body {
 }
 
 .cf-body {
-  color: #aaa;
+  color: var(--game-text-color-muted);
   font-size: 14px;
   line-height: 1.8;
   max-width: 320px;
@@ -2410,7 +2419,7 @@ body {
   background: rgba(51, 255, 51, 0.04);
   animation: nm-pulse 2s ease-in-out infinite;
 }
-.nm-node--available .nm-node-name { color: #ccc; }
+.nm-node--available .nm-node-name { color: var(--game-text-color-dim); }
 .nm-node--available .nm-node-status { color: var(--game-text-color); }
 .nm-node--available .nm-node-type-badge { opacity: 1; }
 .nm-node--available:hover {
@@ -2584,7 +2593,7 @@ body {
 
 .nm-peek-name {
   font-size: 14px;
-  color: #eee;
+  color: var(--game-text-color);
   letter-spacing: 0.5px;
   text-align: center;
 }
@@ -2612,7 +2621,7 @@ body {
 }
 
 .nm-peek-row-value {
-  color: #ccc;
+  color: var(--game-text-color-dim);
   text-align: right;
 }
 
@@ -2728,7 +2737,7 @@ body {
 
 .reward-sub {
   font-size: 11px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   font-style: italic;
 }
 
@@ -2755,7 +2764,7 @@ body {
 
 .reward-card-label {
   font-size: 10px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   text-align: center;
 }
 
@@ -2765,7 +2774,7 @@ body {
   border-color: #444;
 }
 .reward-skip-btn:hover {
-  color: #ccc;
+  color: var(--game-text-color-dim);
   border-color: #666;
 }
 
@@ -2883,7 +2892,7 @@ body {
 .relic-select-name {
   font-size: 13px;
   font-weight: bold;
-  color: #ddd;
+  color: var(--game-text-color-dim);
   margin-bottom: 2px;
 }
 
@@ -2895,6 +2904,39 @@ body {
 
 .relic-select-confirm {
   margin-top: 4px;
+}
+
+.relic-select-broken-divider {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 1px;
+  padding: 6px 0 2px;
+  border-top: 1px solid #333;
+}
+
+.relic-select-card--broken {
+  opacity: 0.45;
+  cursor: default;
+  filter: grayscale(70%);
+  border-color: #333 !important;
+  background: rgba(30, 30, 30, 0.4) !important;
+}
+
+.relic-select-card--broken:hover {
+  transform: none;
+  border-color: #333 !important;
+}
+
+.relic-select-icon--broken,
+.relic-select-name--broken {
+  color: #555;
+}
+
+.relic-select-desc--broken {
+  color: #444;
+  font-style: italic;
 }
 
 /* ── Act complete ────────────────────────────────────────────── */
@@ -2969,7 +3011,7 @@ body {
 
 .ac-relic-desc {
   font-size: 11px;
-  color: #bbb;
+  color: var(--game-text-color-muted);
   font-style: italic;
 }
 
@@ -3076,7 +3118,7 @@ body {
   min-width: 18px;
 }
 
-.spl-item--common    .spl-name { color: #aaa; }
+.spl-item--common    .spl-name { color: var(--game-text-color-muted); }
 .spl-item--uncommon  .spl-name { color: #4fc3f7; }
 .spl-item--rare      .spl-name { color: #ce93d8; }
 .spl-item--legendary .spl-name { color: #ffc832; }
@@ -3103,14 +3145,9 @@ body {
   text-align: center;
 }
 
+/* Uses action-btn--danger; font-size override only */
 .gameover-abandon-btn {
-  border-color: rgba(255, 68, 68, 0.3);
-  color: #ff6666;
   font-size: 11px;
-}
-.gameover-abandon-btn:hover {
-  border-color: #ff4444;
-  background: rgba(255, 68, 68, 0.08);
 }
 
 
@@ -3339,7 +3376,7 @@ body {
 
 .event-description {
   font-size: 12px;
-  color: #bbb;
+  color: var(--game-text-color-muted);
   line-height: 1.8;
   text-align: center;
   max-width: 480px;
@@ -3362,7 +3399,7 @@ body {
   gap: 10px;
   background: none;
   border: 1px solid #333;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   font-family: inherit;
   font-size: 12px;
   padding: 12px 16px;
@@ -3405,7 +3442,7 @@ body {
 
 .event-choice-consequence {
   font-size: 10px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   white-space: nowrap;
 }
 
@@ -3474,7 +3511,7 @@ body {
 
 .cutscene-paragraph {
   font-size: 13px;
-  color: #bbb;
+  color: var(--game-text-color-muted);
   line-height: 1.9;
   margin: 0;
 }
@@ -4104,7 +4141,7 @@ body {
 
 .settings-label {
   font-size: 12px;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   flex: 1;
 }
 
@@ -4189,16 +4226,10 @@ body {
   text-align: right;
 }
 
+/* Uses action-btn--danger; size overrides only */
 .settings-danger-btn {
-  border-color: rgba(255, 68, 68, 0.4);
-  color: #ff6666;
   font-size: 12px;
   padding: 6px 16px;
-}
-.settings-danger-btn:hover {
-  background: rgba(255, 68, 68, 0.1);
-  border-color: #ff4444;
-  box-shadow: 0 0 10px rgba(255,68,68,0.2);
 }
 
 .settings-confirm-row {
@@ -4266,7 +4297,7 @@ body {
   gap: 3px;
   background: none;
   border: 1px solid #2a2a2a;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   font-family: inherit;
   text-align: left;
   padding: 12px 16px;
@@ -4411,7 +4442,7 @@ body {
 
 .daily-modal-desc {
   font-size: 11px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   max-width: 240px;
 }
 
@@ -4497,7 +4528,7 @@ body {
 .inventory-item-name {
   font-size: 9px;
   font-weight: bold;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   text-align: center;
   line-height: 1.2;
 }
@@ -4590,7 +4621,7 @@ body {
 .inventory-detail-name {
   font-size: 16px;
   font-weight: bold;
-  color: #eee;
+  color: var(--game-text-color);
   text-align: center;
 }
 
@@ -4605,7 +4636,7 @@ body {
 
 .inventory-detail-desc {
   font-size: 13px;
-  color: #aaa;
+  color: var(--game-text-color-muted);
   text-align: center;
   line-height: 1.5;
 }
@@ -4732,7 +4763,7 @@ body {
 
 .ach-name {
   font-size: 12px;
-  color: #ccc;
+  color: var(--game-text-color-dim);
   font-weight: bold;
 }
 
