@@ -119,6 +119,12 @@ export const LANE_WIDTH = 500
 
 export type OpponentStrategy = 'swarm' | 'turtle' | 'rush'
 
+export interface BattleStats {
+  cardsPlayed: Record<string, number>  // card name → times played this battle
+  playerKills: number                   // opponent mobile units destroyed
+  playerUnitsLost: number              // player mobile units destroyed
+}
+
 export interface GameState {
   playerBase: Base
   opponentBase: Base
@@ -147,4 +153,5 @@ export interface GameState {
   environment?: string       // battlefield background theme ('forest' | 'ruins' | 'camp' | 'citadel' | 'ashen')
   soulstoneReviveAvailable?: boolean  // Soulstone relic: one unit auto-revives per battle
   relicManaBonus?: number             // Prism Lens relic: +N to maxMana cap
+  battleStats: BattleStats
 }

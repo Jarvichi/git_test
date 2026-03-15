@@ -324,6 +324,7 @@ export function newGame(
     bossAI: boss,
     terrain: generateTerrain(terrainSeed, environment),
     environment,
+    battleStats: { cardsPlayed: {}, playerKills: 0, playerUnitsLost: 0 },
   }
 }
 
@@ -713,6 +714,14 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
     }
   }
 
+  // Count kills for battle stats
+  for (const u of s.field) {
+    if (u.hp <= 0 && u.moveSpeed > 0 && !u.isWall) {
+      if (u.owner === 'opponent') s.battleStats.playerKills++
+      else                        s.battleStats.playerUnitsLost++
+    }
+  }
+
   // Remove dead units
   s.field = s.field.filter(u => u.hp > 0)
 }
@@ -991,6 +1000,12 @@ function triggerBattleEvent(s: GameState, log: string[]): void {
       // Don't damage player-owned walls in dev no-damage mode
       if (u.owner === 'player' && isNoDamageMode()) continue
       u.hp = Math.max(0, u.hp - dmg)
+    }
+    for (const u of s.field) {
+      if (u.hp <= 0 && u.moveSpeed > 0 && !u.isWall) {
+        if (u.owner === 'opponent') s.battleStats.playerKills++
+        else                        s.battleStats.playerUnitsLost++
+      }
     }
     s.field = s.field.filter(u => u.hp > 0)
     event = { type: 'earthquake', label: `🌋 EARTHQUAKE! All walls took ${dmg} damage!`, remainingMs: 3000 }
