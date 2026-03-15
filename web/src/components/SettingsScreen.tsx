@@ -32,7 +32,9 @@ export function loadTextColor(): string {
 export function applyTextSettings(): void {
   const size  = loadTextSize()
   const color = loadTextColor()
+  const zoom  = (size / 14).toFixed(4)
   document.documentElement.style.setProperty('--game-font-size', `${size}px`)
+  document.documentElement.style.setProperty('--game-zoom', zoom)
   document.documentElement.style.setProperty('--game-text-color', color)
 }
 
@@ -106,7 +108,9 @@ export function SettingsScreen({ onBack, onResetGame }: Props) {
   function handleSizeChange(val: number) {
     setTextSize(val)
     try { localStorage.setItem(TEXT_SIZE_KEY, String(val)) } catch { /* ignore */ }
+    const zoom = (val / 14).toFixed(4)
     document.documentElement.style.setProperty('--game-font-size', `${val}px`)
+    document.documentElement.style.setProperty('--game-zoom', zoom)
   }
 
   function handleColorChange(val: string) {

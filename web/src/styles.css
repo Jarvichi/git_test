@@ -7,8 +7,9 @@
 }
 
 :root {
-  --game-text-color: var(--game-text-color);
+  --game-text-color: #33ff33;
   --game-font-size: 14px;
+  --game-zoom: 1;
 }
 
 body {
@@ -26,7 +27,8 @@ body {
   max-width: 740px;
   margin: 0 auto;
   padding: 6px 10px;
-  height: 100vh;
+  height: calc(100vh / var(--game-zoom));
+  zoom: var(--game-zoom);
   display: flex;
   flex-direction: column;
 }
@@ -847,7 +849,8 @@ body {
 
 /* dvh falls back to vh on older browsers */
 @supports (height: 100dvh) {
-  body, .game-container { height: 100dvh; }
+  body { height: 100dvh; }
+  .game-container { height: calc(100dvh / var(--game-zoom)); }
 }
 
 @media (max-width: 480px) {
