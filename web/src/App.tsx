@@ -215,6 +215,8 @@ export default function App() {
   } | null>(null)
   const relicSelectDoneRef  = useRef<(relicName: string | null) => void>(() => {})
   const [bossDialogueNode, setBossDialogueNode] = useState<QuestNode | null>(null)
+  const [showBossSplash, setShowBossSplash] = useState(false)
+  const prevBossCardActiveRef = useRef(false)
 
   // Active campaign event
   const [activeEvent, setActiveEvent] = useState<EventData | null>(null)
@@ -308,6 +310,16 @@ export default function App() {
   useEffect(() => {
     if (gameState?.phase.type === 'gameOver') clearBattleState()
   }, [gameState?.phase.type])
+
+  // Show boss fight splash when phase 2 triggers.
+  useEffect(() => {
+    const active = gameState?.bossCardActive ?? false
+    if (active && !prevBossCardActiveRef.current) {
+      setShowBossSplash(true)
+      setTimeout(() => setShowBossSplash(false), 2500)
+    }
+    prevBossCardActiveRef.current = active
+  }, [gameState?.bossCardActive])
 
   // Trigger SW update check whenever the title screen is shown
   useEffect(() => {
@@ -1499,7 +1511,7 @@ export default function App() {
           />
         ) : (
           <>
-            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} />
+            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} showBossSplash={showBossSplash} />
             {activeRareEvent === 'fakeCrash'   && <FakeCrashEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'blackjack'   && <BlackjackEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'wrongNumber' && <WrongNumberEvent onDone={handleRareEventDone} />}

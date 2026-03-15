@@ -3544,6 +3544,54 @@ body {
 
 /* ── Boss Dialogue Screen ────────────────────────────────── */
 
+/* ── Boss Fight Splash ─────────────────────────────────────────────────────── */
+.boss-splash-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  animation: boss-splash-fade 2.5s ease forwards;
+}
+@keyframes boss-splash-fade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.boss-splash-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.boss-splash-warning {
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.3em;
+  animation: flicker 0.15s infinite alternate;
+}
+.boss-splash-title {
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  color: #ff4444;
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 24px #ff2222, 0 0 48px #ff000088;
+  font-weight: 900;
+}
+.boss-splash-unit {
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  color: var(--fg);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.boss-splash-sub {
+  font-size: 0.75rem;
+  color: var(--fg-dim, #888);
+  letter-spacing: 0.2em;
+}
+
 .boss-dialogue-screen {
   display: flex;
   flex-direction: column;
