@@ -3670,6 +3670,15 @@ body {
   opacity: 0.5;
 }
 
+.merchant-curiosity-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--game-text-color-muted);
+  text-align: center;
+  padding: 6px 0 2px;
+  border-top: 1px solid rgba(255, 215, 0, 0.15);
+}
+
 .merchant-item--inv .merchant-inv-tile {
   display: flex;
   flex-direction: column;

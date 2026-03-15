@@ -14,6 +14,7 @@ interface CardDef {
   unit?: UnitTemplate
   upgradeEffect?: UpgradeEffect
   description: string
+  lore?: string
   /** How many copies go in the default makeDeck() */
   deckCount: number
 }
@@ -51,6 +52,7 @@ interface RawCardDef {
   unit?: RawUnitDef
   upgradeEffect?: { type: string; amount: number }
   description: string
+  lore?: string
   deckCount: number
 }
 
@@ -64,6 +66,7 @@ interface RawHeroCard {
   unit: RawUnitDef
   heroEffect: { type: string; amount: number }
   description: string
+  lore?: string
 }
 
 // ─── Template resolution ──────────────────────────────────
@@ -107,7 +110,6 @@ function resolveCardDef(raw: RawCardDef): CardDef {
 // ─── Resolved data ────────────────────────────────────────
 
 const CARD_DEFS: CardDef[] = (cardsData.cards as RawCardDef[]).map(resolveCardDef)
-const CARD_LORE: Record<string, string> = cardsData.lore as Record<string, string>
 
 // Exported shared templates (for backward compatibility)
 export const GOBLIN_UNIT  = TEMPLATES['goblin']  as UnitTemplate
@@ -127,7 +129,7 @@ export const HERO_CARDS: Card[] = (cardsData.heroCards as RawHeroCard[]).map(raw
   unit: resolveUnit(raw.unit),
   heroEffect: raw.heroEffect as UpgradeEffect,
   description: raw.description,
-  lore: CARD_LORE[raw.name],
+  lore: raw.lore,
 }))
 
 // ─── Public API ───────────────────────────────────────────
@@ -143,7 +145,7 @@ export function getCardCatalog(): Card[] {
     unit: def.unit,
     upgradeEffect: def.upgradeEffect,
     description: def.description,
-    lore: CARD_LORE[def.name],
+    lore: def.lore,
   }))
 }
 
@@ -161,7 +163,7 @@ export function makeDeck(): Card[] {
         unit: def.unit,
         upgradeEffect: def.upgradeEffect,
         description: def.description,
-        lore: CARD_LORE[def.name],
+        lore: def.lore,
       })
     }
   }
@@ -185,7 +187,7 @@ export function makeThorlordDeck(): Card[] {
       unit: def.unit,
       upgradeEffect: def.upgradeEffect,
       description: def.description,
-      lore: CARD_LORE[def.name],
+      lore: def.lore,
     }))
   }
   return [
@@ -217,7 +219,7 @@ export function makeNodeDeck(names: string[]): Card[] {
       unit: def.unit,
       upgradeEffect: def.upgradeEffect,
       description: def.description,
-      lore: CARD_LORE[def.name],
+      lore: def.lore,
     }]
   })
 }
@@ -232,7 +234,7 @@ export function makeKraggDeck(): Card[] {
     return Array.from({ length: count }, () => ({
       id: uid(), name: def.name, rarity: def.rarity, cost: def.cost,
       cardType: def.cardType, unit: def.unit, upgradeEffect: def.upgradeEffect,
-      description: def.description, lore: CARD_LORE[def.name],
+      description: def.description, lore: def.lore,
     }))
   }
   return [
@@ -258,7 +260,7 @@ export function makeAshwalkerDeck(): Card[] {
     return Array.from({ length: count }, () => ({
       id: uid(), name: def.name, rarity: def.rarity, cost: def.cost,
       cardType: def.cardType, unit: def.unit, upgradeEffect: def.upgradeEffect,
-      description: def.description, lore: CARD_LORE[def.name],
+      description: def.description, lore: def.lore,
     }))
   }
   return [

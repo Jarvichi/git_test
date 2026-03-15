@@ -10,57 +10,12 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
-### #187 CSS optimisation — complete
-- [x] CLAUDE.md CSS reuse rule added
-- [x] Standardised button transitions to 0.15s; disabled cursor to not-allowed
-- [x] Added action-btn--danger shared class; reduced duplicate red button definitions
-- [x] Consolidated 3 identical disabled states; removed empty title-play-btn rule
-
-Close #187 manually (no GITHUB_TOKEN).
-
-### #174 Relics: broken relic tracking + greyed-out history on selection screen
-
-**Plan (session 8, 2026-03-15):**
-
-Most of the relic system is already built. The three missing pieces:
-- **`relics.ts`** — `loadBrokenRelics()`, `addBrokenRelic()`, `removeBrokenRelic()`; auto-clear broken state when re-earned
-- **`App.tsx`** — call `addBrokenRelic` when a relic breaks
-- **`RelicSelectScreen.tsx`** — show broken relics greyed-out + unselectable at end of list
-
-Steps:
-- [x] Step 1: Add broken relic storage to relics.ts
-- [x] Step 2: Wire addBrokenRelic in App.tsx; pass brokenRelics to RelicSelectScreen
-- [x] Step 3: Render greyed-out broken relics in RelicSelectScreen + CSS
-- [x] Step 4: Mark #174 complete in CLAUDE.md (already checked in CLAUDE.md)
-
-**#174 complete.** Close manually on GitHub (no GITHUB_TOKEN in env).
-
-### #175 Campaign replays: per-run escalating modifiers
-
-**Plan (session 8, 2026-03-15):**
-
-Each time a player replays an act, escalating modifiers are stacked — making runs progressively harder with optional compensating rewards.
-
-**Modifier types supported:**
-- `enemyHpPercent` — % increase on opponent base HP
-- `enemyIntervalReduction` — ms shaved off opponent play interval (faster AI)
-- `enemyHandBonus` — opponent starts with N extra cards in hand
-- `crystalBonus` — extra crystals awarded after every battle in that act
-
-**Steps:**
-- [ ] Step 1: Add `ReplayModifier` type + `replayModifiers` field to `Act` interface in `questline.ts`; add per-act completion count storage (`loadActCount` / `incrementActCount`)
-- [ ] Step 2: Write `replayModifiers` arrays in `act1.json` – `act4.json` (3–5 entries each)
-- [ ] Step 3: Wire `enemyHandBonus` into `engine.ts` (`NewGameOptions.opponentStartCards`) so opponent deals itself extra cards at game start
-- [ ] Step 4: Update `resolvedNodeOpts` in `App.tsx` to accept and stack active modifiers; add `crystalBonus` to `RunState`; apply in post-battle crystal award
-- [ ] Step 5: Call `incrementActCount` on act completion; pass modifiers + actCount into `resolvedNodeOpts` at all call sites
-- [x] Step 1: Types + per-act count storage
-- [x] Step 2: replayModifiers in all 4 act JSONs
-- [x] Step 3: opponentStartCards in engine.ts
-- [x] Step 4: resolvedNodeOpts + crystalBonus on RunState
-- [x] Step 5: incrementActCount on completion + all call sites
-- [x] Step 6: Show modifiers in NodePeekModal + battle HUD strip
-
-**#175 complete.** Close manually on GitHub (no GITHUB_TOKEN in env).
+### Session 9 completions (2026-03-15)
+- [x] **#175** Per-run escalating modifiers — ReplayModifier types, per-act counts, stacked HP%/interval/hand bonuses, crystalBonus, UI strip in NodePeekModal + battle HUD
+- [x] **#174** Broken relic tracking — addBrokenRelic on break; notification shown on RelicSelectScreen; broken relics not shown in list (user preference)
+- [x] **#187** CSS optimisation — CLAUDE.md rule, transitions standardised, action-btn--danger shared class, disabled states consolidated
+- [x] **Text colour** — --game-text-color-dim/muted CSS vars; 51 hardcoded grays replaced with theme variables
+- [x] **#179** Merchant Curiosity slot — probability 20%, price 10–20 crystals, "✦ CURIOSITY" label (was already implemented; tweaked params + label)
 
 - [x] **Phase 7 / CLAUDE.md** Battle summary screen — implemented
 - [x] **#173** Boss card mechanic (phase 2 fight after base falls) — implemented
@@ -247,7 +202,7 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 - [ ] **#181** Second 25-act story arc: after act 25 completes, a new 25-act arc begins in the same world with a new plot
 
 ### Replay System
-- [ ] **#175** Per-run modifiers: each replay of an act adds an escalating modifier (e.g. +X% enemy HP, faster opponent mana); configure modifier list in act JSON as `replayModifiers` array
+- [x] **#175** Per-run modifiers — implemented
 - [ ] **#144** Boss dialogue run-awareness: support substitution tags (`{n}`, `{ordinalLower}`) inside `bossDialogue` strings (currently plain text only)
 - [ ] **#144** Global word substitution config: a separate JSON file (`web/src/data/wordVariants.json`) holding single-word alternate arrays usable as `{word:key}` tags in any act text
 
@@ -259,12 +214,12 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 - [x] **#144** Campaign Failed screen: 50 crystal reward, clear run, return to menu
 
 ### Cards
-- [ ] **#177** Add `lore` field to card schema (cards.json + TypeScript types) for per-card flavour text
+- [x] **#177** Add `lore` field to card schema — lore moved inline to each card/heroCard object in `cards.json`; `cards.ts` updated to read inline field
 - [ ] **#178** Per-act themed card sets: at least 25 cards per act, tagged to that act's theme, earnable only in that act (except daily/crystal rewards)
 
 ### Music
 - [x] **#144** Refactor sound.ts: export `MusicTrackConfig` type and `startMusicTrack`/`stopMusicTrack` generic API; named config objects (`BATTLE_MUSIC`, `TITLE_MUSIC`, `MAP_MUSIC`, etc.) passable to the engine; per-act wiring remains a future task
-- [ ] **#176** Per-act music: add `mapMusic`, `battleMusic`, `bossMusic` fields to act JSON; wire to startMusicTrack calls
+- [x] **#176** Per-act music: `mapMusicId`, `battleMusicId`, `bossMusicId` added to Act interface + act JSONs; music router uses act overrides with fallback to defaults; `MUSIC_TRACKS` registry exported from sound.ts
 
 ### Merchant
 - [x] **#179** Merchant rarely offers an inventory item alongside cards — implemented

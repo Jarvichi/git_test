@@ -56,7 +56,7 @@ import { DailyLoginModal }   from './components/DailyLoginModal'
 import { InventoryScreen }   from './components/InventoryScreen'
 import { hasDailyReward, claimDailyReward, addToInventory, computeReward, loadInventory, RewardDef, ALL_ITEMS } from './game/dailyLogin'
 import { getRelicDef, addEarnedRelic, removeEarnedRelic, loadEarnedRelics, addBrokenRelic } from './game/relics'
-import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
+import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity, startMusicTrack, stopMusicTrack, MUSIC_TRACKS } from './game/sound'
 import { isNoDamageMode } from './game/debug'
 import { saveBattleState, loadBattleState, clearBattleState } from './game/battleState'
 import {
@@ -137,7 +137,7 @@ function resolvedNodeOpts(
   }
 }
 
-/** Build merchant item list: 3 cards + 30% chance of 1 unowned inventory item at 8 crystals. */
+/** Build merchant item list: 3 cards + ~1-in-5 chance of 1 unowned inventory 'Curiosity' at 10–20 crystals. */
 function buildMerchantItems(): MerchantItem[] {
   const catalog   = getCardCatalog()
   const cardNames = generateMerchantCards()
@@ -145,12 +145,13 @@ function buildMerchantItems(): MerchantItem[] {
     const card = catalog.find(c => c.name === name)!
     return cardMerchantItem(card)
   })
-  if (Math.random() < 0.3) {
+  if (Math.random() < 0.2) {
     const owned = new Set(loadInventory().map(i => i.id))
     const available = ALL_ITEMS.filter(i => !owned.has(i.id))
     if (available.length > 0) {
-      const inv = available[Math.floor(Math.random() * available.length)]
-      items.push({ kind: 'item', inventoryItem: { id: inv.id, name: inv.name, icon: inv.icon, desc: inv.desc, acquiredDate: '' }, price: 8 })
+      const inv   = available[Math.floor(Math.random() * available.length)]
+      const price = 10 + Math.floor(Math.random() * 11)   // 10–20 crystals
+      items.push({ kind: 'item', inventoryItem: { id: inv.id, name: inv.name, icon: inv.icon, desc: inv.desc, acquiredDate: '' }, price })
     }
   }
   return items
@@ -373,6 +374,7 @@ export default function App() {
 
   // ── Music router ─────────────────────────────────────────
   // Exactly one track plays at a time; switching screen stops all others.
+  // Acts can specify per-context music IDs in their JSON (mapMusicId, battleMusicId, bossMusicId).
   useEffect(() => {
     const phase = gameState?.phase
     stopBattleMusic()
@@ -380,13 +382,21 @@ export default function App() {
     stopGameOverMusic()
     stopMapMusic()
 
+    const act = run ? ACTS[run.actId] : undefined
+
     if (screen === 'title' || screen === 'settings' || screen === 'deckbuilder' || screen === 'collection') {
       startTitleMusic()
     } else if (screen === 'nodemap') {
-      startMapMusic()
+      const mapTrackId = act?.mapMusicId
+      const mapTrack = mapTrackId ? MUSIC_TRACKS[mapTrackId] : undefined
+      if (mapTrack) { startMusicTrack(mapTrack) } else { startMapMusic() }
     } else if (screen === 'playing') {
       if (phase?.type === 'playing') {
-        startBattleMusic()
+        const pendingNode = run?.pendingNodeId ? act?.nodes[run.pendingNodeId] : undefined
+        const isBoss = pendingNode?.type === 'boss'
+        const battleTrackId = isBoss ? act?.bossMusicId : act?.battleMusicId
+        const battleTrack = battleTrackId ? MUSIC_TRACKS[battleTrackId] : undefined
+        if (battleTrack) { startMusicTrack(battleTrack) } else { startBattleMusic() }
       } else if (phase?.type === 'gameOver') {
         startGameOverMusic(phase.winner)
       }

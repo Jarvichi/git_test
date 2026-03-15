@@ -537,3 +537,13 @@ let battleIntensity = 1  // 0 | 1 | 2
 export function setBattleIntensity(level: 0 | 1 | 2): void {
   battleIntensity = level
 }
+
+// ─── Music track registry ─────────────────────────────────────────────────────
+// Maps track ID strings (as used in act JSON music fields) to MusicTrackConfig.
+// Acts can reference these by ID to override the default music per act.
+export const MUSIC_TRACKS: Record<string, MusicTrackConfig> = {
+  battle:  BATTLE_MUSIC,
+  title:   TITLE_MUSIC,
+  map:     MAP_MUSIC,
+  gameover: GAME_OVER_MUSIC_VICTORY,
+}
