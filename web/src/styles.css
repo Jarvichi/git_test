@@ -386,6 +386,12 @@ body {
   transition: width 0.15s ease-out;
 }
 
+/* HP bar tinted by upgrade level — overrides player/opponent defaults */
+.lane-unit:has(.lane-unit-level--1) .lane-unit-hp-fill { background: #88cc88; }
+.lane-unit:has(.lane-unit-level--2) .lane-unit-hp-fill { background: #ffcc00; }
+.lane-unit:has(.lane-unit-level--3) .lane-unit-hp-fill { background: #cc88ff; }
+.lane-unit:has(.lane-unit-level--4) .lane-unit-hp-fill { background: #ff5533; }
+
 /* Structures anchored to base edges, no transition needed */
 .lane-unit--structure {
   transition: none;
