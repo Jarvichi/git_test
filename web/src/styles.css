@@ -8,8 +8,8 @@
 
 :root {
   --game-text-color: #33ff33;
-  --game-text-color-dim:   color-mix(in srgb, var(--game-text-color) 65%, transparent);
-  --game-text-color-muted: color-mix(in srgb, var(--game-text-color) 50%, transparent);
+  --game-text-color-dim:   color-mix(in srgb, var(--game-text-color) 85%, transparent);
+  --game-text-color-muted: color-mix(in srgb, var(--game-text-color) 70%, transparent);
   --game-font-size: 14px;
 }
 
@@ -959,7 +959,7 @@ body {
   bottom: 24px;
   font-family: 'Courier New', monospace;
   font-size: 11px;
-  color: #444;
+  color: var(--game-text-color-muted);
   letter-spacing: 2px;
 }
 
@@ -1227,7 +1227,7 @@ body {
   box-sizing: border-box;
 }
 .deckbuilder-search:focus { border-color: #555; }
-.deckbuilder-search::placeholder { color: #555; }
+.deckbuilder-search::placeholder { color: var(--game-text-color-muted); }
 
 .deckbuilder-filter-row {
   display: flex;
@@ -1497,7 +1497,7 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  color: #444;
+  color: var(--game-text-color-muted);
 }
 
 .pack-card-reveal {
@@ -1518,7 +1518,7 @@ body {
 
 .pack-wait {
   font-size: 12px;
-  color: #555;
+  color: var(--game-text-color-muted);
   animation: pulse 1s ease-in-out infinite;
 }
 
@@ -1606,7 +1606,7 @@ body {
 .extra-btn--disabled, .extra-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .cdm-info-btn {
   border-color: #333;
-  color: #555;
+  color: var(--game-text-color-muted);
   margin-left: auto;
 }
 .cdm-info-btn:hover { border-color: var(--game-text-color-muted); color: var(--game-text-color-muted); }
@@ -2148,7 +2148,7 @@ body {
   padding-bottom: 12px;
 }
 .ld-title { font-size: 16px; color: #88aaff; letter-spacing: 3px; display: block; margin-bottom: 6px; }
-.ld-sub   { font-size: 11px; color: #555; font-style: italic; }
+.ld-sub   { font-size: 11px; color: var(--game-text-color-muted); font-style: italic; }
 
 .ld-dice-row {
   display: flex;
@@ -2619,7 +2619,7 @@ body {
 }
 
 .nm-peek-row-label {
-  color: #555;
+  color: var(--game-text-color-muted);
   font-size: 9px;
   letter-spacing: 1.5px;
   flex-shrink: 0;
@@ -2915,7 +2915,7 @@ body {
   grid-column: 1 / -1;
   text-align: center;
   font-size: 9px;
-  color: #555;
+  color: var(--game-text-color-muted);
   letter-spacing: 1px;
   padding: 6px 0 2px;
   border-top: 1px solid #333;
@@ -2936,11 +2936,11 @@ body {
 
 .relic-select-icon--broken,
 .relic-select-name--broken {
-  color: #555;
+  color: var(--game-text-color-muted);
 }
 
 .relic-select-desc--broken {
-  color: #444;
+  color: var(--game-text-color-muted);
   font-style: italic;
 }
 
@@ -3002,7 +3002,7 @@ body {
 
 .ac-relic-label {
   font-size: 8px;
-  color: #555;
+  color: var(--game-text-color-muted);
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -3059,7 +3059,7 @@ body {
 
 .starter-select-sub {
   font-size: 11px;
-  color: #555;
+  color: var(--game-text-color-muted);
   line-height: 1.6;
 }
 
@@ -3098,7 +3098,7 @@ body {
 
 .starter-pack-desc {
   font-size: 10px;
-  color: #555;
+  color: var(--game-text-color-muted);
   line-height: 1.5;
   min-height: 30px;
 }
@@ -3119,7 +3119,7 @@ body {
 }
 
 .spl-count {
-  color: #555;
+  color: var(--game-text-color-muted);
   min-width: 18px;
 }
 
@@ -3538,7 +3538,7 @@ body {
 
 .cutscene-continue {
   font-size: 10px;
-  color: #444;
+  color: var(--game-text-color-muted);
   letter-spacing: 2px;
   animation: blink 1.4s step-end infinite;
 }
@@ -3923,7 +3923,7 @@ body {
 
 .boss-dialogue-continue {
   font-size: 10px;
-  color: #444;
+  color: var(--game-text-color-muted);
   letter-spacing: 2px;
   animation: blink 1.4s step-end infinite;
 }
@@ -4569,7 +4569,7 @@ body {
 
 .inventory-intro-small {
   font-size: 10px;
-  color: #555;
+  color: var(--game-text-color-muted);
   font-style: italic;
 }
 
@@ -4578,7 +4578,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555;
+  color: var(--game-text-color-muted);
   font-size: 13px;
 }
 
@@ -4737,7 +4737,7 @@ body {
 
 .inventory-detail-date {
   font-size: 10px;
-  color: #555;
+  color: var(--game-text-color-muted);
 }
 
 
@@ -4838,7 +4838,7 @@ body {
 
 .ach-tier {
   font-size: 10px;
-  color: #555;
+  color: var(--game-text-color-muted);
   flex-shrink: 0;
   margin-top: 2px;
   width: 18px;
