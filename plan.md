@@ -2,170 +2,17 @@
 
 ## What's needed
 
-1. **Explicit relic selection** at act start (currently auto-equips last earned) — RelicSelectScreen already exists, just needs to be shown at the right time
-2. **50% break chance** on act completion — equipped relic has a coin-flip chance of breaking
-3. **Broken relics** are greyed out on the selection screen; can't be equipped
-4. **Re-earn** to un-break: completing the act that originally awarded a relic un-breaks it
+1. **Explicit relic selection** at act start — RelicSelectScreen already exists, just needs to be shown at the right time (currently auto-equips last earned)
+2. **50% break chance** on act completion — equipped relic is removed from the earned list and becomes a broken inventory item
+3. **Re-earn** to get it back: completing the act that originally awarded the relic adds it back to `jarv_relics`
+
+**Broken relics are removed from the selection screen entirely.** They become a "Cracked [RelicName]" inventory item. No greyed-out UI needed — simpler.
 
 ---
 
 ## Storage
 
-Add a new localStorage key `jarv_broken_relics` — a JSON array of broken relic names.
-
-Add these helpers to `web/src/game/relics.ts`:
-
-```ts
-const BROKEN_KEY = 'jarv_broken_relics'
-
-export function loadBrokenRelics(): string[] {
-  try { return JSON.parse(localStorage.getItem(BROKEN_KEY) ?? '[]') } catch { return [] }
-}
-
-function saveBrokenRelics(names: string[]): void {
-  localStorage.setItem(BROKEN_KEY, JSON.stringify(names))
-}
-
-export function breakRelic(name: string): void {
-  const broken = loadBrokenRelics()
-  if (!broken.includes(name)) saveBrokenRelics([...broken, name])
-}
-
-export function unbreakRelic(name: string): void {
-  saveBrokenRelics(loadBrokenRelics().filter(n => n !== name))
-}
-```
-
-Commit: `feat: add broken relic persistence helpers to relics.ts`
-
----
-
-## Step 1 — `relics.ts`: Add persistence helpers
-
-Add the four functions above (`loadBrokenRelics`, `saveBrokenRelics`, `breakRelic`, `unbreakRelic`) to `relics.ts` and export the public ones.
-
-Commit: `feat: add broken relic persistence helpers to relics.ts`
-
----
-
-## Step 2 — `RelicSelectScreen.tsx`: Show broken relics greyed out
-
-Add a `brokenRelics: string[]` prop. Broken relics render at reduced opacity with a ~~strikethrough~~ label ("BROKEN") and are not selectable.
-
-```tsx
-interface Props {
-  earnedRelics: string[]
-  brokenRelics: string[]    // NEW
-  currentRelic: string | null
-  onSelect: (relicName: string | null) => void
-}
-```
-
-In the grid, for each relic:
-
-```tsx
-const isBroken = brokenRelics.includes(relic.name)
-<div
-  key={relic.name}
-  className={`relic-option ${selected === relic.name ? 'selected' : ''} ${isBroken ? 'relic-option--broken' : ''}`}
-  onClick={() => { if (!isBroken) setSelected(relic.name) }}
->
-  <span>{relic.icon}</span>
-  <span>{relic.name}</span>
-  {isBroken && <span className="relic-broken-label">BROKEN</span>}
-  {!isBroken && <span>{relic.desc}</span>}
-</div>
-```
-
-Also ensure the confirm button is disabled if `selected` is a broken relic (edge case guard).
-
-Add CSS to `styles.css`:
-
-```css
-.relic-option--broken {
-  opacity: 0.35;
-  cursor: not-allowed;
-  border-color: #2a2a2a;
-}
-
-.relic-broken-label {
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: #884444;
-}
-```
-
-Commit: `feat: show broken relics greyed out in RelicSelectScreen`
-
----
-
-## Step 3 — `App.tsx`: Wire break chance and re-earn
-
-### 3a — Import new helpers
-
-Add `breakRelic`, `unbreakRelic`, `loadBrokenRelics` to the import from `relics`.
-
-### 3b — Pass `brokenRelics` to `RelicSelectScreen`
-
-Find where `<RelicSelectScreen>` is rendered (search for `screen === 'relicselect'`). Add:
-
-```tsx
-<RelicSelectScreen
-  earnedRelics={loadEarnedRelics()}
-  brokenRelics={loadBrokenRelics()}    // ADD
-  currentRelic={run?.activeRelic ?? null}
-  onSelect={relicSelectDoneRef.current}
-/>
-```
-
-### 3c — Apply 50% break chance in `handleActComplete`
-
-In `handleActComplete`, the current flow is:
-
-```ts
-// earn relic
-if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
-
-// ... proceed to relic select screen or next act
-```
-
-After earning the relic but **before** transitioning, check if the player's equipped relic breaks:
-
-```ts
-// 50% chance: equipped relic breaks on act completion
-const equippedRelic = currentRun.activeRelic
-if (equippedRelic && Math.random() < 0.5) {
-  breakRelic(equippedRelic)
-  // Add a broken relic item to inventory
-  const relicDef = getRelicDef(equippedRelic)
-  if (relicDef) {
-    addToInventory({
-      id: `broken-relic-${equippedRelic.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
-      name: `Cracked ${equippedRelic}`,
-      icon: relicDef.icon,
-      desc: `A cracked ${equippedRelic} — it held until it didn't.`,
-      acquiredDate: new Date().toISOString(),
-    })
-  }
-}
-```
-
-Place this block **after** the `addEarnedRelic` call and **before** the relic select / next act logic.
-
-### 3d — Re-earn: un-break when replaying an act that drops the same relic
-
-In the same `handleActComplete`, right after `addEarnedRelic(act.rewardRelic)`:
-
-```ts
-if (act?.rewardRelic) {
-  addEarnedRelic(act.rewardRelic)
-  unbreakRelic(act.rewardRelic)   // un-break if previously broken
-}
-```
-
-This means replaying Act 1 always un-breaks Bark Shield, regardless of whether it was broken.
-
-Commit: `feat: add relic break chance and re-earn logic to handleActComplete`
+No new localStorage key needed. Breaking a relic just calls a new `removeEarnedRelic(name)` helper that removes it from the existing `jarv_relics` array.
 
 ---
 
@@ -173,18 +20,97 @@ Commit: `feat: add relic break chance and re-earn logic to handleActComplete`
 
 | File | Change |
 |---|---|
-| `web/src/game/relics.ts` | Add `loadBrokenRelics`, `breakRelic`, `unbreakRelic` exports |
-| `web/src/components/RelicSelectScreen.tsx` | Add `brokenRelics` prop; grey out broken relics |
-| `web/src/styles.css` | Add `.relic-option--broken` and `.relic-broken-label` styles |
-| `web/src/App.tsx` | Pass `brokenRelics` to screen; apply break chance + re-earn in `handleActComplete` |
+| `web/src/game/relics.ts` | Add `removeEarnedRelic(name)` export |
+| `web/src/App.tsx` | Wire break chance in `handleActComplete`; re-earn un-break; `RelicSelectScreen` already works as-is |
+
+No changes needed to `RelicSelectScreen.tsx` or `styles.css` — broken relics simply won't be in the earned list.
+
+---
+
+## Step 1 — `relics.ts`: Add `removeEarnedRelic`
+
+```ts
+export function removeEarnedRelic(name: string): void {
+  const current = loadEarnedRelics()
+  saveEarnedRelics(current.filter(n => n !== name))
+}
+```
+
+Check whether `saveEarnedRelics` already exists (private helper used by `addEarnedRelic`) — if so, reuse it. If not, add:
+
+```ts
+function saveEarnedRelics(names: string[]): void {
+  localStorage.setItem(RELICS_KEY, JSON.stringify(names))
+}
+```
+
+Commit: `feat: add removeEarnedRelic helper to relics.ts`
+
+---
+
+## Step 2 — `App.tsx`: Break chance + re-earn in `handleActComplete`
+
+### 2a — Import
+
+Add `removeEarnedRelic` to the import from `./game/relics`.
+Check that `addToInventory` is already imported (from `./game/dailyLogin` or similar) — add if not.
+
+### 2b — Re-earn: un-break when earning the act's relic
+
+In `handleActComplete`, find the `addEarnedRelic(act.rewardRelic)` call and ensure the relic is back in the pool regardless of prior breaks. `addEarnedRelic` already deduplicates, so no extra call needed — it just adds it back if it was removed.
+
+```ts
+if (act?.rewardRelic) {
+  addEarnedRelic(act.rewardRelic)   // re-adds even if previously broken/removed
+}
+```
+
+No change needed here — this already works correctly since `removeEarnedRelic` removes from the array and `addEarnedRelic` adds it back.
+
+### 2c — Break chance: 50% on act completion
+
+After the `addEarnedRelic` block and **before** the relic select / next-act transition, add:
+
+```ts
+// 50% chance: equipped relic breaks on act completion
+const equippedRelic = currentRun.activeRelic
+if (equippedRelic && Math.random() < 0.5) {
+  removeEarnedRelic(equippedRelic)
+  const relicDef = getRelicDef(equippedRelic)
+  addToInventory({
+    id: `broken-relic-${equippedRelic.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+    name: `Cracked ${equippedRelic}`,
+    icon: relicDef?.icon ?? '🪨',
+    desc: `A cracked ${equippedRelic} — it held until it didn't.`,
+    acquiredDate: new Date().toISOString(),
+  })
+}
+```
+
+**Important:** This must run **after** `addEarnedRelic(act.rewardRelic)` — the newly earned relic should never be the one that breaks (player just earned it). Only the relic they *carried into* the act can break.
+
+**Edge case:** If `equippedRelic === act.rewardRelic` (same relic somehow), the re-earn runs first so it's in the list, then the break check removes it again. To avoid this, guard:
+
+```ts
+if (equippedRelic && equippedRelic !== act?.rewardRelic && Math.random() < 0.5) {
+```
+
+### 2d — Verify `handleActComplete` has both paths covered
+
+The function has two paths:
+- Normal act completion → relic select → next act
+- Final act completion → card rest / starter pack
+
+Apply the break check on **both** paths (before any transition in both branches).
+
+Commit: `feat: add relic break chance and re-earn to handleActComplete`
 
 ---
 
 ## Implementation Notes
 
-- **Read `RelicSelectScreen.tsx` in full** before editing to understand its existing state management
-- **Read the `handleActComplete` function** in full before editing — it has both a "next act" path and a "final act" path; the break chance should apply on both
-- **`addToInventory` import** — check what file exports it (`dailyLogin.ts`) and add to App.tsx imports if not already there
-- **Build check** after each step
-- **Manual test:** Complete Act 1 boss → see relic select screen → equip Bark Shield → complete Act 2 → 50% chance Bark Shield is now greyed out on next select screen
-- **No test framework** — smoke test only
+- **Read `handleActComplete` in full** before editing — there are two branches (next act vs final act); the break check should appear once, near the top, after `addEarnedRelic` but before any branching
+- **Read `relics.ts` in full** to confirm the `RELICS_KEY` constant name and whether `saveEarnedRelics` already exists
+- **`addToInventory`** — check current imports in App.tsx; it may already be imported for daily login integration
+- **Build check** after each commit
+- **Manual test:** Complete Act 1 boss → if relic breaks, check inventory for "Cracked Bark Shield" item; replay Act 1 → Bark Shield reappears on selection screen
