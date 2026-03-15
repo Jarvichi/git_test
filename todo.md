@@ -28,7 +28,14 @@ Each time a player replays an act, escalating modifiers are stacked — making r
 - [ ] Step 3: Wire `enemyHandBonus` into `engine.ts` (`NewGameOptions.opponentStartCards`) so opponent deals itself extra cards at game start
 - [ ] Step 4: Update `resolvedNodeOpts` in `App.tsx` to accept and stack active modifiers; add `crystalBonus` to `RunState`; apply in post-battle crystal award
 - [ ] Step 5: Call `incrementActCount` on act completion; pass modifiers + actCount into `resolvedNodeOpts` at all call sites
-- [ ] Step 6: Show active modifiers in the NodePeekModal and in the battle HUD (small strip under opponent base)
+- [x] Step 1: Types + per-act count storage
+- [x] Step 2: replayModifiers in all 4 act JSONs
+- [x] Step 3: opponentStartCards in engine.ts
+- [x] Step 4: resolvedNodeOpts + crystalBonus on RunState
+- [x] Step 5: incrementActCount on completion + all call sites
+- [x] Step 6: Show modifiers in NodePeekModal + battle HUD strip
+
+**#175 complete.** Close manually on GitHub (no GITHUB_TOKEN in env).
 
 - [x] **Phase 7 / CLAUDE.md** Battle summary screen — implemented
 - [x] **#173** Boss card mechanic (phase 2 fight after base falls) — implemented
