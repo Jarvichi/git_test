@@ -188,6 +188,15 @@ export interface Act {
   nextActId?: string
 
   /**
+   * Music track IDs for different contexts in this act.
+   * References keys in MUSIC_TRACKS from sound.ts.
+   * Falls back to the global default if omitted.
+   */
+  mapMusicId?: string
+  battleMusicId?: string
+  bossMusicId?: string
+
+  /**
    * Ordered list of modifiers applied on successive replays.
    * Modifier[0] activates on replay 2, modifier[1] on replay 3, etc.
    * All modifiers up to the current replay index stack additively.
