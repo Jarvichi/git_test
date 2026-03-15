@@ -209,6 +209,7 @@ export interface NewGameOptions {
   opponentHandicap?: number
   bossAI?: string
   bossCard?: string
+  bossHpMultiplier?: number
   /** Preset enemy deck (card names). Makes each node deterministic and learnable. */
   enemyDeckNames?: string[]
   /** Node ID used to seed terrain generation deterministically. */
@@ -239,6 +240,7 @@ export function newGame(
     opponentHandicap: handicap = 0,
     bossAI: boss,
     bossCard,
+    bossHpMultiplier,
     enemyDeckNames,
     terrainSeed,
     environment,
@@ -326,6 +328,7 @@ export function newGame(
     bossAI: boss,
     bossCard,
     bossCardActive: false,
+    bossHpMultiplier: bossHpMultiplier ?? (bossCard ? 10 : undefined),
     terrain: generateTerrain(terrainSeed, environment),
     environment,
     battleStats: { cardsPlayed: {}, playerKills: 0, playerUnitsLost: 0 },
@@ -763,7 +766,9 @@ function checkGameOver(s: GameState): boolean {
       s.opponentBase.hp = s.opponentBase.maxHp
       const template = getCardUnit(s.bossCard)
       if (template) {
-        const bossUnit = spawnUnit(template, 'opponent')
+        const mult = s.bossHpMultiplier ?? 10
+        const boostedTemplate = { ...template, maxHp: Math.round(template.maxHp * mult) }
+        const bossUnit = spawnUnit(boostedTemplate, 'opponent')
         s.field.push(bossUnit)
         s.log.push(`⚡ PHASE 2! ${s.bossCard} rises from the ruins!`)
         s.log.push(`Destroy the ${s.bossCard} to win!`)

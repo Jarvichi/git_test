@@ -151,6 +151,7 @@ export interface GameState {
   bossAI?: string            // 'thornlord' etc. — drives boss-specific opponent logic
   bossCard?: string          // card name of the phase-2 boss unit
   bossCardActive?: boolean   // true once the phase-2 unit has been deployed
+  bossHpMultiplier?: number  // HP multiplier applied when boss card spawns (default 10)
   terrain: TerrainObstacle[]
   environment?: string       // battlefield background theme ('forest' | 'ruins' | 'camp' | 'citadel' | 'ashen')
   soulstoneReviveAvailable?: boolean  // Soulstone relic: one unit auto-revives per battle
