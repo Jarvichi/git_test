@@ -214,12 +214,12 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 - [x] **#144** Campaign Failed screen: 50 crystal reward, clear run, return to menu
 
 ### Cards
-- [x] **#177** Add `lore` field to card schema — already implemented (`types.ts`, `cards.json`, `CardDetailModal.tsx`)
+- [x] **#177** Add `lore` field to card schema — lore moved inline to each card/heroCard object in `cards.json`; `cards.ts` updated to read inline field
 - [ ] **#178** Per-act themed card sets: at least 25 cards per act, tagged to that act's theme, earnable only in that act (except daily/crystal rewards)
 
 ### Music
 - [x] **#144** Refactor sound.ts: export `MusicTrackConfig` type and `startMusicTrack`/`stopMusicTrack` generic API; named config objects (`BATTLE_MUSIC`, `TITLE_MUSIC`, `MAP_MUSIC`, etc.) passable to the engine; per-act wiring remains a future task
-- [ ] **#176** Per-act music: add `mapMusic`, `battleMusic`, `bossMusic` fields to act JSON; wire to startMusicTrack calls
+- [ ] **#176** Per-act music: add `mapMusic`, `battleMusic`, `bossMusic` fields to act JSON; wire to startMusicTrack calls — IN PROGRESS
 
 ### Merchant
 - [x] **#179** Merchant rarely offers an inventory item alongside cards — implemented
