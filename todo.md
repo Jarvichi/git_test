@@ -10,6 +10,8 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+- [ ] **Phase 7 / CLAUDE.md** Battle summary screen: stats popup after each campaign battle win — cards played, kills, damage dealt, duration — see `plan.md` for full implementation plan
+
 - [x] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
 - [x] **#193** Stuck units: add `?debug` overlay that renders terrain avoidance areas as semi-transparent red circles on the battlefield
 
@@ -26,7 +28,8 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟡 UX / UI Bugs (session 6 — new)
 
-- [ ] **#183** Intro Screen: fade between "Awesome Software" and "A Jarv Creation" shows the title screen behind it — ensure the fade does not reveal the title screen
+- [x] **#183** Intro Screen: fade between "Awesome Software" and "A Jarv Creation" shows the title screen behind it — already fixed
+- [x] **#189** Campaign intel: peek modal truncates enemy deck list with "+N more" — fixed; `playstyleDescription` now lists full deck
 - [x] **#184** Settings: text size setting doesn't change anything — apply `zoom` to `.game-container` scaled by textSize/14; compensate height — needs manual close on GitHub
 - [x] **#185** Settings: text colour setting doesn't change anything — fix circular CSS variable `--game-text-color: var(--game-text-color)` → `#33ff33` — needs manual close on GitHub
 - [x] **#186** Achievements: add an indicator/badge on the achievements button on the title screen when there's an unclaimed reward — red `!` badge shown when any achievement is unlocked but unclaimed
