@@ -191,11 +191,6 @@ function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect, showName }: { un
           ? <SpriteImg name={unit.spriteName ?? unit.name} className="lane-unit-sprite" />
           : <AnimatedSpriteImg name={unit.spriteName ?? unit.name} frameCount={3} fps={6} className={`lane-unit-sprite${unit.isHero ? ' lane-unit-sprite--hero' : ''}`} />
       }
-      {!unit.isWall && unit.upgradeLevel != null && unit.upgradeLevel >= 1 && (
-        <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, MAX_UPGRADE_LEVEL)}`}>
-          {'★'.repeat(unit.upgradeLevel)}
-        </span>
-      )}
       {!unit.isWall && showName && (
         <div className="lane-unit-name">
           {unit.name}
@@ -210,8 +205,15 @@ function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect, showName }: { un
           ))}
         </div>
       )}
-      <div className="lane-unit-hp-bar">
-        <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />
+      <div className="lane-unit-hp-row">
+        <div className="lane-unit-hp-bar">
+          <div className="lane-unit-hp-fill" style={{ width: `${hpPct}%` }} />
+        </div>
+        {!unit.isWall && unit.upgradeLevel != null && unit.upgradeLevel >= 1 && (
+          <span className={`lane-unit-level lane-unit-level--${Math.min(unit.upgradeLevel, MAX_UPGRADE_LEVEL)}`}>
+            {'★'.repeat(unit.upgradeLevel)}
+          </span>
+        )}
       </div>
     </div>
   )

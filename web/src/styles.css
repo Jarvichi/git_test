@@ -353,6 +353,12 @@ body {
   text-shadow: 0 0 4px currentColor;
 }
 
+.lane-unit-hp-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
 .lane-unit-hp-bar {
   width: 30px;
   height: 4px;
@@ -360,6 +366,12 @@ body {
   border: 1px solid #444;
   border-radius: 1px;
   overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Shorten bar when level stars are shown beside it */
+.lane-unit-hp-row:has(.lane-unit-level) .lane-unit-hp-bar {
+  width: 18px;
 }
 
 .lane-unit--player .lane-unit-hp-fill {
@@ -441,16 +453,13 @@ body {
   50%       { opacity: 0.5; }
 }
 
-/* Upgrade level badge — absolute corner overlay on the sprite */
+/* Upgrade level badge — inline beside the HP bar */
 .lane-unit-level {
-  position: absolute;
-  bottom: 18px;
-  right: -1px;
   font-size: 7px;
   font-weight: bold;
   letter-spacing: -1px;
   line-height: 1;
-  pointer-events: none;
+  flex-shrink: 0;
 }
 .lane-unit-level--1 {
   color: #88cc88;
@@ -469,15 +478,15 @@ body {
   text-shadow: 0 0 8px rgba(255, 80, 40, 1);
 }
 
-/* Upgraded building glow — halo based on level (no hard border) */
-.lane-unit--upgraded-2 {
-  box-shadow: 0 0 10px 2px rgba(255, 204, 0, 0.6);
+/* Upgraded building glow on the sprite only, not the whole unit div */
+.lane-unit--upgraded-2 .lane-unit-sprite {
+  filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.8));
 }
-.lane-unit--upgraded-3 {
-  box-shadow: 0 0 14px 3px rgba(200, 100, 255, 0.75);
+.lane-unit--upgraded-3 .lane-unit-sprite {
+  filter: drop-shadow(0 0 5px rgba(200, 100, 255, 0.9));
 }
-.lane-unit--upgraded-4 {
-  box-shadow: 0 0 18px 4px rgba(255, 80, 40, 0.8);
+.lane-unit--upgraded-4 .lane-unit-sprite {
+  filter: drop-shadow(0 0 7px rgba(255, 80, 40, 1));
 }
 
 /* Attack flash — brief brightness burst when a unit strikes */
