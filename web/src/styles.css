@@ -369,8 +369,8 @@ body {
   flex-shrink: 0;
 }
 
-/* Shorten bar when level stars are shown beside it */
-.lane-unit-hp-row:has(.lane-unit-level) .lane-unit-hp-bar {
+/* Shorten bar when level stars are shown beside it (not walls — they use flex:1) */
+.lane-unit:not(.lane-unit--wall) .lane-unit-hp-row:has(.lane-unit-level) .lane-unit-hp-bar {
   width: 18px;
 }
 
@@ -419,8 +419,8 @@ body {
 }
 
 .lane-unit--wall .lane-unit-hp-bar {
-  flex: none;
-  width: 100%;
+  flex: 1;
+  width: auto;
   max-width: none;
   height: 4px;
 }
