@@ -3459,6 +3459,67 @@ body {
 
 /* ── Merchant Screen ─────────────────────────────────────── */
 
+/* ── Mystery Screen ────────────────────────────────────────────────────────── */
+.mystery-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+.mystery-header {
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.3em;
+}
+.mystery-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 24px 32px;
+  border: 1px solid #333;
+  background: #050508;
+  width: 100%;
+}
+.mystery-field-icon { font-size: 2.5rem; opacity: 0.5; }
+.mystery-field-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  color: #666;
+}
+.mystery-lore {
+  font-size: 0.8rem;
+  color: var(--fg-dim, #888);
+  font-style: italic;
+  line-height: 1.6;
+  max-width: 360px;
+}
+.mystery-chest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 28px;
+  border: 1px solid var(--accent);
+  background: #060610;
+}
+.mystery-chest-icon { font-size: 2rem; }
+.mystery-chest-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+}
+.mystery-reward-value {
+  font-size: 1rem;
+  color: var(--fg);
+  letter-spacing: 0.05em;
+}
+.mystery-collect-btn { margin-top: 8px; }
+
 .merchant-screen {
   display: flex;
   flex-direction: column;
