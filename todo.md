@@ -180,7 +180,7 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 
 ### Campaign Map
 - [ ] **#171** Mystery node: runtime replacement of a normal battle node; displayed as normal battle on map; on entry shows cleared battlefield + reward chest + lore text ("whoops, forgot to clean up")
-- [ ] **#172** Node peek modal: tapping a node shows a preview modal with reward summary, difficulty hint, "Enter Battle" + "Back" buttons; on previously-completed nodes also shows opponent deck + playstyle
+- [x] **#172** Node peek modal — implemented
 
 ### Boss Mechanic
 - [x] **#173** Boss card mechanic — implemented
