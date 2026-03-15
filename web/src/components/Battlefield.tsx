@@ -1008,7 +1008,7 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBoss
           <div className="boss-splash-content">
             <div className="boss-splash-warning">⚡ WARNING ⚡</div>
             <div className="boss-splash-title">BOSS FIGHT</div>
-            <div className="boss-splash-unit">{state.bossCard}</div>
+            <div className="boss-splash-unit">{state.bossName ?? state.bossCard}</div>
             <div className="boss-splash-sub">has entered the battlefield</div>
           </div>
         </div>

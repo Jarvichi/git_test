@@ -150,6 +150,7 @@ export interface GameState {
   activeBattleEvent: BattleEventState | null
   bossAI?: string            // 'thornlord' etc. — drives boss-specific opponent logic
   bossCard?: string          // card name of the phase-2 boss unit
+  bossName?: string          // display name for the boss (e.g. 'The Thornlord')
   bossCardActive?: boolean   // true once the phase-2 unit has been deployed
   bossHpMultiplier?: number  // HP multiplier applied when boss card spawns (default 10)
   terrain: TerrainObstacle[]

@@ -804,6 +804,7 @@
       "environment": "ashen",
       "bossAI": "ashwalker",
       "bossCard": "Behemoth",
+      "bossName": "The Ashwalker",
       "enemyDeck": [
         "Wight Knight",
         "Skeleton",

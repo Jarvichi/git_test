@@ -209,6 +209,7 @@ export interface NewGameOptions {
   opponentHandicap?: number
   bossAI?: string
   bossCard?: string
+  bossName?: string
   bossHpMultiplier?: number
   /** Preset enemy deck (card names). Makes each node deterministic and learnable. */
   enemyDeckNames?: string[]
@@ -240,6 +241,7 @@ export function newGame(
     opponentHandicap: handicap = 0,
     bossAI: boss,
     bossCard,
+    bossName,
     bossHpMultiplier,
     enemyDeckNames,
     terrainSeed,
@@ -327,6 +329,7 @@ export function newGame(
     activeBattleEvent: null,
     bossAI: boss,
     bossCard,
+    bossName,
     bossCardActive: false,
     bossHpMultiplier: bossHpMultiplier ?? (bossCard ? 10 : undefined),
     terrain: generateTerrain(terrainSeed, environment),
@@ -762,16 +765,19 @@ function checkGameOver(s: GameState): boolean {
   }
   if (s.opponentBase.hp <= 0) {
     if (s.bossCard && !s.bossCardActive) {
-      // Trigger phase 2: restore base and deploy boss unit
+      // Trigger phase 2: restore base, clear opponent minions, push player units back, deploy boss
       s.opponentBase.hp = s.opponentBase.maxHp
+      s.field = s.field.filter(u => u.owner !== 'opponent')
+      s.field.forEach(u => { if (u.owner === 'player') u.x = PLAYER_SPAWN_X })
       const template = getCardUnit(s.bossCard)
       if (template) {
         const mult = s.bossHpMultiplier ?? 10
         const boostedTemplate = { ...template, maxHp: Math.round(template.maxHp * mult) }
         const bossUnit = spawnUnit(boostedTemplate, 'opponent')
         s.field.push(bossUnit)
-        s.log.push(`⚡ PHASE 2! ${s.bossCard} rises from the ruins!`)
-        s.log.push(`Destroy the ${s.bossCard} to win!`)
+        const displayName = s.bossName ?? s.bossCard
+        s.log.push(`⚡ PHASE 2! ${displayName} rises from the ruins!`)
+        s.log.push(`Destroy ${displayName} to win!`)
       }
       s.bossCardActive = true
       return false
