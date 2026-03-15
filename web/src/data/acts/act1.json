@@ -822,6 +822,7 @@
       "handicap": 0,
       "environment": "ruins",
       "bossAI": "thornlord",
+      "bossCard": "Elder Treant",
       "bossDialogue": [
         "\"You carry the smell of the shattered world.\"",
         "\"I sealed these paths to keep the rot from spreading. Clearly I should have built higher walls.\"",
