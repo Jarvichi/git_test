@@ -10,6 +10,26 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+### #175 Campaign replays: per-run escalating modifiers
+
+**Plan (session 8, 2026-03-15):**
+
+Each time a player replays an act, escalating modifiers are stacked — making runs progressively harder with optional compensating rewards.
+
+**Modifier types supported:**
+- `enemyHpPercent` — % increase on opponent base HP
+- `enemyIntervalReduction` — ms shaved off opponent play interval (faster AI)
+- `enemyHandBonus` — opponent starts with N extra cards in hand
+- `crystalBonus` — extra crystals awarded after every battle in that act
+
+**Steps:**
+- [ ] Step 1: Add `ReplayModifier` type + `replayModifiers` field to `Act` interface in `questline.ts`; add per-act completion count storage (`loadActCount` / `incrementActCount`)
+- [ ] Step 2: Write `replayModifiers` arrays in `act1.json` – `act4.json` (3–5 entries each)
+- [ ] Step 3: Wire `enemyHandBonus` into `engine.ts` (`NewGameOptions.opponentStartCards`) so opponent deals itself extra cards at game start
+- [ ] Step 4: Update `resolvedNodeOpts` in `App.tsx` to accept and stack active modifiers; add `crystalBonus` to `RunState`; apply in post-battle crystal award
+- [ ] Step 5: Call `incrementActCount` on act completion; pass modifiers + actCount into `resolvedNodeOpts` at all call sites
+- [ ] Step 6: Show active modifiers in the NodePeekModal and in the battle HUD (small strip under opponent base)
+
 - [x] **Phase 7 / CLAUDE.md** Battle summary screen — implemented
 - [x] **#173** Boss card mechanic (phase 2 fight after base falls) — implemented
 - [x] **#174** Relic break chance + broken relic inventory items — implemented
