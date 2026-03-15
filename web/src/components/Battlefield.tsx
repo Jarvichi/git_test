@@ -1052,21 +1052,23 @@ export function Battlefield({ state, onPlayCard, onGiveUp, onPause, actTheme, ac
                     </span>
                   )}
                 </div>
-                <div className="bf-inspect-row"><span>HP</span><span>{inspectedUnit.hp} / {inspectedUnit.maxHp}</span></div>
-                {inspectedUnit.attack > 0 && (
-                  <div className="bf-inspect-row"><span>ATK</span><span>{inspectedUnit.attack}</span></div>
-                )}
-                {inspectedUnit.upgradeLevel != null && inspectedUnit.upgradeLevel >= 2 && (
-                  <div className="bf-inspect-row"><span>Level</span><span>{inspectedUnit.upgradeLevel}</span></div>
-                )}
-                <div className="bf-inspect-row"><span>Type</span><span>{inspectedUnit.moveSpeed === 0 ? 'Structure' : inspectedUnit.isWall ? 'Wall' : 'Unit'}</span></div>
-                {inspectedUnit.bypassWall && (
-                  <div className="bf-inspect-row"><span>Ranged</span><span>✓</span></div>
-                )}
-                {inspectedUnit.flying && (
-                  <div className="bf-inspect-row"><span>Flying</span><span>✓</span></div>
-                )}
-                <button className="action-btn" style={{ marginTop: 12 }} onClick={() => setInspectedUnit(null)}>← Back</button>
+                <div className="bf-inspect-stats">
+                  <div className="bf-inspect-row"><span>HP</span><span>{inspectedUnit.hp}/{inspectedUnit.maxHp}</span></div>
+                  {inspectedUnit.attack > 0 && (
+                    <div className="bf-inspect-row"><span>ATK</span><span>{inspectedUnit.attack}</span></div>
+                  )}
+                  {inspectedUnit.upgradeLevel != null && inspectedUnit.upgradeLevel >= 2 && (
+                    <div className="bf-inspect-row"><span>Lvl</span><span>{inspectedUnit.upgradeLevel}</span></div>
+                  )}
+                  <div className="bf-inspect-row"><span>Type</span><span>{inspectedUnit.moveSpeed === 0 ? 'Structure' : inspectedUnit.isWall ? 'Wall' : 'Unit'}</span></div>
+                  {inspectedUnit.bypassWall && (
+                    <div className="bf-inspect-row"><span>Ranged</span><span>✓</span></div>
+                  )}
+                  {inspectedUnit.flying && (
+                    <div className="bf-inspect-row"><span>Flying</span><span>✓</span></div>
+                  )}
+                </div>
+                <button className="action-btn" style={{ marginTop: 4 }} onClick={() => setInspectedUnit(null)}>← Back</button>
               </div>
             ) : (
               <>
