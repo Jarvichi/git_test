@@ -214,7 +214,7 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 - [x] **#144** Campaign Failed screen: 50 crystal reward, clear run, return to menu
 
 ### Cards
-- [ ] **#177** Add `lore` field to card schema (cards.json + TypeScript types) for per-card flavour text
+- [x] **#177** Add `lore` field to card schema — already implemented (`types.ts`, `cards.json`, `CardDetailModal.tsx`)
 - [ ] **#178** Per-act themed card sets: at least 25 cards per act, tagged to that act's theme, earnable only in that act (except daily/crystal rewards)
 
 ### Music
