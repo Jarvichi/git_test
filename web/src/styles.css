@@ -2641,6 +2641,50 @@ body {
   line-height: 1.5;
 }
 
+/* ── Replay modifier block inside peek modal ── */
+.nm-peek-modifiers {
+  border-top: 1px solid #ff660033;
+  padding-top: 8px;
+  margin-top: 4px;
+}
+.nm-peek-modifiers-label {
+  font-size: 9px;
+  color: #ff8844;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.nm-peek-modifier-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #ffaa55;
+  padding: 1px 0;
+}
+.nm-peek-modifier-icon {
+  font-size: 10px;
+  color: #ff6633;
+}
+
+/* ── Replay modifier strip above opponent base on battlefield ── */
+.replay-modifier-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(255, 80, 20, 0.08);
+  border-bottom: 1px solid #ff440022;
+}
+.replay-modifier-tag {
+  font-size: 9px;
+  color: #ff8844;
+  background: rgba(255, 80, 20, 0.15);
+  border: 1px solid #ff440044;
+  padding: 1px 5px;
+  letter-spacing: 0.5px;
+}
+
 .nm-peek-actions {
   display: flex;
   gap: 8px;

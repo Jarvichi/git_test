@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Act, QuestNode, RunState, getAvailableNodeIds, loadNodeHistory } from '../game/questline'
+import { Act, QuestNode, RunState, ReplayModifier, getAvailableNodeIds, loadNodeHistory, getActiveModifiers, loadActCount } from '../game/questline'
 
 interface Props {
   act: Act
@@ -174,11 +174,12 @@ interface PeekModalProps {
   node: QuestNode
   actId: string
   nodeHistory: Set<string>
+  activeModifiers: ReplayModifier[]
   onEnter: () => void
   onClose: () => void
 }
 
-function NodePeekModal({ node, actId, nodeHistory, onEnter, onClose }: PeekModalProps) {
+function NodePeekModal({ node, actId, nodeHistory, activeModifiers, onEnter, onClose }: PeekModalProps) {
   const hasPreviouslyCompleted = nodeHistory.has(`${actId}:${node.id}`)
   const isBattle = node.type === 'battle' || node.type === 'elite' || node.type === 'boss'
 
@@ -224,6 +225,19 @@ function NodePeekModal({ node, actId, nodeHistory, onEnter, onClose }: PeekModal
           <div className="nm-peek-history">
             <div className="nm-peek-history-label">— INTEL (from previous run) —</div>
             <div className="nm-peek-history-body">{playstyleDescription(node)}</div>
+          </div>
+        )}
+
+        {/* Active modifiers */}
+        {activeModifiers.length > 0 && (
+          <div className="nm-peek-modifiers">
+            <div className="nm-peek-modifiers-label">— REPLAY MODIFIERS —</div>
+            {activeModifiers.map((m, i) => (
+              <div key={i} className="nm-peek-modifier-row">
+                <span className="nm-peek-modifier-icon">⚠</span>
+                <span className="nm-peek-modifier-text">{m.label}</span>
+              </div>
+            ))}
           </div>
         )}
 
@@ -373,6 +387,7 @@ export function NodeMap({ act, run, onSelectNode, onBack }: Props) {
           node={peekNode}
           actId={act.id}
           nodeHistory={nodeHistory}
+          activeModifiers={getActiveModifiers(act, loadActCount(act.id))}
           onEnter={handlePeekEnter}
           onClose={() => setPeekNode(null)}
         />

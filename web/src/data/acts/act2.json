@@ -8,6 +8,14 @@
   "rewardTags": [
     "citadel"
   ],
+  "replayModifiers": [
+    { "type": "enemyHpPercent",         "value": 20,   "label": "+20% enemy HP" },
+    { "type": "enemyIntervalReduction", "value": 750,  "label": "Enemies act faster" },
+    { "type": "enemyHandBonus",         "value": 1,    "label": "Enemies start +1 card" },
+    { "type": "crystalBonus",           "value": 15,   "label": "+15 crystals per battle" },
+    { "type": "enemyHpPercent",         "value": 25,   "label": "+25% enemy HP" },
+    { "type": "enemyHandBonus",         "value": 1,    "label": "Enemies start +2 cards" }
+  ],
   "intro": [
     {
       "title": "THE IRON CITADEL",

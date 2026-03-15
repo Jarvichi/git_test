@@ -221,6 +221,8 @@ export interface NewGameOptions {
   opponentIntervalMs?: number
   /** Override opponent base HP. Defined per-node in act JSON. */
   opponentBaseHp?: number
+  /** Extra cards dealt to opponent at game start (from replay modifiers). */
+  opponentStartCards?: number
 }
 
 export function newGame(
@@ -243,6 +245,7 @@ export function newGame(
     bossCard,
     bossName,
     bossHpMultiplier,
+    opponentStartCards = 0,
     enemyDeckNames,
     terrainSeed,
     environment,
@@ -275,7 +278,7 @@ export function newGame(
   if (!boss) injectHero(opponentDeck, HERO_CARDS)
 
   const playerHand   = playerDeck.splice(0, 4)
-  const opponentHand = opponentDeck.splice(0, 4)
+  const opponentHand = opponentDeck.splice(0, 4 + opponentStartCards)
 
   const strategy      = STRATEGIES[Math.floor(Math.random() * STRATEGIES.length)]
   const maxRarity     = boss ? 'legendary' : maxRarityForHandicap(clamp)

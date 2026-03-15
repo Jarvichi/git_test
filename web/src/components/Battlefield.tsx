@@ -13,6 +13,7 @@ interface Props {
   actTheme?: string       // e.g. 'act1' — applied as CSS modifier class
   activeRelic?: string | null  // relic name currently equipped, if any
   showBossSplash?: boolean
+  activeModifiers?: { label: string }[]  // replay modifiers active this run
 }
 
 const SPAWN_GROW_MS = 1500
@@ -790,7 +791,7 @@ function opponentPortraitSlug(bossAI: string | undefined, actTheme: string | und
   return 'bandit'
 }
 
-export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBossSplash }: Props) {
+export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBossSplash, activeModifiers }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const [heroLightning, setHeroLightning] = useState<{ owner: 'player' | 'opponent'; key: number } | null>(null)
   const prevHeroIdsRef = useRef<Set<string>>(new Set())
@@ -868,6 +869,15 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBoss
           <span className="dev-badge">DEV MODE</span>
         )}
       </div>
+
+      {/* Replay modifier strip */}
+      {activeModifiers && activeModifiers.length > 0 && (
+        <div className="replay-modifier-strip">
+          {activeModifiers.map((m, i) => (
+            <span key={i} className="replay-modifier-tag">⚠ {m.label}</span>
+          ))}
+        </div>
+      )}
 
       {/* Opponent base */}
       <div className="base-bar base-bar--opponent">

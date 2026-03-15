@@ -18,7 +18,8 @@ import {
   hasSeenIntro, markIntroSeen,
   loadRunCount, incrementRunCount, getAct1Intro,
   generateEventFromConfig, EventChoice, EventData,
-  CutscenePanel, QuestNode, RunState,
+  CutscenePanel, QuestNode, RunState, Act, ReplayModifier,
+  getActiveModifiers, loadActCount, incrementActCount,
   recordNodeComplete,
 } from './game/questline'
 import { CardRestSelect }       from './components/CardRestSelect'
@@ -92,17 +93,34 @@ const BROKEN_RELIC_ITEMS: Record<string, { name: string; icon: string; desc: str
 
 function resolvedNodeOpts(
   node: QuestNode,
-  actEnv: string | undefined,
+  act: Act | undefined,
   runCount: number,
+  modifiers: ReplayModifier[],
 ): Omit<NewGameOptions, 'playerCards'> {
   const extra = Math.max(0, runCount - 1)
   const handicapReduction = Math.min(extra * 2, MAX_HANDICAP)
-  const hpBonus = extra * 10
+
+  // Stack modifier values
+  let hpPctBonus = 0
+  let intervalReduction = 0
+  let handBonus = 0
+  for (const m of modifiers) {
+    if (m.type === 'enemyHpPercent') hpPctBonus += m.value
+    if (m.type === 'enemyIntervalReduction') intervalReduction += m.value
+    if (m.type === 'enemyHandBonus') handBonus += m.value
+  }
 
   const adjustedHandicap = Math.max(0, (node.handicap ?? 0) - handicapReduction)
   // Boss default HP is 95; non-boss 82 (mirrors engine.ts defaults)
   const defaultHp = node.bossAI ? 95 : 82
-  const adjustedHp = (node.opponentBaseHp ?? defaultHp) + hpBonus
+  const baseHp = node.opponentBaseHp ?? defaultHp
+  const adjustedHp = Math.round(baseHp * (1 + hpPctBonus / 100))
+
+  // When a modifier reduces interval, fall back to 4000ms base if node didn't specify one
+  const baseInterval = node.opponentIntervalMs ?? (intervalReduction > 0 ? 4000 : undefined)
+  const adjustedInterval = baseInterval !== undefined
+    ? Math.max(1000, baseInterval - intervalReduction)
+    : undefined
 
   return {
     opponentHandicap: adjustedHandicap,
@@ -112,9 +130,10 @@ function resolvedNodeOpts(
     bossHpMultiplier: node.bossHpMultiplier,
     enemyDeckNames: node.enemyDeck,
     terrainSeed: node.id,
-    environment: node.environment ?? actEnv,
-    opponentIntervalMs: node.opponentIntervalMs,
+    environment: node.environment ?? act?.environment,
+    opponentIntervalMs: adjustedInterval,
     opponentBaseHp: adjustedHp,
+    opponentStartCards: handBonus,
   }
 }
 
@@ -201,7 +220,8 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (savedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame({ playerCards, ...resolvedNodeOpts(node, act?.environment, loadRunCount()) })
+        const mods = act ? getActiveModifiers(act, loadActCount(savedRun.actId)) : []
+        const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), mods) })
         state.playerBase = { hp: savedRun.playerHp, maxHp: savedRun.maxHp }
         if (savedRun.activeRelic) getRelicDef(savedRun.activeRelic)?.applyToGame(state)
         return { screen: 'playing' as Screen, gameState: state as GameState | null, run: savedRun, isCampaign: true }
@@ -621,7 +641,8 @@ export default function App() {
         const playerCards = buildDeckCards(deckEntries, collection)
         const earnedEntries = (activeRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
         if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-        const state = newGame({ playerCards, ...resolvedNodeOpts(node, act?.environment, loadRunCount()) })
+        const mods = act ? getActiveModifiers(act, loadActCount(activeRun.actId)) : []
+        const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), mods) })
         state.playerBase = { hp: activeRun.playerHp, maxHp: activeRun.maxHp }
         if (activeRun.activeRelic) getRelicDef(activeRun.activeRelic)?.applyToGame(state)
         setGameState(state)
@@ -645,7 +666,9 @@ export default function App() {
 
     // Mark siblings as skipped (branch choice)
     const afterSkip = skipSiblings(act, node.id, currentRun)
-    const updatedRun: RunState = { ...afterSkip, pendingNodeId: node.id }
+    const activeMods = act ? getActiveModifiers(act, loadActCount(currentRun.actId)) : []
+    const bonusCrystals = activeMods.filter(m => m.type === 'crystalBonus').reduce((s, m) => s + m.value, 0)
+    const updatedRun: RunState = { ...afterSkip, pendingNodeId: node.id, crystalBonus: bonusCrystals }
     saveRun(updatedRun)
     setRun(updatedRun)
 
@@ -709,7 +732,8 @@ export default function App() {
     // Include cards earned as rewards earlier this run
     const earnedEntries = (updatedRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossName: node.bossName, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const mods733 = act ? getActiveModifiers(act, loadActCount(updatedRun.actId)) : []
+    const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), mods733) })
     state.playerBase = { hp: updatedRun.playerHp, maxHp: updatedRun.maxHp }
     if (updatedRun.activeRelic) getRelicDef(updatedRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -737,7 +761,8 @@ export default function App() {
     const earnedEntries = (run.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
     const act = ACTS[run.actId]
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossName: node.bossName, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const mods761 = act ? getActiveModifiers(act, loadActCount(run.actId)) : []
+    const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), mods761) })
     state.playerBase = { hp: run.playerHp, maxHp: run.maxHp }
     if (run.activeRelic) getRelicDef(run.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -894,7 +919,8 @@ export default function App() {
 
     // Check act complete
     if (isActComplete(act, updatedRun)) {
-      // Track act completion achievement
+      // Track act completion achievement + per-act replay count
+      incrementActCount(currentRun.actId)
       const actUnlocked = incrementAchievementProgress(`campaign:${currentRun.actId}`)
       if (actUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...actUnlocked])
 
@@ -914,8 +940,8 @@ export default function App() {
       return
     }
 
-    // Grant crystals for winning
-    const crystalReward = node.type === 'boss' ? 25 : node.type === 'elite' ? 15 : 10
+    // Grant crystals for winning (+ crystalBonus from replay modifiers)
+    const crystalReward = (node.type === 'boss' ? 25 : node.type === 'elite' ? 15 : 10) + (currentRun.crystalBonus ?? 0)
     const newCrystals = loadCrystals() + crystalReward
     saveCrystals(newCrystals)
     setCrystals(newCrystals)
@@ -997,6 +1023,7 @@ export default function App() {
           nodeFailCounts: {},
           earnedCards: [],
           activeRelic: chosenRelic,
+          crystalBonus: 0,
         }
         saveRun(nextRun)
         setRun(nextRun)
@@ -1104,7 +1131,8 @@ export default function App() {
     const playerCards = buildDeckCards(deckEntries, collection)
     const earnedEntries = (currentRun.earnedCards ?? []).map(n => ({ cardName: n, count: 1 }))
     if (earnedEntries.length > 0) playerCards.push(...buildDeckCards(earnedEntries, collection))
-    const state = newGame({ playerCards, opponentHandicap: node.handicap ?? 0, bossAI: node.bossAI, bossCard: node.bossCard, bossName: node.bossName, bossHpMultiplier: node.bossHpMultiplier, enemyDeckNames: node.enemyDeck, terrainSeed: node.id, environment: node.environment ?? act?.environment, opponentIntervalMs: node.opponentIntervalMs, opponentBaseHp: node.opponentBaseHp })
+    const modsRetry = act ? getActiveModifiers(act, loadActCount(currentRun.actId)) : []
+    const state = newGame({ playerCards, ...resolvedNodeOpts(node, act, loadRunCount(), modsRetry) })
     state.playerBase = { hp: currentRun.playerHp, maxHp: currentRun.maxHp }
     if (currentRun.activeRelic) getRelicDef(currentRun.activeRelic)?.applyToGame(state)
     setGameState(state)
@@ -1587,7 +1615,7 @@ export default function App() {
           />
         ) : (
           <>
-            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} showBossSplash={showBossSplash} />
+            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} showBossSplash={showBossSplash} activeModifiers={run ? getActiveModifiers(ACTS[run.actId], loadActCount(run.actId)) : []} />
             {activeRareEvent === 'fakeCrash'   && <FakeCrashEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'blackjack'   && <BlackjackEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'wrongNumber' && <WrongNumberEvent onDone={handleRareEventDone} />}
