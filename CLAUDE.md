@@ -54,6 +54,9 @@ npm run preview  # Preview production build locally
 - **Opponent AI:** Plays 1–2 affordable cards per turn from its own shuffled deck
 - **Win:** Destroy the enemy base (20 HP). **Lose:** Your base reaches 0 HP.
 
+## Constants VS JSON Config
+Whenever we add a constant that is more complex than a primitive type we should consider whether that would be better suited as a JSON configuration item. If the entity is likely to be extended (supporting multiplicity) then we should opt to create a JSON file, or add to an existing JSON file if it makes sense to colocate the data.
+
 ## Permissions
 - Claude has full permission to push and merge code changes
 

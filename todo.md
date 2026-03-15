@@ -194,7 +194,7 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 - [ ] **#144** Global word substitution config: a separate JSON file (`web/src/data/wordVariants.json`) holding single-word alternate arrays usable as `{word:key}` tags in any act text
 
 ### Relics
-- [ ] **#174** Relic selection screen + breaking: pick 1 relic to equip at act start; 50% break chance on completion; broken relics greyed out in inventory; re-earn by replaying the act
+- [x] **#174** Relic selection screen + breaking: 50% break chance on completion; broken relics removed from pool and become unique inventory items (broken-relics.json); re-earn by replaying the act
 
 ### Lives System
 - [x] **#144** Add 3 lives to RunState (`livesRemaining`, `maxLives`); on battle loss player loses 1 life and can retry; at 0 lives show Campaign Failed screen (+50 crystals reward); lives reset to min 3 at act completion; relics/events can grant lives up to 9; shown in NodeMap HUD; "Nine Lives" achievement

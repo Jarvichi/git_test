@@ -1,0 +1,26 @@
+[
+  {
+    "relicName": "Bark Shield",
+    "name": "Shattered Bark Shield",
+    "icon": "🪵",
+    "desc": "Once deflected a thousand blows. Now just good kindling."
+  },
+  {
+    "relicName": "Iron Standard",
+    "name": "Bent Iron Standard",
+    "icon": "🚩",
+    "desc": "The banner that inspired legions. Now it just looks sad."
+  },
+  {
+    "relicName": "Soulstone",
+    "name": "Cracked Soulstone",
+    "icon": "💎",
+    "desc": "The soul inside got out. Probably fine."
+  },
+  {
+    "relicName": "Prism Lens",
+    "name": "Clouded Prism Lens",
+    "icon": "🔮",
+    "desc": "Focused infinite mana. Now focuses nothing. Like most things."
+  }
+]
