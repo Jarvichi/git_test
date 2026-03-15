@@ -55,7 +55,7 @@ import { CardTile }           from './components/CardTile'
 import { DailyLoginModal }   from './components/DailyLoginModal'
 import { InventoryScreen }   from './components/InventoryScreen'
 import { hasDailyReward, claimDailyReward, addToInventory, computeReward, loadInventory, RewardDef, ALL_ITEMS } from './game/dailyLogin'
-import { getRelicDef, addEarnedRelic, removeEarnedRelic, loadEarnedRelics } from './game/relics'
+import { getRelicDef, addEarnedRelic, removeEarnedRelic, loadEarnedRelics, addBrokenRelic, loadBrokenRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import { isNoDamageMode } from './game/debug'
 import { saveBattleState, loadBattleState, clearBattleState } from './game/battleState'
@@ -990,6 +990,7 @@ export default function App() {
     const equippedRelic = currentRun.activeRelic
     if (equippedRelic && equippedRelic !== act?.rewardRelic && Math.random() < 0.5) {
       removeEarnedRelic(equippedRelic)
+      addBrokenRelic(equippedRelic)
       const broken = BROKEN_RELIC_ITEMS[equippedRelic]
       const relicDef = getRelicDef(equippedRelic)
       brokenRelicRef.current = { name: relicDef?.name ?? equippedRelic, icon: relicDef?.icon ?? broken?.icon ?? '🪨' }
@@ -1507,6 +1508,7 @@ export default function App() {
       {screen === 'relicselect' && (
         <RelicSelectScreen
           earnedRelics={loadEarnedRelics()}
+          brokenRelics={loadBrokenRelics()}
           currentRelic={run?.activeRelic ?? null}
           brokenRelic={brokenRelicRef.current}
           onSelect={relic => { brokenRelicRef.current = null; relicSelectDoneRef.current(relic) }}

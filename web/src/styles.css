@@ -2897,6 +2897,39 @@ body {
   margin-top: 4px;
 }
 
+.relic-select-broken-divider {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 1px;
+  padding: 6px 0 2px;
+  border-top: 1px solid #333;
+}
+
+.relic-select-card--broken {
+  opacity: 0.45;
+  cursor: default;
+  filter: grayscale(70%);
+  border-color: #333 !important;
+  background: rgba(30, 30, 30, 0.4) !important;
+}
+
+.relic-select-card--broken:hover {
+  transform: none;
+  border-color: #333 !important;
+}
+
+.relic-select-icon--broken,
+.relic-select-name--broken {
+  color: #555;
+}
+
+.relic-select-desc--broken {
+  color: #444;
+  font-style: italic;
+}
+
 /* ── Act complete ────────────────────────────────────────────── */
 .act-complete {
   display: flex;
