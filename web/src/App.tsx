@@ -1615,7 +1615,7 @@ export default function App() {
           />
         ) : (
           <>
-            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} showBossSplash={showBossSplash} />
+            <Battlefield state={gameState} onPlayCard={handlePlayCard} actTheme={actTheme} activeRelic={run?.activeRelic} showBossSplash={showBossSplash} activeModifiers={run ? getActiveModifiers(ACTS[run.actId], loadActCount(run.actId)) : []} />
             {activeRareEvent === 'fakeCrash'   && <FakeCrashEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'blackjack'   && <BlackjackEvent   onDone={handleRareEventDone} />}
             {activeRareEvent === 'wrongNumber' && <WrongNumberEvent onDone={handleRareEventDone} />}
