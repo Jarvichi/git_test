@@ -3765,20 +3765,18 @@ body {
 .bf-pause-btn:hover { color: var(--game-text-color); border-color: var(--game-text-color); }
 
 /* ─── Pause overlay ─────────────────────────────────────────────── */
-/* ─── Pause panel — floats above battlefield, no backdrop ───────── */
+/* ─── Pause panel — covers the hand area at the bottom ─────────── */
 .battlefield--paused { cursor: pointer; }
 .battlefield--paused .lane-unit { cursor: crosshair; }
 .bf-pause-panel {
   position: absolute;
-  bottom: 120px; /* above the hand area */
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 300;
-  background: rgba(0,0,0,0.92);
-  border: 1px solid var(--game-text-color);
-  border-radius: 4px;
-  padding: 18px 28px;
-  min-width: 200px;
+  background: rgba(0,0,0,0.95);
+  border-top: 2px solid var(--game-text-color);
+  padding: 14px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
