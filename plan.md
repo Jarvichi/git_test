@@ -69,19 +69,30 @@ No change needed here — this already works correctly since `removeEarnedRelic`
 
 ### 2c — Break chance: 50% on act completion
 
+Each relic has a unique broken item. Define a lookup map:
+
+```ts
+const BROKEN_RELIC_ITEMS: Record<string, { name: string; icon: string; desc: string }> = {
+  'Bark Shield':   { name: 'Shattered Bark Shield',  icon: '🪵', desc: 'Once deflected a thousand blows. Now just good kindling.' },
+  'Iron Standard': { name: 'Bent Iron Standard',     icon: '🚩', desc: 'The banner that inspired legions. Now it just looks sad.' },
+  'Soulstone':     { name: 'Cracked Soulstone',      icon: '💎', desc: 'The soul inside got out. Probably fine.' },
+  'Prism Lens':    { name: 'Clouded Prism Lens',     icon: '🔮', desc: 'Focused infinite mana. Now focuses nothing. Like most things.' },
+}
+```
+
 After the `addEarnedRelic` block and **before** the relic select / next-act transition, add:
 
 ```ts
 // 50% chance: equipped relic breaks on act completion
 const equippedRelic = currentRun.activeRelic
-if (equippedRelic && Math.random() < 0.5) {
+if (equippedRelic && equippedRelic !== act?.rewardRelic && Math.random() < 0.5) {
   removeEarnedRelic(equippedRelic)
-  const relicDef = getRelicDef(equippedRelic)
+  const broken = BROKEN_RELIC_ITEMS[equippedRelic]
   addToInventory({
     id: `broken-relic-${equippedRelic.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
-    name: `Cracked ${equippedRelic}`,
-    icon: relicDef?.icon ?? '🪨',
-    desc: `A cracked ${equippedRelic} — it held until it didn't.`,
+    name: broken?.name ?? `Cracked ${equippedRelic}`,
+    icon: broken?.icon ?? '🪨',
+    desc: broken?.desc ?? `A cracked ${equippedRelic} — it held until it didn't.`,
     acquiredDate: new Date().toISOString(),
   })
 }
