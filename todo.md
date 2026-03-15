@@ -1,6 +1,6 @@
 # Jarv's Amazing Web Game — Todo List
 
-Issues sourced from GitHub. Last synced: 2026-03-14 (session 6).
+Issues sourced from GitHub. Last synced: 2026-03-15 (session 7).
 
 ---
 
@@ -10,10 +10,11 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
-- [x] **Phase 7 / CLAUDE.md** Battle summary screen: stats popup after each campaign battle win — cards played, kills, damage dealt, duration — implemented
-
-- [x] **#192** Campaign events: health bar doesn't update when a damaging choice is made — add HP display to EventScreen with live damage preview
-- [x] **#193** Stuck units: add `?debug` overlay that renders terrain avoidance areas as semi-transparent red circles on the battlefield
+- [x] **Phase 7 / CLAUDE.md** Battle summary screen — implemented
+- [x] **#173** Boss card mechanic (phase 2 fight after base falls) — implemented
+- [x] **#174** Relic break chance + broken relic inventory items — implemented
+- [x] **#192** Campaign events: HP bar on EventScreen — implemented
+- [x] **#193** Stuck units: `?debug` terrain overlay — implemented
 
 
 
@@ -182,7 +183,7 @@ Sub-issues created for each unimplemented item from the closed #144. Reference `
 - [ ] **#172** Node peek modal: tapping a node shows a preview modal with reward summary, difficulty hint, "Enter Battle" + "Back" buttons; on previously-completed nodes also shows opponent deck + playstyle
 
 ### Boss Mechanic
-- [x] **#173** Boss card mechanic: boss node opponent gets a boss card instead of hero; when opponent base hits 0 HP, base restores to full and boss unit deploys; player must kill the boss unit to win — add `bossCard` field to QuestNode, `bossCardActive` flag to GameState, intercept game-over in engine.ts
+- [x] **#173** Boss card mechanic — implemented
 
 ### Campaign Structure
 - [ ] **#180** Extend campaign to 25 acts (currently 4); plan and write acts 5–25 story, node maps, bosses, relics, hero cards, themed card sets

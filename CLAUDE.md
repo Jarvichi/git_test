@@ -322,7 +322,7 @@ Current cards: ~95. Target: 1000+ across 10 shards/expansions.
 
 **Phase 7 — Depth & QoL**
 - [ ] Opponent card reveal: briefly flash the card name when the opponent plays one (currently invisible)
-- [ ] Battle summary screen: stats popup after each battle — cards played, kills by unit, damage dealt, turns taken
-- [ ] Boss Phase 2: bosses change behavior at 40% HP (e.g. Thornlord starts building Farms to flood mana)
+- [x] Battle summary screen: stats popup after each battle — cards played, kills by unit, damage dealt, turns taken
+- [x] Boss Phase 2: bosses change behavior at 40% HP (e.g. Thornlord starts building Farms to flood mana)
 - [ ] Card synergy tags: UI labels showing which cards combo well (e.g. "Goblin" tag shared by Goblin, Barracks, Crypt)
 - [ ] Codebase health review: audit file sizes and complexity, split any files over ~500 lines, extract shared logic
