@@ -3776,16 +3776,16 @@ body {
   z-index: 300;
   background: rgba(0,0,0,0.95);
   border-top: 2px solid var(--game-text-color);
-  padding: 14px 20px;
+  padding: 8px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   text-align: center;
   pointer-events: auto;
 }
 .bf-pause-title {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: bold;
   letter-spacing: 2px;
   color: var(--game-text-color);
@@ -3793,14 +3793,12 @@ body {
 .bf-pause-hint {
   font-size: 11px;
   color: var(--game-text-color-dim);
-  max-width: 200px;
-  line-height: 1.5;
+  white-space: nowrap;
 }
 .bf-pause-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
-  width: 100%;
 }
 
 /* ─── Unit inspect panel (shown inside pause overlay) ───────────── */
@@ -3808,22 +3806,26 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   width: 100%;
 }
 .bf-inspect-name {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
   color: var(--game-text-color);
-  margin-bottom: 4px;
+}
+.bf-inspect-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px 10px;
+  width: 100%;
 }
 .bf-inspect-row {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  font-size: 12px;
+  font-size: 11px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding: 3px 0;
+  padding: 2px 0;
 }
 .bf-inspect-row span:first-child { color: var(--game-text-color-dim); }
 .bf-inspect-row span:last-child  { color: var(--game-text-color); font-weight: bold; }
