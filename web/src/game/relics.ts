@@ -65,13 +65,15 @@ export function loadEarnedRelics(): string[] {
   } catch { return [] }
 }
 
-/** Adds a relic to the player's permanent collection (no duplicates). */
+/** Adds a relic to the player's permanent collection (no duplicates). Also clears any broken flag. */
 export function addEarnedRelic(name: string): void {
   try {
     const existing = loadEarnedRelics()
     if (!existing.includes(name)) {
       localStorage.setItem(RELICS_KEY, JSON.stringify([...existing, name]))
     }
+    // If this relic was previously broken, restore it
+    removeBrokenRelic(name)
   } catch { /* ignore */ }
 }
 
@@ -79,6 +81,37 @@ export function addEarnedRelic(name: string): void {
 export function removeEarnedRelic(name: string): void {
   try {
     localStorage.setItem(RELICS_KEY, JSON.stringify(loadEarnedRelics().filter(n => n !== name)))
+  } catch { /* ignore */ }
+}
+
+// ─── Broken relic tracking ────────────────────────────────────────────────────
+// Broken relics are removed from the usable pool but retained as greyed-out
+// history on the selection screen. Completing the rewarding act restores them.
+
+const BROKEN_RELICS_KEY = 'jarv_broken_relics'
+
+/** Returns relic names that are currently broken (unequippable). */
+export function loadBrokenRelics(): string[] {
+  try {
+    const raw = localStorage.getItem(BROKEN_RELICS_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
+/** Marks a relic as broken (shown greyed-out on selection screen). */
+export function addBrokenRelic(name: string): void {
+  try {
+    const existing = loadBrokenRelics()
+    if (!existing.includes(name)) {
+      localStorage.setItem(BROKEN_RELICS_KEY, JSON.stringify([...existing, name]))
+    }
+  } catch { /* ignore */ }
+}
+
+/** Removes a relic from the broken list (called when it is re-earned). */
+export function removeBrokenRelic(name: string): void {
+  try {
+    localStorage.setItem(BROKEN_RELICS_KEY, JSON.stringify(loadBrokenRelics().filter(n => n !== name)))
   } catch { /* ignore */ }
 }
 
