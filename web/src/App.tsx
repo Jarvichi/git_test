@@ -53,7 +53,7 @@ import { CardTile }           from './components/CardTile'
 import { DailyLoginModal }   from './components/DailyLoginModal'
 import { InventoryScreen }   from './components/InventoryScreen'
 import { hasDailyReward, claimDailyReward, addToInventory, computeReward, loadInventory, RewardDef, ALL_ITEMS } from './game/dailyLogin'
-import { getRelicDef, addEarnedRelic, loadEarnedRelics } from './game/relics'
+import { getRelicDef, addEarnedRelic, removeEarnedRelic, loadEarnedRelics } from './game/relics'
 import { playCardPlay, playButtonClick, playBattleEvent, playCardFlip, playRestHeal, startBattleMusic, stopBattleMusic, startTitleMusic, stopTitleMusic, startGameOverMusic, stopGameOverMusic, startMapMusic, stopMapMusic, setBattleIntensity } from './game/sound'
 import { isNoDamageMode } from './game/debug'
 import { saveBattleState, loadBattleState, clearBattleState } from './game/battleState'
@@ -64,12 +64,17 @@ import { AchievementsScreen } from './components/AchievementsScreen'
 import { HeroCardsScreen }   from './components/HeroCardsScreen'
 import { BattleSummary }    from './components/BattleSummary'
 import './styles.css'
+import brokenRelicsData from './data/broken-relics.json'
 
 // Apply saved display settings on load
 applyTextSettings()
 
 const TICK_MS    = 100
 const HANDICAP_KEY = 'jarvs_handicap'
+
+const BROKEN_RELIC_ITEMS: Record<string, { name: string; icon: string; desc: string }> =
+  Object.fromEntries((brokenRelicsData as { relicName: string; name: string; icon: string; desc: string }[])
+    .map(r => [r.relicName, { name: r.name, icon: r.icon, desc: r.desc }]))
 
 // ─── Campaign difficulty scaling ─────────────────────────────────────────────
 //
@@ -872,7 +877,22 @@ export default function App() {
     const act = ACTS[currentRun.actId]
 
     // Persist the act's relic reward to the player's permanent relic collection
+    // (also re-earns a previously broken relic)
     if (act?.rewardRelic) addEarnedRelic(act.rewardRelic)
+
+    // 50% chance: the relic carried into this act breaks on completion
+    // Guard: never break the relic just earned this act
+    const equippedRelic = currentRun.activeRelic
+    if (equippedRelic && equippedRelic !== act?.rewardRelic && Math.random() < 0.5) {
+      removeEarnedRelic(equippedRelic)
+      const broken = BROKEN_RELIC_ITEMS[equippedRelic]
+      addToInventory({
+        id: `broken-relic-${equippedRelic.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+        name: broken?.name ?? `Cracked ${equippedRelic}`,
+        icon: broken?.icon ?? '🪨',
+        desc: broken?.desc ?? `A cracked ${equippedRelic} — it held until it didn't.`,
+      })
+    }
 
     const nextAct = getNextAct(currentRun.actId)
 
