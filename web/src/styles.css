@@ -463,15 +463,20 @@ body {
   color: #cc88ff;
   text-shadow: 0 0 6px rgba(200, 100, 255, 0.9);
 }
+.lane-unit-level--4 {
+  color: #ff5533;
+  text-shadow: 0 0 8px rgba(255, 80, 40, 1);
+}
 
-/* Upgraded building glow — outer ring based on level */
+/* Upgraded building glow — halo based on level (no hard border) */
 .lane-unit--upgraded-2 {
-  outline: 1px solid rgba(255, 204, 0, 0.6);
-  box-shadow: 0 0 6px rgba(255, 204, 0, 0.5);
+  box-shadow: 0 0 10px 2px rgba(255, 204, 0, 0.6);
 }
 .lane-unit--upgraded-3 {
-  outline: 1px solid rgba(200, 100, 255, 0.7);
-  box-shadow: 0 0 8px rgba(200, 100, 255, 0.7);
+  box-shadow: 0 0 14px 3px rgba(200, 100, 255, 0.75);
+}
+.lane-unit--upgraded-4 {
+  box-shadow: 0 0 18px 4px rgba(255, 80, 40, 0.8);
 }
 
 /* Attack flash — brief brightness burst when a unit strikes */
@@ -3745,6 +3750,86 @@ body {
 /* ── Boss Dialogue Screen ────────────────────────────────── */
 
 /* ── Boss Fight Splash ─────────────────────────────────────────────────────── */
+/* ─── Pause button ──────────────────────────────────────────────── */
+.bf-pause-btn {
+  background: none;
+  border: 1px solid var(--game-text-color-muted);
+  color: var(--game-text-color-dim);
+  font-size: 14px;
+  padding: 0 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+.bf-pause-btn:hover { color: var(--game-text-color); border-color: var(--game-text-color); }
+
+/* ─── Pause overlay ─────────────────────────────────────────────── */
+.bf-pause-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bf-pause-panel {
+  background: #111;
+  border: 1px solid var(--game-text-color);
+  border-radius: 4px;
+  padding: 24px 32px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.bf-pause-title {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: var(--game-text-color);
+}
+.bf-pause-hint {
+  font-size: 11px;
+  color: var(--game-text-color-dim);
+  max-width: 200px;
+  line-height: 1.5;
+}
+.bf-pause-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ─── Unit inspect panel (shown inside pause overlay) ───────────── */
+.bf-inspect-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.bf-inspect-name {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--game-text-color);
+  margin-bottom: 4px;
+}
+.bf-inspect-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 3px 0;
+}
+.bf-inspect-row span:first-child { color: var(--game-text-color-dim); }
+.bf-inspect-row span:last-child  { color: var(--game-text-color); font-weight: bold; }
+
 .boss-splash-overlay {
   position: absolute;
   inset: 0;
