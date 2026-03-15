@@ -785,6 +785,7 @@
       "handicap": 0,
       "environment": "citadel",
       "bossAI": "kragg",
+      "bossCard": "Golem",
       "bossDialogue": [
         "\"You walked through my garrison. My garrison that has held for three years.\"",
         "\"I don't know what you are. But I know what I am. And I have not lost a defensive engagement in my career.\"",

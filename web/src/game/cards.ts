@@ -273,6 +273,10 @@ export function makeAshwalkerDeck(): Card[] {
   ]
 }
 
+export function getCardUnit(cardName: string): UnitTemplate | undefined {
+  return CARD_DEFS.find(d => d.name === cardName)?.unit
+}
+
 export function rarityStars(r: CardRarity): string {
   return '\u2605'.repeat({ common: 1, uncommon: 2, rare: 3, legendary: 4 }[r])
 }

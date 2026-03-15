@@ -803,6 +803,7 @@
       "handicap": 0,
       "environment": "ashen",
       "bossAI": "ashwalker",
+      "bossCard": "Behemoth",
       "enemyDeck": [
         "Wight Knight",
         "Skeleton",

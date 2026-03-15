@@ -1,5 +1,5 @@
 import { GameState, Card, Unit, UnitTemplate, UpgradeEffect, CardRarity, LANE_WIDTH, BattleEventState, TerrainObstacle, TerrainType, BuffTag, TERRAIN_AVOID_SHAPE } from './types'
-import { makeDeck, makeThorlordDeck, makeKraggDeck, makeAshwalkerDeck, makeNodeDeck, HERO_CARDS } from './cards'
+import { makeDeck, makeThorlordDeck, makeKraggDeck, makeAshwalkerDeck, makeNodeDeck, HERO_CARDS, getCardUnit } from './cards'
 import { playUnitDeath, playBuildingDestroyed } from './sound'
 import { isNoDamageMode } from './debug'
 
@@ -208,6 +208,7 @@ export interface NewGameOptions {
   playerCards?: Card[]
   opponentHandicap?: number
   bossAI?: string
+  bossCard?: string
   /** Preset enemy deck (card names). Makes each node deterministic and learnable. */
   enemyDeckNames?: string[]
   /** Node ID used to seed terrain generation deterministically. */
@@ -237,6 +238,7 @@ export function newGame(
     playerCards,
     opponentHandicap: handicap = 0,
     bossAI: boss,
+    bossCard,
     enemyDeckNames,
     terrainSeed,
     environment,
@@ -322,6 +324,8 @@ export function newGame(
     battleEventTimer: BATTLE_EVENT_BASE_MS,
     activeBattleEvent: null,
     bossAI: boss,
+    bossCard,
+    bossCardActive: false,
     terrain: generateTerrain(terrainSeed, environment),
     environment,
     battleStats: { cardsPlayed: {}, playerKills: 0, playerUnitsLost: 0 },
@@ -731,11 +735,44 @@ function processAttacks(s: GameState, deltaMs: number, log: string[]): void {
 const VICTORY_BONUS = 500
 
 function checkGameOver(s: GameState): boolean {
-  if (s.playerBase.hp <= 0 || s.opponentBase.hp <= 0) {
-    const winner = s.opponentBase.hp <= 0 ? 'player' : 'opponent'
-    if (winner === 'player') s.playerScore += VICTORY_BONUS
-    else s.opponentScore += VICTORY_BONUS
-    s.phase = { type: 'gameOver', winner }
+  // Phase 2 active — win when boss unit dies; normal base HP is irrelevant
+  if (s.bossCardActive && s.bossCard) {
+    const bossAlive = s.field.some(u => u.owner === 'opponent' && u.name === s.bossCard)
+    if (!bossAlive) {
+      s.playerScore += VICTORY_BONUS
+      s.phase = { type: 'gameOver', winner: 'player' }
+      return true
+    }
+    if (s.playerBase.hp <= 0) {
+      s.opponentScore += VICTORY_BONUS
+      s.phase = { type: 'gameOver', winner: 'opponent' }
+      return true
+    }
+    return false
+  }
+
+  // Normal checks
+  if (s.playerBase.hp <= 0) {
+    s.opponentScore += VICTORY_BONUS
+    s.phase = { type: 'gameOver', winner: 'opponent' }
+    return true
+  }
+  if (s.opponentBase.hp <= 0) {
+    if (s.bossCard && !s.bossCardActive) {
+      // Trigger phase 2: restore base and deploy boss unit
+      s.opponentBase.hp = s.opponentBase.maxHp
+      const template = getCardUnit(s.bossCard)
+      if (template) {
+        const bossUnit = spawnUnit(template, 'opponent')
+        s.field.push(bossUnit)
+        s.log.push(`⚡ PHASE 2! ${s.bossCard} rises from the ruins!`)
+        s.log.push(`Destroy the ${s.bossCard} to win!`)
+      }
+      s.bossCardActive = true
+      return false
+    }
+    s.playerScore += VICTORY_BONUS
+    s.phase = { type: 'gameOver', winner: 'player' }
     return true
   }
   return false
@@ -1121,7 +1158,9 @@ export function tick(state: GameState, deltaMs: number): GameState {
   }
 
   // 9. Sudden death — trigger when all cards have been drawn and played
-  if (!s.suddenDeath) {
+  // Suppress during phase 2: boss unit death determines the winner
+  if (s.bossCardActive) { /* skip sudden death */ }
+  else if (!s.suddenDeath) {
     const allExhausted =
       s.playerDeck.length === 0 && s.playerHand.length === 0 &&
       s.opponentDeck.length === 0 && s.opponentHand.length === 0
