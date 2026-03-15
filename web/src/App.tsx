@@ -23,7 +23,7 @@ import {
 } from './game/questline'
 import { CardRestSelect }       from './components/CardRestSelect'
 import { EventScreen }          from './components/EventScreen'
-import { MerchantScreen, MerchantItem } from './components/MerchantScreen'
+import { MerchantScreen, MerchantItem, cardMerchantItem } from './components/MerchantScreen'
 import { CutsceneScreen }       from './components/CutsceneScreen'
 import { BossDialogueScreen }   from './components/BossDialogueScreen'
 import { Battlefield }        from './components/Battlefield'
@@ -114,6 +114,25 @@ function resolvedNodeOpts(
     opponentIntervalMs: node.opponentIntervalMs,
     opponentBaseHp: adjustedHp,
   }
+}
+
+/** Build merchant item list: 3 cards + 30% chance of 1 unowned inventory item at 8 crystals. */
+function buildMerchantItems(): MerchantItem[] {
+  const catalog   = getCardCatalog()
+  const cardNames = generateMerchantCards()
+  const items: MerchantItem[] = cardNames.map(name => {
+    const card = catalog.find(c => c.name === name)!
+    return cardMerchantItem(card)
+  })
+  if (Math.random() < 0.3) {
+    const owned = new Set(loadInventory().map(i => i.id))
+    const available = ALL_ITEMS.filter(i => !owned.has(i.id))
+    if (available.length > 0) {
+      const inv = available[Math.floor(Math.random() * available.length)]
+      items.push({ kind: 'item', inventoryItem: { id: inv.id, name: inv.name, icon: inv.icon, desc: inv.desc, acquiredDate: '' }, price: 8 })
+    }
+  }
+  return items
 }
 
 function loadHandicap(): number {
@@ -571,13 +590,7 @@ export default function App() {
           if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
         }
         if (node.type === 'merchant') {
-          const catalog = getCardCatalog()
-          const cardNames = generateMerchantCards()
-          const items: MerchantItem[] = cardNames.map(name => {
-            const card = catalog.find(c => c.name === name)!
-            return { card, price: MERCHANT_PRICES[card.rarity] }
-          })
-          setMerchantItems(items)
+          setMerchantItems(buildMerchantItems())
           setScreen('merchant')
           return
         }
@@ -649,13 +662,7 @@ export default function App() {
     }
 
     if (node.type === 'merchant') {
-      const catalog   = getCardCatalog()
-      const cardNames = generateMerchantCards()
-      const items: MerchantItem[] = cardNames.map(name => {
-        const card = catalog.find(c => c.name === name)!
-        return { card, price: MERCHANT_PRICES[card.rarity] }
-      })
-      setMerchantItems(items)
+      setMerchantItems(buildMerchantItems())
       setScreen('merchant')
       return
     }
@@ -777,9 +784,13 @@ export default function App() {
     setScreen('nodemap')
   }, [run])
 
-  const handleMerchantBuy = useCallback((cardName: string, price: number) => {
-    addCardsToCollection([{ cardName, count: 1 }])
-    const next = loadCrystals() - price
+  const handleMerchantBuy = useCallback((item: MerchantItem) => {
+    if (item.kind === 'card') {
+      addCardsToCollection([{ cardName: item.card.name, count: 1 }])
+    } else {
+      addToInventory(item.inventoryItem)
+    }
+    const next = loadCrystals() - item.price
     saveCrystals(Math.max(0, next))
     setCrystals(Math.max(0, next))
   }, [])
