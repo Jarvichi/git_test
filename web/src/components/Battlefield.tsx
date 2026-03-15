@@ -5,6 +5,7 @@ import { CardDetailModal } from './CardDetailModal'
 import { SpriteImg, AnimatedSpriteImg } from './SpriteImg'
 import { BattleEventOverlay } from './BattleEventOverlay'
 import { isNoDamageMode, isDebugMode } from '../game/debug'
+import { MAX_UPGRADE_LEVEL } from '../game/engine'
 import { getRelicDef } from '../game/relics'
 
 interface Props {
@@ -988,11 +989,13 @@ export function Battlefield({ state, onPlayCard, actTheme, activeRelic, showBoss
               const heroLockedSecs = card.isHero
                 ? Math.ceil(Math.max(0, 30000 - state.gameTime) / 1000)
                 : 0
+              const isMaxUpgrade = card.cardType === 'structure' && card.unit != null &&
+                state.field.some(u => u.owner === 'player' && u.name === card.unit!.name && (u.upgradeLevel ?? 1) >= MAX_UPGRADE_LEVEL)
               return (
-              <div key={card.id} className="hand-card-wrap">
+              <div key={card.id} className="hand-card-wrap" title={isMaxUpgrade ? 'Already at max level' : undefined}>
                 <CardTile
                   card={card}
-                  canAfford={state.mana >= card.cost}
+                  canAfford={!isMaxUpgrade && state.mana >= card.cost}
                   onClick={() => onPlayCard(card.id)}
                   lockedSecs={heroLockedSecs}
                 />

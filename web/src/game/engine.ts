@@ -343,6 +343,8 @@ export function newGame(
 
 // ─── Play Card (immediate deploy + cooldown) ─────────────
 
+export const MAX_UPGRADE_LEVEL = 3
+
 export function playCard(state: GameState, cardId: string): GameState {
   if (state.phase.type !== 'playing') return state
 
@@ -351,6 +353,16 @@ export function playCard(state: GameState, cardId: string): GameState {
 
   const card = state.playerHand[cardIdx]
   if (state.mana < card.cost) return state
+
+  // Prevent playing a structure that is already at max upgrade level
+  if (card.cardType === 'structure' && card.unit) {
+    const existing = state.field.find(u => u.owner === 'player' && u.name === card.unit!.name)
+    if (existing && (existing.upgradeLevel ?? 1) >= MAX_UPGRADE_LEVEL) {
+      const s = structuredClone(state)
+      s.log.push(`${existing.name} is already at max level — upgrade blocked.`)
+      return s
+    }
+  }
 
   const s = structuredClone(state)
   s.playerHand.splice(cardIdx, 1)
