@@ -356,6 +356,7 @@ export interface RunState {
   nodeFailCounts: Record<string, number>  // times each node has been lost
   earnedCards: string[]        // card names won as battle rewards this run (usable in subsequent battles)
   activeRelic: string | null   // name of the relic earned at the end of the last act (null = none)
+  crystalBonus: number         // extra crystals awarded after each battle (from replay modifiers)
 }
 
 const RUN_KEY = 'jarv_run'
@@ -378,6 +379,7 @@ export function loadRun(): RunState | null {
     if (typeof parsed.maxHp !== 'number' || isNaN(parsed.maxHp) || parsed.maxHp <= 0) parsed.maxHp = 50
     parsed.playerHp = Math.max(1, Math.min(parsed.maxHp, parsed.playerHp))
     // Migrate: lives system (added later — default 3/3 for old saves)
+    if (typeof parsed.crystalBonus !== 'number') parsed.crystalBonus = 0
     if (typeof parsed.maxLives !== 'number' || parsed.maxLives < 1) parsed.maxLives = 3
     if (typeof parsed.livesRemaining !== 'number') parsed.livesRemaining = parsed.maxLives
     parsed.livesRemaining = Math.max(0, Math.min(parsed.maxLives, parsed.livesRemaining))
@@ -440,6 +442,7 @@ export function newRun(actId: string): RunState {
     nodeFailCounts: {},
     earnedCards: [],
     activeRelic: null,
+    crystalBonus: 0,
   }
 }
 
