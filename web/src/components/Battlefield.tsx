@@ -12,6 +12,7 @@ interface Props {
   state: GameState
   onPlayCard: (cardId: string) => void
   onGiveUp?: () => void
+  onPause?: (paused: boolean) => void
   actTheme?: string       // e.g. 'act1' — applied as CSS modifier class
   activeRelic?: string | null  // relic name currently equipped, if any
   showBossSplash?: boolean
@@ -167,7 +168,7 @@ function LaneUnit({ unit, stackIndex = 0, wallStack, onInspect }: { unit: Unit; 
       ].filter(Boolean).join(' ')}
       style={style}
       title={`${unit.name} — ${unit.hp}/${unit.maxHp} HP, ${unit.attack} ATK`}
-      onClick={onInspect ? () => onInspect(unit) : undefined}
+      onClick={onInspect ? (e) => { e.stopPropagation(); onInspect(unit) } : undefined}
     >
       {/* Ground shadow cast by flying units */}
       {unit.flying && (
@@ -794,11 +795,13 @@ function opponentPortraitSlug(bossAI: string | undefined, actTheme: string | und
   return 'bandit'
 }
 
-export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic, showBossSplash, activeModifiers }: Props) {
+export function Battlefield({ state, onPlayCard, onGiveUp, onPause, actTheme, activeRelic, showBossSplash, activeModifiers }: Props) {
   const [detailCard, setDetailCard] = useState<Card | null>(null)
   const [heroLightning, setHeroLightning] = useState<{ owner: 'player' | 'opponent'; key: number } | null>(null)
   const [paused, setPaused] = useState(false)
   const [inspectedUnit, setInspectedUnit] = useState<Unit | null>(null)
+
+  const doPause = (p: boolean) => { setPaused(p); onPause?.(p); if (!p) setInspectedUnit(null) }
   const prevHeroIdsRef = useRef<Set<string>>(new Set())
 
   // Detect when a new hero unit appears on the field and fire the lightning effect
@@ -823,7 +826,10 @@ export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic
   const event = state.activeBattleEvent
 
   return (
-    <div className={`battlefield${actTheme ? ` battlefield--${actTheme}` : ''}`}>
+    <div
+      className={`battlefield${actTheme ? ` battlefield--${actTheme}` : ''}${paused ? ' battlefield--paused' : ''}`}
+      onClick={paused && !inspectedUnit ? () => doPause(false) : undefined}
+    >
 
       {/* Dramatic battle event overlay (center-screen flash) */}
       <BattleEventOverlay event={event} />
@@ -848,7 +854,7 @@ export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic
 
       {/* Top bar: clock, scores */}
       <div className={`top-bar${state.suddenDeath ? ' top-bar--sudden-death' : ''}`}>
-        <button className="bf-pause-btn" onClick={() => { setPaused(true); setInspectedUnit(null) }} title="Pause">⏸</button>
+        <button className="bf-pause-btn" onClick={() => doPause(true)} title="Pause">⏸</button>
         <span className="game-clock">{timeStr}</span>
         <span className="score-display">
           <span className="score-player">{state.playerScore}</span>
@@ -1032,10 +1038,9 @@ export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic
         </div>
       )}
 
-      {/* Pause overlay */}
+      {/* Pause panel — anchored, no backdrop so the field remains tappable */}
       {paused && (
-        <div className="bf-pause-overlay" onClick={() => { setPaused(false); setInspectedUnit(null) }}>
-          <div className="bf-pause-panel" onClick={e => e.stopPropagation()}>
+        <div className="bf-pause-panel" onClick={e => e.stopPropagation()}>
             <div className="bf-pause-title">⏸ PAUSED</div>
             {inspectedUnit ? (
               <div className="bf-inspect-panel">
@@ -1067,7 +1072,7 @@ export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic
               <>
                 <div className="bf-pause-hint">Tap a unit or building on the field to inspect it</div>
                 <div className="bf-pause-actions">
-                  <button className="action-btn action-btn--large" onClick={() => { setPaused(false); setInspectedUnit(null) }}>▶ Resume</button>
+                  <button className="action-btn action-btn--large" onClick={() => doPause(false)}>▶ Resume</button>
                   {onGiveUp && (
                     <button className="action-btn action-btn--danger" onClick={onGiveUp}>✕ Give Up</button>
                   )}
@@ -1075,7 +1080,6 @@ export function Battlefield({ state, onPlayCard, onGiveUp, actTheme, activeRelic
               </>
             )}
           </div>
-        </div>
       )}
     </div>
   )
