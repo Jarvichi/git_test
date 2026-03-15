@@ -10,6 +10,21 @@ When working an issue from this file, go and check the GitHub issue for addition
 
 ## 🟠 Active Work
 
+### #174 Relics: broken relic tracking + greyed-out history on selection screen
+
+**Plan (session 8, 2026-03-15):**
+
+Most of the relic system is already built. The three missing pieces:
+- **`relics.ts`** — `loadBrokenRelics()`, `addBrokenRelic()`, `removeBrokenRelic()`; auto-clear broken state when re-earned
+- **`App.tsx`** — call `addBrokenRelic` when a relic breaks
+- **`RelicSelectScreen.tsx`** — show broken relics greyed-out + unselectable at end of list
+
+Steps:
+- [ ] Step 1: Add broken relic storage to relics.ts
+- [ ] Step 2: Wire addBrokenRelic in App.tsx; pass brokenRelics to RelicSelectScreen
+- [ ] Step 3: Render greyed-out broken relics in RelicSelectScreen + CSS
+- [ ] Step 4: Mark #174 complete in CLAUDE.md
+
 ### #175 Campaign replays: per-run escalating modifiers
 
 **Plan (session 8, 2026-03-15):**
