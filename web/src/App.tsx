@@ -247,6 +247,7 @@ export default function App() {
 
   // Active merchant
   const [merchantItems, setMerchantItems] = useState<MerchantItem[]>([])
+  const merchantBoughtRef = useRef(0)
   const [mysteryReward, setMysteryReward] = useState<RewardDef | null>(null)
 
   // Card fatigue
@@ -594,7 +595,7 @@ export default function App() {
           if (eventData) { setActiveEvent(eventData); setScreen('event'); return }
         }
         if (node.type === 'merchant') {
-          setMerchantItems(buildMerchantItems())
+          merchantBoughtRef.current = 0; setMerchantItems(buildMerchantItems())
           setScreen('merchant')
           return
         }
@@ -672,7 +673,7 @@ export default function App() {
     }
 
     if (node.type === 'merchant') {
-      setMerchantItems(buildMerchantItems())
+      merchantBoughtRef.current = 0; setMerchantItems(buildMerchantItems())
       setScreen('merchant')
       return
     }
@@ -810,11 +811,17 @@ export default function App() {
     const next = loadCrystals() - item.price
     saveCrystals(Math.max(0, next))
     setCrystals(Math.max(0, next))
+    merchantBoughtRef.current += 1
   }, [])
 
   const handleMerchantDone = useCallback(() => {
     const currentRun = run
     if (!currentRun) return
+    // Check for sweep achievement (bought every item in the visit)
+    if (merchantBoughtRef.current > 0 && merchantBoughtRef.current >= merchantItems.length) {
+      const swept = incrementAchievementProgress('misc:merchant_sweep')
+      if (swept.length > 0) setAchievementToasts(prev => [...prev, ...swept])
+    }
     const nodeId = currentRun.pendingNodeId!
     const updatedRun: RunState = {
       ...currentRun,
@@ -826,7 +833,7 @@ export default function App() {
     setRun(updatedRun)
     setMerchantItems([])
     setScreen('nodemap')
-  }, [run])
+  }, [run, merchantItems.length])
 
   const handleMysteryCollect = useCallback(() => {
     const currentRun = run
@@ -852,6 +859,9 @@ export default function App() {
     saveRun(updatedRun)
     setRun(updatedRun)
     setMysteryReward(null)
+    // Track mystery encounters for achievements
+    const mysteryUnlocked = incrementAchievementProgress('misc:mystery_encounter')
+    if (mysteryUnlocked.length > 0) setAchievementToasts(prev => [...prev, ...mysteryUnlocked])
     setScreen('nodemap')
   }, [run, mysteryReward])
 
