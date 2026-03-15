@@ -5,6 +5,20 @@ import act2Data from '../data/acts/act2.json'
 import act3Data from '../data/acts/act3.json'
 import act4Data from '../data/acts/act4.json'
 
+// ─── Replay modifier types ────────────────────────────────
+
+export type ReplayModifierType =
+  | 'enemyHpPercent'       // % increase applied to opponent base HP
+  | 'enemyIntervalReduction' // ms reduction to opponent play interval (faster AI)
+  | 'enemyHandBonus'       // opponent starts with N extra cards in hand
+  | 'crystalBonus'         // extra crystals awarded after every battle
+
+export interface ReplayModifier {
+  type: ReplayModifierType
+  value: number
+  label: string            // short display string, e.g. "+15% enemy HP"
+}
+
 // ─── Node & Act types ─────────────────────────────────────
 
 export type NodeType = 'battle' | 'elite' | 'boss' | 'rest' | 'event' | 'merchant'
@@ -172,6 +186,13 @@ export interface Act {
 
   /** The actId that follows this one in the campaign, if any. */
   nextActId?: string
+
+  /**
+   * Ordered list of modifiers applied on successive replays.
+   * Modifier[0] activates on replay 2, modifier[1] on replay 3, etc.
+   * All modifiers up to the current replay index stack additively.
+   */
+  replayModifiers?: ReplayModifier[]
 }
 
 // ─── Run counter ──────────────────────────────────────────
@@ -187,6 +208,35 @@ export function incrementRunCount(): number {
   const next = loadRunCount() + 1
   try { localStorage.setItem(RUN_COUNT_KEY, String(next)) } catch { /* ignore */ }
   return next
+}
+
+// ─── Per-act completion counter ───────────────────────────
+
+const ACT_COUNTS_KEY = 'jarv_act_counts'
+
+function loadActCounts(): Record<string, number> {
+  try { return JSON.parse(localStorage.getItem(ACT_COUNTS_KEY) ?? '{}') as Record<string, number> }
+  catch { return {} }
+}
+
+/** How many times the player has completed this act. */
+export function loadActCount(actId: string): number {
+  return loadActCounts()[actId] ?? 0
+}
+
+/** Increment the completion count for an act and return the new value. */
+export function incrementActCount(actId: string): number {
+  const counts = loadActCounts()
+  counts[actId] = (counts[actId] ?? 0) + 1
+  try { localStorage.setItem(ACT_COUNTS_KEY, JSON.stringify(counts)) } catch { /* ignore */ }
+  return counts[actId]
+}
+
+/** Returns the stacked modifiers active for replay N (1-indexed completions). */
+export function getActiveModifiers(act: Act, completionCount: number): ReplayModifier[] {
+  if (!act.replayModifiers || completionCount === 0) return []
+  // modifier[i] activates from replay i+2 onward, stacking with all prior
+  return act.replayModifiers.slice(0, completionCount)
 }
 
 // ─── Intro seen-tracking ──────────────────────────────────
