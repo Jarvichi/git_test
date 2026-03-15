@@ -18,7 +18,7 @@ interface Props {
 }
 
 const RARITY_COLOUR: Record<string, string> = {
-  common:    '#aaa',
+  // common intentionally omitted — inherits --game-text-color-dim via CSS class
   uncommon:  '#33ff99',
   rare:      '#4af',
   legendary: '#ffd700',
@@ -39,7 +39,7 @@ export function CardDetailModal({ card, collection, deckEntries, onClose }: Prop
   const xp     = getMasteryXp(collection, card.name)
   const { level: masteryLvl, current: xpCur, needed: xpNeeded } = masteryProgress(xp)
   const xpPct  = xpNeeded > 0 ? Math.round((xpCur / xpNeeded) * 100) : 100
-  const rarityCol = RARITY_COLOUR[card.rarity] ?? '#aaa'
+  const rarityCol = RARITY_COLOUR[card.rarity] ?? 'var(--game-text-color-dim)'
 
   // Stats — card name for "played", unit name for "died"
   const statsPlayed  = getCardStats(card.name)
