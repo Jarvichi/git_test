@@ -75,3 +75,10 @@ export function addEarnedRelic(name: string): void {
   } catch { /* ignore */ }
 }
 
+/** Removes a relic from the player's permanent collection (e.g. when it breaks). */
+export function removeEarnedRelic(name: string): void {
+  try {
+    localStorage.setItem(RELICS_KEY, JSON.stringify(loadEarnedRelics().filter(n => n !== name)))
+  } catch { /* ignore */ }
+}
+
